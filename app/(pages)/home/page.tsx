@@ -1,14 +1,7 @@
 "use client";
 import Image from "next/image";
 import { motion } from "framer-motion";
-import {
-  FaBrain,
-  FaHeartbeat,
-  FaFlask,
-  FaArrowRight,
-  FaGraduationCap,
-  FaBookOpen,
-} from "react-icons/fa";
+import { FaBrain, FaHeartbeat, FaFlask, FaArrowRight } from "react-icons/fa";
 import Link from "next/link";
 
 type ResearchArea = {
