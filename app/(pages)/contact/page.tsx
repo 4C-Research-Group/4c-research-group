@@ -33,8 +33,8 @@ export default function ContactPage({}: Props) {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.1 }}
             >
-              Have questions about our research or want to collaborate? We'd
-              love to hear from you.
+              Have questions about our research or want to collaborate?
+              We&apos;d love to hear from you.
             </motion.p>
           </div>
         </div>
