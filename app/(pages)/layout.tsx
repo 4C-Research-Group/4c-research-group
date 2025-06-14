@@ -22,7 +22,6 @@ const inter = Inter({
   variable: "--font-sans",
 });
 
-// Theme Toggle Component
 function ThemeToggle() {
   const { theme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
