@@ -164,7 +164,7 @@ function PagesLayout({ children }: { children: React.ReactNode }) {
               </div>
             </div>
             <Link
-              href="/publications"
+              href="/projects"
               className="text-sm font-medium text-foreground/80 hover:text-foreground transition-colors dark:text-gray-300 dark:hover:text-white"
             >
               Projects
@@ -176,19 +176,14 @@ function PagesLayout({ children }: { children: React.ReactNode }) {
               Knowledge Mobilization
             </Link>
             <Link
-              href="/join-the-team"
+              href="/team"
               className="text-sm font-medium text-foreground/80 hover:text-foreground transition-colors dark:text-gray-300 dark:hover:text-white"
             >
               Join the Team
             </Link>
+
             <Link
-              href="/4c-blogs"
-              className="text-sm font-medium text-foreground/80 hover:text-foreground transition-colors dark:text-gray-300 dark:hover:text-white"
-            >
-              4C Blogs
-            </Link>
-            <Link
-              href="/4c-blogs"
+              href="/contact"
               className="text-sm font-medium text-foreground/80 hover:text-foreground transition-colors dark:text-gray-300 dark:hover:text-white"
             >
               Contact
@@ -217,7 +212,7 @@ function PagesLayout({ children }: { children: React.ReactNode }) {
           { name: "Research", href: "/research" },
           { name: "Projects", href: "/projects" },
           { name: "Knowledge Mobilization", href: "/knowledge-mobilization" },
-          { name: "Join the Team", href: "/join-the-team" },
+          { name: "Join the Team", href: "/team" },
           { name: "4C Blogs", href: "/4c-blogs" },
           { name: "Contact", href: "/contact" },
         ]}
