@@ -98,7 +98,7 @@ export default function HomePage() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <div className="text-center lg:text-left">
               <motion.h1
-                className="text-4xl md:text-5xl lg:text-6xl font-bold text-cognition-900 dark:text-white mb-6 font-serif"
+                className="text-4xl md:text-5xl lg:text-6xl font-bold text-cognition-900 dark:text-white mb-6"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5 }}
@@ -277,7 +277,7 @@ export default function HomePage() {
       <section className="py-20 bg-white dark:bg-gray-900">
         <div className="container mx-auto px-4">
           <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold text-foreground dark:text-white mb-4 font-serif">
+            <h2 className="text-3xl md:text-4xl font-bold text-foreground dark:text-white mb-4">
               Our Research Focus Areas
             </h2>
             <div className="w-24 h-1.5 bg-gradient-to-r from-cognition-500 via-consciousness-500 to-care-500 rounded-full mx-auto"></div>
@@ -349,7 +349,7 @@ export default function HomePage() {
                     >
                       {projectData.icon}
                     </div>
-                    <h3 className="text-lg font-bold text-foreground dark:text-white mb-2 text-center font-serif">
+                    <h3 className="text-lg font-bold text-foreground dark:text-white mb-2 text-center">
                       {project.title}
                     </h3>
                     <p className="text-sm text-foreground/80 dark:text-gray-400 text-center leading-relaxed">
@@ -420,7 +420,7 @@ export default function HomePage() {
         <div className="container mx-auto px-4">
           <div className="flex justify-between items-center mb-12">
             <div>
-              <h2 className="text-3xl font-bold text-foreground dark:text-white mb-2 font-serif">
+              <h2 className="text-3xl font-bold text-foreground dark:text-white mb-2">
                 Latest News
               </h2>
               <div className="w-16 h-1 bg-gradient-to-r from-cognition-500 to-care-500 rounded-full"></div>
@@ -474,7 +474,7 @@ export default function HomePage() {
       <section className="py-20 bg-gradient-to-br from-cognition-700 to-cognition-900 text-white dark:bg-gray-900">
         <div className="container mx-auto px-4 text-center">
           <div className="max-w-3xl mx-auto">
-            <h2 className="text-3xl md:text-4xl font-bold mb-6 font-serif">
+            <h2 className="text-3xl md:text-4xl font-bold mb-6">
               Join Our Research Community
             </h2>
             <p className="text-xl text-cognition-100 dark:text-gray-400 mb-8">
