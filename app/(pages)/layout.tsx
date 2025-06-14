@@ -15,6 +15,7 @@ import {
 import { SiteFooter } from "@/components/site-footer";
 import { useState, useEffect } from "react";
 import { useTheme } from "next-themes";
+import MobileNav from "@/components/mobile-nav";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -87,6 +88,7 @@ export default function RootLayout({
 
 function PagesLayout({ children }: { children: React.ReactNode }) {
   const [isScrolled, setIsScrolled] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -204,6 +206,11 @@ function PagesLayout({ children }: { children: React.ReactNode }) {
             >
               Get in Touch
             </Link>
+          </div>
+
+          {/* Mobile Navigation Trigger */}
+          <div className="md:hidden">
+            <MobileNav />
           </div>
         </div>
       </header>
