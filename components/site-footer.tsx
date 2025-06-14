@@ -11,7 +11,6 @@ import {
   FaMapMarkerAlt,
   FaPhone,
 } from "react-icons/fa";
-import { cn } from "@/lib/utils";
 
 export interface NavItem {
   name: string;
@@ -78,7 +77,7 @@ export function SiteFooter({ navItems }: SiteFooterProps) {
               Quick Links
             </h3>
             <ul className="space-y-3">
-              {navItems.slice(0, 6).map((item) => (
+              {navItems.slice(0, 4).map((item) => (
                 <li key={item.name}>
                   <Link
                     href={item.href}
