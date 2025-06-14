@@ -3,12 +3,21 @@
 import * as React from "react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, ChevronDown, LogIn } from "lucide-react";
+import {
+  Menu,
+  X,
+  ChevronDown,
+  ChevronRight,
+  Home,
+  Users,
+  BookOpen,
+  UserPlus,
+  FileText,
+  Mail,
+} from "lucide-react";
 import { cn } from "@/lib/utils";
 import { navigationConfig, NavItem } from "@/lib/navigation";
-import { Icons } from "@/components/icons";
 import { SimpleThemeToggle } from "@/components/simple-theme-toggle";
-import { Button } from "./ui/button";
 import {
   Sheet,
   SheetContent,
@@ -18,12 +27,35 @@ import {
   SheetClose,
 } from "@/components/ui/sheet";
 
+const iconMap: Record<string, React.ReactNode> = {
+  Home: <Home className="h-5 w-5" />,
+  Projects: <FileText className="h-5 w-5" />,
+  "Knowledge Mobilization": <BookOpen className="h-5 w-5" />,
+  "Join the Team": <UserPlus className="h-5 w-5" />,
+  "4C Blogs": <FileText className="h-5 w-5" />,
+  Contact: <Mail className="h-5 w-5" />,
+};
+
 export default function MobileNav() {
   const [activeSubmenu, setActiveSubmenu] = React.useState<string | null>(null);
+  const [activePath, setActivePath] = React.useState("/");
+  const [isOpen, setIsOpen] = React.useState(false);
+
+  React.useEffect(() => {
+    if (typeof window !== "undefined") {
+      setActivePath(window.location.pathname);
+    }
+  }, []);
+
+  const isCurrentPath = (path: string) => {
+    return activePath === path || activePath.startsWith(`${path}/`);
+  };
 
   const renderNavItem = (item: NavItem, depth = 0) => {
     const hasSubItems = item.subItems && item.subItems.length > 0;
     const isActive = activeSubmenu === item.title;
+    const isCurrent = isCurrentPath(item.href);
+    const Icon = iconMap[item.title] || null;
 
     return (
       <motion.div
@@ -31,79 +63,66 @@ export default function MobileNav() {
         initial={{ opacity: 0, x: -20 }}
         animate={{ opacity: 1, x: 0 }}
         transition={{
-          delay: depth * 0.1,
+          delay: depth * 0.05,
           type: "spring",
           stiffness: 300,
-          damping: 15,
+          damping: 20,
         }}
         className={cn(
-          "border-b border-cognition-200 dark:border-cognition-700 last:border-b-0",
-          depth > 0 ? "pl-4" : ""
+          "border-b border-cognition-100/50 dark:border-cognition-800/50 last:border-b-0",
+          depth > 0 ? "pl-6" : ""
         )}
       >
         <motion.div
-          whileHover={{
-            scale: 1.02,
-            transition: { duration: 0.2 },
-          }}
           whileTap={{ scale: 0.98 }}
           className={cn(
-            "flex items-center justify-between p-4 group",
-            "hover:bg-cognition-50 dark:hover:bg-cognition-900/20",
-            "transition-all duration-200",
-            depth === 0 ? "text-lg font-semibold" : "text-base"
+            "flex items-center justify-between py-3 px-4 -mx-1 rounded-lg transition-colors duration-200",
+            isCurrent
+              ? "bg-cognition-100/80 dark:bg-cognition-900/30 text-cognition-700 dark:text-white"
+              : "text-cognition-700 dark:text-cognition-200 hover:bg-cognition-100/70 dark:hover:bg-cognition-800/30"
           )}
         >
-          {hasSubItems ? (
-            <div
-              onClick={() => setActiveSubmenu(isActive ? null : item.title)}
-              className={cn(
-                "flex-grow cursor-pointer",
-                "text-cognition-600 dark:text-white/90",
-                "group-hover:text-cognition-500 dark:group-hover:text-white",
-                "font-semibold transition-colors duration-200"
-              )}
-            >
-              {item.title}
-            </div>
-          ) : (
-            <SheetClose asChild>
-              <Link
-                href={item.href === "#" ? "" : item.href}
+          <div className="flex items-center gap-3">
+            {depth === 0 && Icon && (
+              <span className={cn("opacity-70", isCurrent && "opacity-100")}>
+                {Icon}
+              </span>
+            )}
+            {hasSubItems ? (
+              <button
+                onClick={() => setActiveSubmenu(isActive ? null : item.title)}
                 className={cn(
-                  "flex-grow",
-                  "text-cognition-600 dark:text-white/90",
-                  "group-hover:text-cognition-500 dark:group-hover:text-white",
-                  "transition-colors duration-200",
-                  depth === 0 ? "font-semibold" : "font-normal"
+                  "text-left font-medium",
+                  depth === 0 ? "text-base" : "text-sm"
                 )}
               >
                 {item.title}
-              </Link>
-            </SheetClose>
-          )}
+              </button>
+            ) : (
+              <SheetClose asChild>
+                <Link
+                  href={item.href === "#" ? "" : item.href}
+                  className={cn(
+                    "block w-full font-medium",
+                    depth === 0 ? "text-base" : "text-sm"
+                  )}
+                  onClick={() => setIsOpen(false)}
+                >
+                  {item.title}
+                </Link>
+              </SheetClose>
+            )}
+          </div>
 
           {hasSubItems && (
             <motion.button
               onClick={() => setActiveSubmenu(isActive ? null : item.title)}
-              className={cn(
-                "p-2 rounded-full ml-2",
-                "hover:bg-cognition-100 dark:hover:bg-cognition-900/30",
-                "active:bg-cognition-200 dark:active:bg-cognition-900/40",
-                "transition-colors duration-200"
-              )}
+              className="p-1 -mr-1 rounded-full transition-colors hover:bg-cognition-100/50 dark:hover:bg-cognition-800/50"
               whileTap={{ scale: 0.9 }}
-              animate={{ rotate: isActive ? 180 : 0 }}
-              transition={{ duration: 0.3 }}
+              animate={{ rotate: isActive ? 90 : 0 }}
+              transition={{ duration: 0.2 }}
             >
-              <ChevronDown
-                className={cn(
-                  "h-6 w-6",
-                  "text-cognition-600 dark:text-white/90",
-                  "group-hover:text-cognition-500 dark:group-hover:text-white",
-                  "transition-colors duration-200"
-                )}
-              />
+              <ChevronRight className="h-5 w-5 text-cognition-500 dark:text-cognition-400" />
             </motion.button>
           )}
         </motion.div>
@@ -114,8 +133,8 @@ export default function MobileNav() {
               initial={{ opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: "auto" }}
               exit={{ opacity: 0, height: 0 }}
-              transition={{ duration: 0.3 }}
-              className="overflow-hidden"
+              transition={{ duration: 0.2, ease: "easeInOut" }}
+              className="overflow-hidden pl-4"
             >
               {item.subItems?.map((subItem) =>
                 renderNavItem(subItem, depth + 1)
@@ -128,41 +147,47 @@ export default function MobileNav() {
   };
 
   return (
-    <Sheet>
+    <Sheet open={isOpen} onOpenChange={setIsOpen}>
       <SheetTrigger asChild>
         <button
           className={cn(
-            "md:hidden p-2 rounded-lg",
-            "text-cognition-600 dark:text-cognition-400 hover:text-cognition-500 dark:hover:text-cognition-300",
-            "transition-colors duration-300"
+            "md:hidden p-2 -mr-2 rounded-lg transition-colors",
+            "text-cognition-700 dark:text-cognition-200 hover:bg-cognition-100/50 dark:hover:bg-cognition-800/50"
           )}
+          aria-label="Open menu"
         >
           <Menu className="h-6 w-6" />
         </button>
       </SheetTrigger>
-      <SheetContent side="right">
-        <SheetHeader>
-          <SheetTitle className="text-cognition-600 dark:text-white">
-            4C Research
-          </SheetTitle>
-          <SheetClose asChild>
-            <button
-              className={cn(
-                "absolute top-4 right-4 p-2 rounded-lg",
-                "text-cognition-600 dark:text-white",
-                "group-hover:text-cognition-500 dark:group-hover:text-white",
-                "transition-colors duration-200"
-              )}
-            >
-              <X className="h-6 w-6" />
-            </button>
-          </SheetClose>
-        </SheetHeader>
-        <nav className="mt-6">
-          {navigationConfig.map((item) => renderNavItem(item))}
-        </nav>
-        <div className="mt-8 px-4">
-          <SimpleThemeToggle className="w-full justify-center p-2" />
+      <SheetContent
+        side="right"
+        className="w-[85vw] max-w-sm p-0"
+        onInteractOutside={() => setIsOpen(false)}
+        onEscapeKeyDown={() => setIsOpen(false)}
+      >
+        <div className="h-full flex flex-col">
+          <div className="px-6 pt-6 pb-4 border-b border-cognition-100/50 dark:border-cognition-800/50">
+            <div className="flex items-center justify-between">
+              <h2 className="text-xl font-bold text-cognition-800 dark:text-white">
+                4C Research
+              </h2>
+              <button
+                onClick={() => setIsOpen(false)}
+                className="rounded-lg p-1 -mr-1 transition-colors hover:bg-cognition-100/50 dark:hover:bg-cognition-800/50"
+                aria-label="Close menu"
+              >
+                <X className="h-5 w-5 text-cognition-500 dark:text-cognition-400" />
+              </button>
+            </div>
+          </div>
+
+          <nav className="flex-1 overflow-y-auto p-4 space-y-1">
+            {navigationConfig.map((item) => renderNavItem(item))}
+          </nav>
+
+          <div className="p-4 border-t border-cognition-100/50 dark:border-cognition-800/50">
+            <SimpleThemeToggle className="w-full justify-center" />
+          </div>
         </div>
       </SheetContent>
     </Sheet>
