@@ -237,7 +237,7 @@ export default function TeamPage() {
           </p>
           <div className="flex flex-wrap justify-center gap-4">
             <a
-              href="/careers"
+              href="/team/careers"
               className="px-6 py-3 bg-cognition-600 hover:bg-cognition-700 text-white font-medium rounded-lg transition-colors"
             >
               View Open Positions
