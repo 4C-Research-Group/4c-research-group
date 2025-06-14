@@ -288,8 +288,8 @@ export default function CognitionResearchPage() {
             Interested in Our Research?
           </h2>
           <p className="text-xl text-cognition-100 dark:text-cognition-200 mb-8 max-w-3xl mx-auto">
-            We're always looking for collaborators, research participants, and
-            passionate individuals to join our mission.
+            We&apos;re always looking for collaborators, research participants,
+            and passionate individuals to join our mission.
           </p>
           <div className="flex flex-col sm:flex-row justify-center gap-4">
             <Link

@@ -39,7 +39,7 @@ const teamMembers: Record<string, TeamMember[]> = {
       name: "Dr. Sarah Johnson",
       role: "Co-Director, 4C Research Lab",
       image: "/team/sarah-johnson.jpg",
-      bio: "Dr. Johnson&apos;s research explores the intersection of critical care medicine and cognitive rehabilitation, with a focus on patient-centered outcomes.",
+      bio: "Dr. Johnson's research explores the intersection of critical care medicine and cognitive rehabilitation, with a focus on patient-centered outcomes.",
       socials: {
         linkedin: "#",
         scholar: "#",
