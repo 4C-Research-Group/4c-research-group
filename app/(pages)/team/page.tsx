@@ -231,9 +231,9 @@ export default function TeamPage() {
             Join Our Team
           </h2>
           <p className="text-xl text-gray-600 dark:text-gray-300 mb-8 max-w-3xl mx-auto">
-            We're always looking for passionate researchers and students to join
-            our team. Check our open positions or reach out to discuss potential
-            opportunities.
+            We&apos;re always looking for passionate researchers and students to
+            join our team. Check our open positions or reach out to discuss
+            potential opportunities.
           </p>
           <div className="flex flex-wrap justify-center gap-4">
             <a
