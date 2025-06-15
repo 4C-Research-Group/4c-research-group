@@ -164,6 +164,84 @@ export default function HomePage() {
         <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-white to-transparent dark:from-gray-900 dark:to-transparent"></div>
       </section>
 
+      {/* Research Highlights Section */}
+      <section className="py-16 bg-white dark:bg-gray-900">
+        <div className="container mx-auto px-4">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5 }}
+            className="text-center mb-12"
+          >
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">
+              Groundbreaking Research
+            </h2>
+            <div className="w-24 h-1 bg-gradient-to-r from-cognition-500 to-care-500 mx-auto mb-6"></div>
+          </motion.div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 0.1 }}
+              className="bg-cognition-50 dark:bg-gray-800 p-8 rounded-xl shadow-lg"
+            >
+              <div className="bg-cognition-100 dark:bg-cognition-900/50 w-12 h-12 rounded-full flex items-center justify-center mb-6 mx-auto">
+                <FaBrain className="text-cognition-600 dark:text-cognition-300 text-xl" />
+              </div>
+              <h3 className="text-xl font-bold text-center text-gray-900 dark:text-white mb-4">
+                Cognitive Functions Analysis
+              </h3>
+              <p className="text-gray-700 dark:text-gray-300 text-center">
+                The groundbreaking analysis of the cognitive functions of
+                critically ill children is essential for better understanding
+                and treatment.
+              </p>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 0.2 }}
+              className="bg-consciousness-50 dark:bg-gray-800 p-8 rounded-xl shadow-lg"
+            >
+              <div className="bg-consciousness-100 dark:bg-consciousness-900/50 w-12 h-12 rounded-full flex items-center justify-center mb-6 mx-auto">
+                <FaFlask className="text-consciousness-600 dark:text-consciousness-300 text-xl" />
+              </div>
+              <h3 className="text-xl font-bold text-center text-gray-900 dark:text-white mb-4">
+                Advanced Research
+              </h3>
+              <p className="text-gray-700 dark:text-gray-300 text-center">
+                Our advanced research in altered cognition and consciousness is
+                paving the way for improved long-term outcomes.
+              </p>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 0.3 }}
+              className="bg-care-50 dark:bg-gray-800 p-8 rounded-xl shadow-lg"
+            >
+              <div className="bg-care-100 dark:bg-care-900/50 w-12 h-12 rounded-full flex items-center justify-center mb-6 mx-auto">
+                <FaHeartbeat className="text-care-600 dark:text-care-300 text-xl" />
+              </div>
+              <h3 className="text-xl font-bold text-center text-gray-900 dark:text-white mb-4">
+                Neuroscience Exploration
+              </h3>
+              <p className="text-gray-700 dark:text-gray-300 text-center">
+                Cutting-edge exploration in neuroscience holds the key to
+                enhancing the lives of critically ill children.
+              </p>
+            </motion.div>
+          </div>
+        </div>
+      </section>
+
       {/* Services Section with Wave Background */}
       <section className="relative py-20 overflow-hidden">
         {/* Wave Background */}
@@ -260,7 +338,7 @@ export default function HomePage() {
               >
                 <div className="flex flex-col items-center text-center">
                   {service.icon}
-                  <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-3">
+                  <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-3">
                     {service.title}
                   </h3>
                   <p className="text-gray-600 dark:text-gray-300">
@@ -339,7 +417,7 @@ export default function HomePage() {
                   </div>
                   <div className="p-6">
                     <div
-                      className={`w-16 h-16 rounded-full flex items-center justify-center text-white dark:text-gray-200 mb-4 -mt-10 mx-auto relative z-10 ${
+                      className={`w-16 h-16 rounded-full flex items-center justify-center text-white dark:text-gray-200 mb-4 mx-auto relative z-10 ${
                         projectData.color === "cognition"
                           ? "bg-gradient-to-br from-cognition-500 to-cognition-600"
                           : projectData.color === "consciousness"
