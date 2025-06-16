@@ -108,14 +108,14 @@ function PagesLayout({ children }: { children: React.ReactNode }) {
         )}
       >
         <div className="container flex h-16 items-center justify-between px-4">
-          <div className="flex items-center gap-2">
+          <div className="flex flex-col">
             <Link href="/" className="flex items-center space-x-2">
               <FaBrain className="h-6 w-6 text-cognition-600 dark:text-cognition-400" />
               <span className="text-xl font-bold bg-gradient-to-r from-cognition-600 to-consciousness-600 bg-clip-text text-transparent dark:from-cognition-400 dark:to-consciousness-400">
                 4C Research
               </span>
             </Link>
-            <span className="hidden md:inline-block text-xs text-muted-foreground mt-1">
+            <span className="text-xs text-muted-foreground ml-8 -mt-1">
               Cognition • Consciousness • Critical Care
             </span>
           </div>
@@ -126,6 +126,12 @@ function PagesLayout({ children }: { children: React.ReactNode }) {
               className="text-sm font-medium text-foreground/80 hover:text-foreground transition-colors dark:text-gray-300 dark:hover:text-white"
             >
               Home
+            </Link>
+            <Link
+              href="/about"
+              className="text-sm font-medium text-foreground/80 hover:text-foreground transition-colors dark:text-gray-300 dark:hover:text-white"
+            >
+              About
             </Link>
             <div className="relative group">
               <button className="flex items-center gap-1 text-sm font-medium text-foreground/80 hover:text-foreground transition-colors dark:text-gray-300 dark:hover:text-white">
