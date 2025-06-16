@@ -193,8 +193,8 @@ export default function AboutPage() {
               </h2>
               <div className="w-24 h-1 bg-gradient-to-r from-cognition-500 to-care-500 mx-auto mb-6"></div>
               <p className="text-xl text-gray-600 dark:text-gray-300 max-w-4xl mx-auto">
-                At 4C Research, we're dedicated to transforming patient outcomes
-                through cutting-edge research at the intersection of
+                At 4C Research, we&apos;re dedicated to transforming patient
+                outcomes through cutting-edge research at the intersection of
                 neuroscience and critical care medicine.
               </p>
             </div>
