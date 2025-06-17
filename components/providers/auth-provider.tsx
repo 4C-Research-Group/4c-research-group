@@ -121,15 +121,24 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   };
 
   const signOut = async () => {
-    const { error } = await supabase.auth.signOut();
+    try {
+      console.log("Starting sign out process...");
+      const { error } = await supabase.auth.signOut();
 
-    if (error) {
-      console.error("Sign out error:", error.message);
-      throw error;
+      if (error) {
+        console.error("Sign out error:", error.message);
+        throw error;
+      }
+
+      console.log("Sign out successful, clearing user state...");
+      setUser(null);
+
+      // Force a hard navigation to login page
+      window.location.href = "/login";
+    } catch (err) {
+      console.error("Error during sign out:", err);
+      throw err;
     }
-
-    console.log("Sign out successful");
-    router.refresh();
   };
 
   return (

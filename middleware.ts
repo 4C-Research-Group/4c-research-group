@@ -1,6 +1,9 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 
+// Define public routes that don't require authentication
+const publicRoutes = ["/login", "/signup", "/auth/callback"];
+
 export async function middleware(request: NextRequest) {
   let response = NextResponse.next({
     request: {
@@ -58,8 +61,19 @@ export async function middleware(request: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser();
 
-  if (!user && !request.nextUrl.pathname.startsWith("/login")) {
+  // Check if the current path is a public route
+  const isPublicRoute = publicRoutes.some((route) =>
+    request.nextUrl.pathname.startsWith(route)
+  );
+
+  // If user is not authenticated and trying to access a protected route
+  if (!user && !isPublicRoute) {
     return NextResponse.redirect(new URL("/login", request.url));
+  }
+
+  // If user is authenticated and trying to access a public route
+  if (user && isPublicRoute) {
+    return NextResponse.redirect(new URL("/dashboard", request.url));
   }
 
   return response;
