@@ -1,29 +1,14 @@
-import { cn } from "@/lib/utils";
-import type { Metadata, Viewport } from "next";
+import type { Metadata } from "next";
+import { Inter } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
+import { AuthProvider } from "@/components/providers/auth-provider";
+import { NavAuthButtons } from "@/components/nav-auth-buttons";
+import Link from "next/link";
 
 export const metadata: Metadata = {
   title: "4C Research Group",
-  description: "Cognition, Consciousness & Critical Care Research",
-  icons: {
-    icon: [{ url: "/logo.png" }],
-    shortcut: ["/logo.png"],
-    apple: ["/logo.png"],
-  },
-  openGraph: {
-    title: "4C Research Group",
-    description: "Cognition, Consciousness & Critical Care Research",
-    images: [{ url: "/logo.png" }],
-  },
-};
-
-export const viewport: Viewport = {
-  themeColor: "#1E3A8A", // Primary color
-  width: "device-width",
-  initialScale: 1,
-  maximumScale: 1,
-  userScalable: true,
+  description: "4C Research Group",
 };
 
 export default function RootLayout({
@@ -32,21 +17,24 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      <body
-        className={cn(
-          "min-h-screen w-full bg-background font-sans text-foreground antialiased",
-          "flex flex-col"
-        )}
-      >
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        >
-          {children}
-        </ThemeProvider>
+    <html lang="en">
+      <body>
+        <AuthProvider>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+          >
+            <nav className="flex items-center justify-between p-4 border-b">
+              <Link href="/" className="text-xl font-bold">
+                4C Research Group
+              </Link>
+              <NavAuthButtons />
+            </nav>
+            <main>{children}</main>
+          </ThemeProvider>
+        </AuthProvider>
       </body>
     </html>
   );
