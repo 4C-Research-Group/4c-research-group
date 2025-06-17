@@ -3,6 +3,7 @@ import Image from "next/image";
 import { motion } from "framer-motion";
 import { FaBrain, FaHeartbeat, FaFlask, FaArrowRight } from "react-icons/fa";
 import Link from "next/link";
+import { NavAuthButtons } from "@/components/nav-auth-buttons";
 
 type ResearchArea = {
   icon: React.ReactNode;
@@ -92,6 +93,7 @@ export default function HomePage() {
 
   return (
     <div className="min-h-screen bg-background">
+      <NavAuthButtons />
       {/* Hero Section */}
       <section className="relative overflow-hidden bg-gradient-to-br from-cognition-50 to-white dark:from-cognition-900 dark:to-gray-900">
         <div className="container mx-auto px-4 py-20 md:py-32">

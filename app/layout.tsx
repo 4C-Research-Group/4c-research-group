@@ -3,7 +3,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 import { AuthProvider } from "@/components/providers/auth-provider";
-import { NavAuthButtons } from "@/components/nav-auth-buttons";
+
 import Link from "next/link";
 
 export const metadata: Metadata = {
@@ -30,7 +30,6 @@ export default function RootLayout({
               <Link href="/" className="text-xl font-bold">
                 4C Research Group
               </Link>
-              <NavAuthButtons />
             </nav>
             <main>{children}</main>
           </ThemeProvider>

@@ -46,10 +46,21 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       data: { subscription },
     } = supabase.auth.onAuthStateChange(async (event, session) => {
       if (session?.user) {
+        // Fetch the user's profile from the profiles table
+        const { data: profile, error } = await supabase
+          .from("profiles")
+          .select("*")
+          .eq("id", session.user.id)
+          .single();
+
+        if (error) {
+          console.error("Error fetching user profile:", error);
+        }
+
         setUser({
           id: session.user.id,
           email: session.user.email,
-          role: session.user.user_metadata?.role,
+          role: profile?.role || "user",
         });
       } else {
         setUser(null);
@@ -74,6 +85,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     if (error) {
       throw error;
     }
+
+    // Update local user state
+    setUser((prev) => (prev ? { ...prev, role } : null));
   };
 
   const getUsers = async () => {
@@ -97,6 +111,25 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       throw error;
     }
 
+    // Fetch user profile after successful sign in
+    if (data.user) {
+      const { data: profile, error: profileError } = await supabase
+        .from("profiles")
+        .select("*")
+        .eq("id", data.user.id)
+        .single();
+
+      if (profileError) {
+        console.error("Error fetching user profile:", profileError);
+      }
+
+      setUser({
+        id: data.user.id,
+        email: data.user.email,
+        role: profile?.role || "user",
+      });
+    }
+
     console.log("Sign in successful:", data.user?.email);
     return data;
   };
@@ -107,6 +140,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       password,
       options: {
         emailRedirectTo: `${window.location.origin}/auth/callback`,
+        data: {
+          role: "user",
+        },
       },
     });
 
@@ -123,6 +159,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const signOut = async () => {
     try {
       console.log("Starting sign out process...");
+
+      // Clear the session
       const { error } = await supabase.auth.signOut();
 
       if (error) {
@@ -130,11 +168,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         throw error;
       }
 
-      console.log("Sign out successful, clearing user state...");
+      // Clear local state
       setUser(null);
 
-      // Force a hard navigation to login page
-      window.location.href = "/login";
+      console.log("Sign out successful, redirecting...");
+
+      // Simple redirect
+      document.location.href = "/login";
     } catch (err) {
       console.error("Error during sign out:", err);
       throw err;
