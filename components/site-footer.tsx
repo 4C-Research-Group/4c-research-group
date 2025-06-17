@@ -11,6 +11,7 @@ import {
   FaMapMarkerAlt,
   FaPhone,
 } from "react-icons/fa";
+import Image from "next/image";
 
 export interface NavItem {
   name: string;
@@ -31,7 +32,7 @@ export function SiteFooter({ navItems }: SiteFooterProps) {
           {/* Branding */}
           <div className="space-y-4">
             <div className="flex items-center space-x-2">
-              <FaBrain className="h-8 w-8 text-cognition-600 dark:text-cognition-400" />
+              <Image src="/logo.png" alt="Logo" width={32} height={32} />
               <span className="text-2xl font-bold bg-gradient-to-r from-cognition-600 to-consciousness-600 bg-clip-text text-transparent">
                 4C Research
               </span>

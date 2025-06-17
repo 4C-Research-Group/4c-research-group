@@ -16,6 +16,7 @@ import { SiteFooter } from "@/components/site-footer";
 import { useState, useEffect } from "react";
 import { useTheme } from "next-themes";
 import MobileNav from "@/components/mobile-nav";
+import Image from "next/image";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -110,7 +111,7 @@ function PagesLayout({ children }: { children: React.ReactNode }) {
         <div className="container flex h-16 items-center justify-between px-4">
           <div className="flex flex-col">
             <Link href="/" className="flex items-center space-x-2">
-              <FaBrain className="h-6 w-6 text-cognition-600 dark:text-cognition-400" />
+              <Image src="/logo.png" alt="Logo" width={32} height={32} />
               <span className="text-xl font-bold bg-gradient-to-r from-cognition-600 to-consciousness-600 bg-clip-text text-transparent dark:from-cognition-400 dark:to-consciousness-400">
                 4C Research
               </span>
