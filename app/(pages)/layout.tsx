@@ -17,6 +17,7 @@ import { useState, useEffect } from "react";
 import { useTheme } from "next-themes";
 import MobileNav from "@/components/mobile-nav";
 import Image from "next/image";
+import { NavAuthButtons } from "@/components/nav-auth-buttons";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -121,104 +122,154 @@ function PagesLayout({ children }: { children: React.ReactNode }) {
             </span>
           </div>
 
-          <nav className="hidden md:flex items-center gap-6">
-            <Link
-              href="/"
-              className="text-sm font-medium text-foreground/80 hover:text-foreground transition-colors dark:text-gray-300 dark:hover:text-white"
-            >
-              Home
-            </Link>
-            <Link
-              href="/about"
-              className="text-sm font-medium text-foreground/80 hover:text-foreground transition-colors dark:text-gray-300 dark:hover:text-white"
-            >
-              About
-            </Link>
-            <div className="relative group">
-              <button className="flex items-center gap-1 text-sm font-medium text-foreground/80 hover:text-foreground transition-colors dark:text-gray-300 dark:hover:text-white">
-                Research
-                <FaChevronDown className="h-3 w-3 mt-0.5 transition-transform group-hover:rotate-180" />
-              </button>
-              <div className="absolute left-0 mt-2 w-48 rounded-md shadow-lg bg-white dark:bg-gray-800 ring-1 ring-black/5 dark:ring-white/10 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
-                <div className="py-1">
-                  <Link
-                    href="/research/cognition"
-                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700"
-                  >
-                    <div className="flex items-center gap-2">
-                      <FaBrain className="h-4 w-4 text-cognition-500" />
-                      Cognition
-                    </div>
-                  </Link>
-                  <Link
-                    href="/research/consciousness"
-                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700"
-                  >
-                    <div className="flex items-center gap-2">
-                      <FaFlask className="h-4 w-4 text-consciousness-500" />
-                      Consciousness
-                    </div>
-                  </Link>
-                  <Link
-                    href="/research/critical-care"
-                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700"
-                  >
-                    <div className="flex items-center gap-2">
-                      <FaHeartbeat className="h-4 w-4 text-care-500" />
-                      Critical Care
-                    </div>
-                  </Link>
+          <div className="hidden md:flex items-center gap-6">
+            <nav className="flex items-center gap-6">
+              <Link
+                href="/"
+                className="text-sm font-medium text-foreground/80 hover:text-foreground transition-colors dark:text-gray-300 dark:hover:text-white"
+              >
+                Home
+              </Link>
+              <Link
+                href="/about"
+                className="text-sm font-medium text-foreground/80 hover:text-foreground transition-colors dark:text-gray-300 dark:hover:text-white"
+              >
+                About
+              </Link>
+              <div className="relative group">
+                <button className="flex items-center gap-1 text-sm font-medium text-foreground/80 hover:text-foreground transition-colors dark:text-gray-300 dark:hover:text-white">
+                  Research
+                  <FaChevronDown className="h-3 w-3 mt-0.5 transition-transform group-hover:rotate-180" />
+                </button>
+                <div className="absolute left-0 mt-2 w-48 rounded-md shadow-lg bg-white dark:bg-gray-800 ring-1 ring-black/5 dark:ring-white/10 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
+                  <div className="py-1">
+                    <Link
+                      href="/research/cognition"
+                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700"
+                    >
+                      <div className="flex items-center gap-2">
+                        <FaBrain className="h-4 w-4 text-cognition-500" />
+                        Cognition
+                      </div>
+                    </Link>
+                    <Link
+                      href="/research/consciousness"
+                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700"
+                    >
+                      <div className="flex items-center gap-2">
+                        <FaFlask className="h-4 w-4 text-consciousness-500" />
+                        Consciousness
+                      </div>
+                    </Link>
+                    <Link
+                      href="/research/critical-care"
+                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700"
+                    >
+                      <div className="flex items-center gap-2">
+                        <FaHeartbeat className="h-4 w-4 text-care-500" />
+                        Critical Care
+                      </div>
+                    </Link>
+                  </div>
                 </div>
               </div>
+              <Link
+                href="/projects"
+                className="text-sm font-medium text-foreground/80 hover:text-foreground transition-colors dark:text-gray-300 dark:hover:text-white"
+              >
+                Projects
+              </Link>
+              <Link
+                href="/knowledge-mobilization"
+                className="text-sm font-medium text-foreground/80 hover:text-foreground transition-colors dark:text-gray-300 dark:hover:text-white"
+              >
+                Knowledge Mobilization
+              </Link>
+              <Link
+                href="/team"
+                className="text-sm font-medium text-foreground/80 hover:text-foreground transition-colors dark:text-gray-300 dark:hover:text-white"
+              >
+                Join the Team
+              </Link>
+              <Link
+                href="/4c-blogs"
+                className="text-sm font-medium text-foreground/80 hover:text-foreground transition-colors dark:text-gray-300 dark:hover:text-white"
+              >
+                4C Blogs
+              </Link>
+              <Link
+                href="/contact"
+                className="text-sm font-medium text-foreground/80 hover:text-foreground transition-colors dark:text-gray-300 dark:hover:text-white"
+              >
+                Contact
+              </Link>
+            </nav>
+
+            <div className="flex items-center gap-4 ml-4">
+              <ThemeToggle />
+              <div className="h-6 w-px bg-gray-200 dark:bg-gray-700" />
+              <NavAuthButtons />
             </div>
-            <Link
-              href="/projects"
-              className="text-sm font-medium text-foreground/80 hover:text-foreground transition-colors dark:text-gray-300 dark:hover:text-white"
-            >
-              Projects
-            </Link>
-            <Link
-              href="/knowledge-mobilization"
-              className="text-sm font-medium text-foreground/80 hover:text-foreground transition-colors dark:text-gray-300 dark:hover:text-white"
-            >
-              Knowledge Mobilization
-            </Link>
-            <Link
-              href="/team"
-              className="text-sm font-medium text-foreground/80 hover:text-foreground transition-colors dark:text-gray-300 dark:hover:text-white"
-            >
-              Join the Team
-            </Link>
-            <Link
-              href="/4c-blogs"
-              className="text-sm font-medium text-foreground/80 hover:text-foreground transition-colors dark:text-gray-300 dark:hover:text-white"
-            >
-              4C Blogs
-            </Link>
-
-            <Link
-              href="/contact"
-              className="text-sm font-medium text-foreground/80 hover:text-foreground transition-colors dark:text-gray-300 dark:hover:text-white"
-            >
-              Contact
-            </Link>
-          </nav>
-
-          <div className="flex items-center gap-4">
-            <ThemeToggle />
-            <Link
-              href="/contact"
-              className="hidden md:inline-flex items-center justify-center px-4 py-2 rounded-lg text-sm font-medium text-white bg-cognition-600 hover:bg-cognition-700 transition-colors dark:bg-cognition-700 dark:hover:bg-cognition-600"
-            >
-              Get in Touch
-            </Link>
           </div>
 
-          {/* Mobile Navigation Trigger */}
-          <div className="md:hidden">
-            <MobileNav />
+          {/* Mobile menu button */}
+          <div className="flex md:hidden items-center gap-4">
+            <ThemeToggle />
+            <button
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              className="p-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800"
+            >
+              <svg
+                className="h-6 w-6"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                {isMobileMenuOpen ? (
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M6 18L18 6M6 6l12 12"
+                  />
+                ) : (
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M4 6h16M4 12h16M4 18h16"
+                  />
+                )}
+              </svg>
+            </button>
           </div>
         </div>
+
+        {/* Mobile menu */}
+        {isMobileMenuOpen && (
+          <div className="md:hidden bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-800">
+            <div className="px-2 pt-2 pb-3 space-y-1">
+              <Link
+                href="/"
+                className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800"
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                Home
+              </Link>
+              <Link
+                href="/about"
+                className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800"
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                About
+              </Link>
+              {/* Add other mobile menu items here */}
+              <div className="px-3 py-2">
+                <NavAuthButtons />
+              </div>
+            </div>
+          </div>
+        )}
       </header>
 
       {/* Main Content */}
