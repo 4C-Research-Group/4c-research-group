@@ -26,11 +26,6 @@ export default function RootLayout({
             enableSystem
             disableTransitionOnChange
           >
-            <nav className="flex items-center justify-between p-4 border-b">
-              <Link href="/" className="text-xl font-bold">
-                4C Research Group
-              </Link>
-            </nav>
             <main>{children}</main>
           </ThemeProvider>
         </AuthProvider>
