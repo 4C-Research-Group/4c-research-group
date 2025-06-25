@@ -1,6 +1,13 @@
-import { redirect } from "next/navigation";
+// app/(admin)/layout.tsx
+import { Inter } from "next/font/google";
 import { createClient } from "@/lib/supabase/server";
+import { redirect } from "next/navigation";
+import { isUserAdmin } from "@/lib/utils/role-check";
+import { Toaster } from "sonner";
 import Link from "next/link";
+import { LogOut, LayoutDashboard, FileEdit, Settings } from "lucide-react";
+
+const inter = Inter({ subsets: ["latin"] });
 
 export default async function AdminLayout({
   children,
@@ -11,70 +18,94 @@ export default async function AdminLayout({
   const {
     data: { user },
   } = await supabase.auth.getUser();
+  const isAdmin = user ? await isUserAdmin(user) : false;
 
-  // Redirect to login if not authenticated
-  if (!user) {
-    redirect(
-      "/login?message=You must be logged in to access the admin dashboard"
-    );
+  if (!isAdmin) {
+    redirect("/login");
   }
 
-  // Check if user is admin
-  const { data: userData } = await supabase
-    .from("users")
-    .select("is_admin")
-    .eq("id", user.id)
-    .single();
-
-  if (!userData?.is_admin) {
-    redirect("/unauthorized");
-  }
+  const handleSignOut = async () => {
+    "use server";
+    const supabase = createClient();
+    await supabase.auth.signOut();
+    redirect("/login");
+  };
 
   return (
-    <div className="flex h-screen bg-gray-100">
-      {/* Sidebar */}
-      <div className="w-64 bg-white shadow-lg flex flex-col">
-        <div className="p-4 border-b">
-          <h1 className="text-xl font-bold">Admin Dashboard</h1>
-          <div className="mt-2 text-sm text-gray-600">
-            <div>{user.email}</div>
-            <div className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
-              Admin
+    <html lang="en" className="h-full bg-white">
+      <body className={`${inter.className} h-full`}>
+        <div className="min-h-full">
+          <nav className="bg-gray-800">
+            <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+              <div className="flex h-16 items-center justify-between">
+                <div className="flex items-center">
+                  <div className="flex-shrink-0">
+                    <Link
+                      href="/admin"
+                      className="text-white font-bold text-xl"
+                    >
+                      Admin Panel
+                    </Link>
+                  </div>
+                  <div className="hidden md:block">
+                    <div className="ml-10 flex items-baseline space-x-4">
+                      <Link
+                        href="/admin"
+                        className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium flex items-center"
+                      >
+                        <LayoutDashboard className="h-4 w-4 mr-2" />
+                        Dashboard
+                      </Link>
+                      <Link
+                        href="/admin/pages/new"
+                        className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium flex items-center"
+                      >
+                        <FileEdit className="h-4 w-4 mr-2" />
+                        New Page
+                      </Link>
+                      <Link
+                        href="/admin/settings"
+                        className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium flex items-center"
+                      >
+                        <Settings className="h-4 w-4 mr-2" />
+                        Settings
+                      </Link>
+                    </div>
+                  </div>
+                </div>
+                <div className="hidden md:block">
+                  <div className="ml-4 flex items-center md:ml-6">
+                    <form action={handleSignOut}>
+                      <button
+                        type="submit"
+                        className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium flex items-center"
+                      >
+                        <LogOut className="h-4 w-4 mr-2" />
+                        Sign out
+                      </button>
+                    </form>
+                  </div>
+                </div>
+              </div>
             </div>
-          </div>
-        </div>
-        <nav className="p-4 space-y-2">
-          <Link
-            href="/admin"
-            className="block px-4 py-2 text-gray-700 hover:bg-gray-100 rounded"
-          >
-            Overview
-          </Link>
-          <Link
-            href="/admin/pages"
-            className="block px-4 py-2 text-gray-700 hover:bg-gray-100 rounded"
-          >
-            Pages
-          </Link>
-          <Link
-            href="/admin/users"
-            className="block px-4 py-2 text-gray-700 hover:bg-gray-100 rounded"
-          >
-            Users
-          </Link>
-          <form action="/auth/signout" method="post">
-            <button
-              type="submit"
-              className="w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100 rounded"
-            >
-              Sign Out
-            </button>
-          </form>
-        </nav>
-      </div>
+          </nav>
 
-      {/* Main Content */}
-      <div className="flex-1 p-8 overflow-auto">{children}</div>
-    </div>
+          <header className="bg-white shadow">
+            <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
+              <h1 className="text-3xl font-bold tracking-tight text-gray-900">
+                Admin Dashboard
+              </h1>
+            </div>
+          </header>
+
+          <main>
+            <div className="mx-auto max-w-7xl py-6 sm:px-6 lg:px-8">
+              {children}
+            </div>
+          </main>
+        </div>
+        <Toaster position="top-right" />
+      </body>
+    </html>
   );
 }

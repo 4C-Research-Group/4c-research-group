@@ -26,7 +26,7 @@ const supabase = createClient(
 
 async function createAdminUser() {
   try {
-    const adminEmail = "admin3@example.com";
+    const adminEmail = "admin@example.com";
     const adminPassword = "admin123";
 
     console.log("Checking for existing auth user...");
