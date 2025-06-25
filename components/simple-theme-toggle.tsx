@@ -24,7 +24,7 @@ export function SimpleThemeToggle({
       title={isDark ? "Switch to light mode" : "Switch to dark mode"}
       onClick={() => setTheme(isDark ? "light" : "dark")}
       className={cn(
-        "relative flex h-10 w-20 items-center rounded-full border-none outline-none focus:ring-2",
+        "relative flex h-8 w-16 items-center rounded-full border-none outline-none focus:ring-2",
         "focus:ring-cognition-500 dark:focus:ring-cognition-400",
         "shadow-lg transition-all duration-300",
         "bg-gradient-to-r from-cognition-500 via-cognition-600 to-cognition-700 dark:from-cognition-400 dark:via-cognition-500 dark:to-cognition-600",
@@ -40,10 +40,10 @@ export function SimpleThemeToggle({
     >
       <span
         className={cn(
-          "absolute top-1 left-1 h-8 w-8 rounded-full shadow-lg transition-all duration-300 flex items-center justify-center",
+          "absolute top-0.5 left-0.5 h-7 w-7 rounded-full shadow-lg transition-all duration-300 flex items-center justify-center",
           "bg-white/90 dark:bg-black/90",
           "ring-2 ring-cognition-400 dark:ring-cognition-500",
-          isDark ? "translate-x-10" : "translate-x-0"
+          isDark ? "translate-x-8" : "translate-x-0"
         )}
         style={{
           boxShadow: isDark
@@ -52,9 +52,9 @@ export function SimpleThemeToggle({
         }}
       >
         {isDark ? (
-          <Sun className="h-4 w-4 text-cognition-400" />
+          <Sun className="h-3 w-3 text-cognition-400" />
         ) : (
-          <Moon className="h-4 w-4 text-cognition-600" />
+          <Moon className="h-3 w-3 text-cognition-600" />
         )}
       </span>
       <span className="sr-only">
