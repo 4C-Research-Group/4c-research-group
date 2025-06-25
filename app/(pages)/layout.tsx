@@ -216,14 +216,14 @@ function PagesLayout({ children }: { children: React.ReactNode }) {
             <div className="px-4 py-3 space-y-3 max-h-[80vh] overflow-y-auto">
               <Link
                 href="/"
-                className="block px-4 py-3 rounded-lg text-base font-medium text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800 transition-colors"
+                className="px-4 py-3 rounded-lg text-base font-medium text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800 transition-colors"
                 onClick={() => setIsMobileMenuOpen(false)}
               >
                 Home
               </Link>
               <Link
                 href="/about"
-                className="block px-4 py-3 rounded-lg text-base font-medium text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800 transition-colors"
+                className="px-4 py-3 rounded-lg text-base font-medium text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800 transition-colors"
                 onClick={() => setIsMobileMenuOpen(false)}
               >
                 About
@@ -235,7 +235,7 @@ function PagesLayout({ children }: { children: React.ReactNode }) {
                 <div className="space-y-2 pl-4">
                   <Link
                     href="/research/cognition"
-                    className="block px-4 py-2 rounded-lg text-base text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800 transition-colors flex items-center gap-2"
+                    className="px-4 py-2 rounded-lg text-base text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800 transition-colors flex items-center gap-2"
                     onClick={() => setIsMobileMenuOpen(false)}
                   >
                     <FaBrain className="h-4 w-4 text-cognition-500" />
@@ -243,7 +243,7 @@ function PagesLayout({ children }: { children: React.ReactNode }) {
                   </Link>
                   <Link
                     href="/research/consciousness"
-                    className="block px-4 py-2 rounded-lg text-base text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800 transition-colors flex items-center gap-2"
+                    className="px-4 py-2 rounded-lg text-base text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800 transition-colors flex items-center gap-2"
                     onClick={() => setIsMobileMenuOpen(false)}
                   >
                     <FaFlask className="h-4 w-4 text-consciousness-500" />
@@ -251,7 +251,7 @@ function PagesLayout({ children }: { children: React.ReactNode }) {
                   </Link>
                   <Link
                     href="/research/critical-care"
-                    className="block px-4 py-2 rounded-lg text-base text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800 transition-colors flex items-center gap-2"
+                    className="px-4 py-2 rounded-lg text-base text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800 transition-colors flex items-center gap-2"
                     onClick={() => setIsMobileMenuOpen(false)}
                   >
                     <FaHeartbeat className="h-4 w-4 text-care-500" />
@@ -261,7 +261,7 @@ function PagesLayout({ children }: { children: React.ReactNode }) {
               </div>
               <Link
                 href="/projects"
-                className="block px-4 py-3 rounded-lg text-base font-medium text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800 transition-colors"
+                className="px-4 py-3 rounded-lg text-base font-medium text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800 transition-colors"
                 onClick={() => setIsMobileMenuOpen(false)}
               >
                 Projects
@@ -295,7 +295,10 @@ function PagesLayout({ children }: { children: React.ReactNode }) {
                 Contact
               </Link>
               <div className="pt-2 border-t border-gray-200 dark:border-gray-700">
-                <NavAuthButtons />
+                <NavAuthButtons
+                  className="flex flex-col space-y-3 px-2"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                />
               </div>
             </div>
           </div>

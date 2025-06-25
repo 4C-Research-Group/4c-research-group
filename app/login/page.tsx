@@ -47,9 +47,9 @@ export default function LoginPage() {
 
         // 3. Redirect based on admin status
         if (userData?.is_admin) {
-          window.location.href = "/admin";
+          router.push("/admin");
         } else {
-          window.location.href = "/";
+          router.push("/");
         }
       }
     } catch (error) {
