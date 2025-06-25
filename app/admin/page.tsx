@@ -2,93 +2,68 @@
 
 import { useAuth } from "@/components/providers/auth-provider";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
-import Link from "next/link";
+import { useEffect } from "react";
 
-export default function AdminDashboard() {
+export default function AdminPage() {
   const { user, loading } = useAuth();
   const router = useRouter();
-  const [isAdmin, setIsAdmin] = useState(false);
 
   useEffect(() => {
     if (!loading && !user) {
-      router.push("/login?redirect=/admin");
-    }
-    // Check if user is admin (you'll need to implement this logic)
-    // For now, we'll just check if user exists
-    if (user) {
-      // TODO: Implement proper admin check
-      setIsAdmin(true);
+      router.push("/login");
     }
   }, [user, loading, router]);
 
-  if (loading) {
+  if (loading || !user) {
     return (
-      <div className="flex justify-center items-center min-h-screen">
-        Loading...
-      </div>
-    );
-  }
-
-  if (!isAdmin) {
-    return (
-      <div className="flex flex-col items-center justify-center min-h-screen p-4">
-        <h1 className="text-2xl font-bold mb-4">Access Denied</h1>
-        <p>You don&apos;t have permission to access this page.</p>
-        <Link href="/" className="mt-4 text-blue-600 hover:underline">
-          Return to Home
-        </Link>
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
       </div>
     );
   }
 
   return (
-    <div className="container mx-auto p-4">
+    <div className="p-8 max-w-7xl mx-auto">
       <h1 className="text-3xl font-bold mb-8">Admin Dashboard</h1>
+      <div className="bg-white p-6 rounded-lg shadow">
+        <h2 className="text-xl font-semibold mb-4">Welcome, {user.email}</h2>
+        <p className="text-gray-600">
+          You have successfully accessed the admin dashboard.
+        </p>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        <DashboardCard
-          title="Pages"
-          description="Manage website pages"
-          href="/admin/pages"
-          icon="📄"
-        />
-        <DashboardCard
-          title="Users"
-          description="Manage user accounts and permissions"
-          href="/admin/users"
-          icon="👥"
-        />
-        <DashboardCard
-          title="Content"
-          description="Edit website content"
-          href="/admin/content"
-          icon="✏️"
-        />
+        <div className="mt-8">
+          <h3 className="text-lg font-medium mb-4">Quick Actions</h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            <a
+              href="/admin/pages"
+              className="p-4 border rounded-lg hover:bg-gray-50 transition-colors block"
+            >
+              <h4 className="font-medium">Manage Pages</h4>
+              <p className="text-sm text-gray-500">
+                View and edit website pages
+              </p>
+            </a>
+            <a
+              href="/admin/users"
+              className="p-4 border rounded-lg hover:bg-gray-50 transition-colors block"
+            >
+              <h4 className="font-medium">Manage Users</h4>
+              <p className="text-sm text-gray-500">
+                View and manage user accounts
+              </p>
+            </a>
+            <a
+              href="/admin/settings"
+              className="p-4 border rounded-lg hover:bg-gray-50 transition-colors block"
+            >
+              <h4 className="font-medium">Site Settings</h4>
+              <p className="text-sm text-gray-500">
+                Configure site preferences
+              </p>
+            </a>
+          </div>
+        </div>
       </div>
     </div>
-  );
-}
-
-function DashboardCard({
-  title,
-  description,
-  href,
-  icon,
-}: {
-  title: string;
-  description: string;
-  href: string;
-  icon: string;
-}) {
-  return (
-    <Link
-      href={href}
-      className="p-6 border rounded-lg hover:shadow-md transition-shadow duration-200 block"
-    >
-      <div className="text-4xl mb-4">{icon}</div>
-      <h2 className="text-xl font-semibold mb-2">{title}</h2>
-      <p className="text-gray-600">{description}</p>
-    </Link>
   );
 }

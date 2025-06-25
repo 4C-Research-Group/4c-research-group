@@ -18,45 +18,12 @@ import { useTheme } from "next-themes";
 import MobileNav from "@/components/mobile-nav";
 import Image from "next/image";
 import { NavAuthButtons } from "@/components/nav-auth-buttons";
+import { SimpleThemeToggle } from "@/components/simple-theme-toggle";
 
 const inter = Inter({
   subsets: ["latin"],
   variable: "--font-sans",
 });
-
-function ThemeToggle() {
-  const { theme, setTheme } = useTheme();
-  const [mounted, setMounted] = useState(false);
-
-  // Ensure component is mounted to avoid hydration mismatch
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  if (!mounted) {
-    return (
-      <button className="w-8 h-8 rounded-lg flex items-center justify-center hover:bg-gray-100 dark:hover:bg-gray-800">
-        <div className="w-4 h-4 rounded-full bg-gray-300 dark:bg-gray-600"></div>
-      </button>
-    );
-  }
-
-  return (
-    <button
-      onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-      className="w-8 h-8 rounded-lg flex items-center justify-center hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors duration-200"
-      aria-label={
-        theme === "dark" ? "Switch to light mode" : "Switch to dark mode"
-      }
-    >
-      {theme === "dark" ? (
-        <FaSun className="w-4 h-4 text-yellow-400" />
-      ) : (
-        <FaMoon className="w-4 h-4 text-gray-600" />
-      )}
-    </button>
-  );
-}
 
 export default function RootLayout({
   children,
@@ -206,7 +173,6 @@ function PagesLayout({ children }: { children: React.ReactNode }) {
             </nav>
 
             <div className="flex items-center gap-4 ml-4">
-              <ThemeToggle />
               <div className="h-6 w-px bg-gray-200 dark:bg-gray-700" />
               <NavAuthButtons />
             </div>
@@ -214,7 +180,6 @@ function PagesLayout({ children }: { children: React.ReactNode }) {
 
           {/* Mobile menu button */}
           <div className="flex md:hidden items-center gap-4">
-            <ThemeToggle />
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
               className="p-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800"
@@ -247,24 +212,89 @@ function PagesLayout({ children }: { children: React.ReactNode }) {
 
         {/* Mobile menu */}
         {isMobileMenuOpen && (
-          <div className="md:hidden bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-800">
-            <div className="px-2 pt-2 pb-3 space-y-1">
+          <div className="md:hidden bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-800 shadow-lg">
+            <div className="px-4 py-3 space-y-3 max-h-[80vh] overflow-y-auto">
               <Link
                 href="/"
-                className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800"
+                className="block px-4 py-3 rounded-lg text-base font-medium text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800 transition-colors"
                 onClick={() => setIsMobileMenuOpen(false)}
               >
                 Home
               </Link>
               <Link
                 href="/about"
-                className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800"
+                className="block px-4 py-3 rounded-lg text-base font-medium text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800 transition-colors"
                 onClick={() => setIsMobileMenuOpen(false)}
               >
                 About
               </Link>
-              {/* Add other mobile menu items here */}
-              <div className="px-3 py-2">
+              <div className="px-4 py-2">
+                <div className="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-2">
+                  Research
+                </div>
+                <div className="space-y-2 pl-4">
+                  <Link
+                    href="/research/cognition"
+                    className="block px-4 py-2 rounded-lg text-base text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800 transition-colors flex items-center gap-2"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                  >
+                    <FaBrain className="h-4 w-4 text-cognition-500" />
+                    Cognition
+                  </Link>
+                  <Link
+                    href="/research/consciousness"
+                    className="block px-4 py-2 rounded-lg text-base text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800 transition-colors flex items-center gap-2"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                  >
+                    <FaFlask className="h-4 w-4 text-consciousness-500" />
+                    Consciousness
+                  </Link>
+                  <Link
+                    href="/research/critical-care"
+                    className="block px-4 py-2 rounded-lg text-base text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800 transition-colors flex items-center gap-2"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                  >
+                    <FaHeartbeat className="h-4 w-4 text-care-500" />
+                    Critical Care
+                  </Link>
+                </div>
+              </div>
+              <Link
+                href="/projects"
+                className="block px-4 py-3 rounded-lg text-base font-medium text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800 transition-colors"
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                Projects
+              </Link>
+              <Link
+                href="/knowledge-mobilization"
+                className="block px-4 py-3 rounded-lg text-base font-medium text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800 transition-colors"
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                Knowledge Mobilization
+              </Link>
+              <Link
+                href="/team"
+                className="block px-4 py-3 rounded-lg text-base font-medium text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800 transition-colors"
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                Join the Team
+              </Link>
+              <Link
+                href="/4c-blogs"
+                className="block px-4 py-3 rounded-lg text-base font-medium text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800 transition-colors"
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                4C Blogs
+              </Link>
+              <Link
+                href="/contact"
+                className="block px-4 py-3 rounded-lg text-base font-medium text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800 transition-colors"
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                Contact
+              </Link>
+              <div className="pt-2 border-t border-gray-200 dark:border-gray-700">
                 <NavAuthButtons />
               </div>
             </div>
@@ -274,6 +304,11 @@ function PagesLayout({ children }: { children: React.ReactNode }) {
 
       {/* Main Content */}
       <main className="flex-1">{children}</main>
+
+      {/* Theme Toggle Fixed Position */}
+      <div className="fixed bottom-6 right-6 z-50">
+        <SimpleThemeToggle className="shadow-lg" />
+      </div>
 
       {/* Footer */}
       <SiteFooter
