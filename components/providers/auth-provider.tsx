@@ -46,21 +46,21 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       data: { subscription },
     } = supabase.auth.onAuthStateChange(async (event, session) => {
       if (session?.user) {
-        // Fetch the user's profile from the profiles table
-        const { data: profile, error } = await supabase
-          .from("profiles")
+        // Fetch the user's data from the users table
+        const { data: userData, error } = await supabase
+          .from("users")
           .select("*")
           .eq("id", session.user.id)
           .single();
 
         if (error) {
-          console.error("Error fetching user profile:", error);
+          console.error("Error fetching user data:", error);
         }
 
         setUser({
           id: session.user.id,
           email: session.user.email,
-          role: profile?.role || "user",
+          role: userData?.role || "user",
         });
       } else {
         setUser(null);
@@ -78,7 +78,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     role: string
   ): Promise<void> => {
     const { error } = await supabase
-      .from("profiles")
+      .from("users")
       .update({ role })
       .eq("id", userId);
 
@@ -92,7 +92,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const getUsers = async () => {
     const { data, error } = await supabase
-      .from("profiles")
+      .from("users")
       .select("id, email, role")
       .order("created_at", { ascending: false });
 
@@ -111,22 +111,22 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       throw error;
     }
 
-    // Fetch user profile after successful sign in
+    // Fetch user data after successful sign in
     if (data.user) {
-      const { data: profile, error: profileError } = await supabase
-        .from("profiles")
+      const { data: userData, error: userDataError } = await supabase
+        .from("users")
         .select("*")
         .eq("id", data.user.id)
         .single();
 
-      if (profileError) {
-        console.error("Error fetching user profile:", profileError);
+      if (userDataError) {
+        console.error("Error fetching user data:", userDataError);
       }
 
       setUser({
         id: data.user.id,
         email: data.user.email,
-        role: profile?.role || "user",
+        role: userData?.role || "user",
       });
     }
 

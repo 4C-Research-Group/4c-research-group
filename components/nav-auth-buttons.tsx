@@ -14,28 +14,17 @@ export function NavAuthButtons({ className, onClick }: NavAuthButtonsProps) {
   const { user, signOut, loading } = useAuth();
   const pathname = usePathname();
   const router = useRouter();
-  const [isAdmin, setIsAdmin] = useState(false);
 
-  useEffect(() => {
-    const checkAdminStatus = async () => {
-      if (user) {
-        const { data } = await fetch("/api/check-admin").then((res) =>
-          res.json()
-        );
-        setIsAdmin(data?.isAdmin || false);
-      }
-    };
-    checkAdminStatus();
-  }, [user]);
+  // Don't show anything on auth pages
+  if (pathname === "/login" || pathname === "/signup") {
+    return null;
+  }
 
+  // Show loading state
   if (loading) {
     return (
       <div className="h-10 w-24 bg-gray-200 dark:bg-gray-700 rounded-lg animate-pulse"></div>
     );
-  }
-
-  if (pathname === "/login" || pathname === "/signup") {
-    return null;
   }
 
   const handleSignOut = async () => {
@@ -44,13 +33,15 @@ export function NavAuthButtons({ className, onClick }: NavAuthButtonsProps) {
     router.refresh();
   };
 
+  // Show user menu if logged in
   if (user) {
     return (
       <div className={`flex items-center gap-4 ${className || ""}`}>
-        {isAdmin && (
+        {user.role === "admin" && (
           <Link
             href="/admin"
             className="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-200 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors duration-200"
+            onClick={onClick}
           >
             Admin
           </Link>
@@ -65,6 +56,7 @@ export function NavAuthButtons({ className, onClick }: NavAuthButtonsProps) {
     );
   }
 
+  // Show login/signup buttons if not logged in
   return (
     <div className={`flex items-center gap-3 ${className || ""}`}>
       <Link
