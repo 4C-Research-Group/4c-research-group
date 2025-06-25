@@ -60,32 +60,32 @@ async function createAdminUser() {
       console.log("✅ Auth user created with ID:", userId);
     }
 
-    // Check and update/insert user profile
-    console.log("Checking user profile...");
-    const { data: existingProfile } = await supabase
+    // Check and update/insert user in users table
+    console.log("Checking user in users table...");
+    const { data: existingUser } = await supabase
       .from("users")
       .select()
-      .eq("email", adminEmail)
+      .eq("id", userId)
       .single();
 
     const userData = {
       id: userId,
       email: adminEmail,
-      name: "Admin User",
-      role: "admin", // Explicitly set role to admin
+      full_name: "Admin User",
+      role: "admin",
       updated_at: new Date().toISOString(),
     };
 
-    if (existingProfile) {
-      console.log("🔄 Updating existing user profile...");
+    if (existingUser) {
+      console.log("🔄 Updating existing user...");
       const { error: updateError } = await supabase
         .from("users")
         .update(userData)
         .eq("id", userId);
       if (updateError) throw updateError;
-      console.log("✅ User profile updated");
+      console.log("✅ User updated");
     } else {
-      console.log("➕ Creating new user profile...");
+      console.log("➕ Creating new user...");
       const { error: insertError } = await supabase.from("users").insert([
         {
           ...userData,
@@ -93,12 +93,12 @@ async function createAdminUser() {
         },
       ]);
       if (insertError) throw insertError;
-      console.log("✅ User profile created");
+      console.log("✅ User created");
     }
 
-    // Verify the role was set correctly
+    // Verify the user role
     console.log("🔍 Verifying user role...");
-    const { data: verifyUser, error: verifyError } = await supabase
+    const { data: verifiedUser, error: verifyError } = await supabase
       .from("users")
       .select("id, email, role, created_at, updated_at")
       .eq("id", userId)
@@ -108,14 +108,14 @@ async function createAdminUser() {
       console.error("❌ Error verifying user role:", verifyError);
     } else {
       console.log("✅ User verification successful:", {
-        id: verifyUser.id,
-        email: verifyUser.email,
-        role: verifyUser.role,
-        created: verifyUser.created_at,
-        updated: verifyUser.updated_at,
+        id: verifiedUser.id,
+        email: verifiedUser.email,
+        role: verifiedUser.role,
+        created: verifiedUser.created_at,
+        updated: verifiedUser.updated_at,
       });
 
-      if (verifyUser.role !== "admin") {
+      if (verifiedUser.role !== "admin") {
         console.warn("⚠️  Warning: User role is not 'admin'");
         console.log(
           "Please check your database for triggers or RLS policies that might be modifying the role."
