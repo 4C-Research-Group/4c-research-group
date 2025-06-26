@@ -1,56 +1,56 @@
 "use client";
 
-import { useAuth } from "@/components/providers/auth-provider";
-import { useEffect, useState } from "react";
-import { createClient } from "@supabase/supabase-js";
+import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { supabase } from "@/lib/supabase/client";
 
 export default function TestAdminPage() {
-  const { user, loading } = useAuth();
-  const [adminStatus, setAdminStatus] = useState<string>("Checking...");
-  const [userData, setUserData] = useState<any>(null);
+  const [user, setUser] = useState<any>(null);
+  const [userRole, setUserRole] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const router = useRouter();
 
   useEffect(() => {
-    const checkAdminStatus = async () => {
-      if (user) {
-        try {
-          console.log("🔍 Checking admin status for user:", user.id);
-          const supabase = createClient(
-            process.env.NEXT_PUBLIC_SUPABASE_URL!,
-            process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-          );
+    const checkAuth = async () => {
+      try {
+        // Check if user is authenticated
+        const {
+          data: { user: authUser },
+          error: authError,
+        } = await supabase.auth.getUser();
 
-          const { data, error } = await supabase
-            .from("users")
-            .select("*")
-            .eq("id", user.id)
-            .single();
-
-          console.log("📊 User data:", data);
-          console.log("❌ Error:", error);
-
-          if (error) {
-            setAdminStatus(`Error: ${error.message}`);
-          } else if (data) {
-            setUserData(data);
-            setAdminStatus(
-              `Role: ${data.role} (${data.role === "admin" ? "ADMIN" : "USER"})`
-            );
-          } else {
-            setAdminStatus("No user data found");
-          }
-        } catch (err) {
-          console.error("💥 Error checking admin status:", err);
-          setAdminStatus(`Exception: ${err}`);
+        if (authError || !authUser) {
+          setError("Not authenticated");
+          setLoading(false);
+          return;
         }
-      } else {
-        setAdminStatus("No user logged in");
+
+        setUser(authUser);
+
+        // Check user role
+        const { data: userData, error: roleError } = await supabase
+          .from("users")
+          .select("role")
+          .eq("id", authUser.id)
+          .single();
+
+        if (roleError) {
+          setError("Error checking user role");
+          setLoading(false);
+          return;
+        }
+
+        setUserRole(userData.role);
+        setLoading(false);
+      } catch (err) {
+        setError("Unexpected error");
+        setLoading(false);
       }
     };
 
-    if (!loading) {
-      checkAdminStatus();
-    }
-  }, [user, loading]);
+    checkAuth();
+  }, []);
 
   return (
     <div className="min-h-screen bg-gray-50 p-8">
@@ -75,14 +75,18 @@ export default function TestAdminPage() {
 
           <div>
             <h2 className="text-lg font-semibold mb-2">Admin Status</h2>
-            <p className="text-lg">{adminStatus}</p>
+            <p className="text-lg">
+              {userRole
+                ? `Role: ${userRole} (${userRole === "admin" ? "ADMIN" : "USER"})`
+                : error || "Checking..."}
+            </p>
           </div>
 
-          {userData && (
+          {user && (
             <div>
               <h2 className="text-lg font-semibold mb-2">User Data</h2>
               <pre className="bg-gray-100 p-4 rounded text-sm overflow-auto">
-                {JSON.stringify(userData, null, 2)}
+                {JSON.stringify(user, null, 2)}
               </pre>
             </div>
           )}

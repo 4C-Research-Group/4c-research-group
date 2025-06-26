@@ -1,8 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { createClient } from "@supabase/supabase-js";
-import { createClient as createSupabaseClient } from "@supabase/supabase-js";
+import { supabase } from "@/lib/supabase/client";
 
 export default function TestLoginPage() {
   const [status, setStatus] = useState<string>("Ready");
@@ -14,10 +13,6 @@ export default function TestLoginPage() {
 
     try {
       console.log("🧪 Starting direct auth test...");
-      const supabase = createClient(
-        process.env.NEXT_PUBLIC_SUPABASE_URL!,
-        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-      );
 
       const startTime = Date.now();
       console.log("🔐 Calling signInWithPassword...");
@@ -60,41 +55,35 @@ export default function TestLoginPage() {
   };
 
   const testFreshClient = async () => {
-    setStatus("Testing with fresh client...");
+    setStatus("Testing with shared client...");
     setResult(null);
 
     try {
-      console.log("🧪 Testing with fresh Supabase client...");
-
-      // Create a fresh client instance
-      const freshSupabase = createSupabaseClient(
-        process.env.NEXT_PUBLIC_SUPABASE_URL!,
-        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-      );
+      console.log("🧪 Testing with shared Supabase client...");
 
       const startTime = Date.now();
-      console.log("🔐 Calling signInWithPassword with fresh client...");
+      console.log("🔐 Calling signInWithPassword with shared client...");
 
-      const { data, error } = await freshSupabase.auth.signInWithPassword({
+      const { data, error } = await supabase.auth.signInWithPassword({
         email: "admin@example.com",
         password: "admin123",
       });
 
       const endTime = Date.now();
-      console.log(`⏱️ Fresh client auth call took ${endTime - startTime}ms`);
+      console.log(`⏱️ Shared client auth call took ${endTime - startTime}ms`);
 
       if (error) {
-        console.error("❌ Fresh client auth error:", error);
-        setStatus(`Fresh client error: ${error.message}`);
+        console.error("❌ Shared client auth error:", error);
+        setStatus(`Shared client error: ${error.message}`);
         setResult({ error: error.message });
       } else {
-        console.log("✅ Fresh client auth successful:", data);
-        setStatus("Fresh client authentication successful!");
+        console.log("✅ Shared client auth successful:", data);
+        setStatus("Shared client authentication successful!");
         setResult(data);
       }
     } catch (err) {
-      console.error("💥 Fresh client exception:", err);
-      setStatus(`Fresh client exception: ${err}`);
+      console.error("💥 Shared client exception:", err);
+      setStatus(`Shared client exception: ${err}`);
       setResult({ exception: err });
     }
   };
@@ -109,10 +98,6 @@ export default function TestLoginPage() {
 
     try {
       console.log("🔍 Testing role query...");
-      const supabase = createClient(
-        process.env.NEXT_PUBLIC_SUPABASE_URL!,
-        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-      );
 
       const { data, error } = await supabase
         .from("users")

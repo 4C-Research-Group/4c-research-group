@@ -1,13 +1,10 @@
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+import { supabase } from "@/lib/supabase/client";
 import { User } from "@supabase/supabase-js";
 
 export async function isUserAdmin(user: User | null): Promise<boolean> {
   if (!user) return false;
 
   try {
-    // Use client component client for role checking
-    const supabase = createClientComponentClient();
-
     const { data, error } = await supabase
       .from("users")
       .select("role")

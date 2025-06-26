@@ -1,18 +1,18 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useAuth } from "@/components/providers/auth-provider";
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+import { supabase } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
 
 export default function TestAuthPage() {
-  const { user, loading, signOut } = useAuth();
   const router = useRouter();
   const [envVars, setEnvVars] = useState<{
     url: string | undefined;
     anonKey: string | undefined;
   }>({ url: undefined, anonKey: undefined });
-  const [authState, setAuthState] = useState<any>(null);
+  const [user, setUser] = useState<any>(null);
+  const [session, setSession] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     // Get environment variables
@@ -21,22 +21,43 @@ export default function TestAuthPage() {
       anonKey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
     });
 
-    // Test Supabase client
-    const testSupabase = async () => {
-      const supabase = createClientComponentClient();
-      const { data, error } = await supabase.auth.getSession();
-      setAuthState({
-        session: data.session,
-        error: error?.message,
-      });
+    const getSession = async () => {
+      try {
+        const {
+          data: { session },
+          error,
+        } = await supabase.auth.getSession();
+
+        if (error) {
+          console.error("Error getting session:", error);
+        } else {
+          setSession(session);
+          setUser(session?.user || null);
+        }
+      } catch (err) {
+        console.error("Unexpected error:", err);
+      } finally {
+        setLoading(false);
+      }
     };
 
-    testSupabase();
+    getSession();
+
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange(async (event, session) => {
+      console.log("Auth state changed:", event, session);
+      setSession(session);
+      setUser(session?.user || null);
+      setLoading(false);
+    });
+
+    return () => subscription.unsubscribe();
   }, []);
 
   const handleSignOut = async () => {
     try {
-      await signOut();
+      await supabase.auth.signOut();
       router.refresh(); // Refresh the page to update the UI
     } catch (error) {
       console.error("Error signing out:", error);
@@ -69,7 +90,7 @@ export default function TestAuthPage() {
       <div className="mb-8 p-4 bg-gray-100 dark:bg-gray-800 rounded-lg">
         <h2 className="text-xl font-semibold mb-2">Auth State</h2>
         <pre className="bg-black dark:bg-gray-900 text-white p-4 rounded overflow-x-auto">
-          {JSON.stringify(authState, null, 2)}
+          {JSON.stringify({ session, user }, null, 2)}
         </pre>
       </div>
 

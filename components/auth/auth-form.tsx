@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef } from "react";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+import { supabase } from "@/lib/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -35,7 +35,6 @@ export default function AuthForm({ initialMode = "login" }: AuthFormProps) {
   const [isCheckingSession, setIsCheckingSession] = useState(true);
   const router = useRouter();
   const hasAttemptedRedirect = useRef(false);
-  const supabase = createClientComponentClient();
 
   const {
     register,

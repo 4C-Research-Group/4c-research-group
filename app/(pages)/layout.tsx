@@ -25,36 +25,11 @@ const inter = Inter({
   variable: "--font-sans",
 });
 
-export default function RootLayout({
+export default function PagesLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const [isScrolled, setIsScrolled] = useState(false);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 10);
-    };
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-
-  return (
-    <html lang="en" suppressHydrationWarning>
-      <body
-        className={cn(
-          "min-h-screen bg-background font-sans antialiased",
-          inter.variable
-        )}
-      >
-        <PagesLayout>{children}</PagesLayout>
-      </body>
-    </html>
-  );
-}
-
-function PagesLayout({ children }: { children: React.ReactNode }) {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
