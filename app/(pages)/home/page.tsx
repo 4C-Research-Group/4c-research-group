@@ -123,8 +123,8 @@ export default function HomePage() {
                       <Image
                         src={hero.logo || "/logo.png"}
                         alt="4C Lab Logo"
-                        width={128}
-                        height={128}
+                        width={512}
+                        height={512}
                       />
                     </div>
                   </div>
