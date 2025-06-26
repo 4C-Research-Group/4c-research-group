@@ -2,7 +2,7 @@ import { createMiddlewareClient } from "@supabase/auth-helpers-nextjs";
 import { NextResponse, type NextRequest } from "next/server";
 
 // Define public routes that don't require authentication
-const publicRoutes = ["/login", "/signup", "/auth/callback"];
+const publicRoutes = ["/login", "/signup", "/auth/callback", "/"];
 
 export async function middleware(request: NextRequest) {
   let response = NextResponse.next({
@@ -26,11 +26,19 @@ export async function middleware(request: NextRequest) {
 
     // If user is not authenticated and trying to access a protected route
     if (!user && !isPublicRoute) {
+      console.log("🔒 Middleware: Redirecting unauthenticated user to login");
       return NextResponse.redirect(new URL("/login", request.url));
     }
 
-    // If user is authenticated and trying to access a public route, redirect to appropriate dashboard
-    if (user && isPublicRoute) {
+    // Only redirect authenticated users from login/signup pages, not from home page
+    if (
+      user &&
+      (request.nextUrl.pathname === "/login" ||
+        request.nextUrl.pathname === "/signup")
+    ) {
+      console.log(
+        "🔄 Middleware: Redirecting authenticated user from login/signup"
+      );
       // Check if user is admin to determine redirect path
       const { data: userData } = await supabase
         .from("users")
@@ -39,6 +47,7 @@ export async function middleware(request: NextRequest) {
         .single();
 
       const redirectPath = userData?.role === "admin" ? "/admin" : "/dashboard";
+      console.log("🔄 Middleware: Redirecting to:", redirectPath);
       return NextResponse.redirect(new URL(redirectPath, request.url));
     }
   } catch (error) {

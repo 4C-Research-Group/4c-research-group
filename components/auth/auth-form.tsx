@@ -136,17 +136,7 @@ export default function AuthForm() {
         }
 
         if (authData.user) {
-          // Refresh session to ensure server-side sync
-          const { error: refreshError } = await supabase.auth.refreshSession();
-
-          if (refreshError) {
-            console.error("Session refresh error:", refreshError);
-          }
-
-          // Wait for session to be properly established
-          await new Promise((resolve) => setTimeout(resolve, 1000));
-
-          // Check if user is admin
+          // Check if user is admin immediately
           const { data: userData, error: roleError } = await supabase
             .from("users")
             .select("role")
@@ -158,15 +148,19 @@ export default function AuthForm() {
             return;
           }
 
-          // Redirect based on role
-          if (userData?.role === "admin") {
-            // Ensure session is established before redirect
-            await supabase.auth.getSession();
-            window.location.href = "/admin";
-          } else {
-            await supabase.auth.getSession();
-            window.location.href = "/dashboard";
-          }
+          // Small delay to ensure session is established
+          await new Promise((resolve) => setTimeout(resolve, 500));
+
+          // Redirect based on role immediately
+          const redirectPath =
+            userData?.role === "admin" ? "/admin" : "/dashboard";
+          console.log(
+            "🔄 Redirecting to:",
+            redirectPath,
+            "for user role:",
+            userData?.role
+          );
+          window.location.href = redirectPath;
         }
       } else {
         const { data: signUpData, error } = await supabase.auth.signUp({

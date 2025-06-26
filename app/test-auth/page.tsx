@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useAuth } from "@/components/providers/auth-provider";
-import { createClient } from "@/lib/supabase/client";
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { useRouter } from "next/navigation";
 
 export default function TestAuthPage() {
@@ -23,7 +23,7 @@ export default function TestAuthPage() {
 
     // Test Supabase client
     const testSupabase = async () => {
-      const supabase = createClient();
+      const supabase = createClientComponentClient();
       const { data, error } = await supabase.auth.getSession();
       setAuthState({
         session: data.session,

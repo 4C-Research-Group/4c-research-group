@@ -16,6 +16,7 @@ export default async function DashboardLayout({
   const supabase = createServerComponentClient({ cookies });
 
   try {
+    console.log("🔍 Dashboard layout: Checking authentication...");
     const {
       data: { user },
       error: authError,
@@ -31,7 +32,10 @@ export default async function DashboardLayout({
       redirect("/login");
     }
 
+    console.log("✅ User authenticated in dashboard layout:", user.id);
+
     // Check user role
+    console.log("🔍 Dashboard layout: Checking user role...");
     const { data: userData, error } = await supabase
       .from("users")
       .select("name, role")
@@ -43,10 +47,15 @@ export default async function DashboardLayout({
       redirect("/login");
     }
 
-    // If user is admin, redirect to admin panel
-    if (userData?.role === "admin") {
-      redirect("/admin");
-    }
+    console.log("👤 User role in dashboard layout:", userData?.role);
+
+    // Temporarily comment out admin redirect to test normal users
+    // if (userData?.role === "admin") {
+    //   console.log("🔄 User is admin, redirecting to admin panel");
+    //   redirect("/admin");
+    // }
+
+    console.log("✅ User is not admin, rendering dashboard layout");
 
     const handleSignOut = async () => {
       "use server";
