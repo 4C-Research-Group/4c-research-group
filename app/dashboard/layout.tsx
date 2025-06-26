@@ -49,11 +49,11 @@ export default async function DashboardLayout({
 
     console.log("👤 User role in dashboard layout:", userData?.role);
 
-    // Temporarily comment out admin redirect to test normal users
-    // if (userData?.role === "admin") {
-    //   console.log("🔄 User is admin, redirecting to admin panel");
-    //   redirect("/admin");
-    // }
+    // If user is admin, redirect to admin panel
+    if (userData?.role === "admin") {
+      console.log("🔄 User is admin, redirecting to admin panel");
+      redirect("/admin");
+    }
 
     console.log("✅ User is not admin, rendering dashboard layout");
 

@@ -5,7 +5,13 @@ import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { Toaster } from "sonner";
 import Link from "next/link";
-import { LogOut, LayoutDashboard, FileEdit, Settings } from "lucide-react";
+import {
+  LogOut,
+  LayoutDashboard,
+  FileEdit,
+  Settings,
+  Users,
+} from "lucide-react";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -95,6 +101,13 @@ export default async function AdminLayout({
                         >
                           <FileEdit className="h-4 w-4 mr-2" />
                           New Page
+                        </Link>
+                        <Link
+                          href="/admin/users"
+                          className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium flex items-center"
+                        >
+                          <Users className="h-4 w-4 mr-2" />
+                          Users
                         </Link>
                         <Link
                           href="/admin/settings"
