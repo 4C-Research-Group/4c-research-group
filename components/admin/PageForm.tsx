@@ -1,8 +1,8 @@
 "use client";
 
 import { useState } from "react";
+import { supabase } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
-import { createClient } from "@/lib/supabase/client";
 import { toast } from "sonner";
 
 export function PageForm({
@@ -20,7 +20,6 @@ export function PageForm({
   const [content, setContent] = useState(initialData?.content || "");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const router = useRouter();
-  const supabase = createClient();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -47,19 +46,13 @@ export function PageForm({
         toast.success("Page updated successfully");
       } else {
         // Create new page
-        const {
-          data: { user },
-        } = await supabase.auth.getUser();
-        if (!user) throw new Error("Not authenticated");
-
-        const { error } = await supabase.from("pages").insert([
-          {
-            title,
-            slug,
-            content,
-            created_by: user.id,
-          },
-        ]);
+        const { error } = await supabase.from("pages").insert({
+          title,
+          slug,
+          content,
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString(),
+        });
 
         if (error) throw error;
         toast.success("Page created successfully");

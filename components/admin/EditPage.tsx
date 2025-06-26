@@ -1,13 +1,12 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { createClient } from "@/lib/supabase/client";
+import { supabase } from "@/lib/supabase/client";
 import { toast } from "sonner";
 
 export default function EditPage({ pageId }: { pageId: string }) {
   const [content, setContent] = useState("");
   const [isSaving, setIsSaving] = useState(false);
-  const supabase = createClient();
 
   useEffect(() => {
     const loadPage = async () => {

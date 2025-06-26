@@ -1,6 +1,5 @@
 import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
-import { isUserAdmin } from "@/lib/utils/role-check";
 import { PageForm } from "@/components/admin/PageForm";
 
 export default async function NewPage() {
@@ -8,7 +7,22 @@ export default async function NewPage() {
   const {
     data: { user },
   } = await supabase.auth.getUser();
-  const isAdmin = user ? await isUserAdmin(user) : false;
+
+  // Check admin status directly using server client
+  let isAdmin = false;
+  if (user) {
+    try {
+      const { data, error } = await supabase
+        .from("users")
+        .select("role")
+        .eq("id", user.id)
+        .single();
+
+      isAdmin = !error && data?.role === "admin";
+    } catch (error) {
+      console.error("Error checking admin status:", error);
+    }
+  }
 
   if (!isAdmin) {
     redirect("/login");

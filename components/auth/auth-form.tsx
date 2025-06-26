@@ -1,224 +1,348 @@
 "use client";
 
-import { useState } from "react";
-import { createClient } from "@/lib/supabase/client";
+import { useState, useEffect, useRef } from "react";
+import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
-import Link from "next/link";
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Icons } from "@/components/icons";
-import { toast } from "sonner";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 
-type AuthFormProps = {
-  type: "login" | "signup";
-};
+import { Loader2, Mail, Lock, Eye, EyeOff } from "lucide-react";
+import { Alert, AlertDescription } from "../ui/alert";
 
-export function AuthForm({ type }: AuthFormProps) {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
+interface LoginFormData {
+  email: string;
+  password: string;
+}
+
+export default function AuthForm() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [showPassword, setShowPassword] = useState(false);
+  const [isLogin, setIsLogin] = useState(true);
+  const [isCheckingSession, setIsCheckingSession] = useState(true);
   const router = useRouter();
-  const supabase = createClient();
+  const hasAttemptedRedirect = useRef(false);
+  const supabase = createClientComponentClient();
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setError(null);
-    setIsLoading(true);
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    reset,
+  } = useForm<LoginFormData>();
 
-    try {
-      if (type === "signup") {
-        if (password !== confirmPassword) {
-          throw new Error("Passwords do not match");
-        }
+  // Check current session on component mount
+  useEffect(() => {
+    if (hasAttemptedRedirect.current) {
+      console.log("🔄 Redirect already attempted, skipping session check");
+      return;
+    }
 
-        // Create auth user
-        const { data: authData, error: signUpError } =
-          await supabase.auth.signUp({
-            email,
-            password,
-            options: {
-              emailRedirectTo: `${window.location.origin}/auth/callback`,
-            },
-          });
+    let isMounted = true;
 
-        if (signUpError) throw signUpError;
+    const checkSession = async () => {
+      try {
+        console.log("🔍 Checking current session...");
 
-        // Create user profile in users table
-        if (authData.user) {
-          const { error: profileError } = await supabase.from("users").upsert({
-            id: authData.user.id,
-            email: authData.user.email,
-            role: "user", // Default role
-            created_at: new Date().toISOString(),
-            updated_at: new Date().toISOString(),
-          });
-
-          if (profileError) throw profileError;
-        }
-
-        toast.success("Check your email to confirm your account!");
-        return;
-      }
-
-      // Handle login
-      const { data, error: signInError } =
-        await supabase.auth.signInWithPassword({
-          email,
-          password,
+        // Add timeout to prevent hanging
+        const timeoutPromise = new Promise<never>((_, reject) => {
+          setTimeout(() => reject(new Error("Session check timeout")), 5000);
         });
 
-      if (signInError) throw signInError;
+        const sessionPromise = supabase.auth.getUser();
 
-      // Get user role
-      const { data: userData, error: userError } = await supabase
-        .from("users")
-        .select("role")
-        .eq("id", data.user.id)
-        .single();
+        const result = await Promise.race([sessionPromise, timeoutPromise]);
 
-      if (userError) throw userError;
+        const {
+          data: { user },
+          error,
+        } = result;
 
-      toast.success("Successfully signed in!");
-      router.refresh();
+        if (!isMounted) return;
 
-      // Redirect based on role
-      const redirectPath = userData?.role === "admin" ? "/admin" : "/";
-      router.push(redirectPath);
-    } catch (err: any) {
+        if (error) {
+          console.error("❌ Session check error:", error);
+          setIsCheckingSession(false);
+          return;
+        }
+
+        if (user) {
+          console.log("✅ User already logged in:", user.id);
+
+          // Check user role and redirect
+          const { data: userData, error: roleError } = await supabase
+            .from("users")
+            .select("role")
+            .eq("id", user.id)
+            .single();
+
+          if (!isMounted) return;
+
+          if (!roleError && userData) {
+            console.log("👤 Current user role:", userData.role);
+            const redirectPath =
+              userData.role === "admin" ? "/admin" : "/dashboard";
+            console.log("🚀 Redirecting to:", redirectPath);
+
+            hasAttemptedRedirect.current = true;
+            window.location.href = redirectPath;
+            return;
+          }
+        }
+
+        console.log("❌ No active session found");
+        setIsCheckingSession(false);
+      } catch (err) {
+        if (!isMounted) return;
+        console.error("❌ Session check failed:", err);
+        setIsCheckingSession(false);
+      }
+    };
+
+    checkSession();
+
+    // Fallback timeout to ensure session check completes
+    const fallbackTimeout = setTimeout(() => {
+      if (isMounted && !hasAttemptedRedirect.current) {
+        console.log("⏰ Session check fallback timeout - showing form");
+        setIsCheckingSession(false);
+      }
+    }, 6000);
+
+    return () => {
+      isMounted = false;
+      clearTimeout(fallbackTimeout);
+    };
+  }, []); // Empty dependency array
+
+  const onSubmit = async (data: LoginFormData) => {
+    // Prevent submission if already checking session
+    if (isCheckingSession) {
+      console.log("⏳ Session check in progress, preventing submission");
+      return;
+    }
+
+    setIsLoading(true);
+    setError(null);
+
+    try {
+      if (isLogin) {
+        console.log("🔐 Starting login process...");
+        const { data: authData, error } =
+          await supabase.auth.signInWithPassword({
+            email: data.email,
+            password: data.password,
+          });
+
+        if (error) {
+          console.error("❌ Login error:", error);
+          setError(error.message);
+          return;
+        }
+
+        console.log("✅ Login successful, user ID:", authData.user?.id);
+
+        if (authData.user) {
+          // Refresh session to ensure server-side sync
+          console.log("🔄 Refreshing session for server-side sync...");
+          const { error: refreshError } = await supabase.auth.refreshSession();
+
+          if (refreshError) {
+            console.error("❌ Session refresh error:", refreshError);
+          } else {
+            console.log("✅ Session refreshed successfully");
+          }
+
+          // Wait for session to be properly established
+          console.log("⏳ Waiting for session to be established...");
+          await new Promise((resolve) => setTimeout(resolve, 1000));
+
+          // Check if user is admin
+          console.log("🔍 Checking user role...");
+          const { data: userData, error: roleError } = await supabase
+            .from("users")
+            .select("role")
+            .eq("id", authData.user.id)
+            .single();
+
+          if (roleError) {
+            console.error("❌ Error checking user role:", roleError);
+            setError("Error checking user permissions");
+            return;
+          }
+
+          console.log("👤 User role:", userData?.role);
+
+          // Redirect based on role
+          if (userData?.role === "admin") {
+            console.log("🚀 Redirecting admin to /admin");
+            // Ensure session is established before redirect
+            await supabase.auth.getSession();
+            window.location.href = "/admin";
+          } else {
+            console.log("🚀 Redirecting user to /dashboard");
+            await supabase.auth.getSession();
+            window.location.href = "/dashboard";
+          }
+        }
+      } else {
+        const { error } = await supabase.auth.signUp({
+          email: data.email,
+          password: data.password,
+          options: {
+            emailRedirectTo: `${window.location.origin}/auth/callback`,
+          },
+        });
+
+        if (error) {
+          setError(error.message);
+          return;
+        }
+
+        setError("Check your email for a confirmation link!");
+        reset();
+      }
+    } catch (err) {
+      setError("An unexpected error occurred");
       console.error("Auth error:", err);
-      setError(err.message);
-      toast.error(err.message || "An error occurred during authentication");
     } finally {
       setIsLoading(false);
     }
   };
 
+  const toggleMode = () => {
+    setIsLogin(!isLogin);
+    setError(null);
+    reset();
+  };
+
   return (
-    <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
-      <div className="flex flex-col space-y-2 text-center">
-        <h1 className="text-2xl font-semibold tracking-tight">
-          {type === "login" ? "Welcome back" : "Create an account"}
-        </h1>
-        <p className="text-sm text-muted-foreground">
-          {type === "login"
-            ? "Enter your credentials to sign in"
-            : "Enter your details to create an account"}
-        </p>
-      </div>
-      <div className="grid gap-6">
-        <form onSubmit={handleSubmit}>
-          <div className="grid gap-4">
-            <div className="grid gap-1">
-              <Label className="sr-only" htmlFor="email">
-                Email
-              </Label>
-              <Input
-                id="email"
-                placeholder="name@example.com"
-                type="email"
-                autoCapitalize="none"
-                autoComplete="email"
-                autoCorrect="off"
-                disabled={isLoading}
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-              />
+    <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+      <Card className="w-full max-w-md">
+        <CardHeader className="space-y-1">
+          <CardTitle className="text-2xl font-bold text-center">
+            {isLogin ? "Welcome back" : "Create account"}
+          </CardTitle>
+          <CardDescription className="text-center">
+            {isLogin
+              ? "Enter your credentials to access your account"
+              : "Enter your details to create your account"}
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          {isCheckingSession ? (
+            <div className="flex items-center justify-center py-8">
+              <Loader2 className="h-6 w-6 animate-spin mr-2" />
+              <span>Checking session...</span>
             </div>
-            <div className="grid gap-1">
-              <Label className="sr-only" htmlFor="password">
-                Password
-              </Label>
-              <Input
-                id="password"
-                placeholder="••••••••"
-                type="password"
-                autoComplete={
-                  type === "login" ? "current-password" : "new-password"
-                }
-                disabled={isLoading}
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                minLength={6}
-                required
-              />
-            </div>
-            {type === "signup" && (
-              <div className="grid gap-1">
-                <Label className="sr-only" htmlFor="confirm-password">
-                  Confirm Password
-                </Label>
-                <Input
-                  id="confirm-password"
-                  placeholder="••••••••"
-                  type="password"
-                  autoComplete="new-password"
-                  disabled={isLoading}
-                  value={confirmPassword}
-                  onChange={(e) => setConfirmPassword(e.target.value)}
-                  minLength={6}
-                  required
-                />
-              </div>
-            )}
-            <Button disabled={isLoading} type="submit" className="w-full">
-              {isLoading && (
-                <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
-              )}
-              {type === "login" ? "Sign In" : "Sign Up"}
-            </Button>
-          </div>
-        </form>
-        <div className="relative">
-          <div className="absolute inset-0 flex items-center">
-            <span className="w-full border-t" />
-          </div>
-          <div className="relative flex justify-center text-xs uppercase">
-            <span className="bg-background px-2 text-muted-foreground">
-              Or continue with
-            </span>
-          </div>
-        </div>
-        <Button
-          variant="outline"
-          type="button"
-          disabled={isLoading}
-          className="w-full"
-        >
-          {isLoading ? (
-            <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
           ) : (
-            <Icons.google className="mr-2 h-4 w-4" />
-          )}{" "}
-          Google
-        </Button>
-      </div>
-      <p className="px-8 text-center text-sm text-muted-foreground">
-        {type === "login" ? (
-          <>
-            Don't have an account?{" "}
-            <Link
-              href="/signup"
-              className="underline underline-offset-4 hover:text-primary"
-            >
-              Sign up
-            </Link>
-          </>
-        ) : (
-          <>
-            Already have an account?{" "}
-            <Link
-              href="/login"
-              className="underline underline-offset-4 hover:text-primary"
-            >
-              Sign in
-            </Link>
-          </>
-        )}
-      </p>
+            <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+              <div className="space-y-2">
+                <Label htmlFor="email">Email</Label>
+                <div className="relative">
+                  <Mail className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
+                  <Input
+                    id="email"
+                    type="email"
+                    placeholder="Enter your email"
+                    className="pl-10"
+                    disabled={isLoading}
+                    {...register("email", {
+                      required: "Email is required",
+                      pattern: {
+                        value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                        message: "Invalid email address",
+                      },
+                    })}
+                  />
+                </div>
+                {errors.email && (
+                  <p className="text-sm text-red-500">{errors.email.message}</p>
+                )}
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="password">Password</Label>
+                <div className="relative">
+                  <Lock className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
+                  <Input
+                    id="password"
+                    type={showPassword ? "text" : "password"}
+                    placeholder="Enter your password"
+                    className="pl-10 pr-10"
+                    disabled={isLoading}
+                    {...register("password", {
+                      required: "Password is required",
+                      minLength: {
+                        value: 6,
+                        message: "Password must be at least 6 characters",
+                      },
+                    })}
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute right-3 top-3 text-gray-400 hover:text-gray-600"
+                    disabled={isLoading}
+                  >
+                    {showPassword ? (
+                      <EyeOff className="h-4 w-4" />
+                    ) : (
+                      <Eye className="h-4 w-4" />
+                    )}
+                  </button>
+                </div>
+                {errors.password && (
+                  <p className="text-sm text-red-500">
+                    {errors.password.message}
+                  </p>
+                )}
+              </div>
+
+              {error && (
+                <Alert
+                  variant={
+                    error.includes("Check your email")
+                      ? "default"
+                      : "destructive"
+                  }
+                >
+                  <AlertDescription>{error}</AlertDescription>
+                </Alert>
+              )}
+
+              <Button type="submit" className="w-full" disabled={isLoading}>
+                {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                {isLogin ? "Sign In" : "Sign Up"}
+              </Button>
+            </form>
+          )}
+
+          {!isCheckingSession && (
+            <div className="mt-6 text-center">
+              <button
+                type="button"
+                onClick={toggleMode}
+                className="text-sm text-blue-600 hover:text-blue-500"
+                disabled={isLoading}
+              >
+                {isLogin
+                  ? "Don't have an account? Sign up"
+                  : "Already have an account? Sign in"}
+              </button>
+            </div>
+          )}
+        </CardContent>
+      </Card>
     </div>
   );
 }

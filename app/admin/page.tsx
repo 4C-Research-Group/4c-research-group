@@ -1,69 +1,61 @@
-"use client";
+import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
+import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
 
-import { useAuth } from "@/components/providers/auth-provider";
-import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+export default async function AdminDashboard() {
+  const supabase = createServerComponentClient({ cookies });
 
-export default function AdminPage() {
-  const { user, loading } = useAuth();
-  const router = useRouter();
+  try {
+    const {
+      data: { user },
+      error: authError,
+    } = await supabase.auth.getUser();
 
-  useEffect(() => {
-    if (!loading && !user) {
-      router.push("/login");
+    if (authError || !user) {
+      console.error("❌ Auth error in admin page:", authError);
+      redirect("/login");
     }
-  }, [user, loading, router]);
 
-  if (loading || !user) {
+    // Check admin status
+    const { data: userData, error } = await supabase
+      .from("users")
+      .select("role")
+      .eq("id", user.id)
+      .single();
+
+    if (error || userData?.role !== "admin") {
+      console.error("❌ User is not admin:", error);
+      redirect("/dashboard");
+    }
+
     return (
-      <div className="flex items-center justify-center min-h-screen">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
-      </div>
-    );
-  }
-
-  return (
-    <div className="p-8 max-w-7xl mx-auto">
-      <h1 className="text-3xl font-bold mb-8">Admin Dashboard</h1>
-      <div className="bg-white p-6 rounded-lg shadow">
-        <h2 className="text-xl font-semibold mb-4">Welcome, {user.email}</h2>
-        <p className="text-gray-600">
-          You have successfully accessed the admin dashboard.
+      <div className="bg-white shadow rounded-lg p-6">
+        <h2 className="text-2xl font-bold text-gray-900 mb-4">
+          Welcome to Admin Dashboard
+        </h2>
+        <p className="text-gray-600 mb-4">
+          You have successfully logged in as an admin user.
         </p>
-
-        <div className="mt-8">
-          <h3 className="text-lg font-medium mb-4">Quick Actions</h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            <a
-              href="/admin/pages"
-              className="p-4 border rounded-lg hover:bg-gray-50 transition-colors block"
-            >
-              <h4 className="font-medium">Manage Pages</h4>
-              <p className="text-sm text-gray-500">
-                View and edit website pages
-              </p>
-            </a>
-            <a
-              href="/admin/users"
-              className="p-4 border rounded-lg hover:bg-gray-50 transition-colors block"
-            >
-              <h4 className="font-medium">Manage Users</h4>
-              <p className="text-sm text-gray-500">
-                View and manage user accounts
-              </p>
-            </a>
-            <a
-              href="/admin/settings"
-              className="p-4 border rounded-lg hover:bg-gray-50 transition-colors block"
-            >
-              <h4 className="font-medium">Site Settings</h4>
-              <p className="text-sm text-gray-500">
-                Configure site preferences
-              </p>
-            </a>
-          </div>
+        <div className="bg-green-50 border border-green-200 rounded-lg p-4">
+          <p className="text-green-800">
+            ✅ Authentication successful! You can now manage your site content.
+          </p>
+        </div>
+        <div className="mt-4 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+          <p className="text-blue-800">
+            <strong>User ID:</strong> {user.id}
+          </p>
+          <p className="text-blue-800">
+            <strong>Email:</strong> {user.email}
+          </p>
+          <p className="text-blue-800">
+            <strong>Role:</strong> {userData.role}
+          </p>
         </div>
       </div>
-    </div>
-  );
+    );
+  } catch (error) {
+    console.error("❌ Admin page error:", error);
+    redirect("/login");
+  }
 }

@@ -18,12 +18,12 @@ export async function GET() {
     // Check if user is admin
     const { data: userData } = await supabase
       .from("users")
-      .select("is_admin")
+      .select("role")
       .eq("id", user.id)
       .single();
 
     return NextResponse.json({
-      isAdmin: userData?.is_admin || false,
+      isAdmin: userData?.role === "admin",
     });
   } catch (error) {
     console.error("Error checking admin status:", error);

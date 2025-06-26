@@ -60,45 +60,51 @@ async function createAdminUser() {
       console.log("✅ Auth user created with ID:", userId);
     }
 
-    // Check and update/insert user in users table
-    console.log("Checking user in users table...");
-    const { data: existingUser } = await supabase
+    // Check and update/insert user profile
+    console.log("Checking user profile...");
+    const { data: existingProfile } = await supabase
       .from("users")
       .select()
-      .eq("id", userId)
+      .eq("email", adminEmail)
       .single();
 
     const userData = {
       id: userId,
       email: adminEmail,
-      full_name: "Admin User",
-      role: "admin",
+      name: "Admin User",
+      role: "admin", // Explicitly set role to admin
       updated_at: new Date().toISOString(),
     };
 
-    if (existingUser) {
-      console.log("🔄 Updating existing user...");
+    if (existingProfile) {
+      console.log("🔄 Updating existing user profile...");
       const { error: updateError } = await supabase
         .from("users")
         .update(userData)
         .eq("id", userId);
       if (updateError) throw updateError;
-      console.log("✅ User updated");
+      console.log("✅ User profile updated");
     } else {
-      console.log("➕ Creating new user...");
+      console.log("➕ Creating new user profile...");
       const { error: insertError } = await supabase.from("users").insert([
         {
           ...userData,
           created_at: new Date().toISOString(),
         },
       ]);
-      if (insertError) throw insertError;
-      console.log("✅ User created");
+      if (insertError) {
+        console.error("❌ Insert error details:", insertError);
+        console.error("❌ Error message:", insertError.message);
+        console.error("❌ Error details:", insertError.details);
+        console.error("❌ Error hint:", insertError.hint);
+        throw insertError;
+      }
+      console.log("✅ User profile created");
     }
 
-    // Verify the user role
+    // Verify the role was set correctly
     console.log("🔍 Verifying user role...");
-    const { data: verifiedUser, error: verifyError } = await supabase
+    const { data: verifyUser, error: verifyError } = await supabase
       .from("users")
       .select("id, email, role, created_at, updated_at")
       .eq("id", userId)
@@ -108,14 +114,14 @@ async function createAdminUser() {
       console.error("❌ Error verifying user role:", verifyError);
     } else {
       console.log("✅ User verification successful:", {
-        id: verifiedUser.id,
-        email: verifiedUser.email,
-        role: verifiedUser.role,
-        created: verifiedUser.created_at,
-        updated: verifiedUser.updated_at,
+        id: verifyUser.id,
+        email: verifyUser.email,
+        role: verifyUser.role,
+        created: verifyUser.created_at,
+        updated: verifyUser.updated_at,
       });
 
-      if (verifiedUser.role !== "admin") {
+      if (verifyUser.role !== "admin") {
         console.warn("⚠️  Warning: User role is not 'admin'");
         console.log(
           "Please check your database for triggers or RLS policies that might be modifying the role."
