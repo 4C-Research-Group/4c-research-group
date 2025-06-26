@@ -88,9 +88,12 @@ export default function HomePage() {
               <motion.h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-cognition-900 dark:text-white mb-6">
                 {hero.title}
               </motion.h1>
-              <motion.p className="text-lg md:text-xl text-gray-700 dark:text-gray-300 mb-8 max-w-2xl mx-auto lg:mx-0">
-                {hero.subtitle}
-              </motion.p>
+              <motion.p
+                className="text-lg md:text-xl text-gray-700 dark:text-gray-300 mb-8 max-w-2xl mx-auto lg:mx-0"
+                dangerouslySetInnerHTML={
+                  hero.subtitle ? { __html: hero.subtitle } : undefined
+                }
+              />
               <motion.div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
                 {hero.primaryText && hero.primaryLink && (
                   <Link
@@ -157,9 +160,12 @@ export default function HomePage() {
                 <h3 className="text-xl font-bold text-center text-gray-900 dark:text-white mb-4">
                   {card.title}
                 </h3>
-                <p className="text-gray-700 dark:text-gray-300 text-center">
-                  {card.description}
-                </p>
+                <p
+                  className="text-gray-700 dark:text-gray-300 text-center"
+                  dangerouslySetInnerHTML={
+                    card.description ? { __html: card.description } : undefined
+                  }
+                />
               </motion.div>
             ))}
           </div>
@@ -173,9 +179,14 @@ export default function HomePage() {
             <motion.h2 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4">
               {services.title}
             </motion.h2>
-            <motion.p className="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
-              {services.description}
-            </motion.p>
+            <motion.p
+              className="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto"
+              dangerouslySetInnerHTML={
+                services.description
+                  ? { __html: services.description }
+                  : undefined
+              }
+            />
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {services.cards.map((service: any, i: number) => (
@@ -188,9 +199,14 @@ export default function HomePage() {
                   <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-3">
                     {service.title}
                   </h3>
-                  <p className="text-gray-600 dark:text-gray-300">
-                    {service.description}
-                  </p>
+                  <p
+                    className="text-gray-600 dark:text-gray-300"
+                    dangerouslySetInnerHTML={
+                      service.description
+                        ? { __html: service.description }
+                        : undefined
+                    }
+                  />
                 </div>
               </motion.div>
             ))}
@@ -229,9 +245,14 @@ export default function HomePage() {
                   <h3 className="text-lg font-bold text-foreground dark:text-white mb-2 text-center">
                     {project.title}
                   </h3>
-                  <p className="text-sm text-foreground/80 dark:text-gray-400 text-center leading-relaxed">
-                    {project.description}
-                  </p>
+                  <p
+                    className="text-sm text-foreground/80 dark:text-gray-400 text-center leading-relaxed"
+                    dangerouslySetInnerHTML={
+                      project.description
+                        ? { __html: project.description }
+                        : undefined
+                    }
+                  />
                 </div>
               </motion.div>
             ))}
@@ -275,9 +296,12 @@ export default function HomePage() {
         <div className="container mx-auto px-4 text-center">
           <div className="max-w-3xl mx-auto">
             <h2 className="text-3xl md:text-4xl font-bold mb-6">{cta.title}</h2>
-            <p className="text-xl text-cognition-100 dark:text-gray-400 mb-8">
-              {cta.description}
-            </p>
+            <p
+              className="text-xl text-cognition-100 dark:text-gray-400 mb-8"
+              dangerouslySetInnerHTML={
+                cta.description ? { __html: cta.description } : undefined
+              }
+            />
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               {cta.primaryText && cta.primaryLink && (
                 <Link
