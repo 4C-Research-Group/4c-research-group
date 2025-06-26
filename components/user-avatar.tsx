@@ -34,8 +34,9 @@ export function UserAvatar() {
           .eq("id", user.id)
           .single();
 
-        if (!error && data) {
-          setUserRole(data.role);
+        if (!error && data && typeof data.role === "string") {
+          const role = data.role as string;
+          setUserRole(role);
         } else {
           // If user doesn't exist in users table, set default role
           setUserRole("user");
