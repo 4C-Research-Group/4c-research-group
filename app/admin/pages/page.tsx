@@ -50,15 +50,24 @@ export default async function AdminPages() {
               </div>
             </CardContent>
             <CardFooter className="pt-0">
-              <Link
-                href={`/admin/pages/edit?path=${encodeURIComponent(page.path)}`}
-                className="w-full"
-              >
-                <Button variant="outline" className="w-full">
-                  <FileEdit className="h-4 w-4 mr-2" />
-                  Edit Page
-                </Button>
-              </Link>
+              {page.path === "/home" ? (
+                <Link href="/admin/edit-home" className="w-full">
+                  <Button variant="outline" className="w-full">
+                    <FileEdit className="h-4 w-4 mr-2" />
+                    Edit Page
+                  </Button>
+                </Link>
+              ) : (
+                <Link
+                  href={`/admin/pages/edit?path=${encodeURIComponent(page.path)}`}
+                  className="w-full"
+                >
+                  <Button variant="outline" className="w-full">
+                    <FileEdit className="h-4 w-4 mr-2" />
+                    Edit Page
+                  </Button>
+                </Link>
+              )}
             </CardFooter>
           </Card>
         ))}

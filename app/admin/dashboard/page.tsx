@@ -29,50 +29,38 @@ export default async function AdminDashboard() {
         </Link>
       </div>
 
-      <div className="bg-white rounded-lg shadow overflow-hidden">
-        <table className="min-w-full divide-y divide-gray-200">
-          <thead className="bg-gray-50">
-            <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Title
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Last Updated
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Actions
-              </th>
-            </tr>
-          </thead>
-          <tbody className="bg-white divide-y divide-gray-200">
-            {pages?.map((page) => (
-              <tr key={page.id}>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <Link
-                    href={`/pages/${page.slug}`}
-                    className="text-blue-600 hover:text-blue-800"
-                  >
-                    {page.title}
-                  </Link>
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                  {new Date(page.updated_at).toLocaleString()}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                  <Link
-                    href={`/admin/pages/${page.id}`}
-                    className="text-indigo-600 hover:text-indigo-900 mr-4"
-                  >
-                    Edit
-                  </Link>
-                  <button className="text-red-600 hover:text-red-900">
-                    Delete
-                  </button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {pages?.map((page) => (
+          <div
+            key={page.id}
+            className="bg-white rounded-lg shadow-md p-6 flex flex-col justify-between"
+          >
+            <div>
+              <h2 className="text-xl font-bold mb-2">
+                <Link
+                  href={`/pages/${page.slug}`}
+                  className="text-blue-600 hover:text-blue-800"
+                >
+                  {page.title}
+                </Link>
+              </h2>
+              <p className="text-sm text-gray-500 mb-4">
+                Last Updated: {new Date(page.updated_at).toLocaleString()}
+              </p>
+            </div>
+            <div className="flex justify-end space-x-2">
+              <Link
+                href={`/admin/pages/${page.id}`}
+                className="px-3 py-1 bg-indigo-100 text-indigo-700 rounded-md text-sm font-medium hover:bg-indigo-200"
+              >
+                Edit
+              </Link>
+              <button className="px-3 py-1 bg-red-100 text-red-700 rounded-md text-sm font-medium hover:bg-red-200">
+                Delete
+              </button>
+            </div>
+          </div>
+        ))}
       </div>
     </div>
   );
