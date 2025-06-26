@@ -72,7 +72,11 @@ export default function HomePage() {
   const cta = content.cta || {};
 
   const colorMap = ["cognition", "consciousness", "care"];
-  const iconMap = [<FaBrain />, <FaFlask />, <FaHeartbeat />];
+  const iconMap = [
+    <FaBrain key="brain" />,
+    <FaFlask key="flask" />,
+    <FaHeartbeat key="heartbeat" />,
+  ];
 
   return (
     <div className="min-h-screen bg-background">
