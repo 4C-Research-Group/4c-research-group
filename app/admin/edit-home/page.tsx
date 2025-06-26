@@ -1,380 +1,612 @@
-import { createClient } from "@/lib/supabase/server";
-import { redirect } from "next/navigation";
+"use client";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { supabase } from "@/lib/supabase/client";
+import { Button } from "@/components/ui/button";
+import dynamic from "next/dynamic";
+const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
+import "react-quill/dist/quill.snow.css";
 
-export default async function EditHomePage() {
-  const supabase = createClient();
+const ICONS = ["brain", "flask", "heartbeat"];
+const COLORS = ["cognition", "consciousness", "care"];
 
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-  if (!user) {
-    redirect("/login");
+export default function EditHomePage() {
+  const [content, setContent] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const router = useRouter();
+
+  useEffect(() => {
+    async function fetchContent() {
+      setLoading(true);
+      setError(null);
+      const { data, error } = await supabase
+        .from("pages")
+        .select("content")
+        .eq("slug", "home")
+        .single();
+      if (error) {
+        setError("Failed to load home page content.");
+        setLoading(false);
+        return;
+      }
+      let parsedContent = null;
+      if (typeof data?.content === "string") {
+        parsedContent = JSON.parse(data.content);
+      }
+      setContent(parsedContent);
+      setLoading(false);
+    }
+    fetchContent();
+  }, []);
+
+  if (loading) return <div className="p-8">Loading...</div>;
+  if (error) return <div className="p-8 text-red-600">{error}</div>;
+  if (!content)
+    return <div className="p-8 text-red-600">No content found.</div>;
+
+  // --- Dynamic Section/Card Editing Helpers ---
+  function handleSectionChange(section: string, value: any) {
+    setContent((prev: any) => ({ ...prev, [section]: value }));
+  }
+  function handleCardChange(
+    section: string,
+    idx: number,
+    field: string,
+    value: any
+  ) {
+    setContent((prev: any) => {
+      const cards = [...(prev[section]?.cards || [])];
+      cards[idx] = { ...cards[idx], [field]: value };
+      return { ...prev, [section]: { ...prev[section], cards } };
+    });
+  }
+  function addCard(section: string) {
+    setContent((prev: any) => {
+      const cards = [
+        ...(prev[section]?.cards || []),
+        { title: "", description: "", color: COLORS[0], icon: ICONS[0] },
+      ];
+      return { ...prev, [section]: { ...prev[section], cards } };
+    });
+  }
+  function removeCard(section: string, idx: number) {
+    setContent((prev: any) => {
+      const cards = [...(prev[section]?.cards || [])];
+      cards.splice(idx, 1);
+      return { ...prev, [section]: { ...prev[section], cards } };
+    });
+  }
+  function moveCard(section: string, idx: number, dir: -1 | 1) {
+    setContent((prev: any) => {
+      const cards = [...(prev[section]?.cards || [])];
+      if (idx + dir < 0 || idx + dir >= cards.length) return prev;
+      [cards[idx], cards[idx + dir]] = [cards[idx + dir], cards[idx]];
+      return { ...prev, [section]: { ...prev[section], cards } };
+    });
   }
 
-  // Ensure the user is an admin
-  const { data: userData } = await supabase
-    .from("users")
-    .select("role")
-    .eq("id", user.id)
-    .single();
-
-  if (userData?.role !== "admin") {
-    redirect("/dashboard");
-  }
-
-  // Fetch home page content or create it if it doesn't exist
-  let { data: pageData } = await supabase
-    .from("pages")
-    .select("id, content")
-    .eq("slug", "home")
-    .single();
-
-  if (!pageData) {
-    const { data: newPageData } = await supabase
+  // --- Save Logic ---
+  async function handleSave(e: React.FormEvent) {
+    e.preventDefault();
+    setSaving(true);
+    setError(null);
+    const { error } = await supabase
       .from("pages")
-      .insert({
-        title: "Home Page",
-        slug: "home",
-        content: JSON.stringify({}),
+      .update({
+        content: JSON.stringify(content),
+        updated_at: new Date().toISOString(),
       })
-      .select("id, content")
-      .single();
-    pageData = newPageData;
+      .eq("slug", "home");
+    setSaving(false);
+    if (error) {
+      setError("Failed to save changes.");
+    } else {
+      router.refresh();
+    }
   }
 
-  const content = pageData?.content ? JSON.parse(pageData.content) : {};
-
+  // --- Render ---
   return (
     <div className="container mx-auto p-6">
       <h1 className="text-3xl font-bold mb-6">Edit Home Page</h1>
-      <form className="space-y-8">
+      <form className="space-y-8" onSubmit={handleSave}>
         {/* Hero Section */}
         <section className="p-4 border rounded-md">
           <h2 className="text-xl font-semibold mb-4">Hero Section</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <label className="block text-sm font-medium mb-1">
-                Main Title
-              </label>
-              <input
-                type="text"
-                defaultValue={content.hero?.title || ""}
-                className="input w-full"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium mb-1">
-                Subtitle/Description
-              </label>
-              <textarea
-                defaultValue={content.hero?.subtitle || ""}
-                className="input w-full"
-                rows={2}
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium mb-1">
-                Primary Button Text
-              </label>
-              <input
-                type="text"
-                defaultValue={content.hero?.primaryText || ""}
-                className="input w-full"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium mb-1">
-                Primary Button Link
-              </label>
-              <input
-                type="text"
-                defaultValue={content.hero?.primaryLink || ""}
-                className="input w-full"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium mb-1">
-                Secondary Button Text
-              </label>
-              <input
-                type="text"
-                defaultValue={content.hero?.secondaryText || ""}
-                className="input w-full"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium mb-1">
-                Secondary Button Link
-              </label>
-              <input
-                type="text"
-                defaultValue={content.hero?.secondaryLink || ""}
-                className="input w-full"
-              />
-            </div>
-            <div className="md:col-span-2">
-              <label className="block text-sm font-medium mb-1">
-                Logo Image Path
-              </label>
-              <input
-                type="text"
-                defaultValue={content.hero?.logo || "/logo.png"}
-                className="input w-full"
-              />
-            </div>
-          </div>
+          <input
+            type="text"
+            className="input w-full mb-2"
+            value={content.hero?.title || ""}
+            onChange={(e) =>
+              handleSectionChange("hero", {
+                ...content.hero,
+                title: e.target.value,
+              })
+            }
+            placeholder="Main Title"
+          />
+          <ReactQuill
+            value={content.hero?.subtitle || ""}
+            onChange={(val) =>
+              handleSectionChange("hero", { ...content.hero, subtitle: val })
+            }
+            className="mb-2"
+          />
+          <input
+            type="text"
+            className="input w-full mb-2"
+            value={content.hero?.primaryText || ""}
+            onChange={(e) =>
+              handleSectionChange("hero", {
+                ...content.hero,
+                primaryText: e.target.value,
+              })
+            }
+            placeholder="Primary Button Text"
+          />
+          <input
+            type="text"
+            className="input w-full mb-2"
+            value={content.hero?.primaryLink || ""}
+            onChange={(e) =>
+              handleSectionChange("hero", {
+                ...content.hero,
+                primaryLink: e.target.value,
+              })
+            }
+            placeholder="Primary Button Link"
+          />
+          <input
+            type="text"
+            className="input w-full mb-2"
+            value={content.hero?.secondaryText || ""}
+            onChange={(e) =>
+              handleSectionChange("hero", {
+                ...content.hero,
+                secondaryText: e.target.value,
+              })
+            }
+            placeholder="Secondary Button Text"
+          />
+          <input
+            type="text"
+            className="input w-full mb-2"
+            value={content.hero?.secondaryLink || ""}
+            onChange={(e) =>
+              handleSectionChange("hero", {
+                ...content.hero,
+                secondaryLink: e.target.value,
+              })
+            }
+            placeholder="Secondary Button Link"
+          />
+          <input
+            type="text"
+            className="input w-full mb-2"
+            value={content.hero?.logo || ""}
+            onChange={(e) =>
+              handleSectionChange("hero", {
+                ...content.hero,
+                logo: e.target.value,
+              })
+            }
+            placeholder="Logo Image Path"
+          />
         </section>
 
         {/* Research Highlights Section */}
         <section className="p-4 border rounded-md">
           <h2 className="text-xl font-semibold mb-4">Research Highlights</h2>
-          <div className="mb-4">
-            <label className="block text-sm font-medium mb-1">
-              Section Title
-            </label>
-            <input
-              type="text"
-              defaultValue={content.researchHighlights?.title || ""}
-              className="input w-full"
-            />
-          </div>
-          {[0, 1, 2].map((i) => (
-            <div key={i} className="mb-4 p-2 border rounded">
-              <label className="block text-sm font-medium mb-1">
-                Card {i + 1} Title
-              </label>
-              <input
-                type="text"
-                defaultValue={
-                  content.researchHighlights?.cards?.[i]?.title || ""
-                }
-                className="input w-full mb-2"
-              />
-              <label className="block text-sm font-medium mb-1">
-                Card {i + 1} Description
-              </label>
-              <textarea
-                defaultValue={
-                  content.researchHighlights?.cards?.[i]?.description || ""
-                }
-                className="input w-full"
-                rows={2}
-              />
-            </div>
-          ))}
+          <input
+            type="text"
+            className="input w-full mb-4"
+            value={content.researchHighlights?.title || ""}
+            onChange={(e) =>
+              handleSectionChange("researchHighlights", {
+                ...content.researchHighlights,
+                title: e.target.value,
+              })
+            }
+            placeholder="Section Title"
+          />
+          {(content.researchHighlights?.cards || []).map(
+            (card: any, i: number) => (
+              <div
+                key={i}
+                className="mb-4 p-2 border rounded flex flex-col gap-2"
+              >
+                <input
+                  type="text"
+                  className="input w-full"
+                  value={card.title}
+                  onChange={(e) =>
+                    handleCardChange(
+                      "researchHighlights",
+                      i,
+                      "title",
+                      e.target.value
+                    )
+                  }
+                  placeholder={`Card ${i + 1} Title`}
+                />
+                <ReactQuill
+                  value={card.description}
+                  onChange={(val) =>
+                    handleCardChange(
+                      "researchHighlights",
+                      i,
+                      "description",
+                      val
+                    )
+                  }
+                />
+                <select
+                  className="input w-full"
+                  value={card.color || COLORS[0]}
+                  onChange={(e) =>
+                    handleCardChange(
+                      "researchHighlights",
+                      i,
+                      "color",
+                      e.target.value
+                    )
+                  }
+                >
+                  {COLORS.map((c) => (
+                    <option key={c} value={c}>
+                      {c}
+                    </option>
+                  ))}
+                </select>
+                <select
+                  className="input w-full"
+                  value={card.icon || ICONS[0]}
+                  onChange={(e) =>
+                    handleCardChange(
+                      "researchHighlights",
+                      i,
+                      "icon",
+                      e.target.value
+                    )
+                  }
+                >
+                  {ICONS.map((ic) => (
+                    <option key={ic} value={ic}>
+                      {ic}
+                    </option>
+                  ))}
+                </select>
+                <div className="flex gap-2 mt-2">
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={() => moveCard("researchHighlights", i, -1)}
+                    disabled={i === 0}
+                  >
+                    ↑
+                  </Button>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={() => moveCard("researchHighlights", i, 1)}
+                    disabled={i === content.researchHighlights.cards.length - 1}
+                  >
+                    ↓
+                  </Button>
+                  <Button
+                    type="button"
+                    variant="destructive"
+                    onClick={() => removeCard("researchHighlights", i)}
+                  >
+                    Remove
+                  </Button>
+                </div>
+              </div>
+            )
+          )}
+          <Button type="button" onClick={() => addCard("researchHighlights")}>
+            Add Card
+          </Button>
         </section>
 
         {/* Services Section */}
         <section className="p-4 border rounded-md">
           <h2 className="text-xl font-semibold mb-4">Services</h2>
-          <div className="mb-4">
-            <label className="block text-sm font-medium mb-1">
-              Section Title
-            </label>
-            <input
-              type="text"
-              defaultValue={content.services?.title || ""}
-              className="input w-full"
-            />
-          </div>
-          <div className="mb-4">
-            <label className="block text-sm font-medium mb-1">
-              Section Description
-            </label>
-            <textarea
-              defaultValue={content.services?.description || ""}
-              className="input w-full"
-              rows={2}
-            />
-          </div>
-          {[0, 1, 2].map((i) => (
-            <div key={i} className="mb-4 p-2 border rounded">
-              <label className="block text-sm font-medium mb-1">
-                Card {i + 1} Title
-              </label>
+          <input
+            type="text"
+            className="input w-full mb-4"
+            value={content.services?.title || ""}
+            onChange={(e) =>
+              handleSectionChange("services", {
+                ...content.services,
+                title: e.target.value,
+              })
+            }
+            placeholder="Section Title"
+          />
+          <ReactQuill
+            value={content.services?.description || ""}
+            onChange={(val) =>
+              handleSectionChange("services", {
+                ...content.services,
+                description: val,
+              })
+            }
+            className="mb-4"
+          />
+          {(content.services?.cards || []).map((card: any, i: number) => (
+            <div
+              key={i}
+              className="mb-4 p-2 border rounded flex flex-col gap-2"
+            >
               <input
                 type="text"
-                defaultValue={content.services?.cards?.[i]?.title || ""}
-                className="input w-full mb-2"
-              />
-              <label className="block text-sm font-medium mb-1">
-                Card {i + 1} Description
-              </label>
-              <textarea
-                defaultValue={content.services?.cards?.[i]?.description || ""}
                 className="input w-full"
-                rows={2}
+                value={card.title}
+                onChange={(e) =>
+                  handleCardChange("services", i, "title", e.target.value)
+                }
+                placeholder={`Card ${i + 1} Title`}
               />
+              <ReactQuill
+                value={card.description}
+                onChange={(val) =>
+                  handleCardChange("services", i, "description", val)
+                }
+              />
+              <select
+                className="input w-full"
+                value={card.color || COLORS[0]}
+                onChange={(e) =>
+                  handleCardChange("services", i, "color", e.target.value)
+                }
+              >
+                {COLORS.map((c) => (
+                  <option key={c} value={c}>
+                    {c}
+                  </option>
+                ))}
+              </select>
+              <select
+                className="input w-full"
+                value={card.icon || ICONS[0]}
+                onChange={(e) =>
+                  handleCardChange("services", i, "icon", e.target.value)
+                }
+              >
+                {ICONS.map((ic) => (
+                  <option key={ic} value={ic}>
+                    {ic}
+                  </option>
+                ))}
+              </select>
+              <div className="flex gap-2 mt-2">
+                <Button
+                  type="button"
+                  variant="destructive"
+                  onClick={() => removeCard("services", i)}
+                >
+                  Remove
+                </Button>
+              </div>
             </div>
           ))}
+          <Button type="button" onClick={() => addCard("services")}>
+            Add Card
+          </Button>
         </section>
 
         {/* Research Projects Section */}
         <section className="p-4 border rounded-md">
           <h2 className="text-xl font-semibold mb-4">Research Projects</h2>
-          <div className="mb-4">
-            <label className="block text-sm font-medium mb-1">
-              Section Title
-            </label>
-            <input
-              type="text"
-              defaultValue={content.projects?.title || ""}
-              className="input w-full"
-            />
-          </div>
-          {[0, 1, 2, 3].map((i) => (
-            <div key={i} className="mb-4 p-2 border rounded">
-              <label className="block text-sm font-medium mb-1">
-                Project {i + 1} Title
-              </label>
+          <input
+            type="text"
+            className="input w-full mb-4"
+            value={content.projects?.title || ""}
+            onChange={(e) =>
+              handleSectionChange("projects", {
+                ...content.projects,
+                title: e.target.value,
+              })
+            }
+            placeholder="Section Title"
+          />
+          {(content.projects?.cards || []).map((card: any, i: number) => (
+            <div
+              key={i}
+              className="mb-4 p-2 border rounded flex flex-col gap-2"
+            >
               <input
                 type="text"
-                defaultValue={content.projects?.cards?.[i]?.title || ""}
-                className="input w-full mb-2"
-              />
-              <label className="block text-sm font-medium mb-1">
-                Project {i + 1} Description
-              </label>
-              <textarea
-                defaultValue={content.projects?.cards?.[i]?.description || ""}
                 className="input w-full"
-                rows={2}
+                value={card.title}
+                onChange={(e) =>
+                  handleCardChange("projects", i, "title", e.target.value)
+                }
+                placeholder={`Project ${i + 1} Title`}
               />
-              <label className="block text-sm font-medium mb-1">
-                Project {i + 1} Image URL
-              </label>
+              <ReactQuill
+                value={card.description}
+                onChange={(val) =>
+                  handleCardChange("projects", i, "description", val)
+                }
+              />
               <input
                 type="text"
-                defaultValue={content.projects?.cards?.[i]?.image || ""}
                 className="input w-full"
+                value={card.image || ""}
+                onChange={(e) =>
+                  handleCardChange("projects", i, "image", e.target.value)
+                }
+                placeholder={`Project ${i + 1} Image URL`}
               />
+              <div className="flex gap-2 mt-2">
+                <Button
+                  type="button"
+                  variant="destructive"
+                  onClick={() => removeCard("projects", i)}
+                >
+                  Remove
+                </Button>
+              </div>
             </div>
           ))}
+          <Button type="button" onClick={() => addCard("projects")}>
+            Add Project
+          </Button>
         </section>
 
         {/* Stats Section */}
         <section className="p-4 border rounded-md">
           <h2 className="text-xl font-semibold mb-4">Stats</h2>
-          {[0, 1, 2, 3].map((i) => (
-            <div key={i} className="mb-4 p-2 border rounded">
-              <label className="block text-sm font-medium mb-1">
-                Stat {i + 1} Label
-              </label>
+          {(content.stats || []).map((stat: any, i: number) => (
+            <div
+              key={i}
+              className="mb-4 p-2 border rounded flex flex-col gap-2"
+            >
               <input
                 type="text"
-                defaultValue={content.stats?.[i]?.label || ""}
-                className="input w-full mb-2"
-              />
-              <label className="block text-sm font-medium mb-1">
-                Stat {i + 1} Value
-              </label>
-              <input
-                type="text"
-                defaultValue={content.stats?.[i]?.value || ""}
                 className="input w-full"
+                value={stat.label || ""}
+                onChange={(e) =>
+                  handleCardChange("stats", i, "label", e.target.value)
+                }
+                placeholder={`Stat ${i + 1} Label`}
               />
+              <input
+                type="text"
+                className="input w-full"
+                value={stat.value || ""}
+                onChange={(e) =>
+                  handleCardChange("stats", i, "value", e.target.value)
+                }
+                placeholder={`Stat ${i + 1} Value`}
+              />
+              <div className="flex gap-2 mt-2">
+                <Button
+                  type="button"
+                  variant="destructive"
+                  onClick={() => removeCard("stats", i)}
+                >
+                  Remove
+                </Button>
+              </div>
             </div>
           ))}
+          <Button type="button" onClick={() => addCard("stats")}>
+            Add Stat
+          </Button>
         </section>
 
         {/* News Section */}
         <section className="p-4 border rounded-md">
           <h2 className="text-xl font-semibold mb-4">News Section</h2>
-          <div className="mb-4">
-            <label className="block text-sm font-medium mb-1">
-              Section Title
-            </label>
-            <input
-              type="text"
-              defaultValue={content.news?.title || ""}
-              className="input w-full"
-            />
-          </div>
+          <input
+            type="text"
+            className="input w-full mb-4"
+            value={content.news?.title || ""}
+            onChange={(e) =>
+              handleSectionChange("news", {
+                ...content.news,
+                title: e.target.value,
+              })
+            }
+            placeholder="Section Title"
+          />
         </section>
 
         {/* Call to Action Section */}
         <section className="p-4 border rounded-md">
           <h2 className="text-xl font-semibold mb-4">Call to Action</h2>
-          <div className="mb-4">
-            <label className="block text-sm font-medium mb-1">
-              Section Title
-            </label>
-            <input
-              type="text"
-              defaultValue={content.cta?.title || ""}
-              className="input w-full"
-            />
-          </div>
-          <div className="mb-4">
-            <label className="block text-sm font-medium mb-1">
-              Description
-            </label>
-            <textarea
-              defaultValue={content.cta?.description || ""}
-              className="input w-full"
-              rows={2}
-            />
-          </div>
-          <div className="mb-4">
-            <label className="block text-sm font-medium mb-1">
-              Primary Button Text
-            </label>
-            <input
-              type="text"
-              defaultValue={content.cta?.primaryText || ""}
-              className="input w-full"
-            />
-          </div>
-          <div className="mb-4">
-            <label className="block text-sm font-medium mb-1">
-              Primary Button Link
-            </label>
-            <input
-              type="text"
-              defaultValue={content.cta?.primaryLink || ""}
-              className="input w-full"
-            />
-          </div>
-          <div className="mb-4">
-            <label className="block text-sm font-medium mb-1">
-              Secondary Button Text
-            </label>
-            <input
-              type="text"
-              defaultValue={content.cta?.secondaryText || ""}
-              className="input w-full"
-            />
-          </div>
-          <div className="mb-4">
-            <label className="block text-sm font-medium mb-1">
-              Secondary Button Link
-            </label>
-            <input
-              type="text"
-              defaultValue={content.cta?.secondaryLink || ""}
-              className="input w-full"
-            />
-          </div>
-          <div className="mb-4">
-            <label className="block text-sm font-medium mb-1">
-              Social Link (X/Twitter)
-            </label>
-            <input
-              type="text"
-              defaultValue={content.cta?.social || ""}
-              className="input w-full"
-            />
-          </div>
+          <input
+            type="text"
+            className="input w-full mb-4"
+            value={content.cta?.title || ""}
+            onChange={(e) =>
+              handleSectionChange("cta", {
+                ...content.cta,
+                title: e.target.value,
+              })
+            }
+            placeholder="Section Title"
+          />
+          <ReactQuill
+            value={content.cta?.description || ""}
+            onChange={(val) =>
+              handleSectionChange("cta", { ...content.cta, description: val })
+            }
+            className="mb-4"
+          />
+          <input
+            type="text"
+            className="input w-full mb-4"
+            value={content.cta?.primaryText || ""}
+            onChange={(e) =>
+              handleSectionChange("cta", {
+                ...content.cta,
+                primaryText: e.target.value,
+              })
+            }
+            placeholder="Primary Button Text"
+          />
+          <input
+            type="text"
+            className="input w-full mb-4"
+            value={content.cta?.primaryLink || ""}
+            onChange={(e) =>
+              handleSectionChange("cta", {
+                ...content.cta,
+                primaryLink: e.target.value,
+              })
+            }
+            placeholder="Primary Button Link"
+          />
+          <input
+            type="text"
+            className="input w-full mb-4"
+            value={content.cta?.secondaryText || ""}
+            onChange={(e) =>
+              handleSectionChange("cta", {
+                ...content.cta,
+                secondaryText: e.target.value,
+              })
+            }
+            placeholder="Secondary Button Text"
+          />
+          <input
+            type="text"
+            className="input w-full mb-4"
+            value={content.cta?.secondaryLink || ""}
+            onChange={(e) =>
+              handleSectionChange("cta", {
+                ...content.cta,
+                secondaryLink: e.target.value,
+              })
+            }
+            placeholder="Secondary Button Link"
+          />
+          <input
+            type="text"
+            className="input w-full mb-4"
+            value={content.cta?.social || ""}
+            onChange={(e) =>
+              handleSectionChange("cta", {
+                ...content.cta,
+                social: e.target.value,
+              })
+            }
+            placeholder="Social Link (X/Twitter)"
+          />
         </section>
 
         <div className="flex justify-end">
-          <button
-            type="submit"
-            className="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700"
-          >
-            Save Changes
-          </button>
+          <Button type="submit" disabled={saving}>
+            {saving ? "Saving..." : "Save Changes"}
+          </Button>
         </div>
+        {error && <div className="text-red-600 mt-2">{error}</div>}
       </form>
     </div>
   );
