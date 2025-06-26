@@ -18,12 +18,39 @@ import { useTheme } from "next-themes";
 import MobileNav from "@/components/mobile-nav";
 import Image from "next/image";
 import { NavAuthButtons } from "@/components/nav-auth-buttons";
-import { SimpleThemeToggle } from "@/components/simple-theme-toggle";
 
-const inter = Inter({
-  subsets: ["latin"],
-  variable: "--font-sans",
-});
+function ThemeToggle() {
+  const { theme, setTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+
+  // Ensure component is mounted to avoid hydration mismatch
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) {
+    return (
+      <button className="w-8 h-8 rounded-lg flex items-center justify-center hover:bg-gray-100 dark:hover:bg-gray-800">
+        <div className="w-4 h-4 rounded-full bg-gray-300 dark:bg-gray-600"></div>
+      </button>
+    );
+  }
+  return (
+    <button
+      onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+      className="w-8 h-8 rounded-lg flex items-center justify-center hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors duration-200"
+      aria-label={
+        theme === "dark" ? "Switch to light mode" : "Switch to dark mode"
+      }
+    >
+      {theme === "dark" ? (
+        <FaSun className="w-4 h-4 text-yellow-400" />
+      ) : (
+        <FaMoon className="w-4 h-4 text-gray-600" />
+      )}
+    </button>
+  );
+}
 
 export default function PagesLayout({
   children,
@@ -148,6 +175,7 @@ export default function PagesLayout({
             </nav>
 
             <div className="flex items-center gap-4 ml-4">
+              <ThemeToggle />
               <div className="h-6 w-px bg-gray-200 dark:bg-gray-700" />
               <NavAuthButtons />
             </div>
@@ -282,11 +310,6 @@ export default function PagesLayout({
 
       {/* Main Content */}
       <main className="flex-1">{children}</main>
-
-      {/* Theme Toggle Fixed Position */}
-      <div className="fixed bottom-6 right-6 z-50">
-        <SimpleThemeToggle className="shadow-lg" />
-      </div>
 
       {/* Footer */}
       <SiteFooter
