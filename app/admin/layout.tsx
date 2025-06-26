@@ -13,8 +13,16 @@ import {
   Users,
   Plus,
 } from "lucide-react";
+import { supabase } from "@/lib/supabase/client";
+import { useRouter } from "next/navigation";
+import { useCallback } from "react";
+import dynamic from "next/dynamic";
 
 const inter = Inter({ subsets: ["latin"] });
+const AdminSignOutButton = dynamic(
+  () => import("@/components/admin/AdminSignOutButton"),
+  { ssr: false }
+);
 
 export default async function AdminLayout({
   children,
@@ -63,13 +71,6 @@ export default async function AdminLayout({
     }
 
     console.log("✅ Admin access granted - rendering admin layout");
-
-    const handleSignOut = async () => {
-      "use server";
-      const supabase = createServerComponentClient({ cookies });
-      await supabase.auth.signOut();
-      redirect("/");
-    };
 
     return (
       <div className="min-h-full">
@@ -128,15 +129,7 @@ export default async function AdminLayout({
                   <span className="text-gray-300 text-sm">
                     Signed in as: {userData?.name || user.email}
                   </span>
-                  <form action={handleSignOut}>
-                    <button
-                      type="submit"
-                      className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium flex items-center"
-                    >
-                      <LogOut className="h-4 w-4 mr-2" />
-                      Sign out
-                    </button>
-                  </form>
+                  <AdminSignOutButton />
                 </div>
               </div>
             </div>

@@ -5,6 +5,9 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { UserAvatar } from "@/components/user-avatar";
 import { useEffect, useState, useCallback } from "react";
+import { supabase } from "@/lib/supabase/client";
+import { LogOut } from "lucide-react";
+import AdminSignOutButton from "@/components/admin/AdminSignOutButton";
 
 interface NavAuthButtonsProps {
   className?: string;
@@ -71,10 +74,20 @@ export function NavAuthButtons({
           </Link>
           <button
             onClick={async (e) => {
+              console.log("Signing out...");
               await signOut();
+              localStorage.clear();
+              sessionStorage.clear();
+              document.cookie.split(";").forEach(function (c) {
+                document.cookie = c
+                  .replace(/^ +/, "")
+                  .replace(
+                    /=.*/,
+                    "=;expires=" + new Date().toUTCString() + ";path=/"
+                  );
+              });
+              window.location.href = "/";
               onClick?.();
-              router.push("/");
-              router.refresh();
             }}
             className="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors duration-200"
           >
@@ -90,10 +103,20 @@ export function NavAuthButtons({
         <UserAvatar />
         <button
           onClick={async (e) => {
+            console.log("Signing out...");
             await signOut();
+            localStorage.clear();
+            sessionStorage.clear();
+            document.cookie.split(";").forEach(function (c) {
+              document.cookie = c
+                .replace(/^ +/, "")
+                .replace(
+                  /=.*/,
+                  "=;expires=" + new Date().toUTCString() + ";path=/"
+                );
+            });
+            window.location.href = "/";
             onClick?.();
-            router.push("/");
-            router.refresh();
           }}
           className="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors duration-200"
         >

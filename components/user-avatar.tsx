@@ -65,8 +65,7 @@ export function UserAvatar() {
 
   const handleSignOut = async () => {
     await signOut();
-    router.push("/");
-    router.refresh();
+    window.location.href = "/";
   };
 
   return (
