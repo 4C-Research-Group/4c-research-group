@@ -166,7 +166,12 @@ export default function HomePage() {
                   <div className="absolute top-1/2 left-1/2 w-48 h-48 rounded-full bg-care-100/80 dark:bg-care-900/50 -translate-x-1/2 -translate-y-1/2"></div>
                   <div className="absolute inset-0 flex items-center justify-center">
                     <div className="text-6xl text-cognition-800 dark:text-cognition-200">
-                      <FaBrain className="animate-pulse" />
+                      <Image
+                        src="/logo.png"
+                        alt="4C Lab Logo"
+                        width={512}
+                        height={512}
+                      />
                     </div>
                   </div>
                 </div>

@@ -18,9 +18,6 @@ import { useTheme } from "next-themes";
 import MobileNav from "@/components/mobile-nav";
 import Image from "next/image";
 import { NavAuthButtons } from "@/components/nav-auth-buttons";
-import { createPagesBrowserClient } from "@supabase/auth-helpers-nextjs";
-
-export const supabase = createPagesBrowserClient();
 
 function ThemeToggle() {
   const { theme, setTheme } = useTheme();
@@ -89,7 +86,7 @@ export default function PagesLayout({
                 4C Research
               </span>
             </Link>
-            <span className="text-xs text-muted-foreground ml-8 -mt-1">
+            <span className="text-xs text-muted-foreground ml-10 -mt-1">
               Cognition • Consciousness • Critical Care
             </span>
           </div>
