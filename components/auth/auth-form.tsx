@@ -23,11 +23,15 @@ interface LoginFormData {
   password: string;
 }
 
-export default function AuthForm() {
+interface AuthFormProps {
+  initialMode?: "login" | "signup";
+}
+
+export default function AuthForm({ initialMode = "login" }: AuthFormProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [showPassword, setShowPassword] = useState(false);
-  const [isLogin, setIsLogin] = useState(true);
+  const [isLogin, setIsLogin] = useState(initialMode === "login");
   const [isCheckingSession, setIsCheckingSession] = useState(true);
   const router = useRouter();
   const hasAttemptedRedirect = useRef(false);
