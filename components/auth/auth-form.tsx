@@ -29,35 +29,68 @@ export function AuthForm({ type }: AuthFormProps) {
     setIsLoading(true);
 
     try {
-      if (type === "signup" && password !== confirmPassword) {
-        throw new Error("Passwords do not match");
-      }
+      if (type === "signup") {
+        if (password !== confirmPassword) {
+          throw new Error("Passwords do not match");
+        }
 
-      if (type === "login") {
-        const { error } = await supabase.auth.signInWithPassword({
-          email,
-          password,
-        });
+        // Create auth user
+        const { data: authData, error: signUpError } =
+          await supabase.auth.signUp({
+            email,
+            password,
+            options: {
+              emailRedirectTo: `${window.location.origin}/auth/callback`,
+            },
+          });
 
-        if (error) throw error;
-        toast.success("Successfully signed in!");
-        router.refresh();
-        router.push("/dashboard");
-      } else {
-        const { error } = await supabase.auth.signUp({
-          email,
-          password,
-          options: {
-            emailRedirectTo: `${window.location.origin}/auth/callback`,
-          },
-        });
+        if (signUpError) throw signUpError;
 
-        if (error) throw error;
+        // Create user profile in users table
+        if (authData.user) {
+          const { error: profileError } = await supabase.from("users").upsert({
+            id: authData.user.id,
+            email: authData.user.email,
+            role: "user", // Default role
+            created_at: new Date().toISOString(),
+            updated_at: new Date().toISOString(),
+          });
+
+          if (profileError) throw profileError;
+        }
+
         toast.success("Check your email to confirm your account!");
+        return;
       }
+
+      // Handle login
+      const { data, error: signInError } =
+        await supabase.auth.signInWithPassword({
+          email,
+          password,
+        });
+
+      if (signInError) throw signInError;
+
+      // Get user role
+      const { data: userData, error: userError } = await supabase
+        .from("users")
+        .select("role")
+        .eq("id", data.user.id)
+        .single();
+
+      if (userError) throw userError;
+
+      toast.success("Successfully signed in!");
+      router.refresh();
+
+      // Redirect based on role
+      const redirectPath = userData?.role === "admin" ? "/admin" : "/";
+      router.push(redirectPath);
     } catch (err: any) {
+      console.error("Auth error:", err);
       setError(err.message);
-      toast.error(err.message);
+      toast.error(err.message || "An error occurred during authentication");
     } finally {
       setIsLoading(false);
     }

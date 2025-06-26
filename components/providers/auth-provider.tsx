@@ -13,6 +13,7 @@ type User = {
 
 type AuthContextType = {
   user: User | null;
+  loading: boolean;
   signIn: (
     email: string,
     password: string
@@ -28,7 +29,6 @@ type AuthContextType = {
     session: Session | null;
   }>;
   signOut: () => Promise<void>;
-  loading: boolean;
   updateUserRole: (userId: string, role: string) => Promise<void>;
   getUsers: () => Promise<Array<{ id: string; email: string; role: string }>>;
 };
@@ -41,25 +41,64 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const router = useRouter();
   const supabase = createClient();
 
+  // Initialize auth state
   useEffect(() => {
+    // First, set loading to true to prevent flash of unauthenticated content
+    setLoading(true);
+
+    // Check for existing session
+    const checkSession = async () => {
+      try {
+        const {
+          data: { session },
+        } = await supabase.auth.getSession();
+
+        if (session?.user) {
+          // Fetch user data from users table
+          const { data: userData, error } = await supabase
+            .from("users")
+            .select("*")
+            .eq("id", session.user.id)
+            .single();
+
+          if (error) {
+            console.error("Error fetching user data:", error);
+            setUser(null);
+          } else {
+            setUser({
+              id: session.user.id,
+              email: session.user.email || undefined,
+              role: userData?.role || "user",
+            });
+          }
+        } else {
+          setUser(null);
+        }
+      } catch (error) {
+        console.error("Error checking session:", error);
+        setUser(null);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    checkSession();
+
+    // Set up auth state change listener
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange(async (event, session) => {
       if (session?.user) {
-        // Fetch the user's data from the users table
-        const { data: userData, error } = await supabase
+        // Fetch user data from users table
+        const { data: userData } = await supabase
           .from("users")
           .select("*")
           .eq("id", session.user.id)
           .single();
 
-        if (error) {
-          console.error("Error fetching user data:", error);
-        }
-
         setUser({
           id: session.user.id,
-          email: session.user.email,
+          email: session.user.email || undefined,
           role: userData?.role || "user",
         });
       } else {
@@ -69,25 +108,49 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     });
 
     return () => {
-      subscription.unsubscribe();
+      subscription?.unsubscribe();
     };
   }, [supabase]);
 
-  const updateUserRole = async (
-    userId: string,
-    role: string
-  ): Promise<void> => {
+  const signIn = async (email: string, password: string) => {
+    const { data, error } = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    });
+
+    if (error) throw error;
+    return data;
+  };
+
+  const signUp = async (email: string, password: string) => {
+    const { data, error } = await supabase.auth.signUp({
+      email,
+      password,
+      options: {
+        emailRedirectTo: `${window.location.origin}/auth/callback`,
+      },
+    });
+
+    if (error) throw error;
+    return data;
+  };
+
+  const signOut = async () => {
+    await supabase.auth.signOut();
+    setUser(null);
+    router.refresh();
+  };
+
+  const updateUserRole = async (userId: string, role: string) => {
     const { error } = await supabase
       .from("users")
       .update({ role })
       .eq("id", userId);
 
-    if (error) {
-      throw error;
-    }
+    if (error) throw error;
 
-    // Update local user state
-    setUser((prev) => (prev ? { ...prev, role } : null));
+    // Update local user state if it's the current user
+    setUser((prev) => (prev?.id === userId ? { ...prev, role } : prev));
   };
 
   const getUsers = async () => {
@@ -100,108 +163,23 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     return data;
   };
 
-  const signIn = async (email: string, password: string) => {
-    const { data, error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    });
-
-    if (error) {
-      console.error("Sign in error:", error.message);
-      throw error;
-    }
-
-    // Fetch user data after successful sign in
-    if (data.user) {
-      const { data: userData, error: userDataError } = await supabase
-        .from("users")
-        .select("*")
-        .eq("id", data.user.id)
-        .single();
-
-      if (userDataError) {
-        console.error("Error fetching user data:", userDataError);
-      }
-
-      setUser({
-        id: data.user.id,
-        email: data.user.email,
-        role: userData?.role || "user",
-      });
-    }
-
-    console.log("Sign in successful:", data.user?.email);
-    return data;
+  const value = {
+    user,
+    loading,
+    signIn,
+    signUp,
+    signOut,
+    updateUserRole,
+    getUsers,
   };
 
-  const signUp = async (email: string, password: string) => {
-    const { data, error } = await supabase.auth.signUp({
-      email,
-      password,
-      options: {
-        emailRedirectTo: `${window.location.origin}/auth/callback`,
-        data: {
-          role: "user",
-        },
-      },
-    });
-
-    if (error) {
-      console.error("Sign up error:", error.message);
-      throw error;
-    }
-
-    console.log("Sign up successful:", data.user?.email);
-    console.log("Confirmation email sent to:", data.user?.email);
-    return data;
-  };
-
-  const signOut = async () => {
-    try {
-      console.log("Starting sign out process...");
-
-      // Clear the session
-      const { error } = await supabase.auth.signOut();
-
-      if (error) {
-        console.error("Sign out error:", error.message);
-        throw error;
-      }
-
-      // Clear local state
-      setUser(null);
-
-      console.log("Sign out successful, redirecting...");
-
-      // Simple redirect
-      document.location.href = "/login";
-    } catch (err) {
-      console.error("Error during sign out:", err);
-      throw err;
-    }
-  };
-
-  return (
-    <AuthContext.Provider
-      value={{
-        user,
-        signIn,
-        signUp,
-        signOut,
-        loading,
-        updateUserRole,
-        getUsers,
-      }}
-    >
-      {children}
-    </AuthContext.Provider>
-  );
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
 
-export const useAuth = () => {
+export function useAuth() {
   const context = useContext(AuthContext);
   if (context === undefined) {
     throw new Error("useAuth must be used within an AuthProvider");
   }
   return context;
-};
+}
