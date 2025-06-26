@@ -41,7 +41,12 @@ export default function TestAdminPage() {
           return;
         }
 
-        setUserRole(userData.role);
+        // Type check to ensure role is a string
+        if (userData && typeof userData.role === "string") {
+          setUserRole(userData.role);
+        } else {
+          setUserRole(null);
+        }
         setLoading(false);
       } catch (err) {
         setError("Unexpected error");
