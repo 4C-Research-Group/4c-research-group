@@ -43,7 +43,6 @@ export default function AuthForm() {
   // Check current session on component mount
   useEffect(() => {
     if (hasAttemptedRedirect.current) {
-      console.log("🔄 Redirect already attempted, skipping session check");
       return;
     }
 
@@ -51,8 +50,6 @@ export default function AuthForm() {
 
     const checkSession = async () => {
       try {
-        console.log("🔍 Checking current session...");
-
         // Add timeout to prevent hanging
         const timeoutPromise = new Promise<never>((_, reject) => {
           setTimeout(() => reject(new Error("Session check timeout")), 5000);
@@ -70,14 +67,11 @@ export default function AuthForm() {
         if (!isMounted) return;
 
         if (error) {
-          console.error("❌ Session check error:", error);
           setIsCheckingSession(false);
           return;
         }
 
         if (user) {
-          console.log("✅ User already logged in:", user.id);
-
           // Check user role and redirect
           const { data: userData, error: roleError } = await supabase
             .from("users")
@@ -88,10 +82,8 @@ export default function AuthForm() {
           if (!isMounted) return;
 
           if (!roleError && userData) {
-            console.log("👤 Current user role:", userData.role);
             const redirectPath =
               userData.role === "admin" ? "/admin" : "/dashboard";
-            console.log("🚀 Redirecting to:", redirectPath);
 
             hasAttemptedRedirect.current = true;
             window.location.href = redirectPath;
@@ -99,11 +91,9 @@ export default function AuthForm() {
           }
         }
 
-        console.log("❌ No active session found");
         setIsCheckingSession(false);
       } catch (err) {
         if (!isMounted) return;
-        console.error("❌ Session check failed:", err);
         setIsCheckingSession(false);
       }
     };
@@ -113,7 +103,6 @@ export default function AuthForm() {
     // Fallback timeout to ensure session check completes
     const fallbackTimeout = setTimeout(() => {
       if (isMounted && !hasAttemptedRedirect.current) {
-        console.log("⏰ Session check fallback timeout - showing form");
         setIsCheckingSession(false);
       }
     }, 6000);
@@ -127,7 +116,6 @@ export default function AuthForm() {
   const onSubmit = async (data: LoginFormData) => {
     // Prevent submission if already checking session
     if (isCheckingSession) {
-      console.log("⏳ Session check in progress, preventing submission");
       return;
     }
 
@@ -136,7 +124,6 @@ export default function AuthForm() {
 
     try {
       if (isLogin) {
-        console.log("🔐 Starting login process...");
         const { data: authData, error } =
           await supabase.auth.signInWithPassword({
             email: data.email,
@@ -144,30 +131,22 @@ export default function AuthForm() {
           });
 
         if (error) {
-          console.error("❌ Login error:", error);
           setError(error.message);
           return;
         }
 
-        console.log("✅ Login successful, user ID:", authData.user?.id);
-
         if (authData.user) {
           // Refresh session to ensure server-side sync
-          console.log("🔄 Refreshing session for server-side sync...");
           const { error: refreshError } = await supabase.auth.refreshSession();
 
           if (refreshError) {
-            console.error("❌ Session refresh error:", refreshError);
-          } else {
-            console.log("✅ Session refreshed successfully");
+            console.error("Session refresh error:", refreshError);
           }
 
           // Wait for session to be properly established
-          console.log("⏳ Waiting for session to be established...");
           await new Promise((resolve) => setTimeout(resolve, 1000));
 
           // Check if user is admin
-          console.log("🔍 Checking user role...");
           const { data: userData, error: roleError } = await supabase
             .from("users")
             .select("role")
@@ -175,27 +154,22 @@ export default function AuthForm() {
             .single();
 
           if (roleError) {
-            console.error("❌ Error checking user role:", roleError);
             setError("Error checking user permissions");
             return;
           }
 
-          console.log("👤 User role:", userData?.role);
-
           // Redirect based on role
           if (userData?.role === "admin") {
-            console.log("🚀 Redirecting admin to /admin");
             // Ensure session is established before redirect
             await supabase.auth.getSession();
             window.location.href = "/admin";
           } else {
-            console.log("🚀 Redirecting user to /dashboard");
             await supabase.auth.getSession();
             window.location.href = "/dashboard";
           }
         }
       } else {
-        const { error } = await supabase.auth.signUp({
+        const { data: signUpData, error } = await supabase.auth.signUp({
           email: data.email,
           password: data.password,
           options: {
@@ -206,6 +180,40 @@ export default function AuthForm() {
         if (error) {
           setError(error.message);
           return;
+        }
+
+        if (signUpData.user) {
+          // Manually create user record in users table
+          console.log("Creating user record for:", signUpData.user.id);
+          const { data: insertData, error: userError } = await supabase
+            .from("users")
+            .insert([
+              {
+                id: signUpData.user.id,
+                email: signUpData.user.email,
+                name: data.email.split("@")[0], // Use email prefix as name
+                role: "user",
+                created_at: new Date().toISOString(),
+                updated_at: new Date().toISOString(),
+              },
+            ])
+            .select(); // Add select to get the inserted data
+
+          if (userError) {
+            console.error("Error creating user record:", userError);
+            console.error("Error details:", userError.details);
+            console.error("Error hint:", userError.hint);
+
+            // Check if it's a duplicate key error (user already exists)
+            if (userError.code === "23505") {
+              console.log("User record already exists, continuing...");
+            } else {
+              // Only show error for non-duplicate key errors
+              console.error("Non-duplicate error occurred:", userError);
+            }
+          } else {
+            console.log("User record created successfully:", insertData);
+          }
         }
 
         setError("Check your email for a confirmation link!");
