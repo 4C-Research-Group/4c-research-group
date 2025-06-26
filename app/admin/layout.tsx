@@ -105,13 +105,7 @@ export default async function AdminLayout({
                       <FileEdit className="h-4 w-4 mr-2" />
                       New Page
                     </Link>
-                    <Link
-                      href="/admin/edit-home"
-                      className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium flex items-center"
-                    >
-                      <FileEdit className="h-4 w-4 mr-2" />
-                      Edit Home Page
-                    </Link>
+
                     <Link
                       href="/admin/users"
                       className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium flex items-center"
