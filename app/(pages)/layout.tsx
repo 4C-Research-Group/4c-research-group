@@ -108,8 +108,18 @@ export default function PagesLayout({
 
           <div className="hidden lg:flex items-center gap-6">
             <nav className="flex items-center gap-4">
-              <Link href="/">Home</Link>
-              <Link href="/about">About</Link>
+              <Link
+                href="/"
+                className="text-sm font-medium text-foreground/80 hover:text-foreground transition-colors dark:text-gray-300 dark:hover:text-white"
+              >
+                Home
+              </Link>
+              <Link
+                href="/about"
+                className="text-sm font-medium text-foreground/80 hover:text-foreground transition-colors dark:text-gray-300 dark:hover:text-white"
+              >
+                About
+              </Link>
               <div className="relative group">
                 <button className="flex items-center gap-1 text-sm font-medium text-foreground/80 hover:text-foreground transition-colors dark:text-gray-300 dark:hover:text-white">
                   Research
@@ -148,7 +158,11 @@ export default function PagesLayout({
                 </div>
               </div>
               {navPages.map((page) => (
-                <Link key={page.slug} href={`/${page.slug}`}>
+                <Link
+                  key={page.slug}
+                  href={`/${page.slug}`}
+                  className="text-sm font-medium text-foreground/80 hover:text-foreground transition-colors dark:text-gray-300 dark:hover:text-white"
+                >
                   {page.nav_label}
                 </Link>
               ))}

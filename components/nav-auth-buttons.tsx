@@ -65,7 +65,7 @@ export function NavAuthButtons({
           <Link
             href="/admin"
             onClick={onClick}
-            className="px-4 py-2 text-sm font-medium text-white bg-gradient-to-r from-cognition-600 to-consciousness-600 rounded-lg hover:opacity-90 transition-opacity duration-200"
+            className="px-4 py-3 rounded-lg text-base font-medium text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800 transition-colors"
           >
             Admin Dashboard
           </Link>
@@ -86,7 +86,7 @@ export function NavAuthButtons({
               window.location.href = "/";
               onClick?.();
             }}
-            className="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors duration-200"
+            className="px-4 py-3 rounded-lg text-base font-medium text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800 transition-colors"
           >
             Sign Out
           </button>
@@ -115,7 +115,7 @@ export function NavAuthButtons({
             window.location.href = "/";
             onClick?.();
           }}
-          className="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors duration-200"
+          className="px-4 py-3 rounded-lg text-base font-medium text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800 transition-colors"
         >
           Sign Out
         </button>
@@ -131,7 +131,7 @@ export function NavAuthButtons({
           onClick?.();
           router.push("/login");
         }}
-        className="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors duration-200"
+        className="px-4 py-3 rounded-lg text-base font-medium text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800 transition-colors"
       >
         Login
       </button>
@@ -142,7 +142,7 @@ export function NavAuthButtons({
             onClick?.();
             router.push("/signup");
           }}
-          className="relative px-4 py-2 text-sm font-medium text-white bg-gradient-to-r from-cognition-600 to-consciousness-600 rounded-lg hover:opacity-90 transition-opacity duration-200"
+          className="relative px-4 py-3 rounded-lg text-base font-medium text-white bg-gradient-to-r from-cognition-600 to-consciousness-600 hover:opacity-90 transition-opacity duration-200"
         >
           Sign Up
         </button>
@@ -166,9 +166,18 @@ export default async function PagesLayout({ children }) {
     <header>
       {/* ...other nav code... */}
       <nav>
-        <Link href="/">Home</Link>
+        <Link
+          href="/"
+          className="px-4 py-3 rounded-lg text-base font-medium text-foreground/80 hover:text-foreground transition-colors dark:text-gray-300 dark:hover:text-white"
+        >
+          Home
+        </Link>
         {navPages.map((page) => (
-          <Link key={page.slug} href={`/${page.slug}`}>
+          <Link
+            key={page.slug}
+            href={`/${page.slug}`}
+            className="px-4 py-3 rounded-lg text-base font-medium text-foreground/80 hover:text-foreground transition-colors dark:text-gray-300 dark:hover:text-white"
+          >
             {page.nav_label}
           </Link>
         ))}
