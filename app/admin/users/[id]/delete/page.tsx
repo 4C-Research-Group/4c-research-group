@@ -74,7 +74,7 @@ export default function DeleteUserPage({ params }: { params: { id: string } }) {
     };
 
     fetchUser();
-  }, [params.id, router, supabase]);
+  }, [params.id, router]);
 
   const handleDelete = async () => {
     setDeleting(true);

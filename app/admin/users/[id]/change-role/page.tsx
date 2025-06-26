@@ -61,7 +61,7 @@ export default function ChangeRolePage({ params }: { params: { id: string } }) {
     };
 
     fetchUser();
-  }, [params.id, router, supabase]);
+  }, [params.id, router]);
 
   const handleRoleChange = async (newRole: "admin" | "user") => {
     setSaving(true);

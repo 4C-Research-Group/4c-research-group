@@ -63,7 +63,7 @@ export default function EditUserPage({ params }: { params: { id: string } }) {
     };
 
     fetchUser();
-  }, [params.id, router, supabase]);
+  }, [params.id, router]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
