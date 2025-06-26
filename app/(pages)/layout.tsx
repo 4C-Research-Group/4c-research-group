@@ -18,6 +18,7 @@ import { useTheme } from "next-themes";
 import MobileNav from "@/components/mobile-nav";
 import Image from "next/image";
 import { NavAuthButtons } from "@/components/nav-auth-buttons";
+import { supabase } from "@/lib/supabase/client";
 
 function ThemeToggle() {
   const { theme, setTheme } = useTheme();
@@ -59,6 +60,19 @@ export default function PagesLayout({
 }) {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [navPages, setNavPages] = useState<any[]>([]);
+
+  useEffect(() => {
+    const fetchNavPages = async () => {
+      const { data } = await supabase
+        .from("pages")
+        .select("slug, nav_label, nav_order")
+        .eq("show_in_nav", true)
+        .order("nav_order", { ascending: true });
+      setNavPages(data || []);
+    };
+    fetchNavPages();
+  }, []);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -79,33 +93,23 @@ export default function PagesLayout({
         )}
       >
         <div className="container flex h-16 items-center justify-between px-4">
-          {/* Logo and subtitle in a row on md+ screens, column on mobile */}
-          <div className="flex flex-col md:flex-row md:items-center md:gap-4">
+          {/* Logo and subtitle in a row on lg+ screens, column on mobile */}
+          <div className="flex flex-col lg:flex-row lg:items-center lg:gap-4">
             <Link href="/" className="flex items-center space-x-2">
               <Image src="/logo.png" alt="Logo" width={32} height={32} />
               <span className="text-xl font-bold bg-gradient-to-r from-cognition-600 to-consciousness-600 bg-clip-text text-transparent dark:from-cognition-400 dark:to-consciousness-400">
                 4C Research
               </span>
             </Link>
-            <span className="text-xs text-muted-foreground ml-10 md:ml-0 md:pl-4 md:border-l md:border-gray-200 dark:md:border-gray-700 md:mt-0 mt-1">
+            <span className="text-xs text-muted-foreground ml-10 lg:ml-0 lg:pl-4 lg:border-l lg:border-gray-200 dark:lg:border-gray-700 lg:mt-0 mt-1">
               Cognition • Consciousness • Critical Care
             </span>
           </div>
 
           <div className="hidden lg:flex items-center gap-6">
             <nav className="flex items-center gap-4">
-              <Link
-                href="/"
-                className="text-sm font-medium text-foreground/80 hover:text-foreground transition-colors dark:text-gray-300 dark:hover:text-white"
-              >
-                Home
-              </Link>
-              <Link
-                href="/about"
-                className="text-sm font-medium text-foreground/80 hover:text-foreground transition-colors dark:text-gray-300 dark:hover:text-white"
-              >
-                About
-              </Link>
+              <Link href="/">Home</Link>
+              <Link href="/about">About</Link>
               <div className="relative group">
                 <button className="flex items-center gap-1 text-sm font-medium text-foreground/80 hover:text-foreground transition-colors dark:text-gray-300 dark:hover:text-white">
                   Research
@@ -143,7 +147,11 @@ export default function PagesLayout({
                   </div>
                 </div>
               </div>
-              {/* More dropdown for less critical links */}
+              {navPages.map((page) => (
+                <Link key={page.slug} href={`/${page.slug}`}>
+                  {page.nav_label}
+                </Link>
+              ))}
               <div className="relative group">
                 <button className="flex items-center gap-1 text-sm font-medium text-foreground/80 hover:text-foreground transition-colors dark:text-gray-300 dark:hover:text-white">
                   More
@@ -274,6 +282,16 @@ export default function PagesLayout({
                   </Link>
                 </div>
               </div>
+              {navPages.map((page) => (
+                <Link
+                  key={page.slug}
+                  href={`/${page.slug}`}
+                  className="px-4 py-3 rounded-lg text-base font-medium text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800 transition-colors"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  {page.nav_label}
+                </Link>
+              ))}
               <Link
                 href="/projects"
                 className="px-4 py-3 rounded-lg text-base font-medium text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800 transition-colors"
@@ -283,38 +301,32 @@ export default function PagesLayout({
               </Link>
               <Link
                 href="/knowledge-mobilization"
-                className="block px-4 py-3 rounded-lg text-base font-medium text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800 transition-colors"
+                className="px-4 py-3 rounded-lg text-base font-medium text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800 transition-colors"
                 onClick={() => setIsMobileMenuOpen(false)}
               >
                 Knowledge Mobilization
               </Link>
               <Link
                 href="/team"
-                className="block px-4 py-3 rounded-lg text-base font-medium text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800 transition-colors"
+                className="px-4 py-3 rounded-lg text-base font-medium text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800 transition-colors"
                 onClick={() => setIsMobileMenuOpen(false)}
               >
                 Join the Team
               </Link>
               <Link
                 href="/4c-blogs"
-                className="block px-4 py-3 rounded-lg text-base font-medium text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800 transition-colors"
+                className="px-4 py-3 rounded-lg text-base font-medium text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800 transition-colors"
                 onClick={() => setIsMobileMenuOpen(false)}
               >
                 4C Blogs
               </Link>
               <Link
                 href="/contact"
-                className="block px-4 py-3 rounded-lg text-base font-medium text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800 transition-colors"
+                className="px-4 py-3 rounded-lg text-base font-medium text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800 transition-colors"
                 onClick={() => setIsMobileMenuOpen(false)}
               >
                 Contact
               </Link>
-              <div className="pt-2 border-t border-gray-200 dark:border-gray-700">
-                <NavAuthButtons
-                  className="flex flex-col space-y-3 px-2"
-                  onClick={() => setIsMobileMenuOpen(false)}
-                />
-              </div>
             </div>
           </div>
         )}

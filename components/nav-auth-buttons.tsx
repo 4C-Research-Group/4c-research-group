@@ -4,10 +4,7 @@ import { useAuth } from "@/components/providers/auth-provider";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { UserAvatar } from "@/components/user-avatar";
-import { useEffect, useState, useCallback } from "react";
-import { supabase } from "@/lib/supabase/client";
-import { LogOut } from "lucide-react";
-import AdminSignOutButton from "@/components/admin/AdminSignOutButton";
+import { useEffect, useState } from "react";
 
 interface NavAuthButtonsProps {
   className?: string;
@@ -151,5 +148,33 @@ export function NavAuthButtons({
         </button>
       </div>
     </div>
+  );
+}
+
+export default async function PagesLayout({ children }) {
+  // Removed server client import; use browser client if needed
+
+  const { data: navPages } = await supabase
+    .from("pages")
+    .select("slug, nav_label, nav_order")
+    .eq("show_in_nav", true)
+    .order("nav_order", { ascending: true });
+
+  // ...rest of your layout code
+
+  return (
+    <header>
+      {/* ...other nav code... */}
+      <nav>
+        <Link href="/">Home</Link>
+        {navPages.map((page) => (
+          <Link key={page.slug} href={`/${page.slug}`}>
+            {page.nav_label}
+          </Link>
+        ))}
+      </nav>
+      {/* ... */}
+    </header>
+    // ...rest of your layout
   );
 }
