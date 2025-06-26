@@ -98,27 +98,6 @@ export function NavAuthButtons({
     return (
       <div className={`flex items-center gap-3 ${className}`}>
         <UserAvatar />
-        <button
-          onClick={async (e) => {
-            console.log("Signing out...");
-            await signOut();
-            localStorage.clear();
-            sessionStorage.clear();
-            document.cookie.split(";").forEach(function (c) {
-              document.cookie = c
-                .replace(/^ +/, "")
-                .replace(
-                  /=.*/,
-                  "=;expires=" + new Date().toUTCString() + ";path=/"
-                );
-            });
-            window.location.href = "/";
-            onClick?.();
-          }}
-          className="px-4 py-3 rounded-lg text-base font-medium text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800 transition-colors"
-        >
-          Sign Out
-        </button>
       </div>
     );
   }
@@ -142,7 +121,7 @@ export function NavAuthButtons({
             onClick?.();
             router.push("/signup");
           }}
-          className="relative px-4 py-3 rounded-lg text-base font-medium text-white bg-gradient-to-r from-cognition-600 to-consciousness-600 hover:opacity-90 transition-opacity duration-200"
+          className="relative px-4 py-2 rounded-lg text-base font-medium text-white bg-gradient-to-r from-cognition-600 to-consciousness-600 hover:opacity-90 transition-opacity duration-200"
         >
           Sign Up
         </button>

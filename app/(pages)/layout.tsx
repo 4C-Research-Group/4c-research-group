@@ -157,6 +157,12 @@ export default function PagesLayout({
                   </div>
                 </div>
               </div>
+              <Link
+                href="/4c-blogs"
+                className="text-sm font-medium text-foreground/80 hover:text-foreground transition-colors dark:text-gray-300 dark:hover:text-white"
+              >
+                4C Blogs
+              </Link>
               {navPages.map((page) => (
                 <Link
                   key={page.slug}
@@ -296,6 +302,13 @@ export default function PagesLayout({
                   </Link>
                 </div>
               </div>
+              <Link
+                href="/4c-blogs"
+                className="px-4 py-3 rounded-lg text-base font-medium text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800 transition-colors"
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                4C Blogs
+              </Link>
               {navPages.map((page) => (
                 <Link
                   key={page.slug}
