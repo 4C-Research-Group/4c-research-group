@@ -79,20 +79,21 @@ export default function PagesLayout({
         )}
       >
         <div className="container flex h-16 items-center justify-between px-4">
-          <div className="flex flex-col">
+          {/* Logo and subtitle in a row on md+ screens, column on mobile */}
+          <div className="flex flex-col md:flex-row md:items-center md:gap-4">
             <Link href="/" className="flex items-center space-x-2">
               <Image src="/logo.png" alt="Logo" width={32} height={32} />
               <span className="text-xl font-bold bg-gradient-to-r from-cognition-600 to-consciousness-600 bg-clip-text text-transparent dark:from-cognition-400 dark:to-consciousness-400">
                 4C Research
               </span>
             </Link>
-            <span className="text-xs text-muted-foreground ml-10 -mt-1">
+            <span className="text-xs text-muted-foreground ml-10 md:ml-0 md:pl-4 md:border-l md:border-gray-200 dark:md:border-gray-700 md:mt-0 mt-1">
               Cognition • Consciousness • Critical Care
             </span>
           </div>
 
-          <div className="hidden md:flex items-center gap-6">
-            <nav className="flex items-center gap-6">
+          <div className="hidden lg:flex items-center gap-6">
+            <nav className="flex items-center gap-4">
               <Link
                 href="/"
                 className="text-sm font-medium text-foreground/80 hover:text-foreground transition-colors dark:text-gray-300 dark:hover:text-white"
@@ -142,36 +143,47 @@ export default function PagesLayout({
                   </div>
                 </div>
               </div>
-              <Link
-                href="/projects"
-                className="text-sm font-medium text-foreground/80 hover:text-foreground transition-colors dark:text-gray-300 dark:hover:text-white"
-              >
-                Projects
-              </Link>
-              <Link
-                href="/knowledge-mobilization"
-                className="text-sm font-medium text-foreground/80 hover:text-foreground transition-colors dark:text-gray-300 dark:hover:text-white"
-              >
-                Knowledge Mobilization
-              </Link>
-              <Link
-                href="/team"
-                className="text-sm font-medium text-foreground/80 hover:text-foreground transition-colors dark:text-gray-300 dark:hover:text-white"
-              >
-                Join the Team
-              </Link>
-              <Link
-                href="/4c-blogs"
-                className="text-sm font-medium text-foreground/80 hover:text-foreground transition-colors dark:text-gray-300 dark:hover:text-white"
-              >
-                4C Blogs
-              </Link>
-              <Link
-                href="/contact"
-                className="text-sm font-medium text-foreground/80 hover:text-foreground transition-colors dark:text-gray-300 dark:hover:text-white"
-              >
-                Contact
-              </Link>
+              {/* More dropdown for less critical links */}
+              <div className="relative group">
+                <button className="flex items-center gap-1 text-sm font-medium text-foreground/80 hover:text-foreground transition-colors dark:text-gray-300 dark:hover:text-white">
+                  More
+                  <FaChevronDown className="h-3 w-3 mt-0.5 transition-transform group-hover:rotate-180" />
+                </button>
+                <div className="absolute left-0 mt-2 w-48 rounded-md shadow-lg bg-white dark:bg-gray-800 ring-1 ring-black/5 dark:ring-white/10 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
+                  <div className="py-1">
+                    <Link
+                      href="/projects"
+                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700"
+                    >
+                      Projects
+                    </Link>
+                    <Link
+                      href="/knowledge-mobilization"
+                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700"
+                    >
+                      Knowledge Mobilization
+                    </Link>
+                    <Link
+                      href="/team"
+                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700"
+                    >
+                      Join the Team
+                    </Link>
+                    <Link
+                      href="/4c-blogs"
+                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700"
+                    >
+                      4C Blogs
+                    </Link>
+                    <Link
+                      href="/contact"
+                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700"
+                    >
+                      Contact
+                    </Link>
+                  </div>
+                </div>
+              </div>
             </nav>
 
             <div className="flex items-center gap-4 ml-4">
@@ -182,7 +194,7 @@ export default function PagesLayout({
           </div>
 
           {/* Mobile menu button */}
-          <div className="flex md:hidden items-center gap-4">
+          <div className="flex lg:hidden items-center gap-4">
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
               className="p-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800"
@@ -215,7 +227,7 @@ export default function PagesLayout({
 
         {/* Mobile menu */}
         {isMobileMenuOpen && (
-          <div className="md:hidden bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-800 shadow-lg">
+          <div className="lg:hidden bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-800 shadow-lg">
             <div className="px-4 py-3 space-y-3 max-h-[80vh] overflow-y-auto">
               <Link
                 href="/"
