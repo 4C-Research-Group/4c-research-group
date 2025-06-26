@@ -44,12 +44,12 @@ export default async function DashboardLayout({
 
     if (error) {
       console.error("❌ Error checking user status:", error);
-      redirect("/login");
+      // Don't redirect to login if user is authenticated but not in users table
+      // Just log the error and continue with default user data
+      console.log("⚠️ User not found in users table, using default values");
     }
 
-    console.log("👤 User role in dashboard layout:", userData?.role);
-
-    // If user is admin, redirect to admin panel
+    // If user is admin and we have user data, redirect to admin panel
     if (userData?.role === "admin") {
       console.log("🔄 User is admin, redirecting to admin panel");
       redirect("/admin");

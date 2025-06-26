@@ -11,10 +11,46 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import { supabase } from "@/lib/supabase/client";
 
 export function UserAvatar() {
   const { user, signOut } = useAuth();
   const router = useRouter();
+  const [userRole, setUserRole] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchUserRole = async () => {
+      if (!user) {
+        setLoading(false);
+        return;
+      }
+
+      try {
+        const { data, error } = await supabase
+          .from("users")
+          .select("role")
+          .eq("id", user.id)
+          .single();
+
+        if (!error && data) {
+          setUserRole(data.role);
+        } else {
+          // If user doesn't exist in users table, set default role
+          setUserRole("user");
+        }
+      } catch (error) {
+        console.error("Error fetching user role:", error);
+        // Set default role on error
+        setUserRole("user");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchUserRole();
+  }, [user]);
 
   if (!user) return null;
 
@@ -49,18 +85,18 @@ export function UserAvatar() {
           <div className="flex flex-col space-y-1">
             <p className="text-sm font-medium leading-none">{user.email}</p>
             <p className="text-xs leading-none text-muted-foreground">
-              {user.role === "admin" ? "Admin" : "User"}
+              {loading ? "Loading..." : userRole === "admin" ? "Admin" : "User"}
             </p>
           </div>
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
-        {user.role === "admin" && (
+        {!loading && userRole === "admin" && (
           <DropdownMenuItem onClick={() => router.push("/admin")}>
             Admin Dashboard
           </DropdownMenuItem>
         )}
-        <DropdownMenuItem onClick={() => router.push("/profile")}>
-          Profile
+        <DropdownMenuItem onClick={() => router.push("/dashboard")}>
+          Dashboard
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem onClick={handleSignOut}>Sign out</DropdownMenuItem>

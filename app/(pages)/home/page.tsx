@@ -3,6 +3,10 @@ import Image from "next/image";
 import { motion } from "framer-motion";
 import { FaBrain, FaHeartbeat, FaFlask, FaArrowRight } from "react-icons/fa";
 import Link from "next/link";
+import { useAuth } from "@/components/providers/auth-provider";
+import { UserAvatar } from "@/components/user-avatar";
+import { Button } from "@/components/ui/button";
+import { useRouter } from "next/navigation";
 
 type ResearchArea = {
   icon: React.ReactNode;
@@ -19,6 +23,15 @@ type NewsItem = {
 };
 
 export default function HomePage() {
+  const { user, signOut, loading } = useAuth();
+  const router = useRouter();
+
+  const handleSignOut = async () => {
+    await signOut();
+    router.push("/");
+    router.refresh();
+  };
+
   const researchAreas: ResearchArea[] = [
     {
       icon: <FaBrain className="text-4xl" />,
@@ -95,6 +108,30 @@ export default function HomePage() {
       {/* Hero Section */}
       <section className="relative overflow-hidden bg-gradient-to-br from-cognition-50 to-white dark:from-cognition-900 dark:to-gray-900">
         <div className="container mx-auto px-4 py-20 md:py-32">
+          {/* User Authentication Display */}
+          {!loading && user && (
+            <motion.div
+              className="flex justify-end mb-8"
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+            >
+              <div className="flex items-center gap-4">
+                <div className="text-sm text-gray-600 dark:text-gray-400">
+                  Welcome, {user.email}
+                </div>
+                <UserAvatar />
+                <Button
+                  onClick={handleSignOut}
+                  variant="outline"
+                  className="border-cognition-700 text-cognition-700 hover:bg-cognition-50 dark:border-cognition-400 dark:text-cognition-100 dark:hover:bg-cognition-900/50"
+                >
+                  Sign Out
+                </Button>
+              </div>
+            </motion.div>
+          )}
+
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <div className="text-center lg:text-left">
               <motion.h1

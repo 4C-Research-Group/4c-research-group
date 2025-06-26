@@ -48,6 +48,28 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     return () => subscription.unsubscribe();
   }, []);
 
+  useEffect(() => {
+    // Auto-logout if user record is deleted from users table
+    if (!user) return;
+    let cancelled = false;
+    const checkUserRecord = async () => {
+      const { data, error } = await supabase
+        .from("users")
+        .select("id")
+        .eq("id", user.id)
+        .single();
+      if (!cancelled && (error || !data)) {
+        // User record missing, sign out
+        await signOut();
+        window.location.href = "/login";
+      }
+    };
+    checkUserRecord();
+    return () => {
+      cancelled = true;
+    };
+  }, [user]);
+
   const signOut = async () => {
     await supabase.auth.signOut();
   };
