@@ -18,6 +18,9 @@ import { useTheme } from "next-themes";
 import MobileNav from "@/components/mobile-nav";
 import Image from "next/image";
 import { NavAuthButtons } from "@/components/nav-auth-buttons";
+import { createPagesBrowserClient } from "@supabase/auth-helpers-nextjs";
+
+export const supabase = createPagesBrowserClient();
 
 function ThemeToggle() {
   const { theme, setTheme } = useTheme();
