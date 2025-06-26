@@ -19,8 +19,10 @@ export default function EditPage({ pageId }: { pageId: string }) {
       if (error) {
         toast.error("Failed to load page");
         console.error(error);
-      } else if (data) {
+      } else if (data && typeof data.content === "string") {
         setContent(data.content);
+      } else {
+        setContent("");
       }
     };
 
