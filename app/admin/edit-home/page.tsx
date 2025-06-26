@@ -89,10 +89,10 @@ export default function EditHomePage() {
     });
   }
 
-  const handleStatChange = (index, field, value) => {
-    setContent((prevContent) => ({
+  const handleStatChange = (index: number, field: string, value: any) => {
+    setContent((prevContent: any) => ({
       ...prevContent,
-      stats: prevContent.stats.map((stat, i) =>
+      stats: prevContent.stats.map((stat: any, i: number) =>
         i === index ? { ...stat, [field]: value } : stat
       ),
     }));
@@ -497,10 +497,10 @@ export default function EditHomePage() {
                     type="button"
                     variant="destructive"
                     onClick={() =>
-                      setContent((prevContent) => ({
+                      setContent((prevContent: any) => ({
                         ...prevContent,
                         stats: prevContent.stats.filter(
-                          (_, index) => index !== i
+                          (_: any, index: number) => index !== i
                         ),
                       }))
                     }
@@ -514,7 +514,7 @@ export default function EditHomePage() {
           <Button
             type="button"
             onClick={() =>
-              setContent((prevContent) => ({
+              setContent((prevContent: any) => ({
                 ...prevContent,
                 stats: [...(prevContent.stats || []), { value: "", label: "" }],
               }))
