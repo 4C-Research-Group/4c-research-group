@@ -59,7 +59,6 @@ export function NavAuthButtons({
   if (user) {
     // If admin, show admin link and sign out button
     if (user.role === "admin") {
-      const statsArray = Array.isArray(user.stats) ? user.stats : [];
       return (
         <div className={`flex items-center gap-3 ${className}`}>
           <UserAvatar />
