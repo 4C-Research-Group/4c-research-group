@@ -87,6 +87,15 @@ export default function EditHomePage() {
     });
   }
 
+  const handleStatChange = (index, field, value) => {
+    setContent((prevContent) => ({
+      ...prevContent,
+      stats: prevContent.stats.map((stat, i) =>
+        i === index ? { ...stat, [field]: value } : stat
+      ),
+    }));
+  };
+
   // --- Save Logic ---
   async function handleSave(e: React.FormEvent) {
     e.preventDefault();
@@ -461,41 +470,54 @@ export default function EditHomePage() {
         {/* Stats Section */}
         <section className="p-4 border rounded-md">
           <h2 className="text-xl font-semibold mb-4">Stats</h2>
-          {(content.stats || []).map((stat: any, i: number) => (
-            <div
-              key={i}
-              className="mb-4 p-2 border rounded flex flex-col gap-2"
-            >
-              <input
-                type="text"
-                className="input w-full"
-                value={stat.label || ""}
-                onChange={(e) =>
-                  handleCardChange("stats", i, "label", e.target.value)
-                }
-                placeholder={`Stat ${i + 1} Label`}
-              />
-              <input
-                type="text"
-                className="input w-full"
-                value={stat.value || ""}
-                onChange={(e) =>
-                  handleCardChange("stats", i, "value", e.target.value)
-                }
-                placeholder={`Stat ${i + 1} Value`}
-              />
-              <div className="flex gap-2 mt-2">
-                <Button
-                  type="button"
-                  variant="destructive"
-                  onClick={() => removeCard("stats", i)}
-                >
-                  Remove
-                </Button>
+          {(Array.isArray(content.stats) ? content.stats : []).map(
+            (stat: any, i: number) => (
+              <div
+                key={i}
+                className="mb-4 p-2 border rounded flex flex-col gap-2"
+              >
+                <input
+                  type="text"
+                  className="input w-full"
+                  value={stat.label || ""}
+                  onChange={(e) => handleStatChange(i, "label", e.target.value)}
+                  placeholder={`Stat ${i + 1} Label`}
+                />
+                <input
+                  type="text"
+                  className="input w-full"
+                  value={stat.value || ""}
+                  onChange={(e) => handleStatChange(i, "value", e.target.value)}
+                  placeholder={`Stat ${i + 1} Value`}
+                />
+                <div className="flex gap-2 mt-2">
+                  <Button
+                    type="button"
+                    variant="destructive"
+                    onClick={() =>
+                      setContent((prevContent) => ({
+                        ...prevContent,
+                        stats: prevContent.stats.filter(
+                          (_, index) => index !== i
+                        ),
+                      }))
+                    }
+                  >
+                    Remove
+                  </Button>
+                </div>
               </div>
-            </div>
-          ))}
-          <Button type="button" onClick={() => addCard("stats")}>
+            )
+          )}
+          <Button
+            type="button"
+            onClick={() =>
+              setContent((prevContent) => ({
+                ...prevContent,
+                stats: [...(prevContent.stats || []), { value: "", label: "" }],
+              }))
+            }
+          >
             Add Stat
           </Button>
         </section>
