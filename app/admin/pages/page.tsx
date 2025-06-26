@@ -1,6 +1,6 @@
 import { FileEdit, Plus } from "lucide-react";
 import Link from "next/link";
-import { getAllPages } from "@/lib/utils/page-utils";
+import { createClient } from "@/lib/supabase/server";
 import { formatDate } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import {
@@ -12,7 +12,22 @@ import {
 } from "@/components/ui/card";
 
 export default async function AdminPages() {
-  const pages = await getAllPages();
+  // Only fetch the home page for now
+  const supabase = createClient();
+  const { data, error } = await supabase
+    .from("pages")
+    .select("slug, updated_at, content")
+    .eq("slug", "home")
+    .single();
+
+  const pages = [];
+  if (data) {
+    pages.push({
+      path: "/home",
+      lastModified: data.updated_at,
+      size: data.content ? JSON.stringify(data.content).length : 0,
+    });
+  }
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -50,24 +65,12 @@ export default async function AdminPages() {
               </div>
             </CardContent>
             <CardFooter className="pt-0">
-              {page.path === "/home" ? (
-                <Link href="/admin/edit-home" className="w-full">
-                  <Button variant="outline" className="w-full">
-                    <FileEdit className="h-4 w-4 mr-2" />
-                    Edit Page
-                  </Button>
-                </Link>
-              ) : (
-                <Link
-                  href={`/admin/pages/edit?path=${encodeURIComponent(page.path)}`}
-                  className="w-full"
-                >
-                  <Button variant="outline" className="w-full">
-                    <FileEdit className="h-4 w-4 mr-2" />
-                    Edit Page
-                  </Button>
-                </Link>
-              )}
+              <Link href="/admin/edit-home" className="w-full">
+                <Button variant="outline" className="w-full">
+                  <FileEdit className="h-4 w-4 mr-2" />
+                  Edit Page
+                </Button>
+              </Link>
             </CardFooter>
           </Card>
         ))}
