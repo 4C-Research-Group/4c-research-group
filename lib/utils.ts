@@ -15,6 +15,20 @@ export function validateString(
   return value.trim().length <= maxLength;
 }
 
+export function formatDate(date: Date | string): string {
+  if (!date) return "-";
+
+  const d = new Date(date);
+  return new Intl.DateTimeFormat("en-US", {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: true,
+  }).format(d);
+}
+
 export const sectionStyles = {
   base: "container py-12 md:py-16 lg:py-24",
   card: "relative rounded-xl mx-auto flex flex-col items-center text-center lg:max-w-[1000px] overflow-hidden p-6 bg-white/30 dark:bg-gray-900/30 shadow-lg border border-gray-200 dark:border-gray-700 backdrop-blur-lg",
