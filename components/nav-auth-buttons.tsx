@@ -106,22 +106,26 @@ export function NavAuthButtons({
   // Show login/signup buttons when not logged in
   return (
     <div className={`flex items-center gap-3 ${className}`}>
-      <Link
-        href="/login"
-        onClick={onClick}
+      <button
+        onClick={() => {
+          onClick?.();
+          router.push("/login");
+        }}
         className="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors duration-200"
       >
         Login
-      </Link>
+      </button>
       <div className="relative group">
         <div className="absolute -inset-0.5 bg-gradient-to-r from-cognition-600 to-consciousness-600 rounded-lg opacity-75 group-hover:opacity-100 blur transition duration-200"></div>
-        <Link
-          href="/signup"
-          onClick={onClick}
+        <button
+          onClick={() => {
+            onClick?.();
+            router.push("/signup");
+          }}
           className="relative px-4 py-2 text-sm font-medium text-white bg-gradient-to-r from-cognition-600 to-consciousness-600 rounded-lg hover:opacity-90 transition-opacity duration-200"
         >
           Sign Up
-        </Link>
+        </button>
       </div>
     </div>
   );

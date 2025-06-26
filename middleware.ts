@@ -39,16 +39,35 @@ export async function middleware(request: NextRequest) {
       console.log(
         "🔄 Middleware: Redirecting authenticated user from login/signup"
       );
-      // Check if user is admin to determine redirect path
-      const { data: userData } = await supabase
+
+      // Add timeout for role checking to prevent delays
+      const roleCheckPromise = supabase
         .from("users")
         .select("role")
         .eq("id", user.id)
         .single();
 
-      const redirectPath = userData?.role === "admin" ? "/admin" : "/dashboard";
-      console.log("🔄 Middleware: Redirecting to:", redirectPath);
-      return NextResponse.redirect(new URL(redirectPath, request.url));
+      const timeoutPromise = new Promise((_, reject) => {
+        setTimeout(() => reject(new Error("Role check timeout")), 2000);
+      });
+
+      try {
+        const result = (await Promise.race([
+          roleCheckPromise,
+          timeoutPromise,
+        ])) as any;
+        const userData = result?.data;
+        const redirectPath =
+          userData?.role === "admin" ? "/admin" : "/dashboard";
+        console.log("🔄 Middleware: Redirecting to:", redirectPath);
+        return NextResponse.redirect(new URL(redirectPath, request.url));
+      } catch (error) {
+        // If role check fails or times out, redirect to dashboard as default
+        console.log(
+          "⚠️ Middleware: Role check failed, redirecting to dashboard"
+        );
+        return NextResponse.redirect(new URL("/dashboard", request.url));
+      }
     }
   } catch (error) {
     console.error("Middleware auth error:", error);

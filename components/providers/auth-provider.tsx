@@ -22,16 +22,29 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [session, setSession] = useState<Session | null>(null);
   const [loading, setLoading] = useState(true);
+  const [mounted, setMounted] = useState(false);
+
+  // Ensure we're on the client side
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   useEffect(() => {
+    if (!mounted) return;
+
     // Get initial session
     const getInitialSession = async () => {
-      const {
-        data: { session },
-      } = await supabase.auth.getSession();
-      setSession(session);
-      setUser(session?.user ?? null);
-      setLoading(false);
+      try {
+        const {
+          data: { session },
+        } = await supabase.auth.getSession();
+        setSession(session);
+        setUser(session?.user ?? null);
+      } catch (error) {
+        console.error("Error getting initial session:", error);
+      } finally {
+        setLoading(false);
+      }
     };
 
     getInitialSession();
@@ -46,33 +59,48 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     });
 
     return () => subscription.unsubscribe();
-  }, []);
+  }, [mounted]);
 
   useEffect(() => {
-    // Auto-logout if user record is deleted from users table
-    if (!user) return;
+    if (!mounted || !user) return;
+
     let cancelled = false;
     const checkUserRecord = async () => {
-      const { data, error } = await supabase
-        .from("users")
-        .select("id")
-        .eq("id", user.id)
-        .single();
-      if (!cancelled && (error || !data)) {
-        // User record missing, sign out
-        await signOut();
-        window.location.href = "/login";
+      try {
+        const { data, error } = await supabase
+          .from("users")
+          .select("id")
+          .eq("id", user.id)
+          .single();
+        if (!cancelled && (error || !data)) {
+          // User record missing, sign out
+          await signOut();
+          window.location.href = "/login";
+        }
+      } catch (error) {
+        console.error("Error checking user record:", error);
       }
     };
     checkUserRecord();
     return () => {
       cancelled = true;
     };
-  }, [user]);
+  }, [user, mounted]);
 
   const signOut = async () => {
     await supabase.auth.signOut();
   };
+
+  // Don't render children until mounted to prevent hydration issues
+  if (!mounted) {
+    return (
+      <AuthContext.Provider
+        value={{ user: null, session: null, loading: true, signOut }}
+      >
+        {children}
+      </AuthContext.Provider>
+    );
+  }
 
   return (
     <AuthContext.Provider value={{ user, session, loading, signOut }}>

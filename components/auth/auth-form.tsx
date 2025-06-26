@@ -54,9 +54,9 @@ export default function AuthForm({ initialMode = "login" }: AuthFormProps) {
 
     const checkSession = async () => {
       try {
-        // Add timeout to prevent hanging
+        // Reduce timeout to 2 seconds for faster response
         const timeoutPromise = new Promise<never>((_, reject) => {
-          setTimeout(() => reject(new Error("Session check timeout")), 5000);
+          setTimeout(() => reject(new Error("Session check timeout")), 2000);
         });
 
         const sessionPromise = supabase.auth.getUser();
@@ -104,12 +104,12 @@ export default function AuthForm({ initialMode = "login" }: AuthFormProps) {
 
     checkSession();
 
-    // Fallback timeout to ensure session check completes
+    // Reduce fallback timeout to 3 seconds
     const fallbackTimeout = setTimeout(() => {
       if (isMounted && !hasAttemptedRedirect.current) {
         setIsCheckingSession(false);
       }
-    }, 6000);
+    }, 3000);
 
     return () => {
       isMounted = false;
@@ -245,108 +245,106 @@ export default function AuthForm({ initialMode = "login" }: AuthFormProps) {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          {isCheckingSession ? (
-            <div className="flex items-center justify-center py-8">
-              <Loader2 className="h-6 w-6 animate-spin mr-2" />
-              <span>Checking session...</span>
-            </div>
-          ) : (
-            <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="email">Email</Label>
-                <div className="relative">
-                  <Mail className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
-                  <Input
-                    id="email"
-                    type="email"
-                    placeholder="Enter your email"
-                    className="pl-10"
-                    disabled={isLoading}
-                    {...register("email", {
-                      required: "Email is required",
-                      pattern: {
-                        value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-                        message: "Invalid email address",
-                      },
-                    })}
-                  />
-                </div>
-                {errors.email && (
-                  <p className="text-sm text-red-500">{errors.email.message}</p>
-                )}
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+            {isCheckingSession && (
+              <div className="flex items-center justify-center py-2 mb-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
+                <Loader2 className="h-4 w-4 animate-spin mr-2" />
+                <span className="text-sm text-blue-600 dark:text-blue-400">
+                  Checking session...
+                </span>
               </div>
+            )}
 
-              <div className="space-y-2">
-                <Label htmlFor="password">Password</Label>
-                <div className="relative">
-                  <Lock className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
-                  <Input
-                    id="password"
-                    type={showPassword ? "text" : "password"}
-                    placeholder="Enter your password"
-                    className="pl-10 pr-10"
-                    disabled={isLoading}
-                    {...register("password", {
-                      required: "Password is required",
-                      minLength: {
-                        value: 6,
-                        message: "Password must be at least 6 characters",
-                      },
-                    })}
-                  />
-                  <button
-                    type="button"
-                    onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-3 text-gray-400 hover:text-gray-600"
-                    disabled={isLoading}
-                  >
-                    {showPassword ? (
-                      <EyeOff className="h-4 w-4" />
-                    ) : (
-                      <Eye className="h-4 w-4" />
-                    )}
-                  </button>
-                </div>
-                {errors.password && (
-                  <p className="text-sm text-red-500">
-                    {errors.password.message}
-                  </p>
-                )}
+            <div className="space-y-2">
+              <Label htmlFor="email">Email</Label>
+              <div className="relative">
+                <Mail className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
+                <Input
+                  id="email"
+                  type="email"
+                  placeholder="Enter your email"
+                  className="pl-10"
+                  disabled={isLoading}
+                  {...register("email", {
+                    required: "Email is required",
+                    pattern: {
+                      value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                      message: "Invalid email address",
+                    },
+                  })}
+                />
               </div>
-
-              {error && (
-                <Alert
-                  variant={
-                    error.includes("Check your email")
-                      ? "default"
-                      : "destructive"
-                  }
-                >
-                  <AlertDescription>{error}</AlertDescription>
-                </Alert>
+              {errors.email && (
+                <p className="text-sm text-red-500">{errors.email.message}</p>
               )}
-
-              <Button type="submit" className="w-full" disabled={isLoading}>
-                {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                {isLogin ? "Sign In" : "Sign Up"}
-              </Button>
-            </form>
-          )}
-
-          {!isCheckingSession && (
-            <div className="mt-6 text-center">
-              <button
-                type="button"
-                onClick={toggleMode}
-                className="text-sm text-blue-600 hover:text-blue-500"
-                disabled={isLoading}
-              >
-                {isLogin
-                  ? "Don't have an account? Sign up"
-                  : "Already have an account? Sign in"}
-              </button>
             </div>
-          )}
+
+            <div className="space-y-2">
+              <Label htmlFor="password">Password</Label>
+              <div className="relative">
+                <Lock className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
+                <Input
+                  id="password"
+                  type={showPassword ? "text" : "password"}
+                  placeholder="Enter your password"
+                  className="pl-10 pr-10"
+                  disabled={isLoading}
+                  {...register("password", {
+                    required: "Password is required",
+                    minLength: {
+                      value: 6,
+                      message: "Password must be at least 6 characters",
+                    },
+                  })}
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-3 top-3 text-gray-400 hover:text-gray-600"
+                  disabled={isLoading}
+                >
+                  {showPassword ? (
+                    <EyeOff className="h-4 w-4" />
+                  ) : (
+                    <Eye className="h-4 w-4" />
+                  )}
+                </button>
+              </div>
+              {errors.password && (
+                <p className="text-sm text-red-500">
+                  {errors.password.message}
+                </p>
+              )}
+            </div>
+
+            {error && (
+              <Alert
+                variant={
+                  error.includes("Check your email") ? "default" : "destructive"
+                }
+              >
+                <AlertDescription>{error}</AlertDescription>
+              </Alert>
+            )}
+
+            <Button type="submit" className="w-full" disabled={isLoading}>
+              {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+              {isLogin ? "Sign In" : "Sign Up"}
+            </Button>
+          </form>
+
+          <div className="mt-6 text-center">
+            <button
+              type="button"
+              onClick={toggleMode}
+              className="text-sm text-blue-600 hover:text-blue-500"
+              disabled={isLoading}
+            >
+              {isLogin
+                ? "Don't have an account? Sign up"
+                : "Already have an account? Sign in"}
+            </button>
+          </div>
         </CardContent>
       </Card>
     </div>
