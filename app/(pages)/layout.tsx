@@ -13,7 +13,7 @@ import {
   FaMoon,
 } from "react-icons/fa";
 import { SiteFooter } from "@/components/site-footer";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { useTheme } from "next-themes";
 import MobileNav from "@/components/mobile-nav";
 import Image from "next/image";
@@ -61,6 +61,8 @@ export default function PagesLayout({
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [navPages, setNavPages] = useState<any[]>([]);
+  const [showResearch, setShowResearch] = useState(false);
+  const menuRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const fetchNavPages = async () => {
@@ -81,6 +83,66 @@ export default function PagesLayout({
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  // Prevent background scroll when mobile menu is open
+  useEffect(() => {
+    if (isMobileMenuOpen) {
+      document.body.style.overflow = "hidden";
+      document.documentElement.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+      document.documentElement.style.overflow = "";
+    }
+    return () => {
+      document.body.style.overflow = "";
+      document.documentElement.style.overflow = "";
+    };
+  }, [isMobileMenuOpen]);
+
+  // Reset showResearch when closing menu
+  const closeMobileMenu = useCallback(() => {
+    setIsMobileMenuOpen(false);
+    setShowResearch(false);
+  }, []);
+
+  // Keyboard accessibility: close on Esc
+  useEffect(() => {
+    if (!isMobileMenuOpen) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        closeMobileMenu();
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [isMobileMenuOpen, closeMobileMenu]);
+
+  // Focus trap for accessibility
+  useEffect(() => {
+    if (!isMobileMenuOpen || !menuRef.current) return;
+    const focusable = menuRef.current.querySelectorAll<HTMLElement>(
+      'a, button, [tabindex]:not([tabindex="-1"])'
+    );
+    if (focusable.length) focusable[0].focus();
+    const handleTab = (e: KeyboardEvent) => {
+      if (e.key !== "Tab") return;
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+      if (e.shiftKey) {
+        if (document.activeElement === first) {
+          e.preventDefault();
+          last.focus();
+        }
+      } else {
+        if (document.activeElement === last) {
+          e.preventDefault();
+          first.focus();
+        }
+      }
+    };
+    window.addEventListener("keydown", handleTab);
+    return () => window.removeEventListener("keydown", handleTab);
+  }, [isMobileMenuOpen]);
 
   return (
     <div className="flex flex-col min-h-screen">
@@ -223,140 +285,9 @@ export default function PagesLayout({
 
           {/* Mobile menu button */}
           <div className="flex lg:hidden items-center gap-4">
-            <button
-              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="p-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800"
-            >
-              <svg
-                className="h-6 w-6"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                {isMobileMenuOpen ? (
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M6 18L18 6M6 6l12 12"
-                  />
-                ) : (
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M4 6h16M4 12h16M4 18h16"
-                  />
-                )}
-              </svg>
-            </button>
+            <MobileNav />
           </div>
         </div>
-
-        {/* Mobile menu */}
-        {isMobileMenuOpen && (
-          <div className="lg:hidden bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-800 shadow-lg">
-            <div className="px-4 py-3 space-y-3 max-h-[80vh] overflow-y-auto">
-              <Link
-                href="/"
-                className="px-4 py-3 rounded-lg text-base font-medium text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800 transition-colors"
-                onClick={() => setIsMobileMenuOpen(false)}
-              >
-                Home
-              </Link>
-              <Link
-                href="/about"
-                className="px-4 py-3 rounded-lg text-base font-medium text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800 transition-colors"
-                onClick={() => setIsMobileMenuOpen(false)}
-              >
-                About
-              </Link>
-              <div className="px-4 py-2">
-                <div className="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-2">
-                  Research
-                </div>
-                <div className="space-y-2 pl-4">
-                  <Link
-                    href="/research/cognition"
-                    className="px-4 py-2 rounded-lg text-base text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800 transition-colors flex items-center gap-2"
-                    onClick={() => setIsMobileMenuOpen(false)}
-                  >
-                    <FaBrain className="h-4 w-4 text-cognition-500" />
-                    Cognition
-                  </Link>
-                  <Link
-                    href="/research/consciousness"
-                    className="px-4 py-2 rounded-lg text-base text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800 transition-colors flex items-center gap-2"
-                    onClick={() => setIsMobileMenuOpen(false)}
-                  >
-                    <FaFlask className="h-4 w-4 text-consciousness-500" />
-                    Consciousness
-                  </Link>
-                  <Link
-                    href="/research/critical-care"
-                    className="px-4 py-2 rounded-lg text-base text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800 transition-colors flex items-center gap-2"
-                    onClick={() => setIsMobileMenuOpen(false)}
-                  >
-                    <FaHeartbeat className="h-4 w-4 text-care-500" />
-                    Critical Care
-                  </Link>
-                </div>
-              </div>
-              <Link
-                href="/4c-blogs"
-                className="px-4 py-3 rounded-lg text-base font-medium text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800 transition-colors"
-                onClick={() => setIsMobileMenuOpen(false)}
-              >
-                4C Blogs
-              </Link>
-              {navPages.map((page) => (
-                <Link
-                  key={page.slug}
-                  href={`/${page.slug}`}
-                  className="px-4 py-3 rounded-lg text-base font-medium text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800 transition-colors"
-                  onClick={() => setIsMobileMenuOpen(false)}
-                >
-                  {page.nav_label}
-                </Link>
-              ))}
-              <Link
-                href="/projects"
-                className="px-4 py-3 rounded-lg text-base font-medium text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800 transition-colors"
-                onClick={() => setIsMobileMenuOpen(false)}
-              >
-                Projects
-              </Link>
-              <Link
-                href="/knowledge-mobilization"
-                className="px-4 py-3 rounded-lg text-base font-medium text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800 transition-colors"
-                onClick={() => setIsMobileMenuOpen(false)}
-              >
-                Knowledge Mobilization
-              </Link>
-              <Link
-                href="/team"
-                className="px-4 py-3 rounded-lg text-base font-medium text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800 transition-colors"
-                onClick={() => setIsMobileMenuOpen(false)}
-              >
-                Join the Team
-              </Link>
-              <Link
-                href="/4c-blogs"
-                className="px-4 py-3 rounded-lg text-base font-medium text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800 transition-colors"
-                onClick={() => setIsMobileMenuOpen(false)}
-              >
-                4C Blogs
-              </Link>
-              <Link
-                href="/contact"
-                className="px-4 py-3 rounded-lg text-base font-medium text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800 transition-colors"
-                onClick={() => setIsMobileMenuOpen(false)}
-              >
-                Contact
-              </Link>
-            </div>
-          </div>
-        )}
       </header>
 
       {/* Main Content */}

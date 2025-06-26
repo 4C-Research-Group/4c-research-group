@@ -16,6 +16,8 @@ export default function EditHomePage() {
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [showResearch, setShowResearch] = useState(false);
 
   useEffect(() => {
     async function fetchContent() {
