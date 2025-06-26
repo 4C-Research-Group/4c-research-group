@@ -171,13 +171,14 @@ export default function MobileNav() {
               <h2 className="text-xl font-bold text-cognition-800 dark:text-white">
                 4C Research
               </h2>
-              <button
-                onClick={() => setIsOpen(false)}
-                className="rounded-lg p-1 -mr-1 transition-colors hover:bg-cognition-100/50 dark:hover:bg-cognition-800/50"
-                aria-label="Close menu"
-              >
-                <X className="h-5 w-5 text-cognition-500 dark:text-cognition-400" />
-              </button>
+              <SheetClose asChild>
+                <button
+                  className="rounded-lg p-1 -mr-1 transition-colors hover:bg-cognition-100/50 dark:hover:bg-cognition-800/50"
+                  aria-label="Close menu"
+                >
+                  <X className="h-5 w-5 text-cognition-500 dark:text-cognition-400" />
+                </button>
+              </SheetClose>
             </div>
           </div>
 
@@ -185,8 +186,8 @@ export default function MobileNav() {
             {navigationConfig.map((item) => renderNavItem(item))}
           </nav>
 
-          <div className="p-4 border-t border-cognition-100/50 dark:border-cognition-800/50">
-            <SimpleThemeToggle className="w-full justify-center" />
+          <div className="pb-20 pt-4 ml-10 border-t border-cognition-100/50 dark:border-cognition-800/50">
+            <SimpleThemeToggle />
           </div>
         </div>
       </SheetContent>
