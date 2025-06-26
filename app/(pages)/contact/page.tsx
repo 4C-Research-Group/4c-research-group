@@ -8,6 +8,7 @@ import {
   FaEnvelope,
   FaClock,
   FaPaperPlane,
+  FaUser,
 } from "react-icons/fa";
 
 type Props = {};
@@ -33,8 +34,10 @@ export default function ContactPage({}: Props) {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.1 }}
             >
-              Have questions about our research or want to collaborate?
-              We&apos;d love to hear from you.
+              Let us know if you are interested in learning more about our
+              research, collaborating with our team, or contributing to our
+              mission. If you are a student looking for opportunities to
+              participate in research, please do not hesitate to reach out!
             </motion.p>
           </div>
         </div>
@@ -170,11 +173,9 @@ export default function ContactPage({}: Props) {
                       Location
                     </h3>
                     <p className="text-gray-600 dark:text-gray-300">
-                      123 Research Avenue
+                      800 Commissioners Rd. E
                       <br />
-                      Toronto, ON M5G 1X8
-                      <br />
-                      Canada
+                      London, ON N6K 0C1
                     </p>
                   </div>
                 </div>
@@ -188,7 +189,7 @@ export default function ContactPage({}: Props) {
                       Phone
                     </h3>
                     <p className="text-gray-600 dark:text-gray-300">
-                      +1 (416) 555-0123
+                      (519) 685-8500 Ext. 74702
                     </p>
                   </div>
                 </div>
@@ -202,7 +203,33 @@ export default function ContactPage({}: Props) {
                       Email
                     </h3>
                     <p className="text-gray-600 dark:text-gray-300">
-                      info@4cresearchlab.ca
+                      <a
+                        href="mailto:rishi.ganesan@lhsc.on.ca"
+                        className="hover:text-cognition-600 dark:hover:text-cognition-400 transition-colors"
+                      >
+                        rishi.ganesan@lhsc.on.ca
+                      </a>
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex items-start">
+                  <div className="flex-shrink-0 bg-cognition-100 dark:bg-cognition-900 p-3 rounded-full text-cognition-600 dark:text-cognition-400">
+                    <FaUser className="text-xl" />
+                  </div>
+                  <div className="ml-4">
+                    <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+                      Research Coordinator
+                    </h3>
+                    <p className="text-gray-600 dark:text-gray-300">
+                      Ms. Maysaa Assaf
+                      <br />
+                      <a
+                        href="mailto:Maysaa.Assaf@lhsc.on.ca"
+                        className="hover:text-cognition-600 dark:hover:text-cognition-400 transition-colors"
+                      >
+                        Maysaa.Assaf@lhsc.on.ca
+                      </a>
                     </p>
                   </div>
                 </div>

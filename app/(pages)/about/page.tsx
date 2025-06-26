@@ -1,7 +1,15 @@
 "use client";
 import React from "react";
 import { motion } from "framer-motion";
-import { FaBrain, FaHeartbeat, FaFlask, FaLinkedin } from "react-icons/fa";
+import {
+  FaBrain,
+  FaHeartbeat,
+  FaFlask,
+  FaLinkedin,
+  FaQuestion,
+  FaSearch,
+  FaBullseye,
+} from "react-icons/fa";
 import Image from "next/image";
 import drGanesanProfile from "@/lib/data/dr_saptharishi_ganesan_profile.json";
 
@@ -67,27 +75,27 @@ export default function AboutPage() {
             {[
               {
                 icon: (
-                  <FaBrain className="text-4xl mb-4 text-cognition-600 dark:text-cognition-400" />
+                  <FaQuestion className="text-4xl mb-4 text-cognition-600 dark:text-cognition-400" />
                 ),
-                title: "Cognition",
+                title: "What?",
                 description:
-                  "Exploring the neural and computational mechanisms of human thought, learning, and decision-making processes.",
+                  "To improve outcomes for critically ill patients with acute disorders of cognition and consciousness.",
               },
               {
                 icon: (
-                  <FaFlask className="text-4xl mb-4 text-consciousness-600 dark:text-consciousness-400" />
+                  <FaSearch className="text-4xl mb-4 text-consciousness-600 dark:text-consciousness-400" />
                 ),
-                title: "Consciousness",
+                title: "How?",
                 description:
-                  "Investigating the nature of awareness and subjective experience in both health and disease states.",
+                  "Through the development and validation of functional neuroimaging modalities as tools for accurate prediction and timely detection of pathological brain states.",
               },
               {
                 icon: (
-                  <FaHeartbeat className="text-4xl mb-4 text-care-600 dark:text-care-400" />
+                  <FaBullseye className="text-4xl mb-4 text-care-600 dark:text-care-400" />
                 ),
-                title: "Critical Care",
+                title: "Why?",
                 description:
-                  "Advancing patient care through innovative research in intensive care medicine and cognitive recovery.",
+                  "The long-term consequences of brain injury acquired prior to or during critical illness are debilitating. Our work will improve survival and mitigate morbidity associated with brain injury.",
               },
             ].map((item, index) => (
               <motion.div
@@ -109,6 +117,70 @@ export default function AboutPage() {
                 </div>
               </motion.div>
             ))}
+          </div>
+        </motion.section>
+
+        {/* About Us Section */}
+        <motion.section
+          className="py-16"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5 }}
+        >
+          <div className="container mx-auto px-4">
+            <div className="flex flex-col md:flex-row items-center gap-12">
+              {/* Text Content */}
+              <div className="md:w-1/2">
+                <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-6">
+                  Our Dedicated Research
+                </h2>
+                <div className="space-y-4 text-gray-700 dark:text-gray-300 text-lg">
+                  <p>
+                    Our dedicated research group focuses on uncovering
+                    groundbreaking discoveries in altered cognition and
+                    consciousness in critically ill children.
+                  </p>
+                  <p>
+                    By understanding the complex neurophysiology underlying
+                    these pathological brain states, we can develop tools to
+                    predict and detect such neurological problems in a timely
+                    manner. Accurate prediction and/or early detection of such
+                    conditions would positively impact the long-term functional
+                    outcomes of these children.
+                  </p>
+                  <p>
+                    Our work is driven by our passion for improving the lives of
+                    children and their families. Join us on this journey as we
+                    strive to make a difference in the world of pediatric
+                    survivors of critical illness. Together, we can create a
+                    brighter future for our young patients.
+                  </p>
+                </div>
+                <div className="mt-8">
+                  <a
+                    href="/projects"
+                    className="inline-block bg-cognition-600 hover:bg-cognition-700 text-white font-semibold py-3 px-6 rounded-lg transition-colors duration-200"
+                  >
+                    View all projects
+                  </a>
+                </div>
+              </div>
+
+              {/* Image */}
+              <div className="md:w-1/2">
+                <div className="relative rounded-xl overflow-hidden shadow-xl">
+                  <Image
+                    src="/images/mission.jpg" // Update this path to your actual image location
+                    alt="Our Mission in Pediatric Research"
+                    width={600}
+                    height={400}
+                    className="w-full h-auto object-cover"
+                    priority
+                  />
+                </div>
+              </div>
+            </div>
           </div>
         </motion.section>
 

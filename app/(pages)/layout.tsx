@@ -260,10 +260,10 @@ export default function PagesLayout({
                       Join the Team
                     </Link>
                     <Link
-                      href="/4c-blogs"
+                      href="/publications"
                       className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700"
                     >
-                      4C Blogs
+                      Publications
                     </Link>
                     <Link
                       href="/contact"
@@ -301,7 +301,7 @@ export default function PagesLayout({
           { name: "Projects", href: "/projects" },
           { name: "Knowledge Mobilization", href: "/knowledge-mobilization" },
           { name: "Join the Team", href: "/team" },
-          { name: "4C Blogs", href: "/4c-blogs" },
+          { name: "Publications", href: "/publications" },
           { name: "Contact", href: "/contact" },
         ]}
       />

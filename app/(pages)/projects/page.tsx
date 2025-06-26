@@ -9,6 +9,7 @@ import {
   FaSearch,
 } from "react-icons/fa";
 import { useState } from "react";
+import Image from "next/image";
 
 type Project = {
   id: string;
@@ -26,80 +27,68 @@ type Project = {
 const projects: Project[] = [
   {
     id: "1",
-    title: "Cognitive Recovery After Critical Illness",
+    title: "NuANCEd",
     description:
-      "A longitudinal study examining cognitive function recovery patterns in ICU survivors over 12 months post-discharge.",
-    category: "Clinical Research",
+      "An integrated knowledge translation project that brings together implementation science, quality improvement and research.",
+    category: "Implementation Science",
     status: "active",
-    startDate: "2023-01-15",
+    startDate: "2023-01-01",
     endDate: "2025-12-31",
-    image: "/projects/cognitive-recovery.jpg",
-    tags: ["ICU", "Cognitive Function", "Longitudinal Study"],
-    link: "/projects/cognitive-recovery",
+    image: "/images/project-1.png",
+    tags: ["Implementation Science", "Quality Improvement", "Research"],
+    link: "/projects/nuanced",
   },
   {
     id: "2",
-    title: "Delirium Prevention Protocol",
+    title: "TraNSIEnCe",
     description:
-      "Development and implementation of a multi-component delirium prevention protocol in the medical-surgical ICU.",
+      "This study aims to characterize functional and effective brain connectivity in critically ill children at varying degrees of risk for delirium.",
     category: "Clinical Research",
-    status: "completed",
-    startDate: "2022-03-01",
-    endDate: "2023-12-15",
-    image: "/projects/delirium-prevention.jpg",
-    tags: ["Delirium", "Prevention", "Protocol Development"],
-    link: "/projects/delirium-prevention",
+    status: "active",
+    startDate: "2023-05-15",
+    endDate: "2026-06-30",
+    image: "/images/project-2.jpg",
+    tags: ["Brain Connectivity", "Delirium", "Pediatric Critical Care"],
+    link: "/projects/transience",
   },
   {
     id: "3",
-    title: "Family Engagement in Critical Care",
+    title: "PREDICT ABI",
     description:
-      "Exploring the impact of structured family engagement on patient outcomes and satisfaction in the ICU setting.",
-    category: "Patient-Centered Care",
+      "This pilot prospective observational study will use functional neuroimaging to help improve the accuracy and precision of predicting neurological outcomes in unresponsive critically ill children with moderate-severe acquired brain injury.",
+    category: "Clinical Research",
     status: "active",
-    startDate: "2023-06-10",
-    endDate: "2024-12-31",
-    image: "/projects/family-engagement.jpg",
-    tags: ["Family Engagement", "Patient Satisfaction", "ICU"],
-    link: "/projects/family-engagement",
+    startDate: "2023-08-01",
+    endDate: "2025-12-31",
+    image: "/images/project-3.png",
+    tags: ["Neuroimaging", "Brain Injury", "Outcome Prediction"],
+    link: "/projects/predict-abi",
   },
   {
     id: "4",
-    title: "Digital Cognitive Assessment Tool",
+    title: "ABOVE",
     description:
-      "Development and validation of a digital platform for rapid cognitive assessment in critical care survivors.",
-    category: "Digital Health",
+      "A pilot, multicenter, vanguard randomized controlled trial (RCT) in preparation for a definitive trial to evaluate if inhaled anesthetics compared to IV sedative agents improves delirium in mechanically ventilated children.",
+    category: "Clinical Trial",
     status: "upcoming",
-    startDate: "2024-03-01",
-    image: "/projects/digital-assessment.jpg",
-    tags: ["Digital Health", "Cognitive Assessment", "Validation Study"],
-    link: "/projects/digital-assessment",
+    startDate: "2024-01-15",
+    endDate: "2025-12-31",
+    image: "/images/project-4.jpeg",
+    tags: ["Clinical Trial", "Delirium", "Mechanical Ventilation"],
+    link: "/projects/above",
   },
   {
     id: "5",
-    title: "Sleep Quality in the ICU",
+    title: "NORSE",
     description:
-      "Investigating the impact of ICU environment on sleep quality and its relationship with delirium incidence.",
+      "This study aims to collect health related data and biological samples that will enable researchers to understand the cause of cryptogenic new-onset refractory status epilepticus (NORSE).",
     category: "Clinical Research",
-    status: "completed",
-    startDate: "2021-09-15",
-    endDate: "2023-03-20",
-    image: "/projects/sleep-quality.jpg",
-    tags: ["Sleep", "Delirium", "ICU Environment"],
-    link: "/projects/sleep-quality",
-  },
-  {
-    id: "6",
-    title: "Post-ICU Rehabilitation Program",
-    description:
-      "Development and evaluation of a multidisciplinary rehabilitation program for patients after critical illness.",
-    category: "Rehabilitation",
     status: "active",
-    startDate: "2023-09-01",
-    endDate: "2025-06-30",
-    image: "/projects/rehabilitation.jpg",
-    tags: ["Rehabilitation", "Post-ICU", "Multidisciplinary Care"],
-    link: "/projects/post-icu-rehab",
+    startDate: "2023-03-01",
+    endDate: "2026-03-31",
+    image: "/images/project-5.jpeg",
+    tags: ["Epilepsy", "Status Epilepticus", "Biomarkers"],
+    link: "/projects/norse",
   },
 ];
 
@@ -268,22 +257,15 @@ export default function ProjectsPage() {
                 transition={{ duration: 0.3, delay: index * 0.1 }}
                 className="bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300 flex flex-col"
               >
-                <div className="h-48 bg-gray-200 dark:bg-gray-700 relative overflow-hidden">
-                  <div className="absolute inset-0 bg-gradient-to-br from-cognition-100 to-cognition-300 dark:from-cognition-800 dark:to-cognition-900 opacity-70"></div>
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    {project.category === "Clinical Research" && (
-                      <FaFlask className="text-white text-6xl opacity-30" />
-                    )}
-                    {project.category === "Patient-Centered Care" && (
-                      <FaHospital className="text-white text-6xl opacity-30" />
-                    )}
-                    {project.category === "Digital Health" && (
-                      <FaBrain className="text-white text-6xl opacity-30" />
-                    )}
-                    {project.category === "Rehabilitation" && (
-                      <FaChartLine className="text-white text-6xl opacity-30" />
-                    )}
-                  </div>
+                <div className="h-64 bg-gray-200 dark:bg-gray-700 relative overflow-hidden">
+                  <Image
+                    src={project.image}
+                    alt={project.title}
+                    fill
+                    className="object-cover"
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-br from-cognition-100 to-cognition-300 dark:from-cognition-800 dark:to-cognition-900 opacity-50"></div>
                   <div className="absolute top-4 right-4">
                     {getStatusBadge(project.status)}
                   </div>
