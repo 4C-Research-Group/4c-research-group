@@ -19,7 +19,7 @@ const teamMembers: TeamMember[] = [
     role: "DDS Student",
     image: "/team/julia.jpg",
     testimonial:
-      "Working with Dr. Ganesan's lab during my clinical rotation has been a valuable experience that I am extremely grateful for. Being immersed in the realm of critical care over the span of 8 weeks allowed me to gain insight into how research is conducted at the bedside.",
+      "Working with Dr. Ganesan&apos;s lab during my clinical rotation has been a valuable experience that I am extremely grateful for. Being immersed in the realm of critical care over the span of 8 weeks allowed me to gain insight into how research is conducted at the bedside.",
     bio: "Julia completed her BSc. (Honours) in Behaviour, Cognition, and Neuroscience at the University of Windsor, and her MSc. in Interdisciplinary Medical Sciences at Western University.",
     education:
       "BSc (Honours) in Behaviour, Cognition, and Neuroscience, University of Windsor; MSc in Interdisciplinary Medical Sciences, Western University; DDS Student at Schulich School of Medicine and Dentistry, Western University",
@@ -29,8 +29,8 @@ const teamMembers: TeamMember[] = [
     role: "Research Assistant",
     image: "/team/devorah.jpg",
     testimonial:
-      "I had the privilege of working under the supervision of Dr. Ganesan, alongside three classmates, as a component of my master's program at Western University. I was lucky to be welcomed so generously by Dr. Ganesan, Maysaa, and the graduate students in the lab.",
-    bio: "Devorah completed her undergraduate degree in cognitive and developmental neurosciences (BSc) at Western University, and a master's in interdisciplinary medical sciences (MSC) at Western University.",
+      "I had the privilege of working under the supervision of Dr. Ganesan, alongside three classmates, as a component of my master&apos;s program at Western University. I was lucky to be welcomed so generously by Dr. Ganesan, Maysaa, and the graduate students in the lab.",
+    bio: "Devorah completed her undergraduate degree in cognitive and developmental neurosciences (BSc) at Western University, and a master&apos;s in interdisciplinary medical sciences (MSC) at Western University.",
     education:
       "BSc in Cognitive and Developmental Neurosciences, Western University; MSc in Interdisciplinary Medical Sciences, Western University",
   },
@@ -49,8 +49,8 @@ const teamMembers: TeamMember[] = [
     role: "MSc Student",
     image: "/team/hafsa.jpg",
     testimonial:
-      "I had the privilege of completing my clinical research rotation under the supervision of Dr. Ganesan as part of my master's program.",
-    bio: "Hafsa completed her bachelor's in psychology, Neuroscience, and behaviour at McMaster University. She is currently completing her MSc. in Interdisciplinary Medical Sciences at the University of Western Ontario.",
+      "I had the privilege of completing my clinical research rotation under the supervision of Dr. Ganesan as part of my master&apos;s program.",
+    bio: "Hafsa completed her bachelor&apos;s in psychology, Neuroscience, and behaviour at McMaster University. She is currently completing her MSc. in Interdisciplinary Medical Sciences at the University of Western Ontario.",
     education:
       "BSc in Psychology, Neuroscience, and Behaviour, McMaster University; Current MSc Student in Interdisciplinary Medical Sciences, Western University",
   },
@@ -175,8 +175,8 @@ export default function TeamPage() {
             Join Our Team
           </h2>
           <p className="text-xl text-gray-600 dark:text-gray-300 mb-8 max-w-3xl mx-auto">
-            Interested in joining our research team? We're always looking for
-            passionate individuals to contribute to our work.
+            Interested in joining our research team? We&apos;re always looking
+            for passionate individuals to contribute to our work.
           </p>
           <a
             href="mailto:research@4clab.ca"

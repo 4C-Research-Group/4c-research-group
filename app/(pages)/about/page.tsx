@@ -339,7 +339,7 @@ export default function AboutPage() {
                       {member.role}
                     </p>
                     <p className="text-sm text-gray-600 dark:text-gray-300 line-clamp-3">
-                      {member.bio}
+                      {member.bio.replace(/'/g, "&apos;")}
                     </p>
                   </div>
                 </motion.div>

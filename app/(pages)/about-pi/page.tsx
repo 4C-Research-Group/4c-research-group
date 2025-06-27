@@ -53,11 +53,11 @@ export default function AboutPIPage() {
                   Dr. Rishi Ganesan is a paediatric intensive care
                   physician-researcher with additional expertise in paediatric
                   neurocritical care. He is a physician in the Division of
-                  Paediatric Critical Care Medicine at the Children's Hospital-
-                  London Health Sciences Centre, Assistant Professor in the
-                  Department of Paediatrics at the Schulich School of Medicine
-                  (Western University) and an Associate Scientist at the Lawson
-                  Health Research Institute.
+                  Paediatric Critical Care Medicine at the Children&apos;s
+                  Hospital- London Health Sciences Centre, Assistant Professor
+                  in the Department of Paediatrics at the Schulich School of
+                  Medicine (Western University) and an Associate Scientist at
+                  the Lawson Health Research Institute.
                 </p>
 
                 <h3 className="text-xl font-semibold mt-8 mb-4 text-gray-900 dark:text-white">
