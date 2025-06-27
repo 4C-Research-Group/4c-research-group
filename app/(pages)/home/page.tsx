@@ -145,7 +145,7 @@ export default function HomePage() {
       <section className="py-20 bg-white dark:bg-gray-900">
         <div className="container mx-auto px-4">
           <div className="text-center mb-16">
-            <motion.h2 className="text-4xl md:text-5xl font-bold text-foreground dark:text-white mb-4">
+            <motion.h2 className="text-3xl md:text-4xl font-bold text-foreground dark:text-white mb-4">
               {projects.title}
             </motion.h2>
             <div className="w-24 h-1.5 bg-gradient-to-r from-cognition-500 via-consciousness-500 to-care-500 rounded-full mx-auto"></div>
@@ -200,7 +200,7 @@ export default function HomePage() {
               className="flex flex-col h-full"
             >
               <div className="mb-8">
-                <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 dark:text-white mb-6">
+                <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-6">
                   Unveiling the mission within
                 </h2>
                 <div className="w-24 h-1 bg-gradient-to-r from-cognition-500 to-care-500 mb-8" />
@@ -253,7 +253,7 @@ export default function HomePage() {
               transition={{ duration: 0.5 }}
             >
               <div className="mb-8 text-center">
-                <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 dark:text-white mb-6">
+                <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-6">
                   The 4C&apos;s
                 </h2>
                 <div className="w-24 h-1 bg-gradient-to-r from-cognition-500 to-care-500 mx-auto mb-8" />
@@ -276,7 +276,7 @@ export default function HomePage() {
       <section className="py-16 bg-white dark:bg-gray-900">
         <div className="container mx-auto px-4">
           <motion.div className="text-center mb-12">
-            <h2 className="text-3xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4">
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">
               {services.title}
             </h2>
             <div className="w-24 h-1 bg-gradient-to-r from-cognition-500 to-care-500 mx-auto mb-6"></div>
@@ -331,7 +331,7 @@ export default function HomePage() {
             viewport={{ once: true }}
             transition={{ duration: 0.5 }}
           >
-            <h2 className="text-3xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4">
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">
               Our Partners
             </h2>
             <p className="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
@@ -370,7 +370,7 @@ export default function HomePage() {
       <section className="py-16 bg-white dark:bg-gray-900">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-5xl font-bold text-gray-900 dark:text-white mb-6">
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-6">
               Mission 4C In The News
             </h2>
             <div className="w-24 h-1 bg-gradient-to-r from-cognition-500 to-care-500 mx-auto mb-8"></div>
@@ -418,7 +418,7 @@ export default function HomePage() {
       <section className="py-16 bg-gray-50 dark:bg-gray-800">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-5xl font-bold text-gray-900 dark:text-white mb-6">
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-6">
               Discover our latest research on social media
             </h2>
             <div className="w-24 h-1 bg-gradient-to-r from-cognition-500 to-care-500 mx-auto mb-8"></div>
@@ -465,7 +465,7 @@ export default function HomePage() {
       <section className="py-20 bg-gradient-to-br from-cognition-700 to-cognition-900 text-white dark:bg-gray-900">
         <div className="container mx-auto px-4 text-center">
           <div className="max-w-3xl mx-auto">
-            <h2 className="text-3xl md:text-5xl font-bold mb-6">{cta.title}</h2>
+            <h2 className="text-3xl md:text-4xl font-bold mb-6">{cta.title}</h2>
             <p
               className="text-xl text-cognition-100 dark:text-gray-400 mb-8"
               dangerouslySetInnerHTML={
