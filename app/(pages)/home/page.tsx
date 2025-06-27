@@ -205,39 +205,42 @@ export default function HomePage() {
                 </h2>
                 <div className="w-24 h-1 bg-gradient-to-r from-cognition-500 to-care-500 mb-8" />
               </div>
-              <p className="text-xl text-gray-600 dark:text-gray-300 mb-8 flex-grow">
-                Explore the depths of our research, our vision, and our impact.
-                Delve into the intricacies of altered cognition and
-                consciousness in critically ill children and the transformative
-                journey towards improved long-term functional outcomes.
-              </p>
-              <div className="flex flex-col sm:flex-row gap-4">
-                <Link
-                  href="/about"
-                  className="px-8 py-3 bg-cognition-600 hover:bg-cognition-700 text-white font-medium rounded-lg transition-colors flex items-center justify-center"
-                >
-                  Learn More
-                  <svg
-                    className="w-4 h-4 ml-2"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                    xmlns="http://www.w3.org/2000/svg"
+              <div className="space-y-8">
+                <p className="text-xl text-gray-600 dark:text-gray-300">
+                  Explore the depths of our research, our vision, and our
+                  impact. Delve into the intricacies of altered cognition and
+                  consciousness in critically ill children and the
+                  transformative journey towards improved long-term functional
+                  outcomes.
+                </p>
+                <div className="flex flex-col sm:flex-row gap-4">
+                  <Link
+                    href="/about"
+                    className="px-8 py-3 bg-cognition-600 hover:bg-cognition-700 text-white font-medium rounded-lg transition-colors flex items-center justify-center"
                   >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M14 5l7 7m0 0l-7 7m7-7H3"
-                    />
-                  </svg>
-                </Link>
-                <Link
-                  href="/about-pi"
-                  className="px-8 py-3 border-2 border-cognition-600 text-cognition-600 hover:bg-cognition-50 dark:border-cognition-400 dark:text-cognition-400 dark:hover:bg-gray-800 font-medium rounded-lg transition-colors flex items-center justify-center"
-                >
-                  ABOUT THE PI
-                </Link>
+                    Learn More
+                    <svg
+                      className="w-4 h-4 ml-2"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M14 5l7 7m0 0l-7 7m7-7H3"
+                      />
+                    </svg>
+                  </Link>
+                  <Link
+                    href="/about-pi"
+                    className="px-8 py-3 border-2 border-cognition-600 text-cognition-600 hover:bg-cognition-50 dark:border-cognition-400 dark:text-cognition-400 dark:hover:bg-gray-800 font-medium rounded-lg transition-colors flex items-center justify-center"
+                  >
+                    ABOUT THE PI
+                  </Link>
+                </div>
               </div>
             </motion.div>
 

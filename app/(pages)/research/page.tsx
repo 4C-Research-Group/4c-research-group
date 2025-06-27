@@ -288,18 +288,10 @@ export default function ProjectsPage() {
                     ))}
                   </div>
                   <div className="mt-auto pt-4 border-t border-gray-200 dark:border-gray-700">
-                    <div className="flex justify-between items-center text-sm text-gray-500 dark:text-gray-400">
-                      <span>{new Date(project.startDate).getFullYear()}</span>
-                      <span>
-                        {project.endDate
-                          ? `${new Date(project.startDate).getFullYear()} - ${new Date(project.endDate).getFullYear()}`
-                          : "Ongoing"}
-                      </span>
-                    </div>
                     {project.link && (
                       <a
                         href={project.link}
-                        className="mt-4 w-full inline-flex justify-center items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-cognition-600 hover:bg-cognition-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cognition-500 transition-colors duration-200"
+                        className="w-full inline-flex justify-center items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-cognition-600 hover:bg-cognition-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cognition-500 transition-colors duration-200"
                       >
                         Learn More
                         <svg
