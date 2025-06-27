@@ -187,98 +187,83 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Mission Section */}
+      {/* Combined Mission & 4C's Section */}
       <section className="py-16 bg-white dark:bg-gray-900">
         <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto text-center">
-            <motion.h2
-              className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 dark:text-white mb-6"
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start max-w-6xl mx-auto">
+            {/* Left Column - Mission */}
+            <motion.div
+              initial={{ opacity: 0, x: -20 }}
+              whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5 }}
+              className="flex flex-col h-full"
             >
-              Unveiling the mission within
-            </motion.h2>
-            <motion.div
-              className="w-24 h-1 bg-gradient-to-r from-cognition-500 to-care-500 mx-auto mb-8"
-              initial={{ scaleX: 0 }}
-              whileInView={{ scaleX: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: 0.1 }}
-            />
-            <p className="text-xl text-gray-600 dark:text-gray-300 mb-8 max-w-3xl mx-auto">
-              Explore the depths of our research, our vision, and our impact.
-              Delve into the intricacies of altered cognition and consciousness
-              in critically ill children and the transformative journey towards
-              improved long-term functional outcomes.
-            </p>
-            <div className="flex flex-col sm:flex-row justify-center gap-4">
-              <Link
-                href="/about"
-                className="px-8 py-3 bg-cognition-600 hover:bg-cognition-700 text-white font-medium rounded-lg transition-colors flex items-center justify-center"
-              >
-                Learn More
-                <svg
-                  className="w-4 h-4 ml-2"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                  xmlns="http://www.w3.org/2000/svg"
+              <div className="mb-8">
+                <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 dark:text-white mb-6">
+                  Unveiling the mission within
+                </h2>
+                <div className="w-24 h-1 bg-gradient-to-r from-cognition-500 to-care-500 mb-8" />
+              </div>
+              <p className="text-xl text-gray-600 dark:text-gray-300 mb-8 flex-grow">
+                Explore the depths of our research, our vision, and our impact.
+                Delve into the intricacies of altered cognition and
+                consciousness in critically ill children and the transformative
+                journey towards improved long-term functional outcomes.
+              </p>
+              <div className="flex flex-col sm:flex-row gap-4">
+                <Link
+                  href="/about"
+                  className="px-8 py-3 bg-cognition-600 hover:bg-cognition-700 text-white font-medium rounded-lg transition-colors flex items-center justify-center"
                 >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M14 5l7 7m0 0l-7 7m7-7H3"
-                  />
-                </svg>
-              </Link>
-              <Link
-                href="/about-pi"
-                className="px-8 py-3 border-2 border-cognition-600 text-cognition-600 hover:bg-cognition-50 dark:border-cognition-400 dark:text-cognition-400 dark:hover:bg-gray-800 font-medium rounded-lg transition-colors flex items-center justify-center"
-              >
-                ABOUT THE PI
-              </Link>
-            </div>
-          </div>
-        </div>
-      </section>
+                  Learn More
+                  <svg
+                    className="w-4 h-4 ml-2"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M14 5l7 7m0 0l-7 7m7-7H3"
+                    />
+                  </svg>
+                </Link>
+                <Link
+                  href="/about-pi"
+                  className="px-8 py-3 border-2 border-cognition-600 text-cognition-600 hover:bg-cognition-50 dark:border-cognition-400 dark:text-cognition-400 dark:hover:bg-gray-800 font-medium rounded-lg transition-colors flex items-center justify-center"
+                >
+                  ABOUT THE PI
+                </Link>
+              </div>
+            </motion.div>
 
-      {/* 4C's Section */}
-      <section className="py-16 md:py-24 bg-white dark:bg-gray-900">
-        <div className="container mx-auto px-4 max-w-6xl">
-          <div className="text-center mb-12 px-4">
-            <motion.h2
-              className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 dark:text-white mb-6"
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
+            {/* Right Column - 4C's */}
+            <motion.div
+              className="flex flex-col h-full justify-center"
+              initial={{ opacity: 0, x: 20 }}
+              whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5 }}
             >
-              The 4C&apos;s
-            </motion.h2>
-            <motion.div
-              className="w-24 h-1 bg-gradient-to-r from-cognition-500 to-care-500 mx-auto mb-8"
-              initial={{ scaleX: 0 }}
-              whileInView={{ scaleX: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: 0.1 }}
-            />
-            <motion.div
-              className="relative w-full h-64 md:h-96 lg:h-[32rem] rounded-xl overflow-hidden shadow-xl"
-              initial={{ opacity: 0, scale: 0.95 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: 0.2 }}
-            >
-              <Image
-                src="/images/4cccc.png"
-                alt="The 4C's: Cognition, Care, Compassion, and Collaboration"
-                fill
-                className="object-contain p-4 md:p-8"
-                priority
-              />
+              <div className="mb-8 text-center">
+                <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 dark:text-white mb-6">
+                  The 4C's
+                </h2>
+                <div className="w-24 h-1 bg-gradient-to-r from-cognition-500 to-care-500 mx-auto mb-8" />
+              </div>
+              <div className="relative w-full aspect-[4/3] max-w-xl mx-auto">
+                <Image
+                  src="/images/4cccc.png"
+                  alt="The 4C's: Cognition, Care, Compassion, and Collaboration"
+                  fill
+                  className="object-contain p-4"
+                  priority
+                />
+              </div>
             </motion.div>
           </div>
         </div>
@@ -288,7 +273,7 @@ export default function HomePage() {
       <section className="py-16 bg-white dark:bg-gray-900">
         <div className="container mx-auto px-4">
           <motion.div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">
+            <h2 className="text-3xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4">
               {researchHighlights.title}
             </h2>
             <div className="w-24 h-1 bg-gradient-to-r from-cognition-500 to-care-500 mx-auto mb-6"></div>
@@ -343,7 +328,7 @@ export default function HomePage() {
             viewport={{ once: true }}
             transition={{ duration: 0.5 }}
           >
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">
+            <h2 className="text-3xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4">
               Our Partners
             </h2>
             <p className="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
@@ -382,7 +367,7 @@ export default function HomePage() {
       <section className="py-16 bg-white dark:bg-gray-900">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-6">
+            <h2 className="text-3xl md:text-5xl font-bold text-gray-900 dark:text-white mb-6">
               Mission 4C In The News
             </h2>
             <div className="w-24 h-1 bg-gradient-to-r from-cognition-500 to-care-500 mx-auto mb-8"></div>
@@ -430,7 +415,7 @@ export default function HomePage() {
       <section className="py-16 bg-gray-50 dark:bg-gray-800">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-6">
+            <h2 className="text-3xl md:text-5xl font-bold text-gray-900 dark:text-white mb-6">
               Discover our latest research on social media
             </h2>
             <div className="w-24 h-1 bg-gradient-to-r from-cognition-500 to-care-500 mx-auto mb-8"></div>
@@ -477,7 +462,7 @@ export default function HomePage() {
       <section className="py-20 bg-gradient-to-br from-cognition-700 to-cognition-900 text-white dark:bg-gray-900">
         <div className="container mx-auto px-4 text-center">
           <div className="max-w-3xl mx-auto">
-            <h2 className="text-3xl md:text-4xl font-bold mb-6">{cta.title}</h2>
+            <h2 className="text-3xl md:text-5xl font-bold mb-6">{cta.title}</h2>
             <p
               className="text-xl text-cognition-100 dark:text-gray-400 mb-8"
               dangerouslySetInnerHTML={
