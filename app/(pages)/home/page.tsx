@@ -141,6 +141,52 @@ export default function HomePage() {
         </section>
       )}
 
+      {/* Research Projects Section */}
+      <section className="py-20 bg-white dark:bg-gray-900">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-16">
+            <motion.h2 className="text-4xl md:text-5xl font-bold text-foreground dark:text-white mb-4">
+              {projects.title}
+            </motion.h2>
+            <div className="w-24 h-1.5 bg-gradient-to-r from-cognition-500 via-consciousness-500 to-care-500 rounded-full mx-auto"></div>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {projects.cards.map((project: any, i: number) => (
+              <motion.div
+                key={i}
+                className="bg-white dark:bg-gray-800 rounded-xl shadow-soft overflow-hidden hover:shadow-soft-lg transition-all duration-300 border border-gray-100 dark:border-gray-700"
+              >
+                <div className="h-40 bg-gray-100 dark:bg-gray-700 overflow-hidden">
+                  <Image
+                    src={project.image}
+                    alt={project.title}
+                    width={400}
+                    height={200}
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+                <div className="p-6">
+                  <div className="w-16 h-16 rounded-full flex items-center justify-center text-white dark:text-gray-200 mb-4 mx-auto relative z-10 bg-gradient-to-br from-cognition-500 to-cognition-600">
+                    {iconMap[i]}
+                  </div>
+                  <h3 className="text-lg font-bold text-foreground dark:text-white mb-2 text-center">
+                    {project.title}
+                  </h3>
+                  <p
+                    className="text-sm text-foreground/80 dark:text-gray-400 text-center leading-relaxed"
+                    dangerouslySetInnerHTML={
+                      project.description
+                        ? { __html: project.description }
+                        : undefined
+                    }
+                  />
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* Mission Section */}
       <section className="py-16 bg-white dark:bg-gray-900">
         <div className="container mx-auto px-4">
@@ -265,94 +311,6 @@ export default function HomePage() {
                     card.description ? { __html: card.description } : undefined
                   }
                 />
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Services Section */}
-      <section className="relative py-20 overflow-hidden">
-        <div className="container mx-auto px-4 relative z-10">
-          <div className="text-center mb-16">
-            <motion.h2 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4">
-              {services.title}
-            </motion.h2>
-            <motion.p
-              className="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto"
-              dangerouslySetInnerHTML={
-                services.description
-                  ? { __html: services.description }
-                  : undefined
-              }
-            />
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {services.cards.map((service: any, i: number) => (
-              <motion.div
-                key={i}
-                className="bg-white dark:bg-gray-800 p-8 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300"
-              >
-                <div className="flex flex-col items-center text-center">
-                  {iconMap[i]}
-                  <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-3">
-                    {service.title}
-                  </h3>
-                  <p
-                    className="text-gray-600 dark:text-gray-300"
-                    dangerouslySetInnerHTML={
-                      service.description
-                        ? { __html: service.description }
-                        : undefined
-                    }
-                  />
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Research Projects Section */}
-      <section className="py-20 bg-white dark:bg-gray-900">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold text-foreground dark:text-white mb-4">
-              {projects.title}
-            </h2>
-            <div className="w-24 h-1.5 bg-gradient-to-r from-cognition-500 via-consciousness-500 to-care-500 rounded-full mx-auto"></div>
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {projects.cards.map((project: any, i: number) => (
-              <motion.div
-                key={i}
-                className="bg-white dark:bg-gray-800 rounded-xl shadow-soft overflow-hidden hover:shadow-soft-lg transition-all duration-300 border border-gray-100 dark:border-gray-700"
-              >
-                <div className="h-40 bg-gray-100 dark:bg-gray-700 overflow-hidden">
-                  <Image
-                    src={project.image}
-                    alt={project.title}
-                    width={400}
-                    height={200}
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-                <div className="p-6">
-                  <div className="w-16 h-16 rounded-full flex items-center justify-center text-white dark:text-gray-200 mb-4 mx-auto relative z-10 bg-gradient-to-br from-cognition-500 to-cognition-600">
-                    {iconMap[i]}
-                  </div>
-                  <h3 className="text-lg font-bold text-foreground dark:text-white mb-2 text-center">
-                    {project.title}
-                  </h3>
-                  <p
-                    className="text-sm text-foreground/80 dark:text-gray-400 text-center leading-relaxed"
-                    dangerouslySetInnerHTML={
-                      project.description
-                        ? { __html: project.description }
-                        : undefined
-                    }
-                  />
-                </div>
               </motion.div>
             ))}
           </div>
