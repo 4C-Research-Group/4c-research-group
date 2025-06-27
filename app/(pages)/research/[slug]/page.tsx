@@ -144,17 +144,6 @@ export default function ProjectDetail({ params }: Props) {
                         project.status.slice(1)}
                     </p>
                   </div>
-                  <div>
-                    <span className="text-sm text-gray-500 dark:text-gray-400">
-                      Duration
-                    </span>
-                    <p className="font-medium">
-                      {new Date(project.startDate).getFullYear()}
-                      {project.endDate &&
-                        ` - ${new Date(project.endDate).getFullYear()}`}
-                      {!project.endDate && " - Present"}
-                    </p>
-                  </div>
                   {project.funding && (
                     <div>
                       <span className="text-sm text-gray-500 dark:text-gray-400">
