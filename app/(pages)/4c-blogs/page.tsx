@@ -10,7 +10,6 @@ import {
 } from "react-icons/fa";
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import Image from "next/image";
 import {
   getAllBlogPosts,
   getCategories,
@@ -18,6 +17,7 @@ import {
 } from "@/lib/supabase/blog";
 import { supabase } from "@/lib/supabase/client";
 import { Button } from "@/components/ui/button";
+import BlogImage from "@/components/BlogImage";
 
 export default function BlogPage() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -174,24 +174,13 @@ export default function BlogPage() {
                 >
                   <Link href={`/4c-blogs/${post.slug}`} className="block">
                     <div className="h-48 relative">
-                      {post.image_url ? (
-                        <Image
-                          src={post.image_url}
-                          alt={post.title}
-                          fill
-                          className="object-cover"
-                        />
-                      ) : (
-                        <div className="flex items-center justify-center w-full h-full bg-gray-200 dark:bg-gray-700 text-gray-400 dark:text-gray-500 text-4xl font-bold h-48">
-                          {post.title
-                            ? post.title
-                                .split(" ")
-                                .map((n) => n[0])
-                                .join("")
-                                .toUpperCase()
-                            : "B"}
-                        </div>
-                      )}
+                      <BlogImage
+                        src={post.image_url}
+                        alt={post.title}
+                        title={post.title}
+                        fill
+                        className="object-cover"
+                      />
                     </div>
                     <div className="p-6 flex-1 flex flex-col">
                       <div className="flex items-center text-sm text-gray-500 dark:text-gray-400 mb-3">

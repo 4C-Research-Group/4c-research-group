@@ -1,9 +1,9 @@
 import { notFound } from "next/navigation";
-import Image from "next/image";
 import { FaCalendarAlt, FaClock, FaTags, FaArrowLeft } from "react-icons/fa";
 import Link from "next/link";
 import { getBlogPostBySlug, type BlogPost } from "@/lib/supabase/blog";
 import { AdminEditButton } from "@/components/AdminEditButton";
+import BlogImage from "@/components/BlogImage";
 
 type Props = {
   params: {
@@ -62,9 +62,10 @@ export default async function BlogPostPage({ params }: Props) {
             <AdminEditButton postId={post.id} />
             <div className="prose dark:prose-invert max-w-none">
               <div className="relative aspect-video rounded-xl overflow-hidden mb-12">
-                <Image
+                <BlogImage
                   src={post.image_url}
                   alt={post.title}
+                  title={post.title}
                   fill
                   className="object-cover"
                   priority
@@ -86,9 +87,10 @@ export default async function BlogPostPage({ params }: Props) {
                 <div className="flex items-center">
                   <div className="w-16 h-16 rounded-full overflow-hidden mr-4">
                     {post.author_image_url ? (
-                      <Image
+                      <BlogImage
                         src={post.author_image_url}
                         alt={post.author_name}
+                        title={post.author_name}
                         width={64}
                         height={64}
                         className="object-cover w-full h-full"
