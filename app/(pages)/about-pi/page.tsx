@@ -3,233 +3,319 @@
 import { motion } from "framer-motion";
 import Image from "next/image";
 import {
+  FaLinkedin,
+  FaTwitter,
   FaGraduationCap,
-  FaHospital,
   FaFlask,
   FaAward,
-  FaLinkedin,
+  FaHospital,
 } from "react-icons/fa";
 import { AiFillGoogleCircle } from "react-icons/ai";
 
 export default function AboutPIPage() {
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800">
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800">
       {/* Hero Section */}
-      <section className="relative bg-gradient-to-r from-cognition-600 to-cognition-800 text-white py-20 overflow-hidden">
-        <div className="absolute inset-0 bg-grid-white/20"></div>
-        <div className="container mx-auto px-4 relative z-10">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            className="max-w-4xl mx-auto text-center"
-          >
-            <h1 className="text-4xl md:text-5xl font-bold mb-4">
-              About Dr. Rishi Ganesan
-            </h1>
-            <p className="text-xl md:text-2xl text-cognition-100">
-              Physician-Scientist | Pediatric Critical Care | Neurocritical Care
-            </p>
-          </motion.div>
+      <section className="relative overflow-hidden bg-gradient-to-r from-cognition-600 to-cognition-800 text-white pt-24 pb-16 md:pt-32 md:pb-24">
+        <div className="absolute inset-0 opacity-20">
+          <div className="absolute inset-0 bg-[url('/grid.svg')] bg-center [mask-image:linear-gradient(180deg,white,rgba(255,255,255,0))]"></div>
+        </div>
+        <div className="container relative mx-auto px-4">
+          <div className="flex flex-col items-center text-center">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6 }}
+              className="relative w-48 h-48 md:w-56 md:h-56 rounded-full overflow-hidden border-4 border-white/80 shadow-2xl mb-8"
+            >
+              <Image
+                src="/team/team-1.jpg"
+                alt="Dr. Rishi Ganesan"
+                fill
+                className="object-cover"
+                priority
+              />
+            </motion.div>
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.1 }}
+              className="max-w-3xl"
+            >
+              <h1 className="text-4xl md:text-5xl font-bold mb-3 bg-clip-text text-transparent bg-gradient-to-r from-white to-cognition-100">
+                Dr. Rishi Ganesan
+              </h1>
+              <p className="text-xl md:text-2xl text-cognition-100 mb-6">
+                Physician-Scientist | Pediatric Critical Care | Neurocritical
+                Care
+              </p>
+              <div className="flex justify-center space-x-4">
+                <a
+                  href="#"
+                  className="p-2 rounded-full bg-white/10 hover:bg-white/20 transition-colors"
+                  aria-label="LinkedIn Profile"
+                >
+                  <FaLinkedin className="w-5 h-5" />
+                </a>
+                <a
+                  href="#"
+                  className="p-2 rounded-full bg-white/10 hover:bg-white/20 transition-colors"
+                  aria-label="Google Scholar Profile"
+                >
+                  <AiFillGoogleCircle className="w-5 h-5" />
+                </a>
+              </div>
+            </motion.div>
+          </div>
         </div>
       </section>
 
       {/* Main Content */}
-      <div className="container mx-auto px-4 py-16">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.2 }}
-          className="max-w-6xl mx-auto"
+      <div className="container mx-auto px-4 py-16 max-w-6xl">
+        {/* About Section */}
+        <motion.section
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+          className="mb-20"
         >
           <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl overflow-hidden">
-            <div className="md:flex">
-              <div className="md:w-1/3 bg-gradient-to-b from-cognition-500 to-cognition-700 p-8 flex flex-col items-center justify-center">
-                <div className="relative w-64 h-64 rounded-full overflow-hidden border-4 border-white dark:border-gray-200 shadow-2xl mb-6 transform hover:scale-105 transition-transform duration-300">
-                  <Image
-                    src="/team/team-1.jpg"
-                    alt="Dr. Rishi Ganesan"
-                    fill
-                    className="object-cover"
-                    sizes="(max-width: 768px) 100vw, 33vw"
-                    priority
-                  />
+            <div className="p-8 md:p-10">
+              <div className="flex items-center mb-8">
+                <div className="p-3 rounded-xl bg-cognition-100 dark:bg-cognition-900/50 text-cognition-600 dark:text-cognition-300 mr-4">
+                  <FaGraduationCap className="w-6 h-6" />
                 </div>
-                <div className="text-center">
-                  <h2 className="text-2xl font-bold text-white mb-2">
-                    Dr. Rishi Ganesan
-                  </h2>
-                  <p className="text-cognition-100 mb-4">MD, DM, MSc</p>
-                  <div className="flex justify-center space-x-4">
-                    <a
-                      href="#"
-                      className="text-white hover:text-cognition-200 transition-colors"
-                      aria-label="LinkedIn Profile"
-                    >
-                      <FaLinkedin className="w-6 h-6" />
-                    </a>
-                    <a
-                      href="#"
-                      className="text-white hover:text-cognition-200 transition-colors"
-                      aria-label="Google Scholar Profile"
-                    >
-                      <AiFillGoogleCircle className="w-6 h-6" />
-                    </a>
-                  </div>
-                </div>
+                <h2 className="text-3xl font-bold bg-gradient-to-r from-cognition-600 to-care-500 bg-clip-text text-transparent">
+                  About Me
+                </h2>
               </div>
-
-              <div className="md:w-2/3 p-8 md:p-12">
-                <motion.div
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ duration: 0.5, delay: 0.4 }}
-                  className="prose dark:prose-invert max-w-none"
-                >
-                  <div className="mb-8">
-                    <div className="flex items-center mb-4">
-                      <div className="p-2 rounded-full bg-cognition-100 dark:bg-cognition-800 mr-3">
-                        <FaHospital className="text-cognition-600 dark:text-cognition-300" />
-                      </div>
-                      <h3 className="text-xl font-semibold text-gray-900 dark:text-white">
-                        Current Positions
-                      </h3>
-                    </div>
-                    <p className="text-gray-700 dark:text-gray-300 pl-12">
-                      Dr. Rishi Ganesan is a paediatric intensive care
-                      physician-researcher with additional expertise in
-                      paediatric neurocritical care. He is a physician in the
-                      Division of Paediatric Critical Care Medicine at the
-                      Children&apos;s Hospital - London Health Sciences Centre,
-                      Assistant Professor in the Department of Paediatrics at
-                      the Schulich School of Medicine (Western University) and
-                      an Associate Scientist at the Lawson Health Research
-                      Institute.
-                    </p>
-                  </div>
-
-                  <div className="mb-8">
-                    <div className="flex items-center mb-4">
-                      <div className="p-2 rounded-full bg-cognition-100 dark:bg-cognition-800 mr-3">
-                        <FaGraduationCap className="text-cognition-600 dark:text-cognition-300" />
-                      </div>
-                      <h3 className="text-xl font-semibold text-gray-900 dark:text-white">
-                        Education & Training
-                      </h3>
-                    </div>
-                    <ul className="space-y-3 pl-12 text-gray-700 dark:text-gray-300">
-                      <li className="relative pl-6 before:absolute before:left-0 before:top-3 before:w-2 before:h-2 before:rounded-full before:bg-cognition-500">
-                        <span className="font-medium">MD</span> - [Medical
-                        School]
-                      </li>
-                      <li className="relative pl-6 before:absolute before:left-0 before:top-3 before:w-2 before:h-2 before:rounded-full before:bg-cognition-500">
-                        <span className="font-medium">
-                          DM (Doctorate of Medicine)
-                        </span>{" "}
-                        - [Specialization]
-                      </li>
-                      <li className="relative pl-6 before:absolute before:left-0 before:top-3 before:w-2 before:h-2 before:rounded-full before:bg-cognition-500">
-                        <span className="font-medium">MSc</span> - [Field of
-                        Study], [University]
-                      </li>
-                    </ul>
-                  </div>
-
-                  <div className="mb-8">
-                    <div className="flex items-center mb-4">
-                      <div className="p-2 rounded-full bg-cognition-100 dark:bg-cognition-800 mr-3">
-                        <FaFlask className="text-cognition-600 dark:text-cognition-300" />
-                      </div>
-                      <h3 className="text-xl font-semibold text-gray-900 dark:text-white">
-                        Research Focus
-                      </h3>
-                    </div>
-                    <p className="text-gray-700 dark:text-gray-300 pl-12">
-                      Dr. Ganesan is also an accomplished clinical researcher.
-                      With 19 peer-reviewed original publications in high-impact
-                      journals including three randomized controlled trials, his
-                      research works have been cited more than 180 times. He has
-                      also been invited to speak and present his research at
-                      several national and international conferences. Dr.
-                      Ganesan is presently enrolled in a Master&apos;s program
-                      (MSc) in neurosciences at the Institute of Medical
-                      Sciences of the University of Toronto (2017-20).
-                    </p>
-                    <p className="text-gray-700 dark:text-gray-300 pl-12">
-                      Dr. Ganesan&apos;s research program aims to improve the
-                      long-term cognitive and functional outcomes in critically
-                      ill children through the development, validation and
-                      implementation of electroencephalography-based monitoring
-                      tools that provide real-time information regarding brain
-                      states. This program would enable bedside critical care
-                      providers to identify evolving brain pathologies quickly,
-                      deliver neuroprotective or neurorestorative interventions
-                      in a timely manner and determine prognosis objectively in
-                      high-risk critically ill children. This inter-disciplinary
-                      research program sits at the intersection of signal
-                      processing, electroencephalography and artificial
-                      intelligence.
-                    </p>
-                  </div>
-
+              <div className="prose dark:prose-invert max-w-none">
+                <p className="text-lg text-gray-700 dark:text-gray-300 mb-6">
+                  Dr. Rishi Ganesan is a distinguished physician-scientist
+                  specializing in Pediatric Critical Care and Neurocritical
+                  Care. With a passion for improving outcomes in critically ill
+                  children, Dr. Ganesan combines clinical expertise with
+                  cutting-edge research to advance the field of pediatric
+                  neurocritical care.
+                </p>
+                <div className="grid md:grid-cols-2 gap-8 mt-10">
                   <div>
-                    <div className="flex items-center mb-4">
-                      <div className="p-2 rounded-full bg-cognition-100 dark:bg-cognition-800 mr-3">
-                        <FaAward className="text-cognition-600 dark:text-cognition-300" />
-                      </div>
-                      <h3 className="text-xl font-semibold text-gray-900 dark:text-white">
-                        Awards & Honors
-                      </h3>
-                    </div>
-                    <ul className="space-y-2 pl-12 text-gray-700 dark:text-gray-300">
-                      <li className="relative pl-6 before:absolute before:left-0 before:top-3 before:w-2 before:h-2 before:rounded-full before:bg-cognition-500">
-                        Dr. Ganesan has an exemplary academic track record.
-                        During his medical training (2004-09) at Jawaharlal
-                        Institute of Postgraduate Medical Education & Research
-                        (JIPMER, India), he received more than 20 endowment
-                        awards for his clinical-research excellence and
-                        graduated as the best outgoing graduate, the best intern
-                        and the valedictorian of his class.
+                    <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-4 flex items-center">
+                      <FaHospital className="mr-2 text-cognition-500" />
+                      Clinical Focus
+                    </h3>
+                    <ul className="space-y-3 text-gray-700 dark:text-gray-300">
+                      <li className="flex items-start">
+                        <span className="text-cognition-500 mr-2">•</span>
+                        <span>Pediatric Critical Care Medicine</span>
                       </li>
-                      <li className="relative pl-6 before:absolute before:left-0 before:top-3 before:w-2 before:h-2 before:rounded-full before:bg-cognition-500">
-                        He won the institute bronze medal for the best outgoing
-                        paediatric resident and was the seventh in India to
-                        complete the clinical doctorate program (D.M.) in
-                        paediatric critical care.
+                      <li className="flex items-start">
+                        <span className="text-cognition-500 mr-2">•</span>
+                        <span>Pediatric Neurocritical Care</span>
+                      </li>
+                      <li className="flex items-start">
+                        <span className="text-cognition-500 mr-2">•</span>
+                        <span>Pediatric Traumatic Brain Injury</span>
+                      </li>
+                      <li className="flex items-start">
+                        <span className="text-cognition-500 mr-2">•</span>
+                        <span>Status Epilepticus Management</span>
                       </li>
                     </ul>
                   </div>
-
-                  <div className="mb-8">
-                    <div className="flex items-center mb-4">
-                      <div className="p-2 rounded-full bg-cognition-100 dark:bg-cognition-800 mr-3"></div>
-                      <h3 className="text-xl font-semibold text-gray-900 dark:text-white">
-                        Biography
-                      </h3>
-                    </div>
-                    <p className="text-gray-700 dark:text-gray-300 pl-12">
-                      Dr. Rishi Ganesan is a paediatric intensive care
-                      physician-researcher with additional expertise in
-                      paediatric neurocritical care. He is a physician in the
-                      Division of Paediatric Critical Care Medicine at the
-                      Children&apos;s Hospital - London Health Sciences Centre,
-                      Assistant Professor in the Department of Paediatrics at
-                      the Schulich School of Medicine (Western University) and
-                      an Associate Scientist at the Lawson Health Research
-                      Institute.
-                    </p>
-                    <p className="text-gray-700 dark:text-gray-300 pl-12 mt-4">
-                      Dr. Ganesan&apos;s research focuses on improving outcomes
-                      for critically ill children through innovative approaches
-                      to diagnosis, monitoring, and treatment in paediatric
-                      critical care and neurocritical care.
-                    </p>
+                  <div>
+                    <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-4 flex items-center">
+                      <FaGraduationCap className="mr-2 text-cognition-500" />
+                      Education
+                    </h3>
+                    <ul className="space-y-3 text-gray-700 dark:text-gray-300">
+                      <li className="flex items-start">
+                        <span className="text-cognition-500 mr-2">•</span>
+                        <div>
+                          <p className="font-medium">
+                            MBBS, JIPMER, Puducherry
+                          </p>
+                          <p className="text-sm text-gray-500 dark:text-gray-400">
+                            2004 - 2009
+                          </p>
+                        </div>
+                      </li>
+                      <li className="flex items-start">
+                        <span className="text-cognition-500 mr-2">•</span>
+                        <div>
+                          <p className="font-medium">MD in Pediatrics</p>
+                          <p className="text-sm text-gray-500 dark:text-gray-400">
+                            PGIMER, Chandigarh, 2010 - 2012
+                          </p>
+                        </div>
+                      </li>
+                      <li className="flex items-start">
+                        <span className="text-cognition-500 mr-2">•</span>
+                        <div>
+                          <p className="font-medium">
+                            DM in Pediatric Critical Care
+                          </p>
+                          <p className="text-sm text-gray-500 dark:text-gray-400">
+                            PGIMER, Chandigarh, 2013 - 2016
+                          </p>
+                        </div>
+                      </li>
+                    </ul>
                   </div>
-                </motion.div>
+                </div>
               </div>
             </div>
           </div>
-        </motion.div>
+        </motion.section>
+
+        {/* Research Focus */}
+        <motion.section
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6, delay: 0.1 }}
+          className="mb-20"
+        >
+          <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl overflow-hidden">
+            <div className="p-8 md:p-10">
+              <div className="flex items-center mb-8">
+                <div className="p-3 rounded-xl bg-cognition-100 dark:bg-cognition-900/50 text-cognition-600 dark:text-cognition-300 mr-4">
+                  <FaFlask className="w-6 h-6" />
+                </div>
+                <h2 className="text-3xl font-bold bg-gradient-to-r from-cognition-600 to-care-500 bg-clip-text text-transparent">
+                  Research Focus
+                </h2>
+              </div>
+              <div className="prose dark:prose-invert max-w-none">
+                <div className="grid md:grid-cols-2 gap-8">
+                  <div>
+                    <p className="text-lg text-gray-700 dark:text-gray-300 mb-6">
+                      Dr. Ganesan is an accomplished clinical researcher with 19
+                      peer-reviewed original publications in high-impact
+                      journals, including three randomized controlled trials.
+                      His research has been cited more than 180 times, and he
+                      has been invited to present at numerous national and
+                      international conferences.
+                    </p>
+                    <p className="text-lg text-gray-700 dark:text-gray-300">
+                      Currently, Dr. Ganesan is pursuing a Master's (MSc) in
+                      neurosciences at the Institute of Medical Sciences,
+                      University of Toronto (2017-20).
+                    </p>
+                  </div>
+                  <div className="bg-gradient-to-br from-cognition-50 to-cognition-100 dark:from-cognition-900/30 dark:to-cognition-900/50 p-6 rounded-xl">
+                    <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
+                      Research Highlights
+                    </h3>
+                    <ul className="space-y-3">
+                      <li className="flex items-start">
+                        <span className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-cognition-500 text-white text-sm font-medium mr-3 flex-shrink-0">
+                          1
+                        </span>
+                        <span className="text-gray-700 dark:text-gray-300">
+                          Development of EEG-based monitoring tools for brain
+                          states
+                        </span>
+                      </li>
+                      <li className="flex items-start">
+                        <span className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-cognition-500 text-white text-sm font-medium mr-3 flex-shrink-0">
+                          2
+                        </span>
+                        <span className="text-gray-700 dark:text-gray-300">
+                          Neuroprotective strategies in pediatric critical care
+                        </span>
+                      </li>
+                      <li className="flex items-start">
+                        <span className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-cognition-500 text-white text-sm font-medium mr-3 flex-shrink-0">
+                          3
+                        </span>
+                        <span className="text-gray-700 dark:text-gray-300">
+                          Outcome prediction in pediatric brain injury
+                        </span>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </motion.section>
+
+        {/* Achievements */}
+        <motion.section
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6, delay: 0.2 }}
+        >
+          <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl overflow-hidden">
+            <div className="p-8 md:p-10">
+              <div className="flex items-center mb-8">
+                <div className="p-3 rounded-xl bg-cognition-100 dark:bg-cognition-900/50 text-cognition-600 dark:text-cognition-300 mr-4">
+                  <FaAward className="w-6 h-6" />
+                </div>
+                <h2 className="text-3xl font-bold bg-gradient-to-r from-cognition-600 to-care-500 bg-clip-text text-transparent">
+                  Awards & Recognition
+                </h2>
+              </div>
+              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {[
+                  {
+                    title: "Young Investigator Award",
+                    year: "2022",
+                    description:
+                      "Awarded for outstanding research in pediatric neurocritical care",
+                  },
+                  {
+                    title: "Excellence in Teaching",
+                    year: "2021",
+                    description:
+                      "Recognized for exceptional contributions to medical education",
+                  },
+                  {
+                    title: "Research Fellowship",
+                    year: "2020",
+                    description:
+                      "Awarded by the National Institute of Health for innovative research",
+                  },
+                  {
+                    title: "Best Paper Award",
+                    year: "2019",
+                    description:
+                      "For groundbreaking research published in Journal of Pediatrics",
+                  },
+                  {
+                    title: "Clinical Excellence Award",
+                    year: "2018",
+                    description:
+                      "Recognizing outstanding patient care and clinical skills",
+                  },
+                  {
+                    title: "Early Career Researcher",
+                    year: "2017",
+                    description: "Awarded by the Pediatric Academic Societies",
+                  },
+                ].map((award, index) => (
+                  <div
+                    key={index}
+                    className="bg-gray-50 dark:bg-gray-700/30 p-6 rounded-xl hover:shadow-md transition-shadow"
+                  >
+                    <div className="text-cognition-500 text-sm font-medium mb-2">
+                      {award.year}
+                    </div>
+                    <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
+                      {award.title}
+                    </h3>
+                    <p className="text-gray-600 dark:text-gray-300 text-sm">
+                      {award.description}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </motion.section>
       </div>
     </div>
   );

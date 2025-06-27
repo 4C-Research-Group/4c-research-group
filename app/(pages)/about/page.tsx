@@ -11,7 +11,6 @@ import {
   FaBullseye,
 } from "react-icons/fa";
 import Image from "next/image";
-import drGanesanProfile from "@/lib/data/dr_saptharishi_ganesan_profile.json";
 import Link from "next/link";
 
 type TeamMember = {
@@ -29,7 +28,7 @@ export default function AboutPage() {
       role: "Founder & Director",
       bio: "Pediatric Critical Care Physician and Neuroscientist leading the 4C Research Group.",
       image: "/team/dr-ganesan.jpg",
-      linkedin: drGanesanProfile.contact.linkedin,
+      linkedin: "https://www.linkedin.com/in/dr-saptharishi-ganesan-b1730a60/",
     },
   ];
 
