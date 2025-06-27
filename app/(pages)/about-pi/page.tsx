@@ -26,7 +26,7 @@ export default function AboutPIPage() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6 }}
-              className="relative w-48 h-48 md:w-56 md:h-56 rounded-full overflow-hidden border-4 border-white/80 shadow-2xl mb-8"
+              className="relative w-64 h-64 md:w-72 md:h-72 rounded-xl overflow-hidden border-4 border-white/80 shadow-2xl mb-8"
             >
               <Image
                 src="/team/team-1.jpg"
@@ -87,7 +87,7 @@ export default function AboutPIPage() {
                   <FaGraduationCap className="w-6 h-6" />
                 </div>
                 <h2 className="text-3xl font-bold bg-gradient-to-r from-cognition-600 to-care-500 bg-clip-text text-transparent">
-                  About Me
+                  About Dr. Rishi Ganesan
                 </h2>
               </div>
               <div className="prose dark:prose-invert max-w-none">
