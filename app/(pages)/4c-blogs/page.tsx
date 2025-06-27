@@ -18,6 +18,7 @@ import {
 import { supabase } from "@/lib/supabase/client";
 import { Button } from "@/components/ui/button";
 import BlogImage from "@/components/BlogImage";
+import LikeButton from "@/components/LikeButton";
 
 export default function BlogPage() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -207,10 +208,13 @@ export default function BlogPage() {
                         {post.excerpt}
                       </p>
                       <div className="mt-auto">
-                        <span className="inline-flex items-center text-cognition-600 dark:text-cognition-400 font-medium">
-                          Read more
-                          <FaArrowRight className="ml-2" />
-                        </span>
+                        <div className="flex items-center justify-between">
+                          <span className="inline-flex items-center text-cognition-600 dark:text-cognition-400 font-medium">
+                            Read more
+                            <FaArrowRight className="ml-2" />
+                          </span>
+                          <LikeButton blogPostId={post.id} showCount={true} />
+                        </div>
                       </div>
                     </div>
                   </Link>
