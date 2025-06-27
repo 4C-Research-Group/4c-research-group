@@ -64,13 +64,13 @@ const teamMembers: TeamMember[] = [
   {
     name: "Kyle Sun",
     role: "MSc Student",
-    superpower: "",
+    superpower: "Still searching for my superpower... check back later!",
     image: "/team/team-7.jpg",
   },
   {
     name: "Tallulah Nyland",
     role: "MSc Student",
-    superpower: "",
+    superpower: "Still searching for my superpower... check back later!",
     image: "/team/team-8.jpg",
   },
   {
