@@ -163,7 +163,7 @@ export default function PagesLayout({
                 4C Research
               </span>
             </Link>
-            <span className="text-xs text-muted-foreground ml-10 lg:ml-0 lg:pl-4 lg:border-l lg:border-gray-200 dark:lg:border-gray-700 lg:mt-0 mt-1">
+            <span className="text-[0.5rem] md:text-[0.75rem] text-muted-foreground ml-10 lg:ml-0 lg:pl-4 lg:border-l lg:border-gray-200 dark:lg:border-gray-700 lg:mt-0 mt-1">
               Cognition • Consciousness • Critical Care
             </span>
           </div>
@@ -182,43 +182,24 @@ export default function PagesLayout({
               >
                 About
               </Link>
-              <div className="relative group">
-                <button className="flex items-center gap-1 text-sm font-medium text-foreground/80 hover:text-foreground transition-colors dark:text-gray-300 dark:hover:text-white">
-                  Research
-                  <FaChevronDown className="h-3 w-3 mt-0.5 transition-transform group-hover:rotate-180" />
-                </button>
-                <div className="absolute left-0 mt-2 w-48 rounded-md shadow-lg bg-white dark:bg-gray-800 ring-1 ring-black/5 dark:ring-white/10 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
-                  <div className="py-1">
-                    <Link
-                      href="/research/cognition"
-                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700"
-                    >
-                      <div className="flex items-center gap-2">
-                        <FaBrain className="h-4 w-4 text-cognition-500" />
-                        Cognition
-                      </div>
-                    </Link>
-                    <Link
-                      href="/research/consciousness"
-                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700"
-                    >
-                      <div className="flex items-center gap-2">
-                        <FaFlask className="h-4 w-4 text-consciousness-500" />
-                        Consciousness
-                      </div>
-                    </Link>
-                    <Link
-                      href="/research/critical-care"
-                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700"
-                    >
-                      <div className="flex items-center gap-2">
-                        <FaHeartbeat className="h-4 w-4 text-care-500" />
-                        Critical Care
-                      </div>
-                    </Link>
-                  </div>
-                </div>
-              </div>
+              <Link
+                href="/research"
+                className="text-sm font-medium text-foreground/80 hover:text-foreground transition-colors dark:text-gray-300 dark:hover:text-white"
+              >
+                Research
+              </Link>
+              <Link
+                href="/team"
+                className="text-sm font-medium text-foreground/80 hover:text-foreground transition-colors dark:text-gray-300 dark:hover:text-white"
+              >
+                Our Team
+              </Link>
+              <Link
+                href="/4c-blogs"
+                className="text-sm font-medium text-foreground/80 hover:text-foreground transition-colors dark:text-gray-300 dark:hover:text-white"
+              >
+                4C Blogs
+              </Link>
 
               {navPages.map((page) => (
                 <Link
@@ -237,28 +218,16 @@ export default function PagesLayout({
                 <div className="absolute left-0 mt-2 w-48 rounded-md shadow-lg bg-white dark:bg-gray-800 ring-1 ring-black/5 dark:ring-white/10 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
                   <div className="py-1">
                     <Link
-                      href="/projects"
+                      href="/research"
                       className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700"
                     >
-                      Projects
+                      Research
                     </Link>
                     <Link
                       href="/knowledge-mobilization"
                       className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700"
                     >
                       Knowledge Mobilization
-                    </Link>
-                    <Link
-                      href="/team"
-                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700"
-                    >
-                      Our Team
-                    </Link>
-                    <Link
-                      href="/4c-blogs"
-                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700"
-                    >
-                      4C Blogs
                     </Link>
                     <Link
                       href="/publications"

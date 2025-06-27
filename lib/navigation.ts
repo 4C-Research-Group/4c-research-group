@@ -7,9 +7,10 @@ export interface NavItem {
 
 export const navigationConfig: NavItem[] = [
   { title: "Home", href: "/" },
-  { title: "Projects", href: "/projects" },
+  { title: "About", href: "/about" },
+  { title: "Research", href: "/research" },
   { title: "Knowledge Mobilization", href: "/knowledge-mobilization" },
-  { title: "Join Mission 4C", href: "/team" },
+  { title: "Publications", href: "/publications" },
+  { title: "Our Team", href: "/team" },
   { title: "4C Blogs", href: "/4c-blogs" },
-  { title: "Contact", href: "/contact" },
 ];

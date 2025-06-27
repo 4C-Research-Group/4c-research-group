@@ -36,7 +36,7 @@ const projects: Project[] = [
     endDate: "2025-12-31",
     image: "/images/project-1.png",
     tags: ["Implementation Science", "Quality Improvement", "Research"],
-    link: "/projects/nuanced",
+    link: "/research/nuanced",
   },
   {
     id: "2",
@@ -49,7 +49,7 @@ const projects: Project[] = [
     endDate: "2026-06-30",
     image: "/images/project-2.jpg",
     tags: ["Brain Connectivity", "Delirium", "Pediatric Critical Care"],
-    link: "/projects/transience",
+    link: "/research/transience",
   },
   {
     id: "3",
@@ -62,7 +62,7 @@ const projects: Project[] = [
     endDate: "2025-12-31",
     image: "/images/project-3.png",
     tags: ["Neuroimaging", "Brain Injury", "Outcome Prediction"],
-    link: "/projects/predict-abi",
+    link: "/research/predict-abi",
   },
   {
     id: "4",
@@ -75,7 +75,7 @@ const projects: Project[] = [
     endDate: "2025-12-31",
     image: "/images/project-4.jpeg",
     tags: ["Clinical Trial", "Delirium", "Mechanical Ventilation"],
-    link: "/projects/above",
+    link: "/research/above",
   },
   {
     id: "5",
@@ -88,7 +88,7 @@ const projects: Project[] = [
     endDate: "2026-03-31",
     image: "/images/project-5.jpeg",
     tags: ["Epilepsy", "Status Epilepticus", "Biomarkers"],
-    link: "/projects/norse",
+    link: "/research/norse",
   },
 ];
 
