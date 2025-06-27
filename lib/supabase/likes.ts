@@ -85,16 +85,7 @@ export async function toggleLike(blogPostId: string): Promise<LikeStats> {
 export async function getLikedUsers(blogPostId: string): Promise<BlogLike[]> {
   const { data, error } = await supabase
     .from("blog_likes")
-    .select(
-      `
-      *,
-      user:user_id(
-        id,
-        email,
-        user_metadata
-      )
-    `
-    )
+    .select("*")
     .eq("blog_post_id", blogPostId)
     .order("created_at", { ascending: false })
     .limit(10);
@@ -104,5 +95,24 @@ export async function getLikedUsers(blogPostId: string): Promise<BlogLike[]> {
     return [];
   }
 
-  return data as BlogLike[];
+  // Get user data for each like
+  const likesWithUsers = await Promise.all(
+    (data || []).map(async (like: any) => {
+      let userData = null;
+      if (like.user_id) {
+        const { data: user } = await supabase
+          .from("users")
+          .select("id, email, name")
+          .eq("id", like.user_id)
+          .single();
+        userData = user;
+      }
+      return {
+        ...like,
+        user: userData,
+      };
+    })
+  );
+
+  return likesWithUsers as BlogLike[];
 }

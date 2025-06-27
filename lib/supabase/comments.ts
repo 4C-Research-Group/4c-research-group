@@ -10,16 +10,7 @@ export async function getCommentsByBlogPost(
 ): Promise<BlogComment[]> {
   const { data, error } = await supabase
     .from("blog_comments")
-    .select(
-      `
-      *,
-      user:user_id(
-        id,
-        email,
-        user_metadata
-      )
-    `
-    )
+    .select("*")
     .eq("blog_post_id", blogPostId)
     .eq("is_approved", true)
     .eq("is_spam", false)
@@ -33,32 +24,54 @@ export async function getCommentsByBlogPost(
 
   // Get replies for each comment
   const commentsWithReplies = await Promise.all(
-    (data as BlogComment[]).map(async (comment) => {
+    (data || []).map(async (comment: any) => {
       const { data: replies } = await supabase
         .from("blog_comments")
-        .select(
-          `
-          *,
-          user:user_id(
-            id,
-            email,
-            user_metadata
-          )
-        `
-        )
+        .select("*")
         .eq("parent_id", comment.id)
         .eq("is_approved", true)
         .eq("is_spam", false)
         .order("created_at", { ascending: true });
 
+      // Get user data for the comment
+      let userData = null;
+      if (comment.user_id) {
+        const { data: user } = await supabase
+          .from("users")
+          .select("id, email, name")
+          .eq("id", comment.user_id)
+          .single();
+        userData = user;
+      }
+
+      // Get user data for replies
+      const repliesWithUsers = await Promise.all(
+        (replies || []).map(async (reply: any) => {
+          let replyUserData = null;
+          if (reply.user_id) {
+            const { data: user } = await supabase
+              .from("users")
+              .select("id, email, name")
+              .eq("id", reply.user_id)
+              .single();
+            replyUserData = user;
+          }
+          return {
+            ...reply,
+            user: replyUserData,
+          };
+        })
+      );
+
       return {
         ...comment,
-        replies: replies || [],
+        user: userData,
+        replies: repliesWithUsers,
       };
     })
   );
 
-  return commentsWithReplies;
+  return commentsWithReplies as BlogComment[];
 }
 
 export async function createComment(
@@ -96,7 +109,7 @@ export async function createComment(
     throw error;
   }
 
-  return data as BlogComment;
+  return data as unknown as BlogComment;
 }
 
 export async function updateComment(
@@ -127,7 +140,7 @@ export async function updateComment(
     throw error;
   }
 
-  return data as BlogComment;
+  return data as unknown as BlogComment;
 }
 
 export async function deleteComment(commentId: string): Promise<void> {

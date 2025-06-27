@@ -14,10 +14,12 @@ export interface BlogComment {
   user?: {
     id: string;
     email: string;
-    user_metadata?: {
-      name?: string;
-      avatar_url?: string;
-    };
+    name?: string;
+  };
+  users?: {
+    id: string;
+    email: string;
+    name?: string;
   };
 }
 
