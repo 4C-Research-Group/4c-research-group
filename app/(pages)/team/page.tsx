@@ -1,23 +1,30 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { useMemo, lazy, Suspense } from "react";
 import Image from "next/image";
 import {
   FaEnvelope,
+  FaPhone,
+  FaMapMarkerAlt,
+  FaLinkedin,
+  FaTwitter,
   FaGraduationCap,
-  FaUserMd,
-  FaQuoteLeft,
 } from "react-icons/fa";
 
 interface TeamMember {
   name: string;
   role: string;
   superpower: string;
+  bio?: string;
+  education?: string;
+  location?: string;
   image?: string;
 }
+
 const principalInvestigator: TeamMember = {
   name: "Dr. Rishi Ganesan",
   role: "Head of the 4C Research Group",
+  bio: "Dr. Rishi Ganesan is a paediatric intensive care physician-researcher with additional expertise in paediatric neurocritical care. He is a physician in the Division of Paediatric Critical Care Medicine at the Children's Hospital - London Health Sciences Centre, Assistant Professor in the Department of Paediatrics at the Schulich School of Medicine (Western University) and an Associate Scientist at the Lawson Health Research Institute.",
   superpower:
     "Believing that something magical is happening within and around us every moment",
   image: "/team/team-1.jpg",
@@ -137,203 +144,147 @@ const testimonials: Testimonial[] = [
   },
 ];
 
+const useTeamData = () => {
+  return useMemo(
+    () => ({
+      teamMembers,
+      principalInvestigator,
+      testimonials,
+    }),
+    []
+  );
+};
+
+const TeamMemberCard = lazy(() => import("@/components/TeamMemberCard"));
+
 export default function TeamPage() {
-  ``;
+  const { teamMembers, principalInvestigator, testimonials } = useTeamData();
+
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       {/* Hero Section */}
-      <section className="relative py-20 bg-gradient-to-br from-cognition-50 to-white dark:from-cognition-900 dark:to-gray-900">
+      <section className="bg-cognition-700 text-white py-16">
         <div className="container mx-auto px-4">
-          <div className="text-center max-w-4xl mx-auto">
-            <motion.h1
-              className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-6"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5 }}
-            >
-              Our Team
-            </motion.h1>
-            <motion.p
-              className="text-xl text-gray-600 dark:text-gray-300 mb-8"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.1 }}
-            >
-              Meet the talented individuals driving our research forward
-            </motion.p>
+          <div className="max-w-4xl mx-auto text-center">
+            <h1 className="text-4xl md:text-5xl font-bold mb-4">
+              Meet Our Team
+            </h1>
+            <p className="text-xl text-cognition-100">
+              Dedicated researchers and healthcare professionals working
+              together to advance pediatric critical care
+            </p>
           </div>
         </div>
       </section>
 
-      {/* Team Grid */}
-      <section className="py-12 bg-white dark:bg-gray-900">
-        <motion.div
-          className="container mx-auto px-4"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-        >
-          {/* PI Card - Full Width */}
-          <div className="flex justify-center mb-16">
-            <motion.div
-              className="group bg-white dark:bg-gray-800 rounded-2xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-300 border border-gray-100 dark:border-gray-700 flex flex-col items-center pt-10 pb-8 px-8 text-center w-full max-w-2xl relative"
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              whileHover={{ y: -5 }}
-              transition={{
-                duration: 0.3,
-              }}
-            >
-              <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-cognition-400 to-cognition-600"></div>
-              <div className="relative w-48 h-48 rounded-full overflow-hidden border-4 border-white dark:border-gray-700 shadow-lg mb-6 group-hover:scale-105 transition-transform duration-300">
-                {principalInvestigator.image ? (
+      {/* Principal Investigator */}
+      <section className="py-16 px-4">
+        <div className="container mx-auto max-w-5xl">
+          <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg overflow-hidden">
+            <div className="md:flex">
+              <div className="md:w-1/3 bg-cognition-600 p-8 flex flex-col items-center">
+                <div className="relative w-48 h-48 rounded-full overflow-hidden border-4 border-white dark:border-gray-200 shadow-lg mb-6">
                   <Image
-                    src={principalInvestigator.image}
+                    src={principalInvestigator.image || "/team/placeholder.jpg"}
                     alt={principalInvestigator.name}
                     fill
                     className="object-cover"
                     sizes="(max-width: 768px) 100vw, 33vw"
+                    priority
                   />
-                ) : (
-                  <div className="w-full h-full bg-gradient-to-br from-cognition-400 to-cognition-600 flex items-center justify-center text-5xl text-white font-bold">
-                    {principalInvestigator.name
-                      .split(" ")
-                      .map((n) => n[0])
-                      .join("")}
-                  </div>
-                )}
-              </div>
-              <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
-                {principalInvestigator.name}
-              </h3>
-              <p className="text-cognition-600 dark:text-cognition-400 font-medium mb-4">
-                {principalInvestigator.role}
-              </p>
-              <div className="mt-4 pt-4 border-t border-gray-100 dark:border-gray-700 w-full">
-                <p className="text-sm text-gray-500 dark:text-gray-400 mb-2">
-                  Superpower
+                </div>
+                <h2 className="text-2xl font-bold text-white text-center">
+                  {principalInvestigator.name}
+                </h2>
+                <p className="text-cognition-100 text-center mb-6">
+                  {principalInvestigator.role}
                 </p>
-                <p className="text-gray-700 dark:text-gray-300">
-                  {principalInvestigator.superpower}
-                </p>
+                <div className="flex space-x-4">
+                  <a
+                    href="mailto:rishi.ganesan@lhsc.on.ca"
+                    className="text-white hover:text-cognition-200"
+                    aria-label="Email"
+                  >
+                    <FaEnvelope className="w-5 h-5" />
+                  </a>
+                  <a
+                    href="#"
+                    className="text-white hover:text-cognition-200"
+                    aria-label="LinkedIn"
+                  >
+                    <FaLinkedin className="w-5 h-5" />
+                  </a>
+                </div>
               </div>
-            </motion.div>
-          </div>
 
-          {/* Team Members Grid */}
-          <div className="mt-16">
-            <h2 className="text-3xl font-bold text-center mb-12 text-gray-900 dark:text-white">
-              Our Team Members
-            </h2>
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {teamMembers.map((member, index) => (
-                <motion.div
-                  key={member.name}
-                  className="group bg-white dark:bg-gray-800 rounded-2xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-300 border border-gray-100 dark:border-gray-700 flex flex-col items-center pt-10 pb-8 px-6 text-center relative"
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  whileHover={{ y: -5 }}
-                  transition={{
-                    duration: 0.3,
-                    delay: index * 0.1,
-                  }}
-                  viewport={{ once: true }}
-                >
-                  {/* Decorative accent */}
-                  <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-cognition-400 to-cognition-600"></div>
-
-                  {/* Profile image container */}
-                  <div className="relative w-36 h-36 mb-6 rounded-full overflow-hidden border-4 border-white dark:border-gray-800 shadow-lg group-hover:border-cognition-400 transition-all duration-300 z-10">
-                    {member.image ? (
-                      <Image
-                        src={member.image}
-                        alt={member.name}
-                        fill
-                        className="object-cover transition-transform duration-500 group-hover:scale-110"
-                        sizes="(max-width: 768px) 100vw, 33vw"
-                      />
-                    ) : (
-                      <div className="w-full h-full bg-gradient-to-br from-cognition-400 to-cognition-600 flex items-center justify-center">
-                        <span className="text-5xl text-white font-bold">
-                          {member.name
-                            .split(" ")
-                            .map((n) => n[0])
-                            .join("")}
-                        </span>
-                      </div>
-                    )}
-                  </div>
-
-                  {/* Content */}
-                  <div className="w-full space-y-3">
-                    <h3 className="text-2xl font-bold text-gray-900 dark:text-white group-hover:text-cognition-600 dark:group-hover:text-cognition-400 transition-colors">
-                      {member.name}
-                    </h3>
-                    <p className="text-cognition-600 dark:text-cognition-400 font-medium text-lg mb-2">
-                      {member.role}
-                    </p>
-                    {member.superpower && (
-                      <div className="mt-4 pt-4 border-t border-gray-100 dark:border-gray-700">
-                        <p className="text-xs font-semibold text-gray-500 dark:text-gray-400 mb-2 uppercase tracking-wider">
-                          My Superpower
-                        </p>
-                        <p className="text-gray-600 dark:text-gray-300 text-sm font-medium">
-                          {member.superpower}
-                        </p>
-                      </div>
-                    )}
-                  </div>
-
-                  {/* Hover effect background */}
-                  <div className="absolute inset-0 bg-gradient-to-br from-cognition-50/0 to-cognition-100/0 dark:from-cognition-900/0 dark:to-cognition-800/0 group-hover:from-cognition-50/30 group-hover:to-cognition-100/20 dark:group-hover:from-cognition-900/20 dark:group-hover:to-cognition-800/30 transition-all duration-500 -z-10"></div>
-                </motion.div>
-              ))}
+              <div className="md:w-2/3 p-8">
+                <div className="prose dark:prose-invert max-w-none">
+                  <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
+                    About Dr. Ganesan
+                  </h3>
+                  <p className="text-gray-700 dark:text-gray-300">
+                    {principalInvestigator.bio}
+                  </p>
+                </div>
+                <div className="mt-6">
+                  <a
+                    href="/about-pi"
+                    className="text-cognition-600 dark:text-cognition-400"
+                  >
+                    View full profile
+                  </a>
+                </div>
+              </div>
             </div>
           </div>
-        </motion.div>
+        </div>
       </section>
 
-      {/* Join Us Section */}
-      <section className="py-16 bg-gray-50 dark:bg-gray-800">
-        <div className="container mx-auto px-4 text-center">
-          <div className="max-w-3xl mx-auto bg-white dark:bg-gray-900 rounded-xl shadow-lg p-8 md:p-12">
-            <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-6">
-              Join Mission 4C
+      {/* Team Members */}
+      <section className="py-16 px-4 bg-gray-50 dark:bg-gray-900">
+        <div className="container mx-auto">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
+              Our Team Members
             </h2>
-            <p className="text-xl text-gray-600 dark:text-gray-300 mb-8">
-              We are always looking for passionate students to join our team. If
-              you are interested in joining our team, please send your CV to:
-            </p>
-            <a
-              href="mailto:rishi.ganesan@lhsc.on.ca"
-              className="inline-flex items-center px-6 py-3 bg-cognition-600 hover:bg-cognition-700 text-white font-medium rounded-lg transition-colors mb-8"
+            <div className="w-20 h-1 bg-cognition-600 mx-auto"></div>
+          </div>
+
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <Suspense
+              fallback={
+                <div className="col-span-3 text-center py-8">
+                  Loading team members...
+                </div>
+              }
             >
-              <FaEnvelope className="mr-2" />
-              rishi.ganesan@lhsc.on.ca
-            </a>
-            <p className="text-lg text-gray-600 dark:text-gray-300">
-              Read more about previous students' experiences with Mission 4C
-              below!
-            </p>
+              {teamMembers.map((member, index) => (
+                <TeamMemberCard
+                  key={member.name}
+                  member={member}
+                  index={index}
+                />
+              ))}
+            </Suspense>
           </div>
         </div>
       </section>
 
       {/* Testimonials Section */}
-      <section className="py-16 bg-gray-50 dark:bg-gray-900">
+      <section className="py-16 bg-gray-50 dark:bg-gray-800">
         <div className="container mx-auto px-4">
-          <h2 className="text-3xl font-bold text-center mb-12 text-gray-900 dark:text-white">
-            Student Testimonials
-          </h2>
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
+              Student Testimonials
+            </h2>
+            <div className="w-20 h-1 bg-cognition-600 mx-auto"></div>
+          </div>
+
           <div className="space-y-12 max-w-5xl mx-auto">
             {testimonials.map((testimonial, index) => (
-              <motion.div
+              <div
                 key={`testimonial-${index}`}
                 className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg overflow-hidden border border-gray-100 dark:border-gray-700"
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.3, delay: index * 0.1 }}
-                viewport={{ once: true }}
               >
                 <div className="md:flex">
                   {/* Left Column - Image */}
@@ -346,6 +297,7 @@ export default function TeamPage() {
                           fill
                           className="object-cover"
                           sizes="(max-width: 768px) 100vw, 33vw"
+                          loading={index > 1 ? "lazy" : "eager"}
                         />
                       ) : (
                         <div className="w-full h-full bg-gradient-to-br from-cognition-400 to-cognition-600 flex items-center justify-center">
@@ -363,9 +315,8 @@ export default function TeamPage() {
                   {/* Right Column - Content */}
                   <div className="md:w-2/3 p-8">
                     <div className="relative pl-4 border-l-4 border-cognition-400 mb-6">
-                      <FaQuoteLeft className="absolute -left-3 -top-2 text-cognition-400 text-xl bg-white dark:bg-gray-800 p-1 rounded-full" />
                       <p className="text-gray-700 dark:text-gray-300 italic pl-6">
-                        {testimonial.quote}
+                        "{testimonial.quote}"
                       </p>
                     </div>
 
@@ -390,8 +341,34 @@ export default function TeamPage() {
                     </div>
                   </div>
                 </div>
-              </motion.div>
+              </div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Join Us Section */}
+      <section className="py-16 bg-white dark:bg-gray-900">
+        <div className="container mx-auto px-4 text-center">
+          <div className="max-w-3xl mx-auto bg-gray-50 dark:bg-gray-800 rounded-xl shadow-lg p-8 md:p-12">
+            <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-6">
+              Join Mission 4C
+            </h2>
+            <p className="text-xl text-gray-600 dark:text-gray-300 mb-8">
+              We are always looking for passionate students to join our team. If
+              you are interested in joining our team, please send your CV to:
+            </p>
+            <a
+              href="mailto:rishi.ganesan@lhsc.on.ca"
+              className="inline-flex items-center px-6 py-3 bg-cognition-600 hover:bg-cognition-700 text-white font-medium rounded-lg transition-colors mb-8"
+            >
+              <FaEnvelope className="mr-2" />
+              rishi.ganesan@lhsc.on.ca
+            </a>
+            <p className="text-lg text-gray-600 dark:text-gray-300">
+              Read more about previous students' experiences with Mission 4C
+              above!
+            </p>
           </div>
         </div>
       </section>
