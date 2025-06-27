@@ -366,8 +366,8 @@ export default function TeamPage() {
               rishi.ganesan@lhsc.on.ca
             </a>
             <p className="text-lg text-gray-600 dark:text-gray-300">
-              Read more about previous students' experiences with Mission 4C
-              above!
+              Read more about previous students&apos; experiences with Mission
+              4C above!
             </p>
           </div>
         </div>

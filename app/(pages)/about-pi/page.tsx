@@ -100,7 +100,7 @@ export default function AboutPIPage() {
                       physician-researcher with additional expertise in
                       paediatric neurocritical care. He is a physician in the
                       Division of Paediatric Critical Care Medicine at the
-                      Children's Hospital - London Health Sciences Centre,
+                      Children&apos;s Hospital - London Health Sciences Centre,
                       Assistant Professor in the Department of Paediatrics at
                       the Schulich School of Medicine (Western University) and
                       an Associate Scientist at the Lawson Health Research
@@ -212,16 +212,16 @@ export default function AboutPIPage() {
                       physician-researcher with additional expertise in
                       paediatric neurocritical care. He is a physician in the
                       Division of Paediatric Critical Care Medicine at the
-                      Children's Hospital - London Health Sciences Centre,
+                      Children&apos;s Hospital - London Health Sciences Centre,
                       Assistant Professor in the Department of Paediatrics at
                       the Schulich School of Medicine (Western University) and
                       an Associate Scientist at the Lawson Health Research
                       Institute.
                     </p>
                     <p className="text-gray-700 dark:text-gray-300 pl-12 mt-4">
-                      Dr. Ganesan's research focuses on improving outcomes for
-                      critically ill children through innovative approaches to
-                      diagnosis, monitoring, and treatment in paediatric
+                      Dr. Ganesan&apos;s research focuses on improving outcomes
+                      for critically ill children through innovative approaches
+                      to diagnosis, monitoring, and treatment in paediatric
                       critical care and neurocritical care.
                     </p>
                   </div>
