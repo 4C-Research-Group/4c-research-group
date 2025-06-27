@@ -44,13 +44,13 @@ export default async function BlogPostPage({ params }: Props) {
         </div>
 
         {/* Back Button */}
-        <div className="absolute top-6 left-6 z-20">
+        <div className="absolute top-6 left-6 z-40">
           <Link
             href="/4c-blogs"
             className="inline-flex items-center px-4 py-2 bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-full text-gray-700 dark:text-gray-200 hover:bg-white dark:hover:bg-gray-800 transition-all duration-200 shadow-lg"
           >
             <FaArrowLeft className="mr-2" />
-            Back to Blog
+            Back to Blogs
           </Link>
         </div>
 
