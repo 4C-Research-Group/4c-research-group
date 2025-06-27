@@ -74,7 +74,11 @@ export default function AboutPage() {
             {[
               {
                 icon: (
-                  <FaQuestion className="text-4xl mb-4 text-cognition-600 dark:text-cognition-400" />
+                  <div className="flex justify-center mb-6">
+                    <div className="p-4 bg-cognition-100 dark:bg-cognition-900/30 rounded-full">
+                      <FaQuestion className="text-4xl text-cognition-600 dark:text-cognition-400" />
+                    </div>
+                  </div>
                 ),
                 title: "What?",
                 description:
@@ -82,7 +86,11 @@ export default function AboutPage() {
               },
               {
                 icon: (
-                  <FaSearch className="text-4xl mb-4 text-consciousness-600 dark:text-consciousness-400" />
+                  <div className="flex justify-center mb-6">
+                    <div className="p-4 bg-consciousness-100 dark:bg-consciousness-900/30 rounded-full">
+                      <FaSearch className="text-4xl text-consciousness-600 dark:text-consciousness-400" />
+                    </div>
+                  </div>
                 ),
                 title: "How?",
                 description:
@@ -90,7 +98,11 @@ export default function AboutPage() {
               },
               {
                 icon: (
-                  <FaBullseye className="text-4xl mb-4 text-care-600 dark:text-care-400" />
+                  <div className="flex justify-center mb-6">
+                    <div className="p-4 bg-care-100 dark:bg-care-900/30 rounded-full">
+                      <FaBullseye className="text-4xl text-care-600 dark:text-care-400" />
+                    </div>
+                  </div>
                 ),
                 title: "Why?",
                 description:
@@ -99,21 +111,19 @@ export default function AboutPage() {
             ].map((item, index) => (
               <motion.div
                 key={index}
-                className="bg-white dark:bg-gray-800 p-8 rounded-xl shadow-lg border border-gray-100 dark:border-gray-700"
+                className="bg-white dark:bg-gray-800 p-8 rounded-xl shadow-lg border border-gray-100 dark:border-gray-700 text-center"
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.3, delay: index * 0.1 }}
               >
-                <div className="text-center">
-                  {item.icon}
-                  <h3 className="text-xl font-semibold mb-3 text-gray-900 dark:text-white">
-                    {item.title}
-                  </h3>
-                  <p className="text-gray-700 dark:text-gray-300">
-                    {item.description}
-                  </p>
-                </div>
+                {item.icon}
+                <h3 className="text-xl font-semibold mb-3 text-gray-900 dark:text-white">
+                  {item.title}
+                </h3>
+                <p className="text-gray-700 dark:text-gray-300">
+                  {item.description}
+                </p>
               </motion.div>
             ))}
           </div>
