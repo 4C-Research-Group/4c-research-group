@@ -31,7 +31,7 @@ const iconMap: Record<string, React.ReactNode> = {
   Home: <Home className="h-5 w-5" />,
   Projects: <FileText className="h-5 w-5" />,
   "Knowledge Mobilization": <BookOpen className="h-5 w-5" />,
-  "Join the Team": <UserPlus className="h-5 w-5" />,
+  "Join Mission 4C": <UserPlus className="h-5 w-5" />,
   "4C Blogs": <FileText className="h-5 w-5" />,
   Contact: <Mail className="h-5 w-5" />,
 };

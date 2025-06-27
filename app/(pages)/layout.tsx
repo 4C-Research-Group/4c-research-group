@@ -219,12 +219,7 @@ export default function PagesLayout({
                   </div>
                 </div>
               </div>
-              <Link
-                href="/4c-blogs"
-                className="text-sm font-medium text-foreground/80 hover:text-foreground transition-colors dark:text-gray-300 dark:hover:text-white"
-              >
-                4C Blogs
-              </Link>
+
               {navPages.map((page) => (
                 <Link
                   key={page.slug}
@@ -257,7 +252,13 @@ export default function PagesLayout({
                       href="/team"
                       className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700"
                     >
-                      Join the Team
+                      Our Team
+                    </Link>
+                    <Link
+                      href="/4c-blogs"
+                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700"
+                    >
+                      4C Blogs
                     </Link>
                     <Link
                       href="/publications"
@@ -300,7 +301,7 @@ export default function PagesLayout({
           { name: "Research", href: "/research" },
           { name: "Projects", href: "/projects" },
           { name: "Knowledge Mobilization", href: "/knowledge-mobilization" },
-          { name: "Join the Team", href: "/team" },
+          { name: "Join Mission 4C", href: "/team" },
           { name: "Publications", href: "/publications" },
           { name: "Contact", href: "/contact" },
         ]}
