@@ -316,7 +316,7 @@ export default function TeamPage() {
                   <div className="md:w-2/3 p-8">
                     <div className="relative pl-4 border-l-4 border-cognition-400 mb-6">
                       <p className="text-gray-700 dark:text-gray-300 italic pl-6">
-                        "{testimonial.quote}"
+                        &ldquo;{testimonial.quote}&rdquo;
                       </p>
                     </div>
 
