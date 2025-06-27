@@ -151,7 +151,7 @@ export default function MobileNav() {
       <SheetTrigger asChild>
         <button
           className={cn(
-            "md:hidden p-2 -mr-2 rounded-lg transition-colors",
+            "lg:hidden p-2 -mr-2 rounded-lg transition-colors",
             "text-cognition-700 dark:text-cognition-200 hover:bg-cognition-100/50 dark:hover:bg-cognition-800/50"
           )}
           aria-label="Open menu"
