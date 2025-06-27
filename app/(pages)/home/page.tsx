@@ -269,17 +269,17 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Research Highlights Section */}
+      {/* Services Section */}
       <section className="py-16 bg-white dark:bg-gray-900">
         <div className="container mx-auto px-4">
           <motion.div className="text-center mb-12">
             <h2 className="text-3xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4">
-              {researchHighlights.title}
+              {services.title}
             </h2>
             <div className="w-24 h-1 bg-gradient-to-r from-cognition-500 to-care-500 mx-auto mb-6"></div>
           </motion.div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {researchHighlights.cards.map((card: any, i: number) => (
+            {services.cards.map((card: any, i: number) => (
               <motion.div
                 key={i}
                 className={`bg-${colorMap[i]}-50 dark:bg-gray-800 p-8 rounded-xl shadow-lg`}
