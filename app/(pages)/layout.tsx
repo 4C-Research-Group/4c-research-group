@@ -192,13 +192,13 @@ export default function PagesLayout({
                 href="/team"
                 className="text-sm font-medium text-foreground/80 hover:text-foreground transition-colors dark:text-gray-300 dark:hover:text-white"
               >
-                Our Team
+                Team
               </Link>
               <Link
                 href="/4c-blogs"
                 className="text-sm font-medium text-foreground/80 hover:text-foreground transition-colors dark:text-gray-300 dark:hover:text-white"
               >
-                4C Blogs
+                Blogs
               </Link>
 
               {navPages.map((page) => (
