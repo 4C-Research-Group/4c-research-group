@@ -199,8 +199,8 @@ export default function AboutPIPage() {
                       international conferences.
                     </p>
                     <p className="text-lg text-gray-700 dark:text-gray-300">
-                      Currently, Dr. Ganesan is pursuing a Master's (MSc) in
-                      neurosciences at the Institute of Medical Sciences,
+                      Currently, Dr. Ganesan is pursuing a Master&apos;s (MSc)
+                      in neurosciences at the Institute of Medical Sciences,
                       University of Toronto (2017-20).
                     </p>
                   </div>
