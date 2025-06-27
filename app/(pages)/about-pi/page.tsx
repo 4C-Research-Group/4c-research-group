@@ -151,12 +151,12 @@ export default function AboutPIPage() {
                       research works have been cited more than 180 times. He has
                       also been invited to speak and present his research at
                       several national and international conferences. Dr.
-                      Ganesan is presently enrolled in a Master's program (MSc)
-                      in neurosciences at the Institute of Medical Sciences of
-                      the University of Toronto (2017-20).
+                      Ganesan is presently enrolled in a Master&apos;s program
+                      (MSc) in neurosciences at the Institute of Medical
+                      Sciences of the University of Toronto (2017-20).
                     </p>
                     <p className="text-gray-700 dark:text-gray-300 pl-12">
-                      Dr. Ganesan's research program aims to improve the
+                      Dr. Ganesan&apos;s research program aims to improve the
                       long-term cognitive and functional outcomes in critically
                       ill children through the development, validation and
                       implementation of electroencephalography-based monitoring
