@@ -141,7 +141,7 @@ export default function EditBlogForm({ post }: { post: BlogPost }) {
             htmlFor="read_time"
             className="block text-sm font-medium text-gray-700 dark:text-gray-300"
           >
-            Read Time (e.g., "5 min read")
+            Read Time (e.g., &quot;5 min read&quot;)
           </label>
           <input
             type="text"
