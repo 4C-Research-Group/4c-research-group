@@ -145,9 +145,22 @@ export default function HomePage() {
       <section className="py-16 bg-white dark:bg-gray-900">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto text-center">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-6">
+            <motion.h2
+              className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 dark:text-white mb-6"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5 }}
+            >
               Unveiling the mission within
-            </h2>
+            </motion.h2>
+            <motion.div
+              className="w-24 h-1 bg-gradient-to-r from-cognition-500 to-care-500 mx-auto mb-8"
+              initial={{ scaleX: 0 }}
+              whileInView={{ scaleX: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 0.1 }}
+            />
             <p className="text-xl text-gray-600 dark:text-gray-300 mb-8 max-w-3xl mx-auto">
               Explore the depths of our research, our vision, and our impact.
               Delve into the intricacies of altered cognition and consciousness
