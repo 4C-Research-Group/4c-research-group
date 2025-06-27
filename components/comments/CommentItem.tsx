@@ -104,6 +104,13 @@ export default function CommentItem({
     });
   };
 
+  const handleLikeChange = (newStats: {
+    total_likes: number;
+    is_liked_by_user: boolean;
+  }) => {
+    setLikeStats(newStats);
+  };
+
   return (
     <div
       className={`border-l-2 border-gray-200 pl-4 ${depth > 0 ? "ml-4" : ""}`}
@@ -142,6 +149,7 @@ export default function CommentItem({
                 commentId={comment.id}
                 initialLikes={likeStats.total_likes}
                 initialIsLiked={likeStats.is_liked_by_user}
+                onLikeChange={handleLikeChange}
               />
 
               <Button
