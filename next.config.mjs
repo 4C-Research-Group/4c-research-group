@@ -12,6 +12,10 @@ const nextConfig = {
       },
       {
         protocol: "https",
+        hostname: "via.placeholder.com", // Placeholder images
+      },
+      {
+        protocol: "https",
         hostname: "www.google.com", // Allow Google images if needed (although not recommended)
       },
       {
