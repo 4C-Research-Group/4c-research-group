@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import {
   FaExternalLinkAlt,
@@ -9,31 +10,40 @@ import {
   FaOrcid,
 } from "react-icons/fa";
 
-type Publication = {
-  id: number;
-  title: string;
-  authors: string;
-  journal: string;
-  year: number;
-  doi?: string;
-  pdf?: string;
-};
-
-const publications: Publication[] = [
-  // Add your publications here
-  // Example:
-  // {
-  //   id: 1,
-  //   title: "Sample Publication Title",
-  //   authors: "Author A, Author B, Author C",
-  //   journal: "Journal of Sample Research",
-  //   year: 2023,
-  //   doi: "10.xxxx/xxxxxx",
-  //   pdf: "/pdfs/sample-publication.pdf"
-  // }
-];
+const ORCID_PROFILE_URL = "https://orcid.org/0000-0002-2599-9119";
 
 export default function PublicationsPage() {
+  const [publications, setPublications] = useState<any[]>([]);
+  const [sortBy, setSortBy] = useState<"year" | "title">("year");
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    async function fetchPubs() {
+      setLoading(true);
+      setError("");
+      try {
+        const res = await fetch("/api/publications");
+        if (!res.ok) throw new Error("Failed to fetch publications");
+        const data = await res.json();
+        setPublications(data);
+      } catch (e: any) {
+        setError(e.message || "Error loading publications");
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchPubs();
+  }, []);
+
+  function getSortedPubs() {
+    if (sortBy === "year") {
+      return [...publications].sort((a, b) => (b.year || 0) - (a.year || 0));
+    } else {
+      return [...publications].sort((a, b) => a.title.localeCompare(b.title));
+    }
+  }
+
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       {/* Hero Section */}
@@ -83,7 +93,7 @@ export default function PublicationsPage() {
                 Google Scholar Profile
               </a>
               <a
-                href="https://orcid.org/0000-0002-2599-9119"
+                href={ORCID_PROFILE_URL}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center px-4 py-2 bg-white dark:bg-gray-800 rounded-lg shadow-md hover:shadow-lg transition-shadow"
@@ -99,9 +109,25 @@ export default function PublicationsPage() {
       {/* Publications List */}
       <div className="container mx-auto px-4 py-16">
         <div className="max-w-4xl mx-auto">
+          <div className="mb-6 flex gap-4 items-center">
+            <button
+              className={`px-3 py-1 rounded border ${sortBy === "year" ? "bg-blue-600 text-white" : "bg-white text-blue-600 border-blue-600"}`}
+              onClick={() => setSortBy("year")}
+            >
+              Sort by Year
+            </button>
+            <button
+              className={`px-3 py-1 rounded border ${sortBy === "title" ? "bg-blue-600 text-white" : "bg-white text-blue-600 border-blue-600"}`}
+              onClick={() => setSortBy("title")}
+            >
+              Sort by Title
+            </button>
+          </div>
+          {loading && <div>Loading publications...</div>}
+          {error && <div className="text-red-500">{error}</div>}
           {publications.length > 0 ? (
             <div className="space-y-8">
-              {publications.map((pub, index) => (
+              {getSortedPubs().map((pub, index) => (
                 <motion.div
                   key={pub.id}
                   className="bg-white dark:bg-gray-800 rounded-xl shadow-md p-6 hover:shadow-lg transition-shadow"
@@ -120,24 +146,32 @@ export default function PublicationsPage() {
                     {pub.journal}, {pub.year}
                   </p>
                   <div className="flex space-x-4">
-                    {pub.doi && (
-                      <a
-                        href={`https://doi.org/${pub.doi}`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-cognition-600 dark:text-cognition-400 hover:underline flex items-center text-sm"
-                      >
-                        <FaExternalLinkAlt className="mr-1" /> DOI
-                      </a>
+                    {pub.externalIds && pub.externalIds.length > 0 && (
+                      <div className="text-sm">
+                        {pub.externalIds.map((eid: any, i: number) =>
+                          eid.type === "doi" ? (
+                            <a
+                              key={i}
+                              href={`https://doi.org/${eid.value}`}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="text-cognition-600 dark:text-cognition-400 hover:underline flex items-center text-sm"
+                            >
+                              <FaExternalLinkAlt className="mr-1" /> DOI:{" "}
+                              {eid.value}
+                            </a>
+                          ) : null
+                        )}
+                      </div>
                     )}
-                    {pub.pdf && (
+                    {pub.url && (
                       <a
-                        href={pub.pdf}
+                        href={pub.url}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="text-cognition-600 dark:text-cognition-400 hover:underline flex items-center text-sm"
                       >
-                        <FaFilePdf className="mr-1" /> PDF
+                        <FaExternalLinkAlt className="mr-1" /> View Publication
                       </a>
                     )}
                   </div>
