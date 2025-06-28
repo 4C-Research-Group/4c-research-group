@@ -12,6 +12,7 @@ import {
   Settings,
   Users,
   Plus,
+  Home,
 } from "lucide-react";
 import { supabase } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
@@ -120,6 +121,13 @@ export default async function AdminLayout({
                     >
                       <Settings className="h-4 w-4 mr-2" />
                       Settings
+                    </Link>
+                    <Link
+                      href={"/"}
+                      className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium flex items-center"
+                    >
+                      <Home className="h-4 w-4 mr-2" />
+                      Home
                     </Link>
                   </div>
                 </div>
