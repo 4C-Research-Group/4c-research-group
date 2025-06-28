@@ -3,6 +3,9 @@ import Image from "next/image";
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import { cookies } from "next/headers";
 
+// Force dynamic rendering for this page
+export const dynamic = "force-dynamic";
+
 // Helper to fetch project by slug from Supabase
 async function getProjectBySlug(slug: string) {
   const supabase = createServerComponentClient({ cookies });
@@ -207,13 +210,6 @@ export default async function ProjectDetail({ params }: Props) {
       </section>
     </div>
   );
-}
-
-export async function generateStaticParams() {
-  const supabase = createServerComponentClient({ cookies });
-  const { data, error } = await supabase.from("projects").select("slug");
-  if (error || !data) return [];
-  return data.map((project: any) => ({ slug: project.slug }));
 }
 
 export async function generateMetadata({ params }: Props) {
