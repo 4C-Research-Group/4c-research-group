@@ -1,4 +1,4 @@
-import { clsx, type ClassValue } from "clsx";
+import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 
 export function cn(...inputs: ClassValue[]) {
@@ -35,3 +35,22 @@ export const sectionStyles = {
   title: "text-2xl font-bold text-gray-900 dark:text-white",
   paragraph: "mt-4 text-gray-700 dark:text-gray-300 leading-relaxed",
 };
+
+/**
+ * Cleans up author names that might be email addresses
+ * Converts email addresses to readable names
+ */
+export function cleanAuthorName(authorName: string): string {
+  if (!authorName) return "Admin User";
+
+  // If it looks like an email address, convert it to a readable name
+  if (authorName.includes("@")) {
+    const emailName = authorName.split("@")[0];
+    return emailName
+      .split(/[._-]/)
+      .map((part: string) => part.charAt(0).toUpperCase() + part.slice(1))
+      .join(" ");
+  }
+
+  return authorName;
+}

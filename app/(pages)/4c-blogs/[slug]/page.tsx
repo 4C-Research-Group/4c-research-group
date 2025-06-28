@@ -14,6 +14,7 @@ import BlogImage from "@/components/BlogImage";
 import CommentsSection from "@/components/comments/CommentsSection";
 import LikeButton from "@/components/LikeButton";
 import RichTextContent from "@/components/ui/rich-text-content";
+import { cleanAuthorName } from "@/lib/utils";
 
 type Props = {
   params: {
@@ -112,8 +113,8 @@ export default async function BlogPostPage({ params }: Props) {
                       />
                     ) : (
                       <div className="flex items-center justify-center w-full h-full bg-gradient-to-br from-cognition-600 to-cognition-700 text-white font-bold text-2xl">
-                        {post.author_name
-                          ? post.author_name
+                        {cleanAuthorName(post.author_name)
+                          ? cleanAuthorName(post.author_name)
                               .split(" ")
                               .map((n) => n[0])
                               .join("")
@@ -124,7 +125,7 @@ export default async function BlogPostPage({ params }: Props) {
                   </div>
                   <div>
                     <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
-                      {post.author_name}
+                      {cleanAuthorName(post.author_name)}
                     </h3>
                     <p className="text-gray-600 dark:text-gray-400">
                       {post.author_role}
@@ -213,7 +214,7 @@ export async function generateMetadata({ params }: Props) {
       images: [post.image_url],
       type: "article",
       publishedTime: post.created_at,
-      authors: [post.author_name],
+      authors: [cleanAuthorName(post.author_name)],
     },
   };
 }
