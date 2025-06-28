@@ -13,6 +13,7 @@ import { AdminEditButton } from "@/components/AdminEditButton";
 import BlogImage from "@/components/BlogImage";
 import CommentsSection from "@/components/comments/CommentsSection";
 import LikeButton from "@/components/LikeButton";
+import RichTextContent from "@/components/ui/rich-text-content";
 
 type Props = {
   params: {
@@ -146,10 +147,7 @@ export default async function BlogPostPage({ params }: Props) {
 
             {/* Article Content */}
             <article className="prose prose-lg dark:prose-invert max-w-none">
-              <div
-                className="text-gray-700 dark:text-gray-300 leading-relaxed text-lg"
-                dangerouslySetInnerHTML={{ __html: post.content }}
-              />
+              <RichTextContent content={post.content} />
             </article>
 
             {/* Tags Section */}

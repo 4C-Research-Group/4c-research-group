@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { updateBlogPost } from "@/lib/supabase/admin/blog";
+import RichTextEditor from "@/components/ui/rich-text-editor";
 
 type BlogPost = {
   id: string;
@@ -26,6 +27,7 @@ export default function EditBlogForm({ post }: { post: BlogPost }) {
   const router = useRouter();
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
+  const [content, setContent] = useState(post.content);
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -33,6 +35,8 @@ export default function EditBlogForm({ post }: { post: BlogPost }) {
     setSuccess("");
     try {
       const fd = new FormData(event.currentTarget);
+      // Update the content in the form data
+      fd.set("content", content);
       await updateBlogPost(post.id, fd);
       setSuccess("Blog post updated successfully");
       router.push(`/4c-blogs/${fd.get("slug")}`);
@@ -102,22 +106,16 @@ export default function EditBlogForm({ post }: { post: BlogPost }) {
           />
         </div>
 
-        <div>
-          <label
-            htmlFor="content"
-            className="block text-sm font-medium text-gray-700 dark:text-gray-300"
-          >
-            Content
-          </label>
-          <textarea
-            name="content"
-            id="content"
-            defaultValue={post.content}
-            required
-            rows={10}
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
-          />
-        </div>
+        <RichTextEditor
+          value={content}
+          onChange={setContent}
+          label="Content"
+          placeholder="Write your blog post content here. Use the toolbar to format headings, subheadings, lists, and more..."
+          required
+        />
+
+        {/* Hidden input to store the content value for form submission */}
+        <input type="hidden" name="content" id="content" value={content} />
 
         <div>
           <label

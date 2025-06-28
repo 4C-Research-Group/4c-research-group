@@ -91,13 +91,10 @@ export function UserAvatar() {
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
         {!loading && userRole === "admin" && (
-          <DropdownMenuItem onClick={() => router.push("/admin")}>
+          <DropdownMenuItem onClick={() => router.push("/dashboard")}>
             Admin Dashboard
           </DropdownMenuItem>
         )}
-        <DropdownMenuItem onClick={() => router.push("/dashboard")}>
-          Dashboard
-        </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem
           onClick={handleSignOut}

@@ -4,11 +4,13 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { createBlogPost } from "@/lib/supabase/admin/blog";
 import { supabase } from "@/lib/supabase/client";
+import RichTextEditor from "@/components/ui/rich-text-editor";
 
 export default function NewBlogPost() {
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
   const [isAdmin, setIsAdmin] = useState(false);
   const [checkedAuth, setCheckedAuth] = useState(false);
   const [user, setUser] = useState<any>(null);
@@ -19,6 +21,9 @@ export default function NewBlogPost() {
   const [category, setCategory] = useState("");
   const [imageUrl, setImageUrl] = useState("");
   const [readTime, setReadTime] = useState("");
+  const [isSlugManuallyEdited, setIsSlugManuallyEdited] = useState(false);
+  const [authorName, setAuthorName] = useState("");
+  const [authorRole, setAuthorRole] = useState("Admin");
 
   // Check admin status and get user info
   useState(() => {
@@ -38,27 +43,72 @@ export default function NewBlogPost() {
         .single();
       if (!error && data?.role === "admin") setIsAdmin(true);
       setCheckedAuth(true);
+
+      // Set default author info
+      if (session.user) {
+        let defaultAuthorName = "";
+        if (session.user.user_metadata?.name) {
+          defaultAuthorName = session.user.user_metadata.name;
+        } else if (session.user.email) {
+          const emailName = session.user.email.split("@")[0];
+          defaultAuthorName = emailName
+            .split(/[._-]/)
+            .map((part: string) => part.charAt(0).toUpperCase() + part.slice(1))
+            .join(" ");
+        } else {
+          defaultAuthorName = "Admin User";
+        }
+        setAuthorName(defaultAuthorName);
+      }
     })();
   });
 
   function handleTitleChange(e: React.ChangeEvent<HTMLInputElement>) {
     const value = e.target.value;
     setTitle(value);
-    if (!slug) {
-      setSlug(
-        value
-          .toLowerCase()
-          .replace(/\s+/g, "-")
-          .replace(/[^a-z0-9-]/g, "")
-      );
+
+    // Only auto-generate slug if it hasn't been manually edited
+    if (!isSlugManuallyEdited) {
+      const generatedSlug = value
+        .toLowerCase()
+        .replace(/\s+/g, "-")
+        .replace(/[^a-z0-9-]/g, "");
+      setSlug(generatedSlug);
     }
+  }
+
+  function handleSlugChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const value = e.target.value;
+    setSlug(value);
+    setIsSlugManuallyEdited(true);
+  }
+
+  function generateSlugFromTitle() {
+    const generatedSlug = title
+      .toLowerCase()
+      .replace(/\s+/g, "-")
+      .replace(/[^a-z0-9-]/g, "");
+    setSlug(generatedSlug);
+    setIsSlugManuallyEdited(false);
   }
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setIsSubmitting(true);
     setError("");
+    setSuccess("");
+
     try {
+      console.log("Submitting blog post with data:", {
+        title,
+        slug,
+        excerpt,
+        content: content.substring(0, 100) + "...", // Log first 100 chars
+        category,
+        imageUrl,
+        readTime,
+      });
+
       const formData = new FormData();
       formData.set("title", title);
       formData.set("slug", slug);
@@ -70,22 +120,42 @@ export default function NewBlogPost() {
         imageUrl || "https://via.placeholder.com/800x400?text=Blog+Post"
       );
       formData.set("read_time", readTime || "1 min read");
+
       // Auto-fill author info if available
       if (user) {
-        formData.set(
-          "author_name",
-          user.user_metadata?.name || user.email || ""
-        );
+        formData.set("author_name", authorName || "Admin User");
         formData.set("author_image_url", user.user_metadata?.avatar_url || "");
-        formData.set("author_role", "Admin");
+        formData.set("author_role", authorRole || "Admin");
       }
+
+      console.log("Calling createBlogPost...");
       const result = await createBlogPost(formData);
-      if (result) {
-        router.push(`/admin/blog/edit/${result.id}`);
+      console.log("Blog post created successfully:", result);
+
+      if (result && result.id) {
+        setSuccess("Blog post created successfully! Redirecting...");
+        console.log(
+          "Redirecting to edit page:",
+          `/admin/blog/edit/${result.id}`
+        );
+
+        // Use setTimeout to ensure the success message is shown
+        setTimeout(() => {
+          router.replace(`/admin/blog/edit/${result.id}`);
+        }, 1000);
+      } else {
+        setSuccess(
+          "Blog post created successfully! Redirecting to blog list..."
+        );
+        console.log("No result or no ID, redirecting to blog list");
+
+        setTimeout(() => {
+          router.replace("/4c-blogs");
+        }, 1000);
       }
     } catch (err) {
+      console.error("Error creating blog post:", err);
       setError(err instanceof Error ? err.message : "Failed to create post");
-      console.error("Error creating post:", err);
     } finally {
       setIsSubmitting(false);
     }
@@ -146,6 +216,28 @@ export default function NewBlogPost() {
           </div>
         </div>
       )}
+      {success && (
+        <div className="bg-green-50 border-l-4 border-green-400 p-4 mb-6">
+          <div className="flex">
+            <div className="flex-shrink-0">
+              <svg
+                className="h-5 w-5 text-green-400"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+              >
+                <path
+                  fillRule="evenodd"
+                  d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
+                  clipRule="evenodd"
+                />
+              </svg>
+            </div>
+            <div className="ml-3">
+              <p className="text-sm text-green-700">{success}</p>
+            </div>
+          </div>
+        </div>
+      )}
       <form
         onSubmit={handleSubmit}
         className="space-y-6 bg-white dark:bg-gray-800 p-6 rounded-lg shadow"
@@ -174,16 +266,32 @@ export default function NewBlogPost() {
           >
             URL Slug
           </label>
-          <input
-            type="text"
-            name="slug"
-            id="slug"
-            required
-            value={slug}
-            onChange={(e) => setSlug(e.target.value)}
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white font-mono text-sm"
-            placeholder="my-awesome-post"
-          />
+          <div className="flex gap-2">
+            <input
+              type="text"
+              name="slug"
+              id="slug"
+              required
+              value={slug}
+              onChange={handleSlugChange}
+              className="flex-1 rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white font-mono text-sm"
+              placeholder="my-awesome-post"
+            />
+            <button
+              type="button"
+              onClick={generateSlugFromTitle}
+              disabled={!title.trim()}
+              className="px-3 py-2 text-sm font-medium text-gray-700 bg-gray-100 border border-gray-300 rounded-md hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed dark:bg-gray-700 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-600"
+              title="Generate slug from title"
+            >
+              Generate
+            </button>
+          </div>
+          <p className="mt-1 text-sm text-gray-500">
+            {isSlugManuallyEdited
+              ? "Slug has been manually edited. Click 'Generate' to create a new one from the title."
+              : "Slug will be auto-generated from the title. You can edit it manually if needed."}
+          </p>
         </div>
         <div>
           <label
@@ -202,23 +310,13 @@ export default function NewBlogPost() {
             className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
           />
         </div>
-        <div>
-          <label
-            htmlFor="content"
-            className="block text-sm font-medium text-gray-700 dark:text-gray-300"
-          >
-            Content
-          </label>
-          <textarea
-            name="content"
-            id="content"
-            rows={10}
-            required
-            value={content}
-            onChange={(e) => setContent(e.target.value)}
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white font-mono text-sm"
-          />
-        </div>
+        <RichTextEditor
+          value={content}
+          onChange={setContent}
+          label="Content"
+          placeholder="Write your blog post content here. Use the toolbar to format headings, subheadings, lists, and more..."
+          required
+        />
         <div>
           <label
             htmlFor="category"
@@ -269,6 +367,52 @@ export default function NewBlogPost() {
             placeholder="5 min read"
           />
         </div>
+
+        {/* Author Information */}
+        <div className="border-t border-gray-200 dark:border-gray-700 pt-6">
+          <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-4">
+            Author Information
+          </h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label
+                htmlFor="author_name"
+                className="block text-sm font-medium text-gray-700 dark:text-gray-300"
+              >
+                Author Name
+              </label>
+              <input
+                type="text"
+                name="author_name"
+                id="author_name"
+                required
+                value={authorName}
+                onChange={(e) => setAuthorName(e.target.value)}
+                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                placeholder="Author Name"
+              />
+            </div>
+            <div>
+              <label
+                htmlFor="author_role"
+                className="block text-sm font-medium text-gray-700 dark:text-gray-300"
+              >
+                Author Role
+              </label>
+              <input
+                type="text"
+                name="author_role"
+                id="author_role"
+                required
+                value={authorRole}
+                onChange={(e) => setAuthorRole(e.target.value)}
+                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                placeholder="e.g., Admin, Researcher, Author"
+              />
+            </div>
+          </div>
+        </div>
+
         <div className="flex justify-end">
           <button
             type="submit"
