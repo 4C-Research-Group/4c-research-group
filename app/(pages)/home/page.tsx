@@ -1,13 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import Image from "next/image";
-import {
-  motion,
-  useScroll,
-  useTransform,
-  useSpring,
-  useInView,
-} from "framer-motion";
+import { motion } from "framer-motion";
 import {
   FaBrain,
   FaHeartbeat,
@@ -16,58 +10,47 @@ import {
   FaMicroscope,
   FaLightbulb,
   FaUsers,
-  FaChartLine,
   FaStar,
   FaPlay,
 } from "react-icons/fa";
 import Link from "next/link";
 import { supabase } from "@/lib/supabase/client";
 
-// Floating animation variants
-const floatingAnimation = {
-  animate: {
-    y: [0, -10, 0],
-    transition: {
-      duration: 3,
-      repeat: Infinity,
-      ease: "easeInOut" as const,
-    },
+// Minimal animation variants for better performance
+const fadeInUp = {
+  hidden: { opacity: 0, y: 20 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.4 },
   },
 };
 
-// Stagger animation for cards
-const containerVariants = {
+const fadeInLeft = {
+  hidden: { opacity: 0, x: -20 },
+  visible: {
+    opacity: 1,
+    x: 0,
+    transition: { duration: 0.4 },
+  },
+};
+
+const fadeInRight = {
+  hidden: { opacity: 0, x: 20 },
+  visible: {
+    opacity: 1,
+    x: 0,
+    transition: { duration: 0.4 },
+  },
+};
+
+const staggerContainer = {
   hidden: { opacity: 0 },
   visible: {
     opacity: 1,
     transition: {
-      staggerChildren: 0.2,
-      delayChildren: 0.1,
-    },
-  },
-};
-
-const itemVariants = {
-  hidden: { opacity: 0, y: 50 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: {
-      duration: 0.6,
-      ease: "easeOut" as const,
-    },
-  },
-};
-
-// Text reveal animation
-const textRevealVariants = {
-  hidden: { opacity: 0, y: 30 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: {
-      duration: 0.8,
-      ease: "easeOut" as const,
+      staggerChildren: 0.05,
+      delayChildren: 0.05,
     },
   },
 };
@@ -76,12 +59,6 @@ export default function HomePage() {
   const [content, setContent] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const { scrollY } = useScroll();
-
-  // Parallax effects
-  const heroY = useTransform(scrollY, [0, 500], [0, -100]);
-  const heroScale = useTransform(scrollY, [0, 500], [1, 1.1]);
-  const textY = useTransform(scrollY, [0, 300], [0, 50]);
 
   useEffect(() => {
     async function fetchContent() {
@@ -110,11 +87,7 @@ export default function HomePage() {
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-cognition-50 to-white dark:from-cognition-900 dark:to-gray-900">
-        <motion.div
-          animate={{ rotate: 360 }}
-          transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
-          className="w-16 h-16 border-4 border-cognition-200 border-t-cognition-600 rounded-full"
-        />
+        <div className="w-12 h-12 border-4 border-cognition-200 border-t-cognition-600 rounded-full animate-spin" />
       </div>
     );
   }
@@ -165,62 +138,32 @@ export default function HomePage() {
   ];
 
   return (
-    <div className="min-h-screen bg-background overflow-hidden">
-      {/* Enhanced Hero Section */}
+    <div className="min-h-screen bg-background">
+      {/* Hero Section */}
       {hero && (
         <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-cognition-50 via-white to-consciousness-50 dark:from-cognition-900 dark:via-gray-900 dark:to-consciousness-900">
-          {/* Animated Background Elements */}
-          <motion.div className="absolute inset-0" style={{ y: heroY }}>
-            <div className="absolute top-20 left-10 w-72 h-72 bg-cognition-200/30 dark:bg-cognition-700/20 rounded-full blur-3xl animate-pulse" />
-            <div
-              className="absolute top-40 right-20 w-96 h-96 bg-consciousness-200/30 dark:bg-consciousness-700/20 rounded-full blur-3xl animate-pulse"
-              style={{ animationDelay: "1s" }}
-            />
-            <div
-              className="absolute bottom-20 left-1/4 w-80 h-80 bg-care-200/30 dark:bg-care-700/20 rounded-full blur-3xl animate-pulse"
-              style={{ animationDelay: "2s" }}
-            />
-          </motion.div>
-
-          {/* Floating Icons */}
-          <motion.div
-            className="absolute top-32 left-20 text-cognition-400/60 dark:text-cognition-300/60"
-            variants={floatingAnimation}
-            animate="animate"
-          >
-            <FaMicroscope className="text-4xl" />
-          </motion.div>
-          <motion.div
-            className="absolute top-48 right-32 text-consciousness-400/60 dark:text-consciousness-300/60"
-            variants={floatingAnimation}
-            animate="animate"
-            style={{ animationDelay: "1s" }}
-          >
-            <FaLightbulb className="text-3xl" />
-          </motion.div>
-          <motion.div
-            className="absolute bottom-32 left-1/3 text-care-400/60 dark:text-care-300/60"
-            variants={floatingAnimation}
-            animate="animate"
-            style={{ animationDelay: "2s" }}
-          >
-            <FaUsers className="text-4xl" />
-          </motion.div>
+          {/* Simple Background Elements */}
+          <div className="absolute inset-0">
+            <div className="absolute top-20 left-10 w-72 h-72 bg-cognition-200/20 dark:bg-cognition-700/10 rounded-full" />
+            <div className="absolute top-40 right-20 w-96 h-96 bg-consciousness-200/20 dark:bg-consciousness-700/10 rounded-full" />
+            <div className="absolute bottom-20 left-1/4 w-80 h-80 bg-care-200/20 dark:bg-care-700/10 rounded-full" />
+          </div>
 
           <div className="container mx-auto px-4 py-20 relative z-10">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
               {/* Left Column - Content */}
               <motion.div
                 className="text-center lg:text-left"
-                initial={{ opacity: 0, x: -50 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.8, ease: "easeOut" }}
+                variants={fadeInLeft}
+                initial="hidden"
+                animate="visible"
               >
                 <motion.div
-                  className="inline-flex items-center px-4 py-2 bg-cognition-100/80 dark:bg-cognition-800/50 rounded-full text-cognition-700 dark:text-cognition-300 text-sm font-medium mb-6 backdrop-blur-sm"
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.2, duration: 0.6 }}
+                  className="inline-flex items-center px-4 py-2 bg-cognition-100/80 dark:bg-cognition-800/50 rounded-full text-cognition-700 dark:text-cognition-300 text-sm font-medium mb-6"
+                  variants={fadeInUp}
+                  initial="hidden"
+                  animate="visible"
+                  transition={{ delay: 0.1 }}
                 >
                   <FaStar className="mr-2 text-cognition-500" />
                   Pioneering Neuroscience Research
@@ -228,10 +171,10 @@ export default function HomePage() {
 
                 <motion.h1
                   className="text-5xl md:text-6xl lg:text-7xl font-bold text-cognition-900 dark:text-white mb-8 leading-tight"
-                  style={{ y: textY }}
-                  initial={{ opacity: 0, y: 30 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.3, duration: 0.8 }}
+                  variants={fadeInUp}
+                  initial="hidden"
+                  animate="visible"
+                  transition={{ delay: 0.2 }}
                 >
                   <span className="bg-gradient-to-r from-cognition-600 via-consciousness-600 to-care-600 bg-clip-text text-transparent">
                     {hero.title}
@@ -240,9 +183,10 @@ export default function HomePage() {
 
                 <motion.p
                   className="text-xl md:text-2xl text-gray-700 dark:text-gray-300 mb-10 max-w-2xl mx-auto lg:mx-0 leading-relaxed"
-                  initial={{ opacity: 0, y: 30 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.5, duration: 0.8 }}
+                  variants={fadeInUp}
+                  initial="hidden"
+                  animate="visible"
+                  transition={{ delay: 0.3 }}
                   dangerouslySetInnerHTML={
                     hero.subtitle ? { __html: hero.subtitle } : undefined
                   }
@@ -250,37 +194,28 @@ export default function HomePage() {
 
                 <motion.div
                   className="flex flex-col sm:flex-row gap-6 justify-center lg:justify-start"
-                  initial={{ opacity: 0, y: 30 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.7, duration: 0.8 }}
+                  variants={fadeInUp}
+                  initial="hidden"
+                  animate="visible"
+                  transition={{ delay: 0.4 }}
                 >
                   {hero.primaryText && hero.primaryLink && (
-                    <motion.div
-                      whileHover={{ scale: 1.05 }}
-                      whileTap={{ scale: 0.95 }}
+                    <Link
+                      href={hero.primaryLink}
+                      className="group inline-flex items-center justify-center px-8 py-4 bg-gradient-to-r from-cognition-600 to-cognition-700 hover:from-cognition-700 hover:to-cognition-800 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300"
                     >
-                      <Link
-                        href={hero.primaryLink}
-                        className="group inline-flex items-center justify-center px-8 py-4 bg-gradient-to-r from-cognition-600 to-cognition-700 hover:from-cognition-700 hover:to-cognition-800 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform"
-                      >
-                        {hero.primaryText}
-                        <FaArrowRight className="ml-2 group-hover:translate-x-1 transition-transform duration-300" />
-                      </Link>
-                    </motion.div>
+                      {hero.primaryText}
+                      <FaArrowRight className="ml-2 group-hover:translate-x-1 transition-transform duration-300" />
+                    </Link>
                   )}
                   {hero.secondaryText && hero.secondaryLink && (
-                    <motion.div
-                      whileHover={{ scale: 1.05 }}
-                      whileTap={{ scale: 0.95 }}
+                    <Link
+                      href={hero.secondaryLink}
+                      className="group inline-flex items-center justify-center px-8 py-4 border-2 border-cognition-600 text-cognition-700 hover:bg-cognition-50 dark:border-cognition-400 dark:text-cognition-300 dark:hover:bg-cognition-900/50 font-semibold rounded-xl transition-all duration-300"
                     >
-                      <Link
-                        href={hero.secondaryLink}
-                        className="group inline-flex items-center justify-center px-8 py-4 border-2 border-cognition-600 text-cognition-700 hover:bg-cognition-50 dark:border-cognition-400 dark:text-cognition-300 dark:hover:bg-cognition-900/50 font-semibold rounded-xl transition-all duration-300 backdrop-blur-sm"
-                      >
-                        <FaPlay className="mr-2 group-hover:scale-110 transition-transform duration-300" />
-                        {hero.secondaryText}
-                      </Link>
-                    </motion.div>
+                      <FaPlay className="mr-2 group-hover:scale-110 transition-transform duration-300" />
+                      {hero.secondaryText}
+                    </Link>
                   )}
                 </motion.div>
               </motion.div>
@@ -288,42 +223,127 @@ export default function HomePage() {
               {/* Right Column - Visual */}
               <motion.div
                 className="relative h-96 md:h-[32rem] lg:h-[40rem]"
-                initial={{ opacity: 0, x: 50 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 0.4, duration: 0.8 }}
-                style={{ scale: heroScale }}
+                variants={fadeInRight}
+                initial="hidden"
+                animate="visible"
+                transition={{ delay: 0.3 }}
               >
-                <div className="absolute inset-0 bg-gradient-to-br from-cognition-100/50 to-consciousness-100/50 dark:from-cognition-800/30 dark:to-consciousness-800/30 rounded-3xl transform rotate-6 backdrop-blur-sm"></div>
-                <div className="absolute inset-0 bg-gradient-to-br from-care-100/50 to-cognition-100/50 dark:from-care-800/30 dark:to-cognition-800/30 rounded-3xl transform -rotate-6 backdrop-blur-sm"></div>
-                <motion.div
-                  className="relative h-full w-full bg-white/70 dark:bg-gray-900/50 backdrop-blur-md rounded-2xl flex items-center justify-center p-8 shadow-2xl border border-white/20"
-                  whileHover={{ scale: 1.02 }}
-                  transition={{ duration: 0.3 }}
-                >
-                  <div className="relative w-full h-full">
-                    {/* Animated background circles */}
+                {/* Floating Bubbles */}
+                <div className="absolute inset-0 overflow-hidden">
+                  {/* Large bubble - top right of logo */}
+                  <div className="absolute top-1/4 right-1/4 w-28 h-28 bg-cognition-200/40 dark:bg-cognition-600/30 rounded-full" />
+
+                  {/* Medium bubble - bottom left of logo */}
+                  <div className="absolute bottom-1/4 left-1/4 w-24 h-24 bg-consciousness-200/40 dark:bg-consciousness-600/30 rounded-full" />
+
+                  {/* Small bubble - top left of logo */}
+                  <div className="absolute top-1/3 left-1/3 w-20 h-20 bg-care-200/40 dark:bg-care-600/30 rounded-full" />
+
+                  {/* Extra small bubble - bottom right of logo */}
+                  <div className="absolute bottom-1/3 right-1/3 w-16 h-16 bg-cognition-300/40 dark:bg-cognition-500/30 rounded-full" />
+
+                  {/* Additional small bubble - center top of logo */}
+                  <div className="absolute top-1/5 left-1/2 w-18 h-18 bg-consciousness-300/30 dark:bg-consciousness-500/25 rounded-full" />
+                </div>
+
+                <div className="absolute inset-0 bg-gradient-to-br from-cognition-100/50 to-consciousness-100/50 dark:from-cognition-800/30 dark:to-consciousness-800/30 rounded-3xl transform rotate-6"></div>
+                <div className="absolute inset-0 bg-gradient-to-br from-care-100/50 to-cognition-100/50 dark:from-care-800/30 dark:to-cognition-800/30 rounded-3xl transform -rotate-6"></div>
+                <div className="relative h-full w-full bg-white/70 dark:bg-gray-900/50 backdrop-blur-md rounded-2xl flex items-center justify-center p-8 shadow-2xl border border-white/20">
+                  {/* Floating Bubbles on the card */}
+                  <div className="absolute inset-0 overflow-hidden rounded-2xl">
+                    {/* Large bubble - top right corner */}
                     <motion.div
-                      className="absolute top-0 left-0 w-32 h-32 rounded-full bg-cognition-200/60 dark:bg-cognition-700/40 -translate-x-1/2 -translate-y-1/2"
-                      animate={{ scale: [1, 1.2, 1], opacity: [0.6, 0.8, 0.6] }}
-                      transition={{ duration: 4, repeat: Infinity }}
-                    />
-                    <motion.div
-                      className="absolute bottom-0 right-0 w-40 h-40 rounded-full bg-consciousness-200/60 dark:bg-consciousness-700/40 translate-x-1/2 translate-y-1/2"
-                      animate={{ scale: [1, 1.3, 1], opacity: [0.6, 0.9, 0.6] }}
-                      transition={{ duration: 5, repeat: Infinity, delay: 1 }}
-                    />
-                    <motion.div
-                      className="absolute top-1/2 left-1/2 w-48 h-48 rounded-full bg-care-200/60 dark:bg-care-700/40 -translate-x-1/2 -translate-y-1/2"
-                      animate={{ scale: [1, 1.1, 1], opacity: [0.6, 0.7, 0.6] }}
-                      transition={{ duration: 6, repeat: Infinity, delay: 2 }}
+                      className="absolute top-4 right-4 w-36 h-36 bg-cognition-200/40 dark:bg-cognition-600/30 rounded-full"
+                      animate={{
+                        y: [0, -15, 0],
+                        scale: [1, 1.05, 1],
+                      }}
+                      transition={{
+                        duration: 4,
+                        repeat: Infinity,
+                        ease: "easeInOut",
+                      }}
                     />
 
+                    {/* Medium bubble - bottom left corner */}
+                    <motion.div
+                      className="absolute bottom-4 left-4 w-32 h-32 bg-consciousness-200/40 dark:bg-consciousness-600/30 rounded-full"
+                      animate={{
+                        y: [0, 12, 0],
+                        x: [0, 8, 0],
+                      }}
+                      transition={{
+                        duration: 3.5,
+                        repeat: Infinity,
+                        ease: "easeInOut",
+                        delay: 1,
+                      }}
+                    />
+
+                    {/* Small bubble - top left corner */}
+                    <motion.div
+                      className="absolute top-6 left-6 w-28 h-28 bg-care-200/40 dark:bg-care-600/30 rounded-full"
+                      animate={{
+                        y: [0, -10, 0],
+                        scale: [1, 0.95, 1],
+                      }}
+                      transition={{
+                        duration: 2.5,
+                        repeat: Infinity,
+                        ease: "easeInOut",
+                        delay: 0.5,
+                      }}
+                    />
+
+                    {/* Extra small bubble - bottom right corner */}
+                    <motion.div
+                      className="absolute bottom-6 right-6 w-24 h-24 bg-cognition-300/40 dark:bg-cognition-500/30 rounded-full"
+                      animate={{
+                        y: [0, 8, 0],
+                        x: [0, -6, 0],
+                      }}
+                      transition={{
+                        duration: 3,
+                        repeat: Infinity,
+                        ease: "easeInOut",
+                        delay: 1.5,
+                      }}
+                    />
+
+                    {/* Additional small bubble - top center */}
+                    <motion.div
+                      className="absolute top-8 left-1/2 transform -translate-x-1/2 w-30 h-30 bg-consciousness-300/30 dark:bg-consciousness-500/25 rounded-full"
+                      animate={{
+                        y: [0, -8, 0],
+                        x: [0, 5, 0],
+                      }}
+                      transition={{
+                        duration: 2.8,
+                        repeat: Infinity,
+                        ease: "easeInOut",
+                        delay: 0.8,
+                      }}
+                    />
+
+                    {/* Another bubble - bottom center */}
+                    <motion.div
+                      className="absolute bottom-8 left-1/2 transform -translate-x-1/2 w-26 h-26 bg-care-300/35 dark:bg-care-500/25 rounded-full"
+                      animate={{
+                        y: [0, 6, 0],
+                        x: [0, -4, 0],
+                      }}
+                      transition={{
+                        duration: 3.2,
+                        repeat: Infinity,
+                        ease: "easeInOut",
+                        delay: 1.2,
+                      }}
+                    />
+                  </div>
+
+                  <div className="relative w-full h-full">
                     <div className="absolute inset-0 flex items-center justify-center">
-                      <motion.div
-                        className="text-6xl text-cognition-800 dark:text-cognition-200"
-                        animate={{ rotate: [0, 5, -5, 0] }}
-                        transition={{ duration: 8, repeat: Infinity }}
-                      >
+                      <div className="text-6xl text-cognition-800 dark:text-cognition-200">
                         <Image
                           src={hero.logo || "/logo.png"}
                           alt="4C Lab Logo"
@@ -331,112 +351,69 @@ export default function HomePage() {
                           height={512}
                           className="drop-shadow-2xl"
                         />
-                      </motion.div>
+                      </div>
                     </div>
                   </div>
-                </motion.div>
+                </div>
               </motion.div>
             </div>
           </div>
 
-          {/* Scroll Indicator */}
-          <motion.div
-            className="absolute bottom-8 left-1/2 transform -translate-x-1/2"
-            animate={{ y: [0, 10, 0] }}
-            transition={{ duration: 2, repeat: Infinity }}
-          >
+          {/* Simple Scroll Indicator */}
+          <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2">
             <div className="w-6 h-10 border-2 border-cognition-400 dark:border-cognition-300 rounded-full flex justify-center">
-              <motion.div
-                className="w-1 h-3 bg-cognition-400 dark:bg-cognition-300 rounded-full mt-2"
-                animate={{ y: [0, 12, 0] }}
-                transition={{ duration: 2, repeat: Infinity }}
-              />
+              <div className="w-1 h-3 bg-cognition-400 dark:bg-cognition-300 rounded-full mt-2 animate-bounce" />
             </div>
-          </motion.div>
+          </div>
         </section>
       )}
 
-      {/* Enhanced Research Projects Section */}
+      {/* Research Projects Section */}
       {projects && projects.cards && projects.cards.length > 0 && (
-        <section className="py-24 bg-gradient-to-b from-white to-gray-50 dark:from-gray-900 dark:to-gray-800 relative overflow-hidden">
-          {/* Background Pattern */}
-          <div className="absolute inset-0 opacity-5 dark:opacity-10">
-            <div
-              className="absolute inset-0"
-              style={{
-                backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23000000' fill-opacity='0.1'%3E%3Ccircle cx='30' cy='30' r='2'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
-              }}
-            />
-          </div>
-
-          <div className="container mx-auto px-4 relative z-10">
+        <section className="py-24 bg-gradient-to-b from-white to-gray-50 dark:from-gray-900 dark:to-gray-800">
+          <div className="container mx-auto px-4">
             <motion.div
               className="text-center mb-20"
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8 }}
+              variants={fadeInUp}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, margin: "-100px" }}
             >
-              <motion.h2
-                className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-6"
-                variants={textRevealVariants}
-                initial="hidden"
-                whileInView="visible"
-                viewport={{ once: true }}
-              >
+              <h2 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-6">
                 <span className="bg-gradient-to-r from-cognition-600 to-consciousness-600 bg-clip-text text-transparent">
                   {projects.title}
                 </span>
-              </motion.h2>
-              <motion.div
-                className="w-32 h-1.5 bg-gradient-to-r from-cognition-500 via-consciousness-500 to-care-500 rounded-full mx-auto"
-                initial={{ width: 0 }}
-                whileInView={{ width: "8rem" }}
-                viewport={{ once: true }}
-                transition={{ duration: 1, delay: 0.3 }}
-              />
+              </h2>
+              <div className="w-32 h-1.5 bg-gradient-to-r from-cognition-500 via-consciousness-500 to-care-500 rounded-full mx-auto" />
             </motion.div>
 
             <motion.div
               className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8"
-              variants={containerVariants}
+              variants={staggerContainer}
               initial="hidden"
               whileInView="visible"
-              viewport={{ once: true }}
+              viewport={{ once: true, margin: "-100px" }}
             >
               {projects.cards.map((project: any, i: number) => (
                 <motion.div
                   key={i}
-                  variants={itemVariants}
-                  className="group relative bg-white dark:bg-gray-800 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-500 overflow-hidden border border-gray-100 dark:border-gray-700"
-                  whileHover={{ y: -10, scale: 1.02 }}
+                  variants={fadeInUp}
+                  className="group relative bg-white dark:bg-gray-800 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden border border-gray-100 dark:border-gray-700"
                 >
-                  {/* Gradient overlay on hover */}
-                  <div className="absolute inset-0 bg-gradient-to-br from-cognition-500/0 to-consciousness-500/0 group-hover:from-cognition-500/10 group-hover:to-consciousness-500/10 transition-all duration-500 rounded-2xl" />
-
                   <div className="relative h-48 bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-700 dark:to-gray-600 overflow-hidden">
-                    <motion.div
-                      whileHover={{ scale: 1.1 }}
-                      transition={{ duration: 0.3 }}
-                    >
-                      <Image
-                        src={project.image}
-                        alt={project.title}
-                        width={400}
-                        height={200}
-                        className="w-full h-full object-cover"
-                      />
-                    </motion.div>
+                    <Image
+                      src={project.image}
+                      alt={project.title}
+                      width={400}
+                      height={200}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                    />
                   </div>
 
                   <div className="p-8 relative">
-                    <motion.div
-                      className="w-16 h-16 rounded-2xl flex items-center justify-center text-white mb-6 mx-auto relative z-10 bg-gradient-to-br from-cognition-500 to-cognition-600 shadow-lg"
-                      whileHover={{ rotate: 360 }}
-                      transition={{ duration: 0.6 }}
-                    >
+                    <div className="w-16 h-16 rounded-2xl flex items-center justify-center text-white mb-6 mx-auto relative z-10 bg-gradient-to-br from-cognition-500 to-cognition-600 shadow-lg">
                       {iconMap[i]}
-                    </motion.div>
+                    </div>
 
                     <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-4 text-center group-hover:text-cognition-600 dark:group-hover:text-cognition-400 transition-colors duration-300">
                       {project.title}
@@ -458,150 +435,129 @@ export default function HomePage() {
         </section>
       )}
 
-      {/* Enhanced Mission & 4C's Section */}
+      {/* Mission Section */}
       {mission && (
-        <section className="py-24 bg-gradient-to-br from-gray-50 to-white dark:from-gray-800 dark:to-gray-900 relative overflow-hidden">
-          {/* Background Elements */}
-          <div className="absolute top-0 left-0 w-96 h-96 bg-cognition-100/30 dark:bg-cognition-800/20 rounded-full blur-3xl" />
-          <div className="absolute bottom-0 right-0 w-80 h-80 bg-consciousness-100/30 dark:bg-consciousness-800/20 rounded-full blur-3xl" />
-
-          <div className="container mx-auto px-4 relative z-10">
-            <motion.div
-              className="text-center mb-20"
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8 }}
-            >
-              <h2 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-6">
-                <span className="bg-gradient-to-r from-cognition-600 to-consciousness-600 bg-clip-text text-transparent">
-                  {mission.title}
-                </span>
-              </h2>
+        <section className="py-24 bg-gradient-to-br from-gray-50 to-white dark:from-gray-800 dark:to-gray-900">
+          <div className="container mx-auto px-4">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start max-w-6xl mx-auto">
+              {/* Left Column - Mission */}
               <motion.div
-                className="w-32 h-1.5 bg-gradient-to-r from-cognition-500 via-consciousness-500 to-care-500 rounded-full mx-auto"
-                initial={{ width: 0 }}
-                whileInView={{ width: "8rem" }}
-                viewport={{ once: true }}
-                transition={{ duration: 1, delay: 0.4 }}
-              />
-            </motion.div>
-
-            <motion.div
-              className="space-y-8"
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.4, duration: 0.8 }}
-            >
-              <div
-                className="text-xl text-gray-600 dark:text-gray-300 leading-relaxed"
-                dangerouslySetInnerHTML={
-                  mission.description
-                    ? { __html: mission.description }
-                    : undefined
-                }
-              />
-              <motion.div
-                className="flex flex-col sm:flex-row gap-6"
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: 0.6, duration: 0.6 }}
+                variants={fadeInLeft}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true, margin: "-100px" }}
+                className="flex flex-col h-full"
               >
-                {mission.primaryText && mission.primaryLink && (
-                  <motion.div
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                  >
-                    <Link
-                      href={mission.primaryLink}
-                      className="group inline-flex items-center justify-center px-8 py-4 bg-gradient-to-r from-cognition-600 to-cognition-700 hover:from-cognition-700 hover:to-cognition-800 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300"
-                    >
-                      {mission.primaryText}
-                      <FaArrowRight className="ml-2 group-hover:translate-x-1 transition-transform duration-300" />
-                    </Link>
-                  </motion.div>
-                )}
-                {mission.secondaryText && mission.secondaryLink && (
-                  <motion.div
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                  >
-                    <Link
-                      href={mission.secondaryLink}
-                      className="group inline-flex items-center justify-center px-8 py-4 border-2 border-cognition-600 text-cognition-700 hover:bg-cognition-50 dark:border-cognition-400 dark:text-cognition-300 dark:hover:bg-cognition-900/50 font-semibold rounded-xl transition-all duration-300 backdrop-blur-sm"
-                    >
-                      {mission.secondaryText}
-                    </Link>
-                  </motion.div>
-                )}
+                <div className="mb-8">
+                  <h2 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-6 leading-tight">
+                    <span className="bg-gradient-to-r from-cognition-600 to-consciousness-600 bg-clip-text text-transparent">
+                      {mission.title}
+                    </span>
+                  </h2>
+                  <div className="w-32 h-1.5 bg-gradient-to-r from-cognition-500 via-consciousness-500 to-care-500 rounded-full" />
+                </div>
+
+                <div className="space-y-8">
+                  <div
+                    className="text-xl text-gray-600 dark:text-gray-300 leading-relaxed"
+                    dangerouslySetInnerHTML={
+                      mission.description
+                        ? { __html: mission.description }
+                        : undefined
+                    }
+                  />
+                  <div className="flex flex-col sm:flex-row gap-6">
+                    {mission.primaryText && mission.primaryLink && (
+                      <Link
+                        href={mission.primaryLink}
+                        className="group inline-flex items-center justify-center px-8 py-4 bg-gradient-to-r from-cognition-600 to-cognition-700 hover:from-cognition-700 hover:to-cognition-800 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300"
+                      >
+                        {mission.primaryText}
+                        <FaArrowRight className="ml-2 group-hover:translate-x-1 transition-transform duration-300" />
+                      </Link>
+                    )}
+                    {mission.secondaryText && mission.secondaryLink && (
+                      <Link
+                        href={mission.secondaryLink}
+                        className="group inline-flex items-center justify-center px-8 py-4 border-2 border-cognition-600 text-cognition-700 hover:bg-cognition-50 dark:border-cognition-400 dark:text-cognition-300 dark:hover:bg-cognition-900/50 font-semibold rounded-xl transition-all duration-300"
+                      >
+                        {mission.secondaryText}
+                      </Link>
+                    )}
+                  </div>
+                </div>
               </motion.div>
-            </motion.div>
+
+              {/* Right Column - 4C's */}
+              <motion.div
+                className="flex flex-col h-full justify-center"
+                variants={fadeInRight}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true, margin: "-100px" }}
+              >
+                <div className="mb-8 text-center">
+                  <h2 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-6 leading-tight">
+                    <span className="bg-gradient-to-r from-cognition-600 to-consciousness-600 bg-clip-text text-transparent">
+                      {mission.fourCsTitle || "The 4C's"}
+                    </span>
+                  </h2>
+                  <div className="w-32 h-1.5 bg-gradient-to-r from-cognition-500 via-consciousness-500 to-care-500 rounded-full mx-auto" />
+                </div>
+
+                <div className="relative w-full h-64 md:h-80 lg:h-96 max-w-4xl mx-auto">
+                  <div className="relative bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-2xl p-2 shadow-xl border border-white/20 h-full">
+                    <Image
+                      src={mission.fourCsImage || "/images/4cccc.png"}
+                      alt="The 4C's: Cognition, Care, Compassion, and Collaboration"
+                      fill
+                      className="object-contain"
+                      priority
+                    />
+                  </div>
+                </div>
+              </motion.div>
+            </div>
           </div>
         </section>
       )}
 
-      {/* Enhanced Services Section */}
+      {/* Services Section */}
       {services && services.cards && services.cards.length > 0 && (
-        <section className="py-24 bg-gradient-to-br from-white to-gray-50 dark:from-gray-900 dark:to-gray-800 relative overflow-hidden">
-          {/* Background Pattern */}
-          <div className="absolute inset-0 opacity-5 dark:opacity-10">
-            <div
-              className="absolute inset-0"
-              style={{
-                backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23000000' fill-opacity='0.1'%3E%3Ccircle cx='30' cy='30' r='2'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
-              }}
-            />
-          </div>
-
-          <div className="container mx-auto px-4 relative z-10">
+        <section className="py-24 bg-gradient-to-br from-white to-gray-50 dark:from-gray-900 dark:to-gray-800">
+          <div className="container mx-auto px-4">
             <motion.div
               className="text-center mb-20"
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8 }}
+              variants={fadeInUp}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, margin: "-100px" }}
             >
               <h2 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-6">
                 <span className="bg-gradient-to-r from-cognition-600 to-consciousness-600 bg-clip-text text-transparent">
                   {services.title}
                 </span>
               </h2>
-              <motion.div
-                className="w-32 h-1.5 bg-gradient-to-r from-cognition-500 via-consciousness-500 to-care-500 rounded-full mx-auto"
-                initial={{ width: 0 }}
-                whileInView={{ width: "8rem" }}
-                viewport={{ once: true }}
-                transition={{ duration: 1, delay: 0.3 }}
-              />
+              <div className="w-32 h-1.5 bg-gradient-to-r from-cognition-500 via-consciousness-500 to-care-500 rounded-full mx-auto" />
             </motion.div>
 
             <motion.div
               className="grid grid-cols-1 md:grid-cols-3 gap-8"
-              variants={containerVariants}
+              variants={staggerContainer}
               initial="hidden"
               whileInView="visible"
-              viewport={{ once: true }}
+              viewport={{ once: true, margin: "-100px" }}
             >
               {services.cards.map((card: any, i: number) => (
                 <motion.div
                   key={i}
-                  variants={itemVariants}
-                  className="group relative bg-white dark:bg-gray-800 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-500 p-8 border border-gray-100 dark:border-gray-700 overflow-hidden"
-                  whileHover={{ y: -10, scale: 1.02 }}
+                  variants={fadeInUp}
+                  className="group relative bg-white dark:bg-gray-800 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 p-8 border border-gray-100 dark:border-gray-700"
                 >
-                  {/* Gradient overlay on hover */}
-                  <div className="absolute inset-0 bg-gradient-to-br from-cognition-500/0 to-consciousness-500/0 group-hover:from-cognition-500/10 group-hover:to-consciousness-500/10 transition-all duration-500 rounded-2xl" />
-
                   <div className="relative z-10">
-                    <motion.div
-                      className="bg-gradient-to-br from-cognition-500 to-cognition-600 w-16 h-16 rounded-2xl flex items-center justify-center mb-6 mx-auto shadow-lg"
-                      whileHover={{ rotate: 360, scale: 1.1 }}
-                      transition={{ duration: 0.6 }}
-                    >
+                    <div className="bg-gradient-to-br from-cognition-500 to-cognition-600 w-16 h-16 rounded-2xl flex items-center justify-center mb-6 mx-auto shadow-lg">
                       {iconMap[i]}
-                    </motion.div>
+                    </div>
 
                     <h3 className="text-2xl font-bold text-center text-gray-900 dark:text-white mb-6 group-hover:text-cognition-600 dark:group-hover:text-cognition-400 transition-colors duration-300">
                       {card.title}
@@ -623,43 +579,22 @@ export default function HomePage() {
         </section>
       )}
 
-      {/* Enhanced Stats Section */}
+      {/* Stats Section */}
       {stats && stats.length > 0 && (
-        <section className="py-24 bg-gradient-to-br from-cognition-600 via-consciousness-600 to-care-600 text-white relative overflow-hidden">
-          {/* Background Elements */}
-          <div className="absolute inset-0 opacity-10">
-            <div className="absolute top-0 left-0 w-96 h-96 bg-white/10 rounded-full blur-3xl" />
-            <div className="absolute bottom-0 right-0 w-80 h-80 bg-white/10 rounded-full blur-3xl" />
-          </div>
-
-          <div className="container mx-auto px-4 relative z-10">
+        <section className="py-24 bg-gradient-to-br from-cognition-600 via-consciousness-600 to-care-600 text-white">
+          <div className="container mx-auto px-4">
             <motion.div
               className="grid md:grid-cols-4 gap-8 text-center"
-              variants={containerVariants}
+              variants={staggerContainer}
               initial="hidden"
               whileInView="visible"
-              viewport={{ once: true }}
+              viewport={{ once: true, margin: "-100px" }}
             >
               {stats.map((stat: any, i: number) => (
-                <motion.div
-                  key={i}
-                  variants={itemVariants}
-                  className="p-8 group"
-                  whileHover={{ scale: 1.05 }}
-                >
-                  <motion.div
-                    className="text-5xl font-bold mb-4 bg-gradient-to-r from-white to-cognition-100 bg-clip-text text-transparent"
-                    initial={{ scale: 0 }}
-                    whileInView={{ scale: 1 }}
-                    viewport={{ once: true }}
-                    transition={{
-                      delay: i * 0.1,
-                      duration: 0.5,
-                      type: "spring",
-                    }}
-                  >
+                <motion.div key={i} variants={fadeInUp} className="p-8">
+                  <div className="text-5xl font-bold mb-4 bg-gradient-to-r from-white to-cognition-100 bg-clip-text text-transparent">
                     {stat.value}
-                  </motion.div>
+                  </div>
                   <div className="text-xl text-cognition-100 dark:text-gray-300 font-medium">
                     {stat.label}
                   </div>
@@ -670,74 +605,50 @@ export default function HomePage() {
         </section>
       )}
 
-      {/* Enhanced Partners Section */}
+      {/* Partners Section */}
       {partners && (
-        <section className="py-24 bg-gradient-to-br from-gray-50 to-white dark:from-gray-800 dark:to-gray-900 relative overflow-hidden">
-          {/* Background Elements */}
-          <div className="absolute top-0 left-0 w-96 h-96 bg-cognition-100/30 dark:bg-cognition-800/20 rounded-full blur-3xl" />
-          <div className="absolute bottom-0 right-0 w-80 h-80 bg-consciousness-100/30 dark:bg-consciousness-800/20 rounded-full blur-3xl" />
-
-          <div className="container mx-auto px-4 relative z-10">
+        <section className="py-24 bg-gradient-to-br from-gray-50 to-white dark:from-gray-800 dark:to-gray-900">
+          <div className="container mx-auto px-4">
             <motion.div
               className="text-center mb-20"
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8 }}
+              variants={fadeInUp}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, margin: "-100px" }}
             >
               <h2 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-6">
                 <span className="bg-gradient-to-r from-cognition-600 to-consciousness-600 bg-clip-text text-transparent">
                   {partners.title}
                 </span>
               </h2>
-              <motion.p
-                className="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto leading-relaxed"
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: 0.2, duration: 0.6 }}
-              >
+              <p className="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto leading-relaxed">
                 {partners.subtitle}
-              </motion.p>
-              <motion.div
-                className="w-32 h-1.5 bg-gradient-to-r from-cognition-500 via-consciousness-500 to-care-500 rounded-full mx-auto mt-8"
-                initial={{ width: 0 }}
-                whileInView={{ width: "8rem" }}
-                viewport={{ once: true }}
-                transition={{ duration: 1, delay: 0.4 }}
-              />
+              </p>
+              <div className="w-32 h-1.5 bg-gradient-to-r from-cognition-500 via-consciousness-500 to-care-500 rounded-full mx-auto mt-8" />
             </motion.div>
 
             {partners.cards && partners.cards.length > 0 && (
               <motion.div
                 className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 items-center justify-center"
-                variants={containerVariants}
+                variants={staggerContainer}
                 initial="hidden"
                 whileInView="visible"
-                viewport={{ once: true }}
+                viewport={{ once: true, margin: "-100px" }}
               >
                 {partners.cards.map((partner: any, i: number) => (
                   <motion.div
                     key={i}
-                    variants={itemVariants}
-                    className="group flex items-center justify-center p-6 bg-white dark:bg-gray-800 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-500 border border-gray-100 dark:border-gray-700"
-                    whileHover={{ y: -8, scale: 1.05 }}
+                    variants={fadeInUp}
+                    className="group flex items-center justify-center p-6 bg-white dark:bg-gray-800 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 border border-gray-100 dark:border-gray-700"
                   >
-                    <div className="relative w-full h-full flex items-center justify-center p-4 rounded-xl bg-white dark:bg-white/90 shadow-sm group-hover:shadow-md transition-all duration-300">
-                      <motion.div
-                        whileHover={{ scale: 1.1 }}
-                        transition={{ duration: 0.3 }}
-                      >
-                        <Image
-                          src={partner.image}
-                          alt={partner.name}
-                          width={180}
-                          height={100}
-                          className="h-16 w-auto max-w-full object-contain"
-                          priority={i < 8}
-                        />
-                      </motion.div>
-                    </div>
+                    <Image
+                      src={partner.image}
+                      alt={partner.name}
+                      width={180}
+                      height={100}
+                      className="h-16 w-auto max-w-full object-contain group-hover:scale-110 transition-transform duration-300"
+                      priority={i < 8}
+                    />
                   </motion.div>
                 ))}
               </motion.div>
@@ -746,65 +657,39 @@ export default function HomePage() {
         </section>
       )}
 
-      {/* Enhanced News Section */}
+      {/* News Section */}
       {news && (
-        <section className="py-24 bg-gradient-to-br from-white to-gray-50 dark:from-gray-900 dark:to-gray-800 relative overflow-hidden">
-          {/* Background Pattern */}
-          <div className="absolute inset-0 opacity-5 dark:opacity-10">
-            <div
-              className="absolute inset-0"
-              style={{
-                backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23000000' fill-opacity='0.1'%3E%3Ccircle cx='30' cy='30' r='2'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
-              }}
-            />
-          </div>
-
-          <div className="container mx-auto px-4 relative z-10">
+        <section className="py-24 bg-gradient-to-br from-white to-gray-50 dark:from-gray-900 dark:to-gray-800">
+          <div className="container mx-auto px-4">
             <motion.div
               className="text-center mb-20"
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8 }}
+              variants={fadeInUp}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, margin: "-100px" }}
             >
               <h2 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-6">
                 <span className="bg-gradient-to-r from-cognition-600 to-consciousness-600 bg-clip-text text-transparent">
                   {news.title}
                 </span>
               </h2>
-              <motion.div
-                className="w-32 h-1.5 bg-gradient-to-r from-cognition-500 via-consciousness-500 to-care-500 rounded-full mx-auto"
-                initial={{ width: 0 }}
-                whileInView={{ width: "8rem" }}
-                viewport={{ once: true }}
-                transition={{ duration: 1, delay: 0.3 }}
-              />
+              <div className="w-32 h-1.5 bg-gradient-to-r from-cognition-500 via-consciousness-500 to-care-500 rounded-full mx-auto" />
             </motion.div>
 
             <motion.div
               className="max-w-4xl mx-auto"
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.2, duration: 0.8 }}
+              variants={fadeInUp}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, margin: "-100px" }}
             >
               <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl overflow-hidden border border-gray-100 dark:border-gray-700">
                 <div className="p-8 md:p-12">
-                  <motion.h3
-                    className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white mb-6 leading-tight"
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ delay: 0.3, duration: 0.6 }}
-                  >
+                  <h3 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white mb-6 leading-tight">
                     {news.headline}
-                  </motion.h3>
-                  <motion.div
+                  </h3>
+                  <div
                     className="text-lg text-gray-600 dark:text-gray-300 mb-8 leading-relaxed"
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ delay: 0.4, duration: 0.6 }}
                     dangerouslySetInnerHTML={
                       news.description
                         ? { __html: news.description }
@@ -812,22 +697,15 @@ export default function HomePage() {
                     }
                   />
                   {news.link && (
-                    <motion.div
-                      initial={{ opacity: 0, y: 20 }}
-                      whileInView={{ opacity: 1, y: 0 }}
-                      viewport={{ once: true }}
-                      transition={{ delay: 0.5, duration: 0.6 }}
+                    <a
+                      href={news.link}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="group inline-flex items-center text-cognition-600 dark:text-cognition-400 hover:text-cognition-700 dark:hover:text-cognition-300 font-semibold transition-colors duration-300"
                     >
-                      <a
-                        href={news.link}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="group inline-flex items-center text-cognition-600 dark:text-cognition-400 hover:text-cognition-700 dark:hover:text-cognition-300 font-semibold transition-colors duration-300"
-                      >
-                        {news.linkText || "Read the full article"}
-                        <FaArrowRight className="ml-2 group-hover:translate-x-1 transition-transform duration-300" />
-                      </a>
-                    </motion.div>
+                      {news.linkText || "Read the full article"}
+                      <FaArrowRight className="ml-2 group-hover:translate-x-1 transition-transform duration-300" />
+                    </a>
                   )}
                 </div>
               </div>
@@ -836,60 +714,40 @@ export default function HomePage() {
         </section>
       )}
 
-      {/* Enhanced Social Media Section */}
+      {/* Social Media Section */}
       {social && (
-        <section className="py-24 bg-gradient-to-br from-gray-50 to-white dark:from-gray-800 dark:to-gray-900 relative overflow-hidden">
-          {/* Background Elements */}
-          <div className="absolute top-0 right-0 w-96 h-96 bg-cognition-100/30 dark:bg-cognition-800/20 rounded-full blur-3xl" />
-          <div className="absolute bottom-0 left-0 w-80 h-80 bg-consciousness-100/30 dark:bg-consciousness-800/20 rounded-full blur-3xl" />
-
-          <div className="container mx-auto px-4 relative z-10">
+        <section className="py-24 bg-gradient-to-br from-gray-50 to-white dark:from-gray-800 dark:to-gray-900">
+          <div className="container mx-auto px-4">
             <motion.div
               className="text-center mb-20"
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8 }}
+              variants={fadeInUp}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, margin: "-100px" }}
             >
               <h2 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-6">
                 <span className="bg-gradient-to-r from-cognition-600 to-consciousness-600 bg-clip-text text-transparent">
                   {social.title}
                 </span>
               </h2>
-              <motion.div
-                className="w-32 h-1.5 bg-gradient-to-r from-cognition-500 via-consciousness-500 to-care-500 rounded-full mx-auto"
-                initial={{ width: 0 }}
-                whileInView={{ width: "8rem" }}
-                viewport={{ once: true }}
-                transition={{ duration: 1, delay: 0.3 }}
-              />
+              <div className="w-32 h-1.5 bg-gradient-to-r from-cognition-500 via-consciousness-500 to-care-500 rounded-full mx-auto" />
             </motion.div>
 
             <motion.div
               className="max-w-4xl mx-auto"
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.2, duration: 0.8 }}
+              variants={fadeInUp}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, margin: "-100px" }}
             >
               <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl overflow-hidden border border-gray-100 dark:border-gray-700">
                 <div className="p-8 md:p-12 text-center">
-                  <motion.div
-                    className="mb-8"
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ delay: 0.3, duration: 0.6 }}
-                  >
+                  <div className="mb-8">
                     <h3 className="text-3xl font-bold text-gray-900 dark:text-white mb-6">
                       {social.platformTitle}
                     </h3>
-                    <motion.div
+                    <div
                       className="text-lg text-gray-600 dark:text-gray-300 mb-8 leading-relaxed"
-                      initial={{ opacity: 0, y: 20 }}
-                      whileInView={{ opacity: 1, y: 0 }}
-                      viewport={{ once: true }}
-                      transition={{ delay: 0.4, duration: 0.6 }}
                       dangerouslySetInnerHTML={
                         social.description
                           ? { __html: social.description }
@@ -897,32 +755,23 @@ export default function HomePage() {
                       }
                     />
                     {social.link && (
-                      <motion.div
-                        initial={{ opacity: 0, y: 20 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        transition={{ delay: 0.5, duration: 0.6 }}
+                      <a
+                        href={social.link}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="group inline-flex items-center justify-center gap-3 px-8 py-4 rounded-xl bg-gradient-to-r from-cognition-600 to-cognition-700 hover:from-cognition-700 hover:to-cognition-800 text-white font-semibold transition-all duration-300 shadow-lg hover:shadow-xl"
                       >
-                        <motion.a
-                          href={social.link}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="group inline-flex items-center justify-center gap-3 px-8 py-4 rounded-xl bg-gradient-to-r from-cognition-600 to-cognition-700 hover:from-cognition-700 hover:to-cognition-800 text-white font-semibold transition-all duration-300 shadow-lg hover:shadow-xl"
-                          whileHover={{ scale: 1.05 }}
-                          whileTap={{ scale: 0.95 }}
+                        <svg
+                          className="w-6 h-6 group-hover:scale-110 transition-transform duration-300"
+                          fill="currentColor"
+                          viewBox="0 0 24 24"
                         >
-                          <svg
-                            className="w-6 h-6 group-hover:scale-110 transition-transform duration-300"
-                            fill="currentColor"
-                            viewBox="0 0 24 24"
-                          >
-                            <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
-                          </svg>
-                          {social.buttonText || "@Mission_FourC"}
-                        </motion.a>
-                      </motion.div>
+                          <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+                        </svg>
+                        {social.buttonText || "@Mission_FourC"}
+                      </a>
                     )}
-                  </motion.div>
+                  </div>
                 </div>
               </div>
             </motion.div>
@@ -930,77 +779,45 @@ export default function HomePage() {
         </section>
       )}
 
-      {/* Enhanced Call to Action */}
+      {/* Call to Action */}
       {cta && (
-        <section className="py-24 bg-gradient-to-br from-cognition-700 via-consciousness-700 to-care-700 text-white relative overflow-hidden">
-          {/* Background Elements */}
-          <div className="absolute inset-0 opacity-10">
-            <div className="absolute top-0 left-0 w-96 h-96 bg-white/10 rounded-full blur-3xl" />
-            <div className="absolute bottom-0 right-0 w-80 h-80 bg-white/10 rounded-full blur-3xl" />
-          </div>
-
-          <div className="container mx-auto px-4 text-center relative z-10">
+        <section className="py-24 bg-gradient-to-br from-cognition-700 via-consciousness-700 to-care-700 text-white">
+          <div className="container mx-auto px-4 text-center">
             <motion.div
               className="max-w-4xl mx-auto"
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8 }}
+              variants={fadeInUp}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, margin: "-100px" }}
             >
-              <motion.h2
-                className="text-4xl md:text-5xl font-bold mb-8 leading-tight"
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: 0.2, duration: 0.6 }}
-              >
+              <h2 className="text-4xl md:text-5xl font-bold mb-8 leading-tight">
                 {cta.title}
-              </motion.h2>
-              <motion.div
+              </h2>
+              <div
                 className="text-xl text-cognition-100 dark:text-gray-300 mb-12 leading-relaxed"
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: 0.3, duration: 0.6 }}
                 dangerouslySetInnerHTML={
                   cta.description ? { __html: cta.description } : undefined
                 }
               />
-              <motion.div
-                className="flex flex-col sm:flex-row gap-6 justify-center"
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: 0.4, duration: 0.6 }}
-              >
+              <div className="flex flex-col sm:flex-row gap-6 justify-center">
                 {cta.primaryText && cta.primaryLink && (
-                  <motion.div
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
+                  <Link
+                    href={cta.primaryLink}
+                    className="group inline-flex items-center justify-center px-8 py-4 border border-transparent text-lg font-semibold rounded-xl shadow-lg text-cognition-900 dark:text-white bg-white dark:bg-gray-900 hover:bg-gray-50 dark:hover:bg-gray-800 transition-all duration-300"
                   >
-                    <Link
-                      href={cta.primaryLink}
-                      className="group inline-flex items-center justify-center px-8 py-4 border border-transparent text-lg font-semibold rounded-xl shadow-lg text-cognition-900 dark:text-white bg-white dark:bg-gray-900 hover:bg-gray-50 dark:hover:bg-gray-800 transition-all duration-300"
-                    >
-                      {cta.primaryText}
-                      <FaArrowRight className="ml-2 group-hover:translate-x-1 transition-transform duration-300" />
-                    </Link>
-                  </motion.div>
+                    {cta.primaryText}
+                    <FaArrowRight className="ml-2 group-hover:translate-x-1 transition-transform duration-300" />
+                  </Link>
                 )}
                 {cta.secondaryText && cta.secondaryLink && (
-                  <motion.div
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
+                  <Link
+                    href={cta.secondaryLink}
+                    className="group inline-flex items-center justify-center px-8 py-4 border-2 border-white dark:border-gray-700 text-lg font-semibold rounded-xl text-white dark:text-gray-200 hover:bg-white/10 dark:hover:bg-gray-900/50 transition-all duration-300"
                   >
-                    <Link
-                      href={cta.secondaryLink}
-                      className="group inline-flex items-center justify-center px-8 py-4 border-2 border-white dark:border-gray-700 text-lg font-semibold rounded-xl text-white dark:text-gray-200 hover:bg-white/10 dark:hover:bg-gray-900/50 transition-all duration-300 backdrop-blur-sm"
-                    >
-                      {cta.secondaryText}
-                    </Link>
-                  </motion.div>
+                    {cta.secondaryText}
+                  </Link>
                 )}
-              </motion.div>
+              </div>
             </motion.div>
           </div>
         </section>

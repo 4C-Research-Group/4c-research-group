@@ -81,78 +81,78 @@ export default function TeamPage() {
 
       {/* Principal Investigator */}
       {principalInvestigator && (
-        <section className="py-16 px-4">
-          <div className="container mx-auto max-w-5xl">
-            <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg overflow-hidden">
-              <div className="md:flex">
-                <div className="md:w-1/3 bg-cognition-600 p-8 flex flex-col items-center">
-                  <div className="relative w-48 h-48 rounded-full overflow-hidden border-4 border-white dark:border-gray-200 shadow-lg mb-6">
-                    <Image
+      <section className="py-16 px-4">
+        <div className="container mx-auto max-w-5xl">
+          <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg overflow-hidden">
+            <div className="md:flex">
+              <div className="md:w-1/3 bg-cognition-600 p-8 flex flex-col items-center">
+                <div className="relative w-48 h-48 rounded-full overflow-hidden border-4 border-white dark:border-gray-200 shadow-lg mb-6">
+                  <Image
                       src={
                         principalInvestigator.image_url ||
                         "/team/placeholder.jpg"
                       }
-                      alt={principalInvestigator.name}
-                      fill
-                      className="object-cover"
-                      sizes="(max-width: 768px) 100vw, 33vw"
-                      priority
-                    />
-                  </div>
-                  <h2 className="text-2xl font-bold text-white text-center">
-                    {principalInvestigator.name}
-                  </h2>
-                  <p className="text-cognition-100 text-center mb-6">
-                    {principalInvestigator.role}
-                  </p>
-                  <div className="flex space-x-4">
+                    alt={principalInvestigator.name}
+                    fill
+                    className="object-cover"
+                    sizes="(max-width: 768px) 100vw, 33vw"
+                    priority
+                  />
+                </div>
+                <h2 className="text-2xl font-bold text-white text-center">
+                  {principalInvestigator.name}
+                </h2>
+                <p className="text-cognition-100 text-center mb-6">
+                  {principalInvestigator.role}
+                </p>
+                <div className="flex space-x-4">
                     {principalInvestigator.email && (
-                      <a
+                  <a
                         href={`mailto:${principalInvestigator.email}`}
-                        className="text-white hover:text-cognition-200"
-                        aria-label="Email"
-                      >
-                        <FaEnvelope className="w-5 h-5" />
-                      </a>
+                    className="text-white hover:text-cognition-200"
+                    aria-label="Email"
+                  >
+                    <FaEnvelope className="w-5 h-5" />
+                  </a>
                     )}
                     {principalInvestigator.linkedin_url && (
-                      <a
+                  <a
                         href={principalInvestigator.linkedin_url}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="text-white hover:text-cognition-200"
-                        aria-label="LinkedIn"
-                      >
-                        <FaLinkedin className="w-5 h-5" />
-                      </a>
+                    className="text-white hover:text-cognition-200"
+                    aria-label="LinkedIn"
+                  >
+                    <FaLinkedin className="w-5 h-5" />
+                  </a>
                     )}
                   </div>
-                </div>
+              </div>
 
-                <div className="md:w-2/3 p-8">
-                  <div className="prose dark:prose-invert max-w-none">
-                    <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
+              <div className="md:w-2/3 p-8">
+                <div className="prose dark:prose-invert max-w-none">
+                  <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
                       About {principalInvestigator.name.split(" ").slice(-1)[0]}
-                    </h3>
+                  </h3>
                     {principalInvestigator.bio && (
-                      <p className="text-gray-700 dark:text-gray-300">
-                        {principalInvestigator.bio}
-                      </p>
+                  <p className="text-gray-700 dark:text-gray-300">
+                    {principalInvestigator.bio}
+                  </p>
                     )}
-                  </div>
-                  <div className="mt-6">
-                    <a
-                      href="/about-pi"
-                      className="text-cognition-600 dark:text-cognition-400"
-                    >
-                      View full profile
-                    </a>
-                  </div>
+                </div>
+                <div className="mt-6">
+                  <a
+                    href="/about-pi"
+                    className="text-cognition-600 dark:text-cognition-400"
+                  >
+                    View full profile
+                  </a>
                 </div>
               </div>
             </div>
           </div>
-        </section>
+        </div>
+      </section>
       )}
 
       {/* Team Members */}
