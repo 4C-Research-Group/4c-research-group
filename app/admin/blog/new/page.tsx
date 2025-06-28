@@ -19,6 +19,7 @@ export default function NewBlogPost() {
   const [excerpt, setExcerpt] = useState("");
   const [content, setContent] = useState("");
   const [category, setCategory] = useState("");
+  const [tags, setTags] = useState("");
   const [imageUrl, setImageUrl] = useState("");
   const [readTime, setReadTime] = useState("");
   const [isSlugManuallyEdited, setIsSlugManuallyEdited] = useState(false);
@@ -105,6 +106,7 @@ export default function NewBlogPost() {
         excerpt,
         content: content.substring(0, 100) + "...", // Log first 100 chars
         category,
+        tags,
         imageUrl,
         readTime,
       });
@@ -115,6 +117,7 @@ export default function NewBlogPost() {
       formData.set("excerpt", excerpt);
       formData.set("content", content);
       formData.set("category", category || "General");
+      formData.set("tags", tags);
       formData.set(
         "image_url",
         imageUrl || "https://via.placeholder.com/800x400?text=Blog+Post"
@@ -332,6 +335,27 @@ export default function NewBlogPost() {
             onChange={(e) => setCategory(e.target.value)}
             className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
           />
+        </div>
+        <div>
+          <label
+            htmlFor="tags"
+            className="block text-sm font-medium text-gray-700 dark:text-gray-300"
+          >
+            Tags (optional)
+          </label>
+          <input
+            type="text"
+            name="tags"
+            id="tags"
+            value={tags}
+            onChange={(e) => setTags(e.target.value)}
+            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+            placeholder="neuroscience, research, brain, cognition (comma-separated)"
+          />
+          <p className="mt-1 text-sm text-gray-500">
+            Enter tags separated by commas (e.g., neuroscience, research, brain,
+            cognition)
+          </p>
         </div>
         <div>
           <label

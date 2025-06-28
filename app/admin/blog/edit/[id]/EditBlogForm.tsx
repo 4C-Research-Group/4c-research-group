@@ -180,7 +180,12 @@ export default function EditBlogForm({ post }: { post: BlogPost }) {
             id="tags"
             defaultValue={post.tags?.join(", ")}
             className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+            placeholder="neuroscience, research, brain, cognition (comma-separated)"
           />
+          <p className="mt-1 text-sm text-gray-500">
+            Enter tags separated by commas (e.g., neuroscience, research, brain,
+            cognition)
+          </p>
         </div>
 
         <div className="flex items-center">
