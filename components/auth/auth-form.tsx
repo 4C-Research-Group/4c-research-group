@@ -21,6 +21,7 @@ import { Alert, AlertDescription } from "../ui/alert";
 interface LoginFormData {
   email: string;
   password: string;
+  confirmPassword?: string;
 }
 
 interface AuthFormProps {
@@ -31,6 +32,7 @@ export default function AuthForm({ initialMode = "login" }: AuthFormProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [isLogin, setIsLogin] = useState(initialMode === "login");
   const [isCheckingSession, setIsCheckingSession] = useState(true);
   const router = useRouter();
@@ -41,7 +43,10 @@ export default function AuthForm({ initialMode = "login" }: AuthFormProps) {
     handleSubmit,
     formState: { errors },
     reset,
+    watch,
   } = useForm<LoginFormData>();
+
+  const password = watch("password");
 
   // Check current session on component mount
   useEffect(() => {
@@ -119,6 +124,12 @@ export default function AuthForm({ initialMode = "login" }: AuthFormProps) {
   const onSubmit = async (data: LoginFormData) => {
     // Prevent submission if already checking session
     if (isCheckingSession) {
+      return;
+    }
+
+    // Frontend validation for confirm password
+    if (!isLogin && data.password !== data.confirmPassword) {
+      setError("Passwords do not match");
       return;
     }
 
@@ -213,8 +224,9 @@ export default function AuthForm({ initialMode = "login" }: AuthFormProps) {
           }
         }
 
-        setError("Check your email for a confirmation link!");
-        reset();
+        // Redirect to home page after successful signup
+        console.log("🔄 Redirecting to home page after signup");
+        window.location.href = "/";
       }
     } catch (err) {
       setError("An unexpected error occurred");
@@ -315,6 +327,44 @@ export default function AuthForm({ initialMode = "login" }: AuthFormProps) {
                 </p>
               )}
             </div>
+
+            {!isLogin && (
+              <div className="space-y-2">
+                <Label htmlFor="confirmPassword">Confirm Password</Label>
+                <div className="relative">
+                  <Lock className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
+                  <Input
+                    id="confirmPassword"
+                    type={showConfirmPassword ? "text" : "password"}
+                    placeholder="Confirm your password"
+                    className="pl-10 pr-10"
+                    disabled={isLoading}
+                    {...register("confirmPassword", {
+                      required: "Please confirm your password",
+                      validate: (value) =>
+                        value === password || "Passwords do not match",
+                    })}
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                    className="absolute right-3 top-3 text-gray-400 hover:text-gray-600"
+                    disabled={isLoading}
+                  >
+                    {showConfirmPassword ? (
+                      <EyeOff className="h-4 w-4" />
+                    ) : (
+                      <Eye className="h-4 w-4" />
+                    )}
+                  </button>
+                </div>
+                {errors.confirmPassword && (
+                  <p className="text-sm text-red-500">
+                    {errors.confirmPassword.message}
+                  </p>
+                )}
+              </div>
+            )}
 
             {error && (
               <Alert
