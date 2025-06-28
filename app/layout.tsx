@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
@@ -11,10 +11,8 @@ const inter = Inter({ subsets: ["latin"] });
 export const metadata: Metadata = {
   title: "4C Research Group",
   description:
-    "4C Research Group - Cognition, Consciousness, and Critical Care Research",
+    "4C Research Group - Cognition, Consciousness, Critical Care and Comfort Research",
   manifest: "/manifest.json",
-  viewport: "width=device-width, initial-scale=1",
-  themeColor: "#1e40af",
   appleWebApp: {
     capable: true,
     statusBarStyle: "default",
@@ -46,6 +44,12 @@ export const metadata: Metadata = {
     ],
     shortcut: "/favicon.ico",
   },
+};
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  themeColor: "#1e40af",
 };
 
 export default function RootLayout({
