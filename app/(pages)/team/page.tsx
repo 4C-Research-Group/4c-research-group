@@ -63,96 +63,105 @@ export default function TeamPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+    <div className="min-h-screen bg-background">
       {/* Hero Section */}
-      <section className="bg-cognition-700 text-white py-16">
-        <div className="container mx-auto px-4">
+      <section className="relative min-h-[60vh] flex items-center justify-center overflow-hidden bg-gradient-to-br from-cognition-50 via-white to-consciousness-50 dark:from-cognition-900 dark:via-gray-900 dark:to-consciousness-900">
+        {/* Background Bubbles */}
+        <div className="absolute inset-0 pointer-events-none">
+          <div className="absolute top-20 left-10 w-72 h-72 bg-cognition-200/20 dark:bg-cognition-700/10 rounded-full animate-pulse-slow" />
+          <div className="absolute top-40 right-20 w-96 h-96 bg-consciousness-200/20 dark:bg-consciousness-700/10 rounded-full animate-pulse-slow" />
+          <div className="absolute bottom-20 left-1/4 w-80 h-80 bg-care-200/20 dark:bg-care-700/10 rounded-full animate-pulse-slow" />
+        </div>
+        <div className="container mx-auto px-4 py-20 md:py-24 relative z-10">
           <div className="max-w-4xl mx-auto text-center">
-            <h1 className="text-4xl md:text-5xl font-bold mb-4">
-              Meet Our Team
+            <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold text-cognition-900 dark:text-white mb-6 leading-tight">
+              <span className="bg-gradient-to-r from-cognition-600 via-consciousness-600 to-care-600 bg-clip-text text-transparent">
+                Meet Our Team
+              </span>
             </h1>
-            <p className="text-xl text-cognition-100">
+            <p className="text-xl md:text-2xl text-gray-700 dark:text-gray-300 leading-relaxed">
               Dedicated researchers and healthcare professionals working
               together to advance pediatric critical care
             </p>
           </div>
         </div>
+        <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-white to-transparent dark:from-gray-900 dark:to-transparent"></div>
       </section>
 
       {/* Principal Investigator */}
       {principalInvestigator && (
-      <section className="py-16 px-4">
-        <div className="container mx-auto max-w-5xl">
-          <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg overflow-hidden">
-            <div className="md:flex">
-              <div className="md:w-1/3 bg-cognition-600 p-8 flex flex-col items-center">
-                <div className="relative w-48 h-48 rounded-full overflow-hidden border-4 border-white dark:border-gray-200 shadow-lg mb-6">
-                  <Image
+        <section className="py-16 px-4">
+          <div className="container mx-auto max-w-5xl">
+            <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg overflow-hidden">
+              <div className="md:flex">
+                <div className="md:w-1/3 bg-cognition-600 p-8 flex flex-col items-center">
+                  <div className="relative w-48 h-48 rounded-full overflow-hidden border-4 border-white dark:border-gray-200 shadow-lg mb-6">
+                    <Image
                       src={
                         principalInvestigator.image_url ||
                         "/team/placeholder.jpg"
                       }
-                    alt={principalInvestigator.name}
-                    fill
-                    className="object-cover"
-                    sizes="(max-width: 768px) 100vw, 33vw"
-                    priority
-                  />
-                </div>
-                <h2 className="text-2xl font-bold text-white text-center">
-                  {principalInvestigator.name}
-                </h2>
-                <p className="text-cognition-100 text-center mb-6">
-                  {principalInvestigator.role}
-                </p>
-                <div className="flex space-x-4">
+                      alt={principalInvestigator.name}
+                      fill
+                      className="object-cover"
+                      sizes="(max-width: 768px) 100vw, 33vw"
+                      priority
+                    />
+                  </div>
+                  <h2 className="text-2xl font-bold text-white text-center">
+                    {principalInvestigator.name}
+                  </h2>
+                  <p className="text-cognition-100 text-center mb-6">
+                    {principalInvestigator.role}
+                  </p>
+                  <div className="flex space-x-4">
                     {principalInvestigator.email && (
-                  <a
+                      <a
                         href={`mailto:${principalInvestigator.email}`}
-                    className="text-white hover:text-cognition-200"
-                    aria-label="Email"
-                  >
-                    <FaEnvelope className="w-5 h-5" />
-                  </a>
+                        className="text-white hover:text-cognition-200"
+                        aria-label="Email"
+                      >
+                        <FaEnvelope className="w-5 h-5" />
+                      </a>
                     )}
                     {principalInvestigator.linkedin_url && (
-                  <a
+                      <a
                         href={principalInvestigator.linkedin_url}
                         target="_blank"
                         rel="noopener noreferrer"
-                    className="text-white hover:text-cognition-200"
-                    aria-label="LinkedIn"
-                  >
-                    <FaLinkedin className="w-5 h-5" />
-                  </a>
+                        className="text-white hover:text-cognition-200"
+                        aria-label="LinkedIn"
+                      >
+                        <FaLinkedin className="w-5 h-5" />
+                      </a>
                     )}
                   </div>
-              </div>
-
-              <div className="md:w-2/3 p-8">
-                <div className="prose dark:prose-invert max-w-none">
-                  <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
-                      About {principalInvestigator.name.split(" ").slice(-1)[0]}
-                  </h3>
-                    {principalInvestigator.bio && (
-                  <p className="text-gray-700 dark:text-gray-300">
-                    {principalInvestigator.bio}
-                  </p>
-                    )}
                 </div>
-                <div className="mt-6">
-                  <a
-                    href="/about-pi"
-                    className="text-cognition-600 dark:text-cognition-400"
-                  >
-                    View full profile
-                  </a>
+
+                <div className="md:w-2/3 p-8">
+                  <div className="prose dark:prose-invert max-w-none">
+                    <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
+                      About {principalInvestigator.name.split(" ").slice(-1)[0]}
+                    </h3>
+                    {principalInvestigator.bio && (
+                      <p className="text-gray-700 dark:text-gray-300">
+                        {principalInvestigator.bio}
+                      </p>
+                    )}
+                  </div>
+                  <div className="mt-6">
+                    <a
+                      href="/about-pi"
+                      className="text-cognition-600 dark:text-cognition-400"
+                    >
+                      View full profile
+                    </a>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
-      </section>
+        </section>
       )}
 
       {/* Team Members */}

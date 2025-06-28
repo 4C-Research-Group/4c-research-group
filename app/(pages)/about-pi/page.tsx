@@ -14,13 +14,16 @@ import { AiFillGoogleCircle } from "react-icons/ai";
 
 export default function AboutPIPage() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800">
+    <div className="min-h-screen bg-background">
       {/* Hero Section */}
-      <section className="relative overflow-hidden bg-gradient-to-r from-cognition-600 to-cognition-800 text-white pt-24 pb-16 md:pt-32 md:pb-24">
-        <div className="absolute inset-0 opacity-20">
-          <div className="absolute inset-0 bg-[url('/grid.svg')] bg-center [mask-image:linear-gradient(180deg,white,rgba(255,255,255,0))]"></div>
+      <section className="relative min-h-[60vh] flex items-center justify-center overflow-hidden bg-gradient-to-br from-cognition-50 via-white to-consciousness-50 dark:from-cognition-900 dark:via-gray-900 dark:to-consciousness-900">
+        {/* Background Bubbles */}
+        <div className="absolute inset-0 pointer-events-none">
+          <div className="absolute top-20 left-10 w-72 h-72 bg-cognition-200/20 dark:bg-cognition-700/10 rounded-full animate-pulse-slow" />
+          <div className="absolute top-40 right-20 w-96 h-96 bg-consciousness-200/20 dark:bg-consciousness-700/10 rounded-full animate-pulse-slow" />
+          <div className="absolute bottom-20 left-1/4 w-80 h-80 bg-care-200/20 dark:bg-care-700/10 rounded-full animate-pulse-slow" />
         </div>
-        <div className="container relative mx-auto px-4">
+        <div className="container relative mx-auto px-4 py-20 md:py-24 relative z-10">
           <div className="flex flex-col items-center text-center">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -42,32 +45,35 @@ export default function AboutPIPage() {
               transition={{ duration: 0.6, delay: 0.1 }}
               className="max-w-3xl"
             >
-              <h1 className="text-4xl md:text-5xl font-bold mb-3 bg-clip-text text-transparent bg-gradient-to-r from-white to-cognition-100">
-                Dr. Rishi Ganesan
+              <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold mb-6 leading-tight">
+                <span className="bg-gradient-to-r from-cognition-600 via-consciousness-600 to-care-600 bg-clip-text text-transparent">
+                  Dr. Rishi Ganesan
+                </span>
               </h1>
-              <p className="text-xl md:text-2xl text-cognition-100 mb-6">
+              <p className="text-xl md:text-2xl text-gray-700 dark:text-gray-300 mb-6 leading-relaxed">
                 Physician-Scientist | Pediatric Critical Care | Neurocritical
                 Care
               </p>
               <div className="flex justify-center space-x-4">
                 <a
                   href="#"
-                  className="p-2 rounded-full bg-white/10 hover:bg-white/20 transition-colors"
+                  className="p-2 rounded-full bg-cognition-100/80 dark:bg-cognition-800/50 hover:bg-cognition-200/80 dark:hover:bg-cognition-700/50 transition-colors"
                   aria-label="LinkedIn Profile"
                 >
-                  <FaLinkedin className="w-5 h-5" />
+                  <FaLinkedin className="w-5 h-5 text-cognition-600 dark:text-cognition-400" />
                 </a>
                 <a
                   href="#"
-                  className="p-2 rounded-full bg-white/10 hover:bg-white/20 transition-colors"
+                  className="p-2 rounded-full bg-cognition-100/80 dark:bg-cognition-800/50 hover:bg-cognition-200/80 dark:hover:bg-cognition-700/50 transition-colors"
                   aria-label="Google Scholar Profile"
                 >
-                  <AiFillGoogleCircle className="w-5 h-5" />
+                  <AiFillGoogleCircle className="w-5 h-5 text-cognition-600 dark:text-cognition-400" />
                 </a>
               </div>
             </motion.div>
           </div>
         </div>
+        <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-white to-transparent dark:from-gray-900 dark:to-transparent"></div>
       </section>
 
       {/* Main Content */}
