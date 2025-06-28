@@ -183,7 +183,7 @@ export default function AdminProjects() {
                   </div>
                 </CardContent>
 
-                <CardFooter className="pt-3 gap-2">
+                <CardFooter className="pt-3 gap-2 flex-col sm:flex-row">
                   <Link
                     href={`/research/${project.slug}`}
                     className="flex-1"
@@ -194,17 +194,15 @@ export default function AdminProjects() {
                       View
                     </Button>
                   </Link>
-
                   <Link
-                    href={`/admin/projects/edit/${project.id}`}
+                    href={`/admin/research/edit/${project.slug}`}
                     className="flex-1"
                   >
-                    <Button variant="outline" className="w-full">
+                    <Button variant="secondary" className="w-full">
                       <Edit className="h-4 w-4 mr-2" />
-                      Edit
+                      Edit Page
                     </Button>
                   </Link>
-
                   <AlertDialog>
                     <AlertDialogTrigger asChild>
                       <Button
