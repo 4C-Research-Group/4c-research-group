@@ -1,6 +1,19 @@
 import { notFound } from "next/navigation";
 import Image from "next/image";
-import { projects } from "../projectsData";
+import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
+import { cookies } from "next/headers";
+
+// Helper to fetch project by slug from Supabase
+async function getProjectBySlug(slug: string) {
+  const supabase = createServerComponentClient({ cookies });
+  const { data, error } = await supabase
+    .from("projects")
+    .select("*")
+    .eq("slug", slug)
+    .single();
+  if (error || !data) return null;
+  return data;
+}
 
 type Props = {
   params: {
@@ -8,12 +21,18 @@ type Props = {
   };
 };
 
-export default function ProjectDetail({ params }: Props) {
-  const project = projects.find((p) => p.id === params.slug);
+export default async function ProjectDetail({ params }: Props) {
+  const project = await getProjectBySlug(params.slug);
 
   if (!project) {
     notFound();
   }
+
+  // Parse JSON fields
+  const images = project.images || [];
+  const tags = project.tags || [];
+  const objectives = project.objectives || [];
+  const teamMembers = project.team_members || [];
 
   return (
     <div className="min-h-screen bg-white dark:bg-gray-900">
@@ -48,7 +67,7 @@ export default function ProjectDetail({ params }: Props) {
             <div className="prose dark:prose-invert max-w-none">
               <h2 className="text-3xl font-bold mb-6">About the Project</h2>
               <p className="text-lg text-gray-600 dark:text-gray-300 mb-6">
-                {project.longDescription ||
+                {project.long_description ||
                   "Detailed project description coming soon..."}
               </p>
 
@@ -56,16 +75,18 @@ export default function ProjectDetail({ params }: Props) {
                 Research Objectives
               </h3>
               <ul className="space-y-3 mb-8">
-                {project.objectives?.map((obj, index) => (
-                  <li key={index} className="flex items-start">
-                    <span className="text-cognition-600 dark:text-cognition-400 mr-2">
-                      •
-                    </span>
-                    <span className="text-gray-700 dark:text-gray-300">
-                      {obj}
-                    </span>
-                  </li>
-                )) || (
+                {objectives.length > 0 ? (
+                  objectives.map((obj: string, index: number) => (
+                    <li key={index} className="flex items-start">
+                      <span className="text-cognition-600 dark:text-cognition-400 mr-2">
+                        •
+                      </span>
+                      <span className="text-gray-700 dark:text-gray-300">
+                        {obj}
+                      </span>
+                    </li>
+                  ))
+                ) : (
                   <li className="text-gray-500 dark:text-gray-400">
                     No objectives listed
                   </li>
@@ -76,24 +97,26 @@ export default function ProjectDetail({ params }: Props) {
                 Team Members
               </h3>
               <div className="flex flex-wrap gap-4">
-                {project.teamMembers?.map((member) => (
-                  <div key={member.name} className="flex items-center">
-                    <div className="w-10 h-10 rounded-full bg-gray-200 dark:bg-gray-700 flex items-center justify-center text-gray-500 dark:text-gray-300 font-medium">
-                      {member.name
-                        .split(" ")
-                        .map((n) => n[0])
-                        .join("")}
+                {teamMembers.length > 0 ? (
+                  teamMembers.map((member: any) => (
+                    <div key={member.name} className="flex items-center">
+                      <div className="w-10 h-10 rounded-full bg-gray-200 dark:bg-gray-700 flex items-center justify-center text-gray-500 dark:text-gray-300 font-medium">
+                        {member.name
+                          .split(" ")
+                          .map((n: string) => n[0])
+                          .join("")}
+                      </div>
+                      <div className="ml-3">
+                        <p className="text-sm font-medium text-gray-900 dark:text-white">
+                          {member.name}
+                        </p>
+                        <p className="text-xs text-gray-500 dark:text-gray-400">
+                          {member.role}
+                        </p>
+                      </div>
                     </div>
-                    <div className="ml-3">
-                      <p className="text-sm font-medium text-gray-900 dark:text-white">
-                        {member.name}
-                      </p>
-                      <p className="text-xs text-gray-500 dark:text-gray-400">
-                        {member.role}
-                      </p>
-                    </div>
-                  </div>
-                )) || (
+                  ))
+                ) : (
                   <p className="text-gray-500 dark:text-gray-400">
                     No team members listed
                   </p>
@@ -105,7 +128,7 @@ export default function ProjectDetail({ params }: Props) {
             <div className="space-y-6">
               <div className="relative rounded-xl overflow-hidden aspect-video bg-gray-100 dark:bg-gray-800">
                 <Image
-                  src={project.images?.[0] || "/images/placeholder.jpg"}
+                  src={images[0] || "/images/placeholder.jpg"}
                   alt={`${project.title} - Main`}
                   fill
                   className="object-cover"
@@ -115,7 +138,7 @@ export default function ProjectDetail({ params }: Props) {
               <div className="grid grid-cols-2 gap-4">
                 <div className="relative rounded-xl overflow-hidden aspect-square bg-gray-100 dark:bg-gray-800">
                   <Image
-                    src={project.images?.[1] || "/images/placeholder.jpg"}
+                    src={images[1] || "/images/placeholder.jpg"}
                     alt={`${project.title} - Secondary`}
                     fill
                     className="object-cover"
@@ -123,7 +146,7 @@ export default function ProjectDetail({ params }: Props) {
                 </div>
                 <div className="relative rounded-xl overflow-hidden aspect-square bg-gray-100 dark:bg-gray-800">
                   <Image
-                    src={project.images?.[2] || "/images/placeholder.jpg"}
+                    src={images[2] || "/images/placeholder.jpg"}
                     alt={`${project.title} - Secondary`}
                     fill
                     className="object-cover"
@@ -187,25 +210,21 @@ export default function ProjectDetail({ params }: Props) {
 }
 
 export async function generateStaticParams() {
-  return projects.map((project) => ({
-    slug: project.id,
-  }));
+  const supabase = createServerComponentClient({ cookies });
+  const { data, error } = await supabase.from("projects").select("slug");
+  if (error || !data) return [];
+  return data.map((project: any) => ({ slug: project.slug }));
 }
 
 export async function generateMetadata({ params }: Props) {
-  const project = projects.find((p) => p.id === params.slug);
-
+  const project = await getProjectBySlug(params.slug);
   if (!project) {
     return {
       title: "Project Not Found",
     };
   }
-
   return {
-    title: `${project.title} | 4C Research Lab`,
+    title: project.title,
     description: project.description,
-    openGraph: {
-      images: [project.images?.[0] || "/images/og-default.jpg"],
-    },
   };
 }

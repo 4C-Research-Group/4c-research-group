@@ -262,7 +262,7 @@ export default function PagesLayout({
         navItems={[
           { name: "Home", href: "/" },
           { name: "Research", href: "/research" },
-          { name: "Projects", href: "/projects" },
+          { name: "Projects", href: "/research" },
           { name: "Knowledge Mobilization", href: "/knowledge-mobilization" },
           { name: "Join Mission 4C", href: "/team" },
           { name: "Publications", href: "/publications" },

@@ -8,97 +8,35 @@ import {
   FaChartLine,
   FaSearch,
 } from "react-icons/fa";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
+import { getProjects, Project } from "@/lib/supabase/projects";
 
-type Project = {
-  id: string;
-  title: string;
-  description: string;
-  category: string;
-  status: "active" | "completed" | "upcoming";
-  startDate: string;
-  endDate?: string;
-  image: string;
-  tags: string[];
-  link?: string;
-};
-
-const projects: Project[] = [
-  {
-    id: "1",
-    title: "NuANCEd",
-    description:
-      "An integrated knowledge translation project that brings together implementation science, quality improvement and research.",
-    category: "Implementation Science",
-    status: "active",
-    startDate: "2023-01-01",
-    endDate: "2025-12-31",
-    image: "/images/project-1.png",
-    tags: ["Implementation Science", "Quality Improvement", "Research"],
-    link: "/research/nuanced",
-  },
-  {
-    id: "2",
-    title: "TraNSIEnCe",
-    description:
-      "This study aims to characterize functional and effective brain connectivity in critically ill children at varying degrees of risk for delirium.",
-    category: "Clinical Research",
-    status: "active",
-    startDate: "2023-05-15",
-    endDate: "2026-06-30",
-    image: "/images/project-2.jpg",
-    tags: ["Brain Connectivity", "Delirium", "Pediatric Critical Care"],
-    link: "/research/transience",
-  },
-  {
-    id: "3",
-    title: "PREDICT ABI",
-    description:
-      "This pilot prospective observational study will use functional neuroimaging to help improve the accuracy and precision of predicting neurological outcomes in unresponsive critically ill children with moderate-severe acquired brain injury.",
-    category: "Clinical Research",
-    status: "active",
-    startDate: "2023-08-01",
-    endDate: "2025-12-31",
-    image: "/images/project-3.png",
-    tags: ["Neuroimaging", "Brain Injury", "Outcome Prediction"],
-    link: "/research/predict-abi",
-  },
-  {
-    id: "4",
-    title: "ABOVE",
-    description:
-      "A pilot, multicenter, vanguard randomized controlled trial (RCT) in preparation for a definitive trial to evaluate if inhaled anesthetics compared to IV sedative agents improves delirium in mechanically ventilated children.",
-    category: "Clinical Trial",
-    status: "upcoming",
-    startDate: "2024-01-15",
-    endDate: "2025-12-31",
-    image: "/images/project-4.jpeg",
-    tags: ["Clinical Trial", "Delirium", "Mechanical Ventilation"],
-    link: "/research/above",
-  },
-  {
-    id: "5",
-    title: "NORSE",
-    description:
-      "This study aims to collect health related data and biological samples that will enable researchers to understand the cause of cryptogenic new-onset refractory status epilepticus (NORSE).",
-    category: "Clinical Research",
-    status: "active",
-    startDate: "2023-03-01",
-    endDate: "2026-03-31",
-    image: "/images/project-5.jpeg",
-    tags: ["Epilepsy", "Status Epilepticus", "Biomarkers"],
-    link: "/research/norse",
-  },
-];
-
-const categories = [...new Set(projects.map((project) => project.category))];
 const statuses = ["active", "completed", "upcoming"] as const;
 
 export default function ProjectsPage() {
+  const [projects, setProjects] = useState<Project[]>([]);
+  const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   const [selectedStatuses, setSelectedStatuses] = useState<string[]>([]);
+
+  useEffect(() => {
+    async function fetchProjects() {
+      try {
+        const projectsData = await getProjects();
+        setProjects(projectsData);
+      } catch (error) {
+        console.error("Error fetching projects:", error);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchProjects();
+  }, []);
+
+  const categories = [...new Set(projects.map((project) => project.category))];
 
   const toggleCategory = (category: string) => {
     setSelectedCategories((prev) =>
@@ -120,9 +58,10 @@ export default function ProjectsPage() {
     const matchesSearch =
       project.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
       project.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      project.tags.some((tag) =>
-        tag.toLowerCase().includes(searchTerm.toLowerCase())
-      );
+      (project.tags &&
+        project.tags.some((tag) =>
+          tag.toLowerCase().includes(searchTerm.toLowerCase())
+        ));
 
     const matchesCategory =
       selectedCategories.length === 0 ||
@@ -155,6 +94,19 @@ export default function ProjectsPage() {
       </span>
     );
   };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-cognition-600 mx-auto mb-4"></div>
+          <p className="text-gray-600 dark:text-gray-400">
+            Loading projects...
+          </p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
@@ -259,7 +211,7 @@ export default function ProjectsPage() {
               >
                 <div className="h-64 bg-gray-200 dark:bg-gray-700 relative overflow-hidden">
                   <Image
-                    src={project.image}
+                    src={project.image || "/images/placeholder.jpg"}
                     alt={project.title}
                     fill
                     className="object-cover"
@@ -278,14 +230,15 @@ export default function ProjectsPage() {
                     {project.description}
                   </p>
                   <div className="mt-4 flex flex-wrap gap-2 mb-4">
-                    {project.tags.map((tag) => (
-                      <span
-                        key={tag}
-                        className="text-xs px-2 py-1 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-full"
-                      >
-                        {tag}
-                      </span>
-                    ))}
+                    {project.tags &&
+                      project.tags.map((tag) => (
+                        <span
+                          key={tag}
+                          className="text-xs px-2 py-1 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-full"
+                        >
+                          {tag}
+                        </span>
+                      ))}
                   </div>
                   <div className="mt-auto pt-4 border-t border-gray-200 dark:border-gray-700">
                     {project.link && (
