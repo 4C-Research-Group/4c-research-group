@@ -168,7 +168,7 @@ export default function AboutPage() {
                 </div>
                 <div className="mt-8">
                   <a
-                    href="/projects"
+                    href="/research"
                     className="inline-block bg-cognition-600 hover:bg-cognition-700 text-white font-semibold py-3 px-6 rounded-lg transition-colors duration-200"
                   >
                     View all projects

@@ -45,13 +45,13 @@ export default function PublicationsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 overflow-x-hidden">
       {/* Hero Section */}
-      <section className="relative py-20 bg-gradient-to-br from-cognition-50 to-white dark:from-cognition-900 dark:to-gray-900">
-        <div className="container mx-auto px-4">
+      <section className="relative py-12 sm:py-20 bg-gradient-to-br from-cognition-50 to-white dark:from-cognition-900 dark:to-gray-900">
+        <div className="container mx-auto px-4 max-w-7xl">
           <div className="text-center max-w-4xl mx-auto">
             <motion.h1
-              className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-6"
+              className="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4 sm:mb-6"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
@@ -59,7 +59,7 @@ export default function PublicationsPage() {
               Publications
             </motion.h1>
             <motion.p
-              className="text-xl text-gray-600 dark:text-gray-300 mb-8"
+              className="text-lg sm:text-xl text-gray-600 dark:text-gray-300 mb-6 sm:mb-8 px-2"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.1 }}
@@ -69,7 +69,7 @@ export default function PublicationsPage() {
 
             {/* Profile Links */}
             <motion.div
-              className="flex flex-wrap justify-center gap-4 mb-8"
+              className="flex flex-col sm:flex-row flex-wrap justify-center gap-3 sm:gap-4 mb-6 sm:mb-8 px-2"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.2 }}
@@ -78,28 +78,28 @@ export default function PublicationsPage() {
                 href="https://www.researchgate.net/profile/Saptharishi-Lalgudi-Ganesan"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center px-4 py-2 bg-white dark:bg-gray-800 rounded-lg shadow-md hover:shadow-lg transition-shadow"
+                className="inline-flex items-center justify-center px-3 sm:px-4 py-2 bg-white dark:bg-gray-800 rounded-lg shadow-md hover:shadow-lg transition-shadow text-sm sm:text-base"
               >
-                <FaResearchgate className="text-green-600 dark:text-green-400 mr-2" />
-                ResearchGate Profile
+                <FaResearchgate className="text-green-600 dark:text-green-400 mr-2 flex-shrink-0" />
+                <span className="truncate">ResearchGate</span>
               </a>
               <a
                 href="http://scholar.google.com/citations?user=iuxSVQwAAAAJ&hl=en"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center px-4 py-2 bg-white dark:bg-gray-800 rounded-lg shadow-md hover:shadow-lg transition-shadow"
+                className="inline-flex items-center justify-center px-3 sm:px-4 py-2 bg-white dark:bg-gray-800 rounded-lg shadow-md hover:shadow-lg transition-shadow text-sm sm:text-base"
               >
-                <FaGoogle className="text-blue-500 dark:text-blue-400 mr-2" />
-                Google Scholar Profile
+                <FaGoogle className="text-blue-500 dark:text-blue-400 mr-2 flex-shrink-0" />
+                <span className="truncate">Google Scholar</span>
               </a>
               <a
                 href={ORCID_PROFILE_URL}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center px-4 py-2 bg-white dark:bg-gray-800 rounded-lg shadow-md hover:shadow-lg transition-shadow"
+                className="inline-flex items-center justify-center px-3 sm:px-4 py-2 bg-white dark:bg-gray-800 rounded-lg shadow-md hover:shadow-lg transition-shadow text-sm sm:text-base"
               >
-                <FaOrcid className="text-green-700 dark:text-green-500 mr-2" />
-                ORCID Profile
+                <FaOrcid className="text-green-700 dark:text-green-500 mr-2 flex-shrink-0" />
+                <span className="truncate">ORCID</span>
               </a>
             </motion.div>
           </div>
@@ -107,45 +107,49 @@ export default function PublicationsPage() {
       </section>
 
       {/* Publications List */}
-      <div className="container mx-auto px-4 py-16">
-        <div className="max-w-4xl mx-auto">
-          <div className="mb-6 flex gap-4 items-center">
+      <div className="container mx-auto px-4 py-12 sm:py-16 max-w-7xl">
+        <div className="max-w-4xl mx-auto w-full">
+          <div className="mb-6 flex flex-col sm:flex-row gap-3 sm:gap-4 items-start sm:items-center">
             <button
-              className={`px-3 py-1 rounded border ${sortBy === "year" ? "bg-blue-600 text-white" : "bg-white text-blue-600 border-blue-600"}`}
+              className={`px-3 py-2 rounded border text-sm sm:text-base w-full sm:w-auto ${sortBy === "year" ? "bg-blue-600 text-white" : "bg-white text-blue-600 border-blue-600"}`}
               onClick={() => setSortBy("year")}
             >
               Sort by Year
             </button>
             <button
-              className={`px-3 py-1 rounded border ${sortBy === "title" ? "bg-blue-600 text-white" : "bg-white text-blue-600 border-blue-600"}`}
+              className={`px-3 py-2 rounded border text-sm sm:text-base w-full sm:w-auto ${sortBy === "title" ? "bg-blue-600 text-white" : "bg-white text-blue-600 border-blue-600"}`}
               onClick={() => setSortBy("title")}
             >
               Sort by Title
             </button>
           </div>
-          {loading && <div>Loading publications...</div>}
-          {error && <div className="text-red-500">{error}</div>}
+          {loading && (
+            <div className="text-center py-8">Loading publications...</div>
+          )}
+          {error && (
+            <div className="text-red-500 text-center py-8">{error}</div>
+          )}
           {publications.length > 0 ? (
-            <div className="space-y-8">
+            <div className="space-y-6 sm:space-y-8">
               {getSortedPubs().map((pub, index) => (
                 <motion.div
                   key={pub.id}
-                  className="bg-white dark:bg-gray-800 rounded-xl shadow-md p-6 hover:shadow-lg transition-shadow"
+                  className="bg-white dark:bg-gray-800 rounded-xl shadow-md p-4 sm:p-6 hover:shadow-lg transition-shadow w-full"
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.3, delay: index * 0.1 }}
                   viewport={{ once: true }}
                 >
-                  <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">
+                  <h3 className="text-lg sm:text-xl font-bold text-gray-900 dark:text-white mb-2 leading-tight break-words">
                     {pub.title}
                   </h3>
-                  <p className="text-gray-600 dark:text-gray-300 mb-2">
+                  <p className="text-gray-600 dark:text-gray-300 mb-2 text-sm sm:text-base break-words">
                     {pub.authors}
                   </p>
-                  <p className="text-gray-600 dark:text-gray-400 text-sm mb-3">
+                  <p className="text-gray-600 dark:text-gray-400 text-xs sm:text-sm mb-3 break-words">
                     {pub.journal}, {pub.year}
                   </p>
-                  <div className="flex space-x-4">
+                  <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
                     {pub.externalIds && pub.externalIds.length > 0 && (
                       <div className="text-sm">
                         {pub.externalIds.map((eid: any, i: number) =>
@@ -155,10 +159,10 @@ export default function PublicationsPage() {
                               href={`https://doi.org/${eid.value}`}
                               target="_blank"
                               rel="noopener noreferrer"
-                              className="text-cognition-600 dark:text-cognition-400 hover:underline flex items-center text-sm"
+                              className="text-cognition-600 dark:text-cognition-400 hover:underline flex items-center text-xs sm:text-sm break-all"
                             >
-                              <FaExternalLinkAlt className="mr-1" /> DOI:{" "}
-                              {eid.value}
+                              <FaExternalLinkAlt className="mr-1 flex-shrink-0" />
+                              <span className="truncate">DOI: {eid.value}</span>
                             </a>
                           ) : null
                         )}
@@ -169,9 +173,10 @@ export default function PublicationsPage() {
                         href={pub.url}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="text-cognition-600 dark:text-cognition-400 hover:underline flex items-center text-sm"
+                        className="text-cognition-600 dark:text-cognition-400 hover:underline flex items-center text-xs sm:text-sm"
                       >
-                        <FaExternalLinkAlt className="mr-1" /> View Publication
+                        <FaExternalLinkAlt className="mr-1 flex-shrink-0" />
+                        <span>View Publication</span>
                       </a>
                     )}
                   </div>
@@ -185,13 +190,13 @@ export default function PublicationsPage() {
               animate={{ opacity: 1 }}
               transition={{ duration: 0.5 }}
             >
-              <p className="text-gray-600 dark:text-gray-400 text-lg">
+              <p className="text-gray-600 dark:text-gray-400 text-base sm:text-lg px-4">
                 Publications will be listed here soon. Please check back later.
               </p>
               <div className="mt-6">
                 <a
                   href="#"
-                  className="inline-flex items-center px-6 py-3 bg-cognition-600 hover:bg-cognition-700 text-white font-medium rounded-lg transition-colors"
+                  className="inline-flex items-center px-4 sm:px-6 py-3 bg-cognition-600 hover:bg-cognition-700 text-white font-medium rounded-lg transition-colors text-sm sm:text-base"
                 >
                   View All Works
                   <FaExternalLinkAlt className="ml-2" />
