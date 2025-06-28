@@ -120,7 +120,7 @@ export default function NewBlogPost() {
       formData.set("tags", tags);
       formData.set(
         "image_url",
-        imageUrl || "https://via.placeholder.com/800x400?text=Blog+Post"
+        imageUrl || "https://placehold.co/800x400/cccccc/666666?text=Blog+Post"
       );
       formData.set("read_time", readTime || "1 min read");
 

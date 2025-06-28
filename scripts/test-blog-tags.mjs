@@ -30,10 +30,11 @@ async function testBlogTags() {
         category: "Test",
         tags: testTags,
         read_time: "2 min read",
-        image_url: "https://via.placeholder.com/800x400?text=Test+Blog",
+        image_url: "https://placehold.co/800x400/cccccc/666666?text=Test+Blog",
         author_name: "Test Author",
         author_role: "Researcher",
-        author_image_url: "https://via.placeholder.com/100x100?text=Author",
+        author_image_url:
+          "https://placehold.co/100x100/cccccc/666666?text=Author",
         featured: false,
       })
       .select()

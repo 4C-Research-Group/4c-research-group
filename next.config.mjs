@@ -8,11 +8,21 @@ const nextConfig = {
       },
       {
         protocol: "https",
-        hostname: "placehold.co", // Placeholder images
+        hostname: "placehold.co", // Updated placeholder service
+        port: "",
+        pathname: "/**",
       },
       {
         protocol: "https",
-        hostname: "via.placeholder.com", // Placeholder images
+        hostname: "images.unsplash.com", // Added for banner images
+        port: "",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
+        hostname: "images.unsplash.com", // Unsplash image CDN domain
+        port: "",
+        pathname: "/**",
       },
       {
         protocol: "https",
@@ -21,14 +31,6 @@ const nextConfig = {
       {
         protocol: "https",
         hostname: "example.com", // Added for John Doe portfolio images
-      },
-      {
-        protocol: "https",
-        hostname: "images.unsplash.com", // Added for banner images
-      },
-      {
-        protocol: "https",
-        hostname: "images.unsplash.com", // Unsplash image CDN domain
       },
       {
         protocol: "https",

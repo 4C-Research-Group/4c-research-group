@@ -50,7 +50,6 @@ export default function BlogImage({
       "images.pexels.com",
       "cdn.pixabay.com",
       "img.freepik.com",
-      "via.placeholder.com",
       "placehold.co",
       "lh3.googleusercontent.com",
     ];
@@ -72,6 +71,9 @@ export default function BlogImage({
 
     return hasImageExtension || isFromImageDomain;
   };
+
+  const placeholderImage =
+    "https://placehold.co/800x400/cccccc/666666?text=Blog+Post";
 
   if (imageError || !src || !isValidImageUrl(src)) {
     console.log("BlogImage: Showing fallback for:", { src, imageError, title });
