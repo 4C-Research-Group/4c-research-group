@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
+import type { Session } from "@supabase/supabase-js";
 
 export default function TestAuthPage() {
   const router = useRouter();
@@ -45,12 +46,14 @@ export default function TestAuthPage() {
 
     const {
       data: { subscription },
-    } = supabase.auth.onAuthStateChange(async (event, session) => {
-      console.log("Auth state changed:", event, session);
-      setSession(session);
-      setUser(session?.user || null);
-      setLoading(false);
-    });
+    } = supabase.auth.onAuthStateChange(
+      async (event: string, session: Session | null) => {
+        console.log("Auth state changed:", event, session);
+        setSession(session);
+        setUser(session?.user || null);
+        setLoading(false);
+      }
+    );
 
     return () => subscription.unsubscribe();
   }, []);

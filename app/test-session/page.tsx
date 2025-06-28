@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase/client";
+import type { Session } from "@supabase/supabase-js";
 
 export default function TestSession() {
   const [session, setSession] = useState<any>(null);
@@ -38,11 +39,13 @@ export default function TestSession() {
     // Listen for auth changes
     const {
       data: { subscription },
-    } = supabase.auth.onAuthStateChange((event, session) => {
-      console.log("Auth state change:", event, session);
-      setSession(session);
-      setUser(session?.user);
-    });
+    } = supabase.auth.onAuthStateChange(
+      (event: string, session: Session | null) => {
+        console.log("Auth state change:", event, session);
+        setSession(session);
+        setUser(session?.user);
+      }
+    );
 
     return () => subscription.unsubscribe();
   }, []);

@@ -1,8 +1,25 @@
-import { createMiddlewareClient } from "@supabase/auth-helpers-nextjs";
+import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 
 // Define public routes that don't require authentication
-const publicRoutes = ["/login", "/signup", "/auth/callback", "/"];
+const publicRoutes = [
+  "/",
+  "/login",
+  "/signup",
+  "/about",
+  "/contact",
+  "/research",
+  "/team",
+  "/publications",
+  "/insights",
+  "/knowledge-mobilization",
+  "/research-4c",
+  "/research-4c/cognition",
+  "/research-4c/consciousness",
+  "/research-4c/critical-care",
+  "/4c-blogs",
+  "/auth/callback",
+];
 
 export async function middleware(request: NextRequest) {
   let response = NextResponse.next({
@@ -11,8 +28,51 @@ export async function middleware(request: NextRequest) {
     },
   });
 
-  // Create Supabase client for middleware
-  const supabase = createMiddlewareClient({ req: request, res: response });
+  const supabase = createServerClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    {
+      cookies: {
+        get(name: string) {
+          return request.cookies.get(name)?.value;
+        },
+        set(name: string, value: string, options: any) {
+          request.cookies.set({
+            name,
+            value,
+            ...options,
+          });
+          response = NextResponse.next({
+            request: {
+              headers: request.headers,
+            },
+          });
+          response.cookies.set({
+            name,
+            value,
+            ...options,
+          });
+        },
+        remove(name: string, options: any) {
+          request.cookies.set({
+            name,
+            value: "",
+            ...options,
+          });
+          response = NextResponse.next({
+            request: {
+              headers: request.headers,
+            },
+          });
+          response.cookies.set({
+            name,
+            value: "",
+            ...options,
+          });
+        },
+      },
+    }
+  );
 
   try {
     const {

@@ -132,19 +132,21 @@ export default function NewBlogPost() {
       }
 
       console.log("Calling createBlogPost...");
-      const result = await createBlogPost(formData);
+      const result = (await createBlogPost(formData)) as Array<{
+        id: string;
+      }> | null;
       console.log("Blog post created successfully:", result);
 
-      if (result && result.id) {
+      if (Array.isArray(result) && result[0]?.id) {
         setSuccess("Blog post created successfully! Redirecting...");
         console.log(
           "Redirecting to edit page:",
-          `/admin/blog/edit/${result.id}`
+          `/admin/blog/edit/${result[0].id}`
         );
 
         // Use setTimeout to ensure the success message is shown
         setTimeout(() => {
-          router.replace(`/admin/blog/edit/${result.id}`);
+          router.replace(`/admin/blog/edit/${result[0].id}`);
         }, 1000);
       } else {
         setSuccess(

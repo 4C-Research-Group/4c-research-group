@@ -106,6 +106,8 @@ export async function getProjectCategories() {
     return [];
   }
 
-  const categories = [...new Set(data?.map((p) => p.category) || [])];
+  const categories = [
+    ...new Set((data ?? []).map((p: { category: string }) => p.category)),
+  ];
   return categories;
 }

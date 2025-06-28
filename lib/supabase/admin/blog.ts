@@ -1,62 +1,85 @@
 // lib/supabase/admin/blog.ts
 "use server";
 
-import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
+import { createServerClient } from "@supabase/ssr";
 import { cookies } from "next/headers";
 import { revalidatePath } from "next/cache";
 
 export async function createBlogPost(formData: FormData) {
-  const supabase = createServerComponentClient({ cookies });
+  const cookieStore = await cookies();
+  const supabase = createServerClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    {
+      cookies: {
+        get(name: string) {
+          return cookieStore.get(name)?.value;
+        },
+      },
+    }
+  );
 
   // Check if user is admin
   const {
     data: { user },
   } = await supabase.auth.getUser();
-  const { data: userRecord, error: userError } = await supabase
-    .from("users")
-    .select("role")
-    .eq("id", user?.id)
-    .eq("role", "admin")
-    .single();
 
-  if (userError || !userRecord) {
-    throw new Error("Unauthorized");
+  if (!user) {
+    throw new Error("Not authenticated");
   }
 
-  const { data, error } = await supabase
-    .from("blog_posts")
-    .insert({
-      title: formData.get("title") as string,
-      slug: formData.get("slug") as string,
-      excerpt: formData.get("excerpt") as string,
-      content: formData.get("content") as string,
-      category: formData.get("category") as string,
-      read_time: formData.get("read_time") as string,
-      image_url: formData.get("image_url") as string,
-      tags: (formData.get("tags") as string)
-        ?.split(",")
-        .map((tag) => tag.trim()),
-      featured: formData.get("featured") === "on",
-      author_name: formData.get("author_name") as string,
-      author_role: formData.get("author_role") as string,
-      author_image_url: formData.get("author_image_url") as string,
-    })
-    .select()
+  const { data: userData } = await supabase
+    .from("users")
+    .select("role")
+    .eq("id", user.id)
     .single();
+
+  if (userData?.role !== "admin") {
+    throw new Error("Not authorized");
+  }
+
+  const title = formData.get("title") as string;
+  const content = formData.get("content") as string;
+  const excerpt = formData.get("excerpt") as string;
+  const image_url = formData.get("image_url") as string;
+  const tags = formData.get("tags") as string;
+
+  if (!title || !content) {
+    throw new Error("Title and content are required");
+  }
+
+  const { data, error } = await supabase.from("blog_posts").insert({
+    title,
+    content,
+    excerpt,
+    image_url,
+    tags: tags ? tags.split(",").map((tag) => tag.trim()) : [],
+    author_id: user.id,
+    slug: title.toLowerCase().replace(/[^a-z0-9]+/g, "-"),
+  });
 
   if (error) {
     console.error("Error creating blog post:", error);
-    throw error;
+    throw new Error("Failed to create blog post");
   }
 
   revalidatePath("/4c-blogs");
-  revalidatePath(`/4c-blogs/${data.slug}`);
-
   return data;
 }
 
 export async function updateBlogPost(postId: string, formData: FormData) {
-  const supabase = createServerComponentClient({ cookies });
+  const cookieStore = await cookies();
+  const supabase = createServerClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    {
+      cookies: {
+        get(name: string) {
+          return cookieStore.get(name)?.value;
+        },
+      },
+    }
+  );
 
   // Check if user is admin
   const {
@@ -118,7 +141,18 @@ export async function updateBlogPost(postId: string, formData: FormData) {
 }
 
 export async function getBlogPostById(postId: string) {
-  const supabase = createServerComponentClient({ cookies });
+  const cookieStore = await cookies();
+  const supabase = createServerClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    {
+      cookies: {
+        get(name: string) {
+          return cookieStore.get(name)?.value;
+        },
+      },
+    }
+  );
 
   // Check if user is admin
   const {

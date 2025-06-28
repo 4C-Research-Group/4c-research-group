@@ -89,6 +89,8 @@ export async function getCategories() {
   }
 
   // Get unique categories
-  const categories = [...new Set(data.map((item) => item.category))];
+  const categories = [
+    ...new Set((data ?? []).map((item: { category: string }) => item.category)),
+  ];
   return categories as string[];
 }
