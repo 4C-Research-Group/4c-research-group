@@ -243,159 +243,202 @@ export default function AuthForm({ initialMode = "login" }: AuthFormProps) {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900 py-12 px-4 sm:px-6 lg:px-8">
-      <Card className="w-full max-w-md dark:bg-gray-800">
-        <CardHeader className="space-y-1">
-          <CardTitle className="text-2xl font-bold text-center">
-            {isLogin ? "Welcome back" : "Create account"}
-          </CardTitle>
-          <CardDescription className="text-center">
-            {isLogin
-              ? "Enter your credentials to access your account"
-              : "Enter your details to create your account"}
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-            {isCheckingSession && (
-              <div className="flex items-center justify-center py-2 mb-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
-                <Loader2 className="h-4 w-4 animate-spin mr-2" />
-                <span className="text-sm text-blue-600 dark:text-blue-400">
-                  Checking session...
-                </span>
-              </div>
-            )}
+    <div className="min-h-screen bg-background">
+      {/* Hero Section with Theme */}
+      <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-cognition-50 via-white to-consciousness-50 dark:from-cognition-900 dark:via-gray-900 dark:to-consciousness-900">
+        {/* Background Bubbles */}
+        <div className="absolute inset-0 pointer-events-none">
+          <div className="absolute top-20 left-10 w-72 h-72 bg-cognition-200/20 dark:bg-cognition-700/10 rounded-full animate-pulse-slow" />
+          <div className="absolute top-40 right-20 w-96 h-96 bg-consciousness-200/20 dark:bg-consciousness-700/10 rounded-full animate-pulse-slow" />
+          <div className="absolute bottom-20 left-1/4 w-80 h-80 bg-care-200/20 dark:bg-care-700/10 rounded-full animate-pulse-slow" />
+          <div className="absolute top-1/2 left-1/3 w-64 h-64 bg-cognition-300/15 dark:bg-cognition-600/10 rounded-full animate-pulse-slow" />
+          <div className="absolute bottom-1/3 right-1/4 w-56 h-56 bg-consciousness-300/15 dark:bg-consciousness-600/10 rounded-full animate-pulse-slow" />
+        </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="email">Email</Label>
-              <div className="relative">
-                <Mail className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
-                <Input
-                  id="email"
-                  type="email"
-                  placeholder="Enter your email"
-                  className="pl-10"
-                  disabled={isLoading}
-                  {...register("email", {
-                    required: "Email is required",
-                    pattern: {
-                      value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-                      message: "Invalid email address",
-                    },
-                  })}
-                />
-              </div>
-              {errors.email && (
-                <p className="text-sm text-red-500">{errors.email.message}</p>
-              )}
-            </div>
+        {/* Auth Form */}
+        <div className="relative z-10 w-full max-w-md mx-auto px-4">
+          <Card className="w-full bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm border-0 shadow-2xl">
+            <CardHeader className="space-y-1 text-center">
+              <CardTitle className="text-3xl font-bold bg-gradient-to-r from-cognition-600 via-consciousness-600 to-care-600 bg-clip-text text-transparent">
+                {isLogin ? "Welcome Back" : "Create Account"}
+              </CardTitle>
+              <CardDescription className="text-lg text-gray-600 dark:text-gray-300">
+                {isLogin
+                  ? "Enter your credentials to access your account"
+                  : "Enter your details to create your account"}
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="p-6">
+              <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+                {isCheckingSession && (
+                  <div className="flex items-center justify-center py-3 mb-4 bg-cognition-50 dark:bg-cognition-900/30 rounded-lg border border-cognition-200 dark:border-cognition-700">
+                    <Loader2 className="h-4 w-4 animate-spin mr-2 text-cognition-600 dark:text-cognition-400" />
+                    <span className="text-sm text-cognition-600 dark:text-cognition-400">
+                      Checking session...
+                    </span>
+                  </div>
+                )}
 
-            <div className="space-y-2">
-              <Label htmlFor="password">Password</Label>
-              <div className="relative">
-                <Lock className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
-                <Input
-                  id="password"
-                  type={showPassword ? "text" : "password"}
-                  placeholder="Enter your password"
-                  className="pl-10 pr-10"
-                  disabled={isLoading}
-                  {...register("password", {
-                    required: "Password is required",
-                    minLength: {
-                      value: 6,
-                      message: "Password must be at least 6 characters",
-                    },
-                  })}
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-3 text-gray-400 hover:text-gray-600"
+                <div className="space-y-2">
+                  <Label
+                    htmlFor="email"
+                    className="text-sm font-medium text-gray-700 dark:text-gray-300"
+                  >
+                    Email
+                  </Label>
+                  <div className="relative">
+                    <Mail className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
+                    <Input
+                      id="email"
+                      type="email"
+                      placeholder="Enter your email"
+                      className="pl-10 bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600 focus:ring-2 focus:ring-cognition-500 focus:border-transparent"
+                      disabled={isLoading}
+                      {...register("email", {
+                        required: "Email is required",
+                        pattern: {
+                          value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                          message: "Invalid email address",
+                        },
+                      })}
+                    />
+                  </div>
+                  {errors.email && (
+                    <p className="text-sm text-red-500">
+                      {errors.email.message}
+                    </p>
+                  )}
+                </div>
+
+                <div className="space-y-2">
+                  <Label
+                    htmlFor="password"
+                    className="text-sm font-medium text-gray-700 dark:text-gray-300"
+                  >
+                    Password
+                  </Label>
+                  <div className="relative">
+                    <Lock className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
+                    <Input
+                      id="password"
+                      type={showPassword ? "text" : "password"}
+                      placeholder="Enter your password"
+                      className="pl-10 pr-10 bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600 focus:ring-2 focus:ring-cognition-500 focus:border-transparent"
+                      disabled={isLoading}
+                      {...register("password", {
+                        required: "Password is required",
+                        minLength: {
+                          value: 6,
+                          message: "Password must be at least 6 characters",
+                        },
+                      })}
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowPassword(!showPassword)}
+                      className="absolute right-3 top-3 text-gray-400 hover:text-gray-600"
+                      disabled={isLoading}
+                    >
+                      {showPassword ? (
+                        <EyeOff className="h-4 w-4" />
+                      ) : (
+                        <Eye className="h-4 w-4" />
+                      )}
+                    </button>
+                  </div>
+                  {errors.password && (
+                    <p className="text-sm text-red-500">
+                      {errors.password.message}
+                    </p>
+                  )}
+                </div>
+
+                {!isLogin && (
+                  <div className="space-y-2">
+                    <Label
+                      htmlFor="confirmPassword"
+                      className="text-sm font-medium text-gray-700 dark:text-gray-300"
+                    >
+                      Confirm Password
+                    </Label>
+                    <div className="relative">
+                      <Lock className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
+                      <Input
+                        id="confirmPassword"
+                        type={showConfirmPassword ? "text" : "password"}
+                        placeholder="Confirm your password"
+                        className="pl-10 pr-10 bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600 focus:ring-2 focus:ring-cognition-500 focus:border-transparent"
+                        disabled={isLoading}
+                        {...register("confirmPassword", {
+                          required: "Please confirm your password",
+                          validate: (value) =>
+                            value === password || "Passwords do not match",
+                        })}
+                      />
+                      <button
+                        type="button"
+                        onClick={() =>
+                          setShowConfirmPassword(!showConfirmPassword)
+                        }
+                        className="absolute right-3 top-3 text-gray-400 hover:text-gray-600"
+                        disabled={isLoading}
+                      >
+                        {showConfirmPassword ? (
+                          <EyeOff className="h-4 w-4" />
+                        ) : (
+                          <Eye className="h-4 w-4" />
+                        )}
+                      </button>
+                    </div>
+                    {errors.confirmPassword && (
+                      <p className="text-sm text-red-500">
+                        {errors.confirmPassword.message}
+                      </p>
+                    )}
+                  </div>
+                )}
+
+                {error && (
+                  <Alert
+                    variant={
+                      error.includes("Check your email")
+                        ? "default"
+                        : "destructive"
+                    }
+                    className="border-red-200 dark:border-red-800"
+                  >
+                    <AlertDescription>{error}</AlertDescription>
+                  </Alert>
+                )}
+
+                <Button
+                  type="submit"
+                  className="w-full bg-gradient-to-r from-cognition-600 to-consciousness-600 hover:from-cognition-700 hover:to-consciousness-700 text-white font-semibold py-3 transition-all duration-300 shadow-lg hover:shadow-xl"
                   disabled={isLoading}
                 >
-                  {showPassword ? (
-                    <EyeOff className="h-4 w-4" />
-                  ) : (
-                    <Eye className="h-4 w-4" />
+                  {isLoading && (
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                   )}
+                  {isLogin ? "Sign In" : "Sign Up"}
+                </Button>
+              </form>
+
+              <div className="mt-6 text-center">
+                <button
+                  type="button"
+                  onClick={toggleMode}
+                  className="text-sm text-cognition-600 hover:text-cognition-700 dark:text-cognition-400 dark:hover:text-cognition-300 transition-colors"
+                  disabled={isLoading}
+                >
+                  {isLogin
+                    ? "Don't have an account? Sign up"
+                    : "Already have an account? Sign in"}
                 </button>
               </div>
-              {errors.password && (
-                <p className="text-sm text-red-500">
-                  {errors.password.message}
-                </p>
-              )}
-            </div>
-
-            {!isLogin && (
-              <div className="space-y-2">
-                <Label htmlFor="confirmPassword">Confirm Password</Label>
-                <div className="relative">
-                  <Lock className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
-                  <Input
-                    id="confirmPassword"
-                    type={showConfirmPassword ? "text" : "password"}
-                    placeholder="Confirm your password"
-                    className="pl-10 pr-10"
-                    disabled={isLoading}
-                    {...register("confirmPassword", {
-                      required: "Please confirm your password",
-                      validate: (value) =>
-                        value === password || "Passwords do not match",
-                    })}
-                  />
-                  <button
-                    type="button"
-                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                    className="absolute right-3 top-3 text-gray-400 hover:text-gray-600"
-                    disabled={isLoading}
-                  >
-                    {showConfirmPassword ? (
-                      <EyeOff className="h-4 w-4" />
-                    ) : (
-                      <Eye className="h-4 w-4" />
-                    )}
-                  </button>
-                </div>
-                {errors.confirmPassword && (
-                  <p className="text-sm text-red-500">
-                    {errors.confirmPassword.message}
-                  </p>
-                )}
-              </div>
-            )}
-
-            {error && (
-              <Alert
-                variant={
-                  error.includes("Check your email") ? "default" : "destructive"
-                }
-              >
-                <AlertDescription>{error}</AlertDescription>
-              </Alert>
-            )}
-
-            <Button type="submit" className="w-full" disabled={isLoading}>
-              {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-              {isLogin ? "Sign In" : "Sign Up"}
-            </Button>
-          </form>
-
-          <div className="mt-6 text-center">
-            <button
-              type="button"
-              onClick={toggleMode}
-              className="text-sm text-blue-600 hover:text-blue-500"
-              disabled={isLoading}
-            >
-              {isLogin
-                ? "Don't have an account? Sign up"
-                : "Already have an account? Sign in"}
-            </button>
-          </div>
-        </CardContent>
-      </Card>
+            </CardContent>
+          </Card>
+        </div>
+      </section>
     </div>
   );
 }
