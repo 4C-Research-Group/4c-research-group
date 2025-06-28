@@ -91,90 +91,57 @@ export default function BlogPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
-      {/* Enhanced Hero Section */}
-      <section className="relative h-[60vh] md:h-[70vh] min-h-[400px] md:min-h-[500px] flex items-center justify-center overflow-hidden">
-        {/* Background Image */}
-        <div className="absolute inset-0 z-0">
-          <Image
-            src="https://images.unsplash.com/photo-1559757148-5c350d0d3c56?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80"
-            alt="Neuroscience Research Background"
-            fill
-            className="object-cover"
-            priority
-            onError={(e) => {
-              // Fallback to gradient if image fails to load
-              const target = e.target as HTMLImageElement;
-              target.style.display = "none";
-            }}
-          />
-          {/* Fallback gradient background */}
-          <div className="absolute inset-0 bg-gradient-to-br from-cognition-800 via-cognition-700 to-cognition-900"></div>
-          {/* Gradient Overlay */}
-          <div className="absolute inset-0 bg-gradient-to-r from-cognition-900/80 via-cognition-800/70 to-cognition-900/80"></div>
-          {/* Additional overlay for better text readability */}
-          <div className="absolute inset-0 bg-black/30"></div>
-        </div>
-
-        {/* Floating Elements */}
-        <div className="absolute inset-0 z-10 hidden md:block">
-          <div className="absolute top-20 left-10 opacity-20">
-            <FaBrain className="text-white text-6xl animate-pulse" />
-          </div>
-          <div className="absolute top-32 right-20 opacity-20">
-            <FaFlask
-              className="text-white text-4xl animate-pulse"
-              style={{ animationDelay: "1s" }}
-            />
-          </div>
-          <div className="absolute bottom-32 left-20 opacity-20">
-            <FaMicroscope
-              className="text-white text-5xl animate-pulse"
-              style={{ animationDelay: "2s" }}
-            />
-          </div>
+    <div className="min-h-screen bg-background">
+      {/* Hero Section */}
+      <section className="relative min-h-[60vh] flex items-center justify-center overflow-hidden bg-gradient-to-br from-cognition-50 via-white to-consciousness-50 dark:from-cognition-900 dark:via-gray-900 dark:to-consciousness-900">
+        {/* Background Bubbles */}
+        <div className="absolute inset-0 pointer-events-none">
+          <div className="absolute top-20 left-10 w-72 h-72 bg-cognition-200/20 dark:bg-cognition-700/10 rounded-full animate-pulse-slow" />
+          <div className="absolute top-40 right-20 w-96 h-96 bg-consciousness-200/20 dark:bg-consciousness-700/10 rounded-full animate-pulse-slow" />
+          <div className="absolute bottom-20 left-1/4 w-80 h-80 bg-care-200/20 dark:bg-care-700/10 rounded-full animate-pulse-slow" />
         </div>
 
         {/* Hero Content */}
-        <div className="relative z-20 text-center text-white px-4 max-w-4xl mx-auto">
+        <div className="relative z-20 text-center px-4 max-w-4xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
           >
-            <h1 className="text-4xl md:text-5xl lg:text-7xl font-bold mb-4 md:mb-6 leading-tight">
-              4C Research
-              <span className="block text-cognition-300">Blog</span>
+            <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold mb-6 leading-tight">
+              <span className="bg-gradient-to-r from-cognition-600 via-consciousness-600 to-care-600 bg-clip-text text-transparent">
+                4C Research Blog
+              </span>
             </h1>
-            <p className="text-lg md:text-xl lg:text-2xl text-cognition-100 mb-6 md:mb-8 max-w-3xl mx-auto leading-relaxed px-4">
+            <p className="text-xl md:text-2xl text-gray-700 dark:text-gray-300 mb-8 leading-relaxed max-w-3xl mx-auto">
               Exploring the frontiers of neuroscience through insights, research
               updates, and stories from our work in cognition, consciousness,
               and critical care.
             </p>
 
             {/* Stats */}
-            <div className="flex flex-wrap justify-center gap-4 md:gap-8 mb-6 md:mb-8">
+            <div className="flex flex-wrap justify-center gap-4 md:gap-8 mb-8">
               <div className="text-center">
-                <div className="text-2xl md:text-3xl font-bold text-cognition-300">
+                <div className="text-2xl md:text-3xl font-bold text-cognition-600 dark:text-cognition-400">
                   {posts.length}
                 </div>
-                <div className="text-xs md:text-sm text-cognition-200">
+                <div className="text-sm text-gray-600 dark:text-gray-400">
                   Articles
                 </div>
               </div>
               <div className="text-center">
-                <div className="text-2xl md:text-3xl font-bold text-cognition-300">
+                <div className="text-2xl md:text-3xl font-bold text-consciousness-600 dark:text-consciousness-400">
                   {categories.length}
                 </div>
-                <div className="text-xs md:text-sm text-cognition-200">
+                <div className="text-sm text-gray-600 dark:text-gray-400">
                   Categories
                 </div>
               </div>
               <div className="text-center">
-                <div className="text-2xl md:text-3xl font-bold text-cognition-300">
+                <div className="text-2xl md:text-3xl font-bold text-care-600 dark:text-care-400">
                   Latest
                 </div>
-                <div className="text-xs md:text-sm text-cognition-200">
+                <div className="text-sm text-gray-600 dark:text-gray-400">
                   Research
                 </div>
               </div>
@@ -201,17 +168,7 @@ export default function BlogPage() {
             </motion.div>
           </motion.div>
         </div>
-
-        {/* Scroll Indicator */}
-        <motion.div
-          className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-20"
-          animate={{ y: [0, 10, 0] }}
-          transition={{ duration: 2, repeat: Infinity }}
-        >
-          <div className="w-6 h-10 border-2 border-white rounded-full flex justify-center">
-            <div className="w-1 h-3 bg-white rounded-full mt-2"></div>
-          </div>
-        </motion.div>
+        <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-white to-transparent dark:from-gray-900 dark:to-transparent"></div>
       </section>
 
       {/* Blog Content */}
