@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Menu,
@@ -37,17 +38,14 @@ const iconMap: Record<string, React.ReactNode> = {
 };
 
 export default function MobileNav() {
-  const [activePath, setActivePath] = React.useState("/");
+  const pathname = usePathname();
   const [isOpen, setIsOpen] = React.useState(false);
 
-  React.useEffect(() => {
-    if (typeof window !== "undefined") {
-      setActivePath(window.location.pathname);
-    }
-  }, []);
-
   const isCurrentPath = (path: string) => {
-    return activePath === path || activePath.startsWith(`${path}/`);
+    if (path === "/") {
+      return pathname === "/";
+    }
+    return pathname === path || pathname.startsWith(`${path}/`);
   };
 
   return (
