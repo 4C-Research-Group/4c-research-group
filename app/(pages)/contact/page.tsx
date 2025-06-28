@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import { motion } from "framer-motion";
 import {
   FaMapMarkerAlt,
@@ -9,11 +9,89 @@ import {
   FaClock,
   FaPaperPlane,
   FaUser,
+  FaCheck,
+  FaExclamationTriangle,
 } from "react-icons/fa";
 
 type Props = {};
 
+interface FormData {
+  firstName: string;
+  lastName: string;
+  email: string;
+  subject: string;
+  message: string;
+}
+
 export default function ContactPage({}: Props) {
+  const [formData, setFormData] = useState<FormData>({
+    firstName: "",
+    lastName: "",
+    email: "",
+    subject: "",
+    message: "",
+  });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitStatus, setSubmitStatus] = useState<{
+    type: "success" | "error" | null;
+    message: string;
+  }>({ type: null, message: "" });
+
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    setSubmitStatus({ type: null, message: "" });
+
+    try {
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        setSubmitStatus({
+          type: "success",
+          message: data.message,
+        });
+        // Reset form on success
+        setFormData({
+          firstName: "",
+          lastName: "",
+          email: "",
+          subject: "",
+          message: "",
+        });
+      } else {
+        setSubmitStatus({
+          type: "error",
+          message: data.error || "Failed to send message. Please try again.",
+        });
+      }
+    } catch (error) {
+      setSubmitStatus({
+        type: "error",
+        message: "Network error. Please check your connection and try again.",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       {/* Hero Section */}
@@ -57,36 +135,63 @@ export default function ContactPage({}: Props) {
             <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">
               Send us a Message
             </h2>
-            <form className="space-y-6">
+
+            {/* Status Message */}
+            {submitStatus.type && (
+              <div
+                className={`mb-6 p-4 rounded-lg flex items-center ${
+                  submitStatus.type === "success"
+                    ? "bg-green-100 text-green-800 dark:bg-green-900/50 dark:text-green-400"
+                    : "bg-red-100 text-red-800 dark:bg-red-900/50 dark:text-red-400"
+                }`}
+              >
+                {submitStatus.type === "success" ? (
+                  <FaCheck className="mr-2 flex-shrink-0" />
+                ) : (
+                  <FaExclamationTriangle className="mr-2 flex-shrink-0" />
+                )}
+                {submitStatus.message}
+              </div>
+            )}
+
+            <form onSubmit={handleSubmit} className="space-y-6">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
                   <label
-                    htmlFor="first-name"
+                    htmlFor="firstName"
                     className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
                   >
                     First Name *
                   </label>
                   <input
                     type="text"
-                    id="first-name"
+                    id="firstName"
+                    name="firstName"
+                    value={formData.firstName}
+                    onChange={handleInputChange}
                     required
                     className="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-cognition-500 focus:border-transparent"
                     placeholder="John"
+                    disabled={isSubmitting}
                   />
                 </div>
                 <div>
                   <label
-                    htmlFor="last-name"
+                    htmlFor="lastName"
                     className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
                   >
                     Last Name *
                   </label>
                   <input
                     type="text"
-                    id="last-name"
+                    id="lastName"
+                    name="lastName"
+                    value={formData.lastName}
+                    onChange={handleInputChange}
                     required
                     className="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-cognition-500 focus:border-transparent"
                     placeholder="Doe"
+                    disabled={isSubmitting}
                   />
                 </div>
               </div>
@@ -101,9 +206,13 @@ export default function ContactPage({}: Props) {
                 <input
                   type="email"
                   id="email"
+                  name="email"
+                  value={formData.email}
+                  onChange={handleInputChange}
                   required
                   className="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-cognition-500 focus:border-transparent"
                   placeholder="you@example.com"
+                  disabled={isSubmitting}
                 />
               </div>
 
@@ -117,9 +226,13 @@ export default function ContactPage({}: Props) {
                 <input
                   type="text"
                   id="subject"
+                  name="subject"
+                  value={formData.subject}
+                  onChange={handleInputChange}
                   required
                   className="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-cognition-500 focus:border-transparent"
                   placeholder="How can we help?"
+                  disabled={isSubmitting}
                 />
               </div>
 
@@ -132,20 +245,34 @@ export default function ContactPage({}: Props) {
                 </label>
                 <textarea
                   id="message"
+                  name="message"
+                  value={formData.message}
+                  onChange={handleInputChange}
                   rows={5}
                   required
                   className="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-cognition-500 focus:border-transparent"
                   placeholder="Your message here..."
+                  disabled={isSubmitting}
                 ></textarea>
               </div>
 
               <div className="pt-2">
                 <button
                   type="submit"
-                  className="w-full bg-cognition-600 hover:bg-cognition-700 text-white font-semibold py-3 px-6 rounded-lg transition-colors duration-300 flex items-center justify-center"
+                  disabled={isSubmitting}
+                  className="w-full bg-cognition-600 hover:bg-cognition-700 disabled:bg-cognition-400 text-white font-semibold py-3 px-6 rounded-lg transition-colors duration-300 flex items-center justify-center disabled:cursor-not-allowed"
                 >
-                  <FaPaperPlane className="mr-2" />
-                  Send Message
+                  {isSubmitting ? (
+                    <>
+                      <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                      Sending...
+                    </>
+                  ) : (
+                    <>
+                      <FaPaperPlane className="mr-2" />
+                      Send Message
+                    </>
+                  )}
                 </button>
               </div>
             </form>

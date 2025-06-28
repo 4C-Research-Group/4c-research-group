@@ -164,7 +164,7 @@ export default function PagesLayout({
               </span>
             </Link>
             <span className="text-[0.5rem] md:text-[0.75rem] text-muted-foreground ml-10 lg:ml-0 lg:pl-4 lg:border-l lg:border-gray-200 dark:lg:border-gray-700 lg:mt-0 mt-1">
-              Cognition • Consciousness • Critical Care • Comfort
+              Cognition • Consciousness • Critical Care
             </span>
           </div>
 
