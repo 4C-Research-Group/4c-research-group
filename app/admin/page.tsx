@@ -35,7 +35,8 @@ export default async function AdminDashboard() {
     supabase
       .from("projects")
       .select("id, title, is_active")
-      .eq("is_active", true),
+      .eq("is_active", true)
+      .order("title"),
     supabase.from("users").select("id, name, role").limit(5),
   ]);
 
