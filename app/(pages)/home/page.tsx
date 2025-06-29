@@ -95,6 +95,21 @@ const viewportSettings = {
   amount: 0.3,
 };
 
+// Utility to strip HTML and get first sentence
+function getFirstSentenceFromHtml(html: string) {
+  if (!html) return "";
+  // Remove HTML tags
+  const text = html
+    .replace(/<[^>]+>/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+  // Get first sentence (ends with . ! or ?)
+  const match = text.match(/.*?[.!?](\s|$)/);
+  return match
+    ? match[0].trim()
+    : text.slice(0, 160) + (text.length > 160 ? "..." : "");
+}
+
 export default function HomePage() {
   const [content, setContent] = useState<any>(null);
   const [loading, setLoading] = useState(true);
@@ -758,14 +773,9 @@ export default function HomePage() {
                   <h3 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white mb-6 leading-tight">
                     {news.headline}
                   </h3>
-                  <div
-                    className="text-lg text-gray-600 dark:text-gray-300 mb-8 leading-relaxed"
-                    dangerouslySetInnerHTML={
-                      news.description
-                        ? { __html: news.description }
-                        : undefined
-                    }
-                  />
+                  <div className="text-lg text-gray-600 dark:text-gray-300 mb-8 leading-relaxed">
+                    {getFirstSentenceFromHtml(news.description)}
+                  </div>
                   {news.link && (
                     <a
                       href={news.link}
