@@ -17,6 +17,15 @@ import Link from "next/link";
 import { supabase } from "@/lib/supabase/client";
 import LoadingSpinner from "@/components/ui/loading-spinner";
 
+// Unsplash images for research focus areas - optimized for performance
+// Four distinct, verified working images for visual variety
+const researchImages = [
+  "https://images.unsplash.com/photo-1559757148-5c350d0d3c56?w=800&h=400&fit=crop&crop=center&auto=format&q=80&fm=webp", // Brain/Neuroscience
+  "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=800&h=400&fit=crop&crop=center&auto=format&q=80&fm=webp", // Laboratory
+  "https://images.unsplash.com/photo-1464983953574-0892a716854b?w=800&h=400&fit=crop&crop=center&auto=format&q=80&fm=webp", // Research/Science
+  "https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=800&h=400&fit=crop&crop=center&auto=format&q=80&fm=webp", // Nature/Brain inspiration
+];
+
 // Minimal animation variants for better performance
 const fadeInUp = {
   hidden: { opacity: 0, y: 20 },
@@ -407,11 +416,21 @@ export default function HomePage() {
                 >
                   <div className="relative h-40 bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-700 dark:to-gray-600 overflow-hidden">
                     <Image
-                      src={project.image}
+                      src={researchImages[i] || researchImages[0]}
                       alt={project.title}
                       width={400}
                       height={200}
                       className="w-full h-full object-cover transition-transform duration-200 ease-out group-hover:scale-105"
+                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
+                      priority={i === 0}
+                      loading={i === 0 ? "eager" : "lazy"}
+                      placeholder="blur"
+                      blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAAIAAoDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAhEAACAQMDBQAAAAAAAAAAAAABAgMABAUGIWGRkqGx0f/EABUBAQEAAAAAAAAAAAAAAAAAAAMF/8QAGhEAAgIDAAAAAAAAAAAAAAAAAAECEgMRkf/aAAwDAQACEQMRAD8AltJagyeH0AthI5xdrLcNM91BF5pX2HaH9bcfaSXWGaRmknyJckliyjqTzSlT54b6bk+h0R//2Q=="
+                      onError={(e) => {
+                        // Fallback to first image if current image fails
+                        const target = e.target as HTMLImageElement;
+                        target.src = researchImages[0];
+                      }}
                     />
                   </div>
 
