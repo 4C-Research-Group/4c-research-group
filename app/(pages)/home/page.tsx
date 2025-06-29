@@ -15,6 +15,7 @@ import {
 } from "react-icons/fa";
 import Link from "next/link";
 import { supabase } from "@/lib/supabase/client";
+import LoadingSpinner from "@/components/ui/loading-spinner";
 
 // Minimal animation variants for better performance
 const fadeInUp = {
@@ -85,11 +86,7 @@ export default function HomePage() {
   }, []);
 
   if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-cognition-50 to-white dark:from-cognition-900 dark:to-gray-900">
-        <div className="w-12 h-12 border-4 border-cognition-200 border-t-cognition-600 rounded-full animate-spin" />
-      </div>
-    );
+    return null; // Don't show loading state, let layout handle it
   }
 
   if (error || !content) {
@@ -350,6 +347,7 @@ export default function HomePage() {
                           width={512}
                           height={512}
                           className="drop-shadow-2xl"
+                          priority
                         />
                       </div>
                     </div>
@@ -389,38 +387,45 @@ export default function HomePage() {
 
             <motion.div
               className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8"
-              variants={staggerContainer}
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, margin: "-100px" }}
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              viewport={{ once: true, margin: "-50px" }}
+              transition={{ duration: 0.3 }}
             >
               {projects.cards.map((project: any, i: number) => (
                 <motion.div
                   key={i}
-                  variants={fadeInUp}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: "-50px" }}
+                  transition={{
+                    duration: 0.3,
+                    delay: i * 0.1,
+                    ease: "easeOut",
+                  }}
                   className="group relative bg-white dark:bg-gray-800 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden border border-gray-100 dark:border-gray-700"
                 >
-                  <div className="relative h-48 bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-700 dark:to-gray-600 overflow-hidden">
+                  <div className="relative h-40 bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-700 dark:to-gray-600 overflow-hidden">
                     <Image
                       src={project.image}
                       alt={project.title}
                       width={400}
                       height={200}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                      className="w-full h-full object-cover transition-transform duration-200 ease-out group-hover:scale-105"
                     />
                   </div>
 
-                  <div className="p-8 relative">
-                    <div className="w-16 h-16 rounded-2xl flex items-center justify-center text-white mb-6 mx-auto relative z-10 bg-gradient-to-br from-cognition-500 to-cognition-600 shadow-lg">
+                  <div className="p-6 relative">
+                    <div className="w-12 h-12 rounded-xl flex items-center justify-center text-white mb-4 mx-auto relative z-10 bg-gradient-to-br from-cognition-500 to-cognition-600 shadow-lg">
                       {iconMap[i]}
                     </div>
 
-                    <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-4 text-center group-hover:text-cognition-600 dark:group-hover:text-cognition-400 transition-colors duration-300">
+                    <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-3 text-center group-hover:text-cognition-600 dark:group-hover:text-cognition-400 transition-colors duration-300">
                       {project.title}
                     </h3>
 
                     <p
-                      className="text-gray-600 dark:text-gray-400 text-center leading-relaxed group-hover:text-gray-700 dark:group-hover:text-gray-300 transition-colors duration-300"
+                      className="text-gray-600 dark:text-gray-400 text-center leading-relaxed group-hover:text-gray-700 dark:group-hover:text-gray-300 transition-colors duration-300 text-sm"
                       dangerouslySetInnerHTML={
                         project.description
                           ? { __html: project.description }
@@ -513,6 +518,7 @@ export default function HomePage() {
                       fill
                       className="object-contain"
                       priority
+                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                     />
                   </div>
                 </div>

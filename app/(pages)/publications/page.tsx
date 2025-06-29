@@ -9,6 +9,7 @@ import {
   FaGoogle,
   FaOrcid,
 } from "react-icons/fa";
+import LoadingSpinner from "@/components/ui/loading-spinner";
 
 const ORCID_PROFILE_URL = "https://orcid.org/0000-0002-2599-9119";
 
@@ -133,7 +134,9 @@ export default function PublicationsPage() {
             </button>
           </div>
           {loading && (
-            <div className="text-center py-8">Loading publications...</div>
+            <div className="text-center py-8">
+              <LoadingSpinner message="Loading publications..." />
+            </div>
           )}
           {error && (
             <div className="text-red-500 text-center py-8">{error}</div>

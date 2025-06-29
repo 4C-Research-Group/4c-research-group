@@ -13,6 +13,7 @@ import {
 import Image from "next/image";
 import Link from "next/link";
 import { supabase } from "@/lib/supabase/client";
+import LoadingSpinner from "@/components/ui/loading-spinner";
 
 type TeamMember = {
   name: string;
@@ -54,7 +55,7 @@ export default function AboutPage() {
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        Loading...
+        <LoadingSpinner />
       </div>
     );
   }

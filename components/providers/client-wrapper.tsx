@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import LoadingSpinner from "@/components/ui/loading-spinner";
 
 interface ClientWrapperProps {
   children: React.ReactNode;
@@ -13,15 +14,9 @@ export function ClientWrapper({ children }: ClientWrapperProps) {
     setMounted(true);
   }, []);
 
+  // Don't show loading state, let layout handle it
   if (!mounted) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-cognition-600 mx-auto mb-4"></div>
-          <p className="text-gray-600 dark:text-gray-400">Loading...</p>
-        </div>
-      </div>
-    );
+    return null;
   }
 
   return <>{children}</>;

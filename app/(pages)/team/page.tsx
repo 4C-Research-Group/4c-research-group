@@ -18,6 +18,7 @@ import {
   type TeamMember,
   type Testimonial,
 } from "@/lib/supabase/team";
+import LoadingSpinner from "@/components/ui/loading-spinner";
 
 const TeamMemberCard = lazy(() => import("@/components/TeamMemberCard"));
 
@@ -97,10 +98,7 @@ export default function TeamPage() {
         {/* Loading Content */}
         <section className="py-16 px-4">
           <div className="container mx-auto text-center">
-            <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-cognition-600 mx-auto"></div>
-            <p className="mt-4 text-gray-600 dark:text-gray-300 text-lg">
-              Loading team data...
-            </p>
+            <LoadingSpinner message="Loading team data..." size="lg" />
           </div>
         </section>
       </div>

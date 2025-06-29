@@ -19,6 +19,7 @@ import MobileNav from "@/components/mobile-nav";
 import Image from "next/image";
 import { NavAuthButtons } from "@/components/nav-auth-buttons";
 import { supabase } from "@/lib/supabase/client";
+import LoadingSpinner from "@/components/ui/loading-spinner";
 
 function ThemeToggle() {
   const { theme, setTheme } = useTheme();
@@ -63,15 +64,32 @@ export default function PagesLayout({
   const [navPages, setNavPages] = useState<any[]>([]);
   const [showResearch, setShowResearch] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isInitialLoad, setIsInitialLoad] = useState(true);
 
   useEffect(() => {
     const fetchNavPages = async () => {
+      const startTime = Date.now();
       const { data } = await supabase
         .from("pages")
         .select("slug, nav_label, nav_order")
         .eq("show_in_nav", true)
         .order("nav_order", { ascending: true });
       setNavPages(data || []);
+
+      // Ensure minimum loading time for smooth UX
+      const elapsed = Date.now() - startTime;
+      const minLoadingTime = 600; // Reduced to 600ms for faster loading
+      if (elapsed < minLoadingTime) {
+        setTimeout(() => {
+          setIsLoading(false);
+          // Mark initial load as complete after a short delay
+          setTimeout(() => setIsInitialLoad(false), 100);
+        }, minLoadingTime - elapsed);
+      } else {
+        setIsLoading(false);
+        setTimeout(() => setIsInitialLoad(false), 100);
+      }
     };
     fetchNavPages();
   }, []);
@@ -146,129 +164,150 @@ export default function PagesLayout({
 
   return (
     <div className="flex flex-col min-h-screen">
-      {/* Navigation */}
-      <header
-        className={cn(
-          "sticky top-0 z-50 w-full border-b bg-white/80 backdrop-blur-sm transition-all duration-200",
-          isScrolled ? "shadow-sm" : "border-transparent",
-          "dark:bg-gray-900/80 dark:border-gray-800"
-        )}
-      >
-        <div className="container flex h-16 items-center justify-between px-4">
-          {/* Logo and subtitle in a row on lg+ screens, column on mobile */}
-          <div className="flex flex-col lg:flex-row lg:items-center lg:gap-4">
-            <Link href="/" className="flex items-center space-x-2">
-              <Image src="/logo.png" alt="Logo" width={32} height={32} />
-              <span className="text-xl font-bold bg-gradient-to-r from-cognition-600 to-consciousness-600 bg-clip-text text-transparent dark:from-cognition-400 dark:to-consciousness-400">
-                4C Research
-              </span>
-            </Link>
-            <span className="text-[0.5rem] md:text-[0.75rem] text-muted-foreground ml-10 lg:ml-0 lg:pl-4 lg:border-l lg:border-gray-200 dark:lg:border-gray-700 lg:mt-0 mt-1">
-              Cognition • Consciousness • Critical Care
-            </span>
-          </div>
-
-          <div className="hidden lg:flex items-center gap-6">
-            <nav className="flex items-center gap-4">
-              <Link
-                href="/"
-                className="text-sm font-medium text-foreground/80 hover:text-foreground transition-colors dark:text-gray-300 dark:hover:text-white"
-              >
-                Home
-              </Link>
-              <Link
-                href="/about"
-                className="text-sm font-medium text-foreground/80 hover:text-foreground transition-colors dark:text-gray-300 dark:hover:text-white"
-              >
-                About
-              </Link>
-              <Link
-                href="/research"
-                className="text-sm font-medium text-foreground/80 hover:text-foreground transition-colors dark:text-gray-300 dark:hover:text-white"
-              >
-                Research
-              </Link>
-              <Link
-                href="/team"
-                className="text-sm font-medium text-foreground/80 hover:text-foreground transition-colors dark:text-gray-300 dark:hover:text-white"
-              >
-                Team
-              </Link>
-              <Link
-                href="/4c-blogs"
-                className="text-sm font-medium text-foreground/80 hover:text-foreground transition-colors dark:text-gray-300 dark:hover:text-white"
-              >
-                Blogs
-              </Link>
-
-              {navPages.map((page) => (
-                <Link
-                  key={page.slug}
-                  href={`/${page.slug}`}
-                  className="text-sm font-medium text-foreground/80 hover:text-foreground transition-colors dark:text-gray-300 dark:hover:text-white"
-                >
-                  {page.nav_label}
+      {isLoading && isInitialLoad ? (
+        <div className="fixed inset-0 z-50 bg-gradient-to-br from-cognition-50 to-white dark:from-cognition-900 dark:to-gray-900 transition-opacity duration-300 flex items-center justify-center">
+          <LoadingSpinner
+            message="Loading 4C Research..."
+            size="md"
+            fullScreen={false}
+          />
+        </div>
+      ) : (
+        <>
+          {/* Navigation */}
+          <header
+            className={cn(
+              "sticky top-0 z-50 w-full border-b bg-white/80 backdrop-blur-sm transition-all duration-200",
+              isScrolled ? "shadow-sm" : "border-transparent",
+              "dark:bg-gray-900/80 dark:border-gray-800"
+            )}
+          >
+            <div className="container flex h-16 items-center justify-between px-4">
+              {/* Logo and subtitle in a row on lg+ screens, column on mobile */}
+              <div className="flex flex-col lg:flex-row lg:items-center lg:gap-4">
+                <Link href="/" className="flex items-center space-x-2">
+                  <Image
+                    src="/logo.png"
+                    alt="Logo"
+                    width={32}
+                    height={32}
+                    priority
+                  />
+                  <span className="text-xl font-bold bg-gradient-to-r from-cognition-600 to-consciousness-600 bg-clip-text text-transparent dark:from-cognition-400 dark:to-consciousness-400">
+                    4C Research
+                  </span>
                 </Link>
-              ))}
-              <div className="relative group">
-                <button className="flex items-center gap-1 text-sm font-medium text-foreground/80 hover:text-foreground transition-colors dark:text-gray-300 dark:hover:text-white">
-                  More
-                  <FaChevronDown className="h-3 w-3 mt-0.5 transition-transform group-hover:rotate-180" />
-                </button>
-                <div className="absolute left-0 mt-2 w-48 rounded-md shadow-lg bg-white dark:bg-gray-800 ring-1 ring-black/5 dark:ring-white/10 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
-                  <div className="py-1">
+                <span className="text-[0.5rem] md:text-[0.75rem] text-muted-foreground ml-10 lg:ml-0 lg:pl-4 lg:border-l lg:border-gray-200 dark:lg:border-gray-700 lg:mt-0 mt-1">
+                  Cognition • Consciousness • Critical Care
+                </span>
+              </div>
+
+              <div className="hidden lg:flex items-center gap-6">
+                <nav className="flex items-center gap-4">
+                  <Link
+                    href="/"
+                    className="text-sm font-medium text-foreground/80 hover:text-foreground transition-colors dark:text-gray-300 dark:hover:text-white"
+                  >
+                    Home
+                  </Link>
+                  <Link
+                    href="/about"
+                    className="text-sm font-medium text-foreground/80 hover:text-foreground transition-colors dark:text-gray-300 dark:hover:text-white"
+                  >
+                    About
+                  </Link>
+                  <Link
+                    href="/research"
+                    className="text-sm font-medium text-foreground/80 hover:text-foreground transition-colors dark:text-gray-300 dark:hover:text-white"
+                  >
+                    Research
+                  </Link>
+                  <Link
+                    href="/team"
+                    className="text-sm font-medium text-foreground/80 hover:text-foreground transition-colors dark:text-gray-300 dark:hover:text-white"
+                  >
+                    Team
+                  </Link>
+                  <Link
+                    href="/4c-blogs"
+                    className="text-sm font-medium text-foreground/80 hover:text-foreground transition-colors dark:text-gray-300 dark:hover:text-white"
+                  >
+                    Blogs
+                  </Link>
+
+                  {navPages.map((page) => (
                     <Link
-                      href="/knowledge-mobilization"
-                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700"
+                      key={page.slug}
+                      href={`/${page.slug}`}
+                      className="text-sm font-medium text-foreground/80 hover:text-foreground transition-colors dark:text-gray-300 dark:hover:text-white"
                     >
-                      Knowledge Mobilization
+                      {page.nav_label}
                     </Link>
-                    <Link
-                      href="/publications"
-                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700"
-                    >
-                      Publications
-                    </Link>
-                    <Link
-                      href="/contact"
-                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700"
-                    >
-                      Contact
-                    </Link>
+                  ))}
+                  <div className="relative group">
+                    <button className="flex items-center gap-1 text-sm font-medium text-foreground/80 hover:text-foreground transition-colors dark:text-gray-300 dark:hover:text-white">
+                      More
+                      <FaChevronDown className="h-3 w-3 mt-0.5 transition-transform group-hover:rotate-180" />
+                    </button>
+                    <div className="absolute left-0 mt-2 w-48 rounded-md shadow-lg bg-white dark:bg-gray-800 ring-1 ring-black/5 dark:ring-white/10 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
+                      <div className="py-1">
+                        <Link
+                          href="/knowledge-mobilization"
+                          className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700"
+                        >
+                          Knowledge Mobilization
+                        </Link>
+                        <Link
+                          href="/publications"
+                          className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700"
+                        >
+                          Publications
+                        </Link>
+                        <Link
+                          href="/contact"
+                          className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700"
+                        >
+                          Contact
+                        </Link>
+                      </div>
+                    </div>
                   </div>
+                </nav>
+
+                <div className="flex items-center gap-4 ml-4">
+                  <ThemeToggle />
+                  <div className="h-6 w-px bg-gray-200 dark:bg-gray-700" />
+                  <NavAuthButtons />
                 </div>
               </div>
-            </nav>
 
-            <div className="flex items-center gap-4 ml-4">
-              <ThemeToggle />
-              <div className="h-6 w-px bg-gray-200 dark:bg-gray-700" />
-              <NavAuthButtons />
+              {/* Mobile menu button */}
+              <div className="flex lg:hidden items-center gap-4">
+                <MobileNav />
+              </div>
             </div>
-          </div>
+          </header>
 
-          {/* Mobile menu button */}
-          <div className="flex lg:hidden items-center gap-4">
-            <MobileNav />
-          </div>
-        </div>
-      </header>
+          {/* Main Content */}
+          <main className="flex-1">{children}</main>
 
-      {/* Main Content */}
-      <main className="flex-1">{children}</main>
-
-      {/* Footer */}
-      <SiteFooter
-        navItems={[
-          { name: "Home", href: "/" },
-          { name: "Research", href: "/research" },
-          { name: "Projects", href: "/research" },
-          { name: "Knowledge Mobilization", href: "/knowledge-mobilization" },
-          { name: "Join Mission 4C", href: "/team" },
-          { name: "Publications", href: "/publications" },
-          { name: "Contact", href: "/contact" },
-        ]}
-      />
+          {/* Footer */}
+          <SiteFooter
+            navItems={[
+              { name: "Home", href: "/" },
+              { name: "Research", href: "/research" },
+              { name: "Projects", href: "/research" },
+              {
+                name: "Knowledge Mobilization",
+                href: "/knowledge-mobilization",
+              },
+              { name: "Join Mission 4C", href: "/team" },
+              { name: "Publications", href: "/publications" },
+              { name: "Contact", href: "/contact" },
+            ]}
+          />
+        </>
+      )}
     </div>
   );
 }

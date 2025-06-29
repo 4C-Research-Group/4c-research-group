@@ -23,6 +23,7 @@ import { supabase } from "@/lib/supabase/client";
 import { Button } from "@/components/ui/button";
 import BlogImage from "@/components/BlogImage";
 import LikeButton from "@/components/LikeButton";
+import LoadingSpinner from "@/components/ui/loading-spinner";
 
 export default function BlogPage() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -85,7 +86,7 @@ export default function BlogPage() {
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-cognition-600"></div>
+        <LoadingSpinner />
       </div>
     );
   }
