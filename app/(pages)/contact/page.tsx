@@ -388,12 +388,44 @@ export default function ContactPage({}: Props) {
               </div>
             </div>
 
-            {/* Map Placeholder */}
+            {/* Real Map */}
             <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl overflow-hidden">
-              <div className="aspect-w-16 aspect-h-9 w-full h-64 bg-gray-200 dark:bg-gray-700 flex items-center justify-center">
-                <p className="text-gray-500 dark:text-gray-400">Map Location</p>
+              <div className="w-full h-64">
+                <iframe
+                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2918.964964073839!2d-81.2225!3d42.9475!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x882ef1c1b2e2e0e7%3A0x6e7e2e2e2e2e2e2e!2sLondon%20Health%20Sciences%20Centre%20Victoria%20Hospital!5e0!3m2!1sen!2sca!4v1685641234567!5m2!1sen!2sca"
+                  width="100%"
+                  height="100%"
+                  style={{ border: 0 }}
+                  allowFullScreen
+                  loading="lazy"
+                  referrerPolicy="no-referrer-when-downgrade"
+                  title="4C Research Lab Location"
+                  className="rounded-2xl"
+                ></iframe>
               </div>
             </div>
+
+            <a
+              href="https://maps.app.goo.gl/NHAV4ZiR9p3aeGGW6"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center mt-4 px-4 py-2 bg-cognition-600 hover:bg-cognition-700 text-white font-semibold rounded-lg transition-colors"
+            >
+              Open in Google Maps
+              <svg
+                className="w-4 h-4 ml-2"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M17 8l4 4m0 0l-4 4m4-4H3"
+                ></path>
+              </svg>
+            </a>
           </motion.div>
         </div>
       </div>
