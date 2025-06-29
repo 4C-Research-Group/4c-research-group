@@ -220,12 +220,13 @@ export default function AccessibilityPage() {
               </p>
               <div className="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg mb-6">
                 <p>
-                  <strong>Accessibility Coordinator</strong>
+                  <strong>4C Research Lab</strong>
                 </p>
-                <p>Email: accessibility@4cresearchlab.com</p>
-                <p>Phone: [Your Phone Number]</p>
-                <p>TTY: [Your TTY Number]</p>
-                <p>Address: [Your Address]</p>
+                <p>Email: rishi.ganesan@lhsc.on.ca</p>
+                <p>Phone: +1 (519) 685-8500</p>
+                <p>
+                  Address: 800 Commissioners Rd E, London, ON N6A 5W9, Canada
+                </p>
               </div>
 
               <h2 className="text-2xl font-bold text-care-900 dark:text-white mb-4">

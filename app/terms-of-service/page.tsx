@@ -263,9 +263,11 @@ export default function TermsOfServicePage() {
                 <p>
                   <strong>4C Research Lab</strong>
                 </p>
-                <p>Email: legal@4cresearchlab.com</p>
-                <p>Phone: [Your Phone Number]</p>
-                <p>Address: [Your Address]</p>
+                <p>Email: rishi.ganesan@lhsc.on.ca</p>
+                <p>Phone: +1 (519) 685-8500</p>
+                <p>
+                  Address: 800 Commissioners Rd E, London, ON N6A 5W9, Canada
+                </p>
               </div>
 
               <div className="mt-8 p-4 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg">

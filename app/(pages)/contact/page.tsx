@@ -309,9 +309,9 @@ export default function ContactPage({}: Props) {
                       Location
                     </h3>
                     <p className="text-gray-600 dark:text-gray-300">
-                      800 Commissioners Rd. E
+                      800 Commissioners Rd E
                       <br />
-                      London, ON N6K 0C1
+                      London, ON N6A 5W9
                     </p>
                   </div>
                 </div>
