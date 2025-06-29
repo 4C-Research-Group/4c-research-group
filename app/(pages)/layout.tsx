@@ -303,11 +303,11 @@ export default function PagesLayout({
               { name: "Home", href: "/" },
               { name: "Research", href: "/research" },
               { name: "Projects", href: "/research" },
+              { name: "Join 4C Lab", href: "/join-4c-lab" },
               {
                 name: "Knowledge Mobilization",
                 href: "/knowledge-mobilization",
               },
-              { name: "Join 4C Lab", href: "/join-4c-lab" },
               { name: "Publications", href: "/publications" },
               { name: "Contact", href: "/contact" },
             ]}

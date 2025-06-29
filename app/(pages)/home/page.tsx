@@ -664,7 +664,7 @@ export default function HomePage() {
                   <motion.div
                     key={i}
                     variants={fadeInUp}
-                    className="group flex items-center justify-center p-6 bg-white dark:bg-gray-800 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 border border-gray-100 dark:border-gray-700"
+                    className="group flex items-center justify-center p-6 bg-white dark:bg-gray-400 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 border border-gray-100 dark:border-gray-700"
                   >
                     <Image
                       src={partner.image}
