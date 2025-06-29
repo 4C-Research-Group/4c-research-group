@@ -177,27 +177,32 @@ export default function PagesLayout({
           {/* Navigation */}
           <header
             className={cn(
-              "sticky top-0 z-50 w-full border-b bg-white/80 backdrop-blur-sm transition-all duration-200",
-              isScrolled ? "shadow-sm" : "border-transparent",
-              "dark:bg-gray-900/80 dark:border-gray-800"
+              "sticky top-0 z-50 w-full border-b bg-white dark:bg-gray-900 transition-all duration-200",
+              isScrolled
+                ? "shadow-sm border-gray-200 dark:border-gray-700"
+                : "border-transparent"
             )}
           >
             <div className="container flex h-16 items-center justify-between px-4">
               {/* Logo and subtitle in a row on lg+ screens, column on mobile */}
-              <div className="flex flex-col lg:flex-row lg:items-center lg:gap-4">
-                <Link href="/" className="flex items-center space-x-2">
+              <div className="flex flex-col lg:flex-row lg:items-center lg:gap-4 flex-1 min-w-0">
+                <Link
+                  href="/"
+                  className="flex items-center space-x-2 flex-shrink-0"
+                >
                   <Image
                     src="/logo.png"
                     alt="Logo"
                     width={32}
                     height={32}
                     priority
+                    className="flex-shrink-0"
                   />
-                  <span className="text-xl font-bold bg-gradient-to-r from-cognition-600 to-consciousness-600 bg-clip-text text-transparent dark:from-cognition-400 dark:to-consciousness-400">
+                  <span className="text-xl font-bold bg-gradient-to-r from-cognition-600 to-consciousness-600 bg-clip-text text-transparent dark:from-cognition-400 dark:to-consciousness-400 flex-shrink-0">
                     4C Research
                   </span>
                 </Link>
-                <span className="text-[0.5rem] md:text-[0.75rem] text-muted-foreground ml-10 lg:ml-0 lg:pl-4 lg:border-l lg:border-gray-200 dark:lg:border-gray-700 lg:mt-0 mt-1">
+                <span className="text-[0.5rem] md:text-[0.75rem] text-muted-foreground ml-10 lg:ml-0 lg:pl-4 lg:border-l lg:border-gray-200 dark:lg:border-gray-700 lg:mt-0 mt-1 flex-shrink-0">
                   Cognition • Consciousness • Critical Care
                 </span>
               </div>
@@ -288,7 +293,7 @@ export default function PagesLayout({
               </div>
 
               {/* Mobile menu button */}
-              <div className="flex lg:hidden items-center gap-4">
+              <div className="flex lg:hidden items-center gap-4 flex-shrink-0">
                 <MobileNav />
               </div>
             </div>

@@ -53,12 +53,29 @@ export default function MobileNav() {
   return (
     <Sheet open={isOpen} onOpenChange={setIsOpen}>
       <SheetTrigger asChild>
-        <button className="lg:hidden p-2 rounded-md text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800">
+        <button
+          className="lg:hidden p-2 rounded-md text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800"
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            minWidth: "44px",
+            minHeight: "44px",
+            zIndex: 1,
+          }}
+        >
           <Menu className="h-6 w-6" />
           <span className="sr-only">Open main menu</span>
         </button>
       </SheetTrigger>
-      <SheetContent side="left" className="w-[300px] sm:w-[400px] p-0">
+      <SheetContent
+        side="left"
+        className="w-[300px] sm:w-[400px] p-0 z-[60]"
+        style={{
+          // Ensure proper stacking above sticky header
+          zIndex: 60,
+        }}
+      >
         <div className="flex h-full flex-col">
           <div className="flex items-center justify-between px-4 py-4 border-b border-cognition-100/50 dark:border-cognition-800/50">
             <SheetHeader>
