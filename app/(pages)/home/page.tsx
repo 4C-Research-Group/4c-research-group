@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import Image from "next/image";
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import {
   FaBrain,
   FaHeartbeat,
@@ -28,47 +28,101 @@ const researchImages = [
 
 // Minimal animation variants for better performance
 const fadeInUp = {
-  hidden: { opacity: 0, y: 20 },
+  hidden: { opacity: 0, transform: "translateY(30px)" },
   visible: {
     opacity: 1,
-    y: 0,
-    transition: { duration: 0.4 },
+    transform: "translateY(0px)",
+    transition: {
+      duration: 0.6,
+    },
   },
 };
 
 const fadeInLeft = {
-  hidden: { opacity: 0, x: -20 },
+  hidden: { opacity: 0, transform: "translateX(-30px)" },
   visible: {
     opacity: 1,
-    x: 0,
-    transition: { duration: 0.4 },
+    transform: "translateX(0px)",
+    transition: {
+      duration: 0.6,
+    },
   },
 };
 
 const fadeInRight = {
-  hidden: { opacity: 0, x: 20 },
+  hidden: { opacity: 0, transform: "translateX(30px)" },
   visible: {
     opacity: 1,
-    x: 0,
-    transition: { duration: 0.4 },
+    transform: "translateX(0px)",
+    transition: {
+      duration: 0.6,
+    },
   },
 };
 
+// Optimized stagger container with better timing
 const staggerContainer = {
   hidden: { opacity: 0 },
   visible: {
     opacity: 1,
     transition: {
-      staggerChildren: 0.05,
-      delayChildren: 0.05,
+      staggerChildren: 0.1,
+      delayChildren: 0.1,
+      duration: 0.6,
     },
   },
+};
+
+// Card-specific variants for better performance
+const cardVariants = {
+  hidden: {
+    opacity: 0,
+    transform: "translateY(20px) scale(0.95)",
+  },
+  visible: {
+    opacity: 1,
+    transform: "translateY(0px) scale(1)",
+    transition: {
+      duration: 0.5,
+    },
+  },
+};
+
+// Optimized viewport settings
+const viewportSettings = {
+  once: true,
+  margin: "-50px 0px -100px 0px",
+  amount: 0.3,
 };
 
 export default function HomePage() {
   const [content, setContent] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const prefersReducedMotion = useReducedMotion();
+
+  // Conditional animation variants based on user preference
+  const shouldReduceMotion = prefersReducedMotion === true;
+
+  const conditionalFadeInUp = shouldReduceMotion
+    ? { hidden: { opacity: 0 }, visible: { opacity: 1 } }
+    : fadeInUp;
+
+  const conditionalFadeInLeft = shouldReduceMotion
+    ? { hidden: { opacity: 0 }, visible: { opacity: 1 } }
+    : fadeInLeft;
+
+  const conditionalFadeInRight = shouldReduceMotion
+    ? { hidden: { opacity: 0 }, visible: { opacity: 1 } }
+    : fadeInRight;
+
+  const conditionalStaggerContainer = shouldReduceMotion
+    ? { hidden: { opacity: 0 }, visible: { opacity: 1 } }
+    : staggerContainer;
+
+  const conditionalCardVariants = shouldReduceMotion
+    ? { hidden: { opacity: 0 }, visible: { opacity: 1 } }
+    : cardVariants;
 
   useEffect(() => {
     async function fetchContent() {
@@ -160,13 +214,13 @@ export default function HomePage() {
               {/* Left Column - Content */}
               <motion.div
                 className="text-center lg:text-left"
-                variants={fadeInLeft}
+                variants={conditionalFadeInLeft}
                 initial="hidden"
                 animate="visible"
               >
                 <motion.div
                   className="inline-flex items-center px-4 py-2 bg-cognition-100/80 dark:bg-cognition-800/50 rounded-full text-cognition-700 dark:text-cognition-300 text-sm font-medium mb-6"
-                  variants={fadeInUp}
+                  variants={conditionalFadeInUp}
                   initial="hidden"
                   animate="visible"
                   transition={{ delay: 0.1 }}
@@ -177,7 +231,7 @@ export default function HomePage() {
 
                 <motion.h1
                   className="text-5xl md:text-6xl lg:text-7xl font-bold text-cognition-900 dark:text-white mb-8 leading-tight"
-                  variants={fadeInUp}
+                  variants={conditionalFadeInUp}
                   initial="hidden"
                   animate="visible"
                   transition={{ delay: 0.2 }}
@@ -189,7 +243,7 @@ export default function HomePage() {
 
                 <motion.p
                   className="text-xl md:text-2xl text-gray-700 dark:text-gray-300 mb-10 max-w-2xl mx-auto lg:mx-0 leading-relaxed"
-                  variants={fadeInUp}
+                  variants={conditionalFadeInUp}
                   initial="hidden"
                   animate="visible"
                   transition={{ delay: 0.3 }}
@@ -200,7 +254,7 @@ export default function HomePage() {
 
                 <motion.div
                   className="flex flex-col sm:flex-row gap-6 justify-center lg:justify-start"
-                  variants={fadeInUp}
+                  variants={conditionalFadeInUp}
                   initial="hidden"
                   animate="visible"
                   transition={{ delay: 0.4 }}
@@ -229,7 +283,7 @@ export default function HomePage() {
               {/* Right Column - Visual */}
               <motion.div
                 className="relative h-96 md:h-[32rem] lg:h-[40rem]"
-                variants={fadeInRight}
+                variants={conditionalFadeInRight}
                 initial="hidden"
                 animate="visible"
                 transition={{ delay: 0.3 }}
@@ -267,7 +321,6 @@ export default function HomePage() {
                       transition={{
                         duration: 4,
                         repeat: Infinity,
-                        ease: "easeInOut",
                       }}
                     />
 
@@ -281,7 +334,6 @@ export default function HomePage() {
                       transition={{
                         duration: 3.5,
                         repeat: Infinity,
-                        ease: "easeInOut",
                         delay: 1,
                       }}
                     />
@@ -296,7 +348,6 @@ export default function HomePage() {
                       transition={{
                         duration: 2.5,
                         repeat: Infinity,
-                        ease: "easeInOut",
                         delay: 0.5,
                       }}
                     />
@@ -311,7 +362,6 @@ export default function HomePage() {
                       transition={{
                         duration: 3,
                         repeat: Infinity,
-                        ease: "easeInOut",
                         delay: 1.5,
                       }}
                     />
@@ -326,7 +376,6 @@ export default function HomePage() {
                       transition={{
                         duration: 2.8,
                         repeat: Infinity,
-                        ease: "easeInOut",
                         delay: 0.8,
                       }}
                     />
@@ -341,7 +390,6 @@ export default function HomePage() {
                       transition={{
                         duration: 3.2,
                         repeat: Infinity,
-                        ease: "easeInOut",
                         delay: 1.2,
                       }}
                     />
@@ -381,10 +429,10 @@ export default function HomePage() {
           <div className="container mx-auto px-4">
             <motion.div
               className="text-center mb-20"
-              variants={fadeInUp}
+              variants={conditionalFadeInUp}
               initial="hidden"
               whileInView="visible"
-              viewport={{ once: true, margin: "-100px" }}
+              viewport={viewportSettings}
             >
               <h2 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-6">
                 <span className="bg-gradient-to-r from-cognition-600 to-consciousness-600 bg-clip-text text-transparent">
@@ -396,22 +444,15 @@ export default function HomePage() {
 
             <motion.div
               className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8"
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              viewport={{ once: true, margin: "-50px" }}
-              transition={{ duration: 0.3 }}
+              variants={conditionalStaggerContainer}
+              initial="hidden"
+              whileInView="visible"
+              viewport={viewportSettings}
             >
               {projects.cards.map((project: any, i: number) => (
                 <motion.div
                   key={i}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, margin: "-50px" }}
-                  transition={{
-                    duration: 0.3,
-                    delay: i * 0.1,
-                    ease: "easeOut",
-                  }}
+                  variants={conditionalCardVariants}
                   className="group relative bg-white dark:bg-gray-800 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden border border-gray-100 dark:border-gray-700"
                 >
                   <div className="relative h-40 bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-700 dark:to-gray-600 overflow-hidden">
@@ -466,10 +507,10 @@ export default function HomePage() {
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start max-w-6xl mx-auto">
               {/* Left Column - Mission */}
               <motion.div
-                variants={fadeInLeft}
+                variants={conditionalFadeInLeft}
                 initial="hidden"
                 whileInView="visible"
-                viewport={{ once: true, margin: "-100px" }}
+                viewport={viewportSettings}
                 className="flex flex-col h-full"
               >
                 <div className="mb-8">
@@ -515,10 +556,10 @@ export default function HomePage() {
               {/* Right Column - 4C's */}
               <motion.div
                 className="flex flex-col h-full justify-center"
-                variants={fadeInRight}
+                variants={conditionalFadeInRight}
                 initial="hidden"
                 whileInView="visible"
-                viewport={{ once: true, margin: "-100px" }}
+                viewport={viewportSettings}
               >
                 <div className="mb-8 text-center">
                   <h2 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-6 leading-tight">
@@ -553,10 +594,10 @@ export default function HomePage() {
           <div className="container mx-auto px-4">
             <motion.div
               className="text-center mb-20"
-              variants={fadeInUp}
+              variants={conditionalFadeInUp}
               initial="hidden"
               whileInView="visible"
-              viewport={{ once: true, margin: "-100px" }}
+              viewport={viewportSettings}
             >
               <h2 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-6">
                 <span className="bg-gradient-to-r from-cognition-600 to-consciousness-600 bg-clip-text text-transparent">
@@ -568,15 +609,15 @@ export default function HomePage() {
 
             <motion.div
               className="grid grid-cols-1 md:grid-cols-3 gap-8"
-              variants={staggerContainer}
+              variants={conditionalStaggerContainer}
               initial="hidden"
               whileInView="visible"
-              viewport={{ once: true, margin: "-100px" }}
+              viewport={viewportSettings}
             >
               {services.cards.map((card: any, i: number) => (
                 <motion.div
                   key={i}
-                  variants={fadeInUp}
+                  variants={conditionalCardVariants}
                   className="group relative bg-white dark:bg-gray-800 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 p-8 border border-gray-100 dark:border-gray-700"
                 >
                   <div className="relative z-10">
@@ -610,13 +651,17 @@ export default function HomePage() {
           <div className="container mx-auto px-4">
             <motion.div
               className="grid md:grid-cols-4 gap-8 text-center"
-              variants={staggerContainer}
+              variants={conditionalStaggerContainer}
               initial="hidden"
               whileInView="visible"
-              viewport={{ once: true, margin: "-100px" }}
+              viewport={viewportSettings}
             >
               {stats.map((stat: any, i: number) => (
-                <motion.div key={i} variants={fadeInUp} className="p-8">
+                <motion.div
+                  key={i}
+                  variants={conditionalFadeInUp}
+                  className="p-8"
+                >
                   <div className="text-5xl font-bold mb-4 bg-gradient-to-r from-white to-cognition-100 bg-clip-text text-transparent">
                     {stat.value}
                   </div>
@@ -636,10 +681,10 @@ export default function HomePage() {
           <div className="container mx-auto px-4">
             <motion.div
               className="text-center mb-20"
-              variants={fadeInUp}
+              variants={conditionalFadeInUp}
               initial="hidden"
               whileInView="visible"
-              viewport={{ once: true, margin: "-100px" }}
+              viewport={viewportSettings}
             >
               <h2 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-6">
                 <span className="bg-gradient-to-r from-cognition-600 to-consciousness-600 bg-clip-text text-transparent">
@@ -655,15 +700,15 @@ export default function HomePage() {
             {partners.cards && partners.cards.length > 0 && (
               <motion.div
                 className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 items-center justify-center"
-                variants={staggerContainer}
+                variants={conditionalStaggerContainer}
                 initial="hidden"
                 whileInView="visible"
-                viewport={{ once: true, margin: "-100px" }}
+                viewport={viewportSettings}
               >
                 {partners.cards.map((partner: any, i: number) => (
                   <motion.div
                     key={i}
-                    variants={fadeInUp}
+                    variants={conditionalFadeInUp}
                     className="group flex items-center justify-center p-6 bg-white dark:bg-gray-400 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 border border-gray-100 dark:border-gray-700"
                   >
                     <Image
@@ -688,10 +733,10 @@ export default function HomePage() {
           <div className="container mx-auto px-4">
             <motion.div
               className="text-center mb-20"
-              variants={fadeInUp}
+              variants={conditionalFadeInUp}
               initial="hidden"
               whileInView="visible"
-              viewport={{ once: true, margin: "-100px" }}
+              viewport={viewportSettings}
             >
               <h2 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-6">
                 <span className="bg-gradient-to-r from-cognition-600 to-consciousness-600 bg-clip-text text-transparent">
@@ -703,10 +748,10 @@ export default function HomePage() {
 
             <motion.div
               className="max-w-4xl mx-auto"
-              variants={fadeInUp}
+              variants={conditionalFadeInUp}
               initial="hidden"
               whileInView="visible"
-              viewport={{ once: true, margin: "-100px" }}
+              viewport={viewportSettings}
             >
               <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl overflow-hidden border border-gray-100 dark:border-gray-700">
                 <div className="p-8 md:p-12">
@@ -745,10 +790,10 @@ export default function HomePage() {
           <div className="container mx-auto px-4">
             <motion.div
               className="text-center mb-20"
-              variants={fadeInUp}
+              variants={conditionalFadeInUp}
               initial="hidden"
               whileInView="visible"
-              viewport={{ once: true, margin: "-100px" }}
+              viewport={viewportSettings}
             >
               <h2 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-6">
                 <span className="bg-gradient-to-r from-cognition-600 to-consciousness-600 bg-clip-text text-transparent">
@@ -760,10 +805,10 @@ export default function HomePage() {
 
             <motion.div
               className="max-w-4xl mx-auto"
-              variants={fadeInUp}
+              variants={conditionalFadeInUp}
               initial="hidden"
               whileInView="visible"
-              viewport={{ once: true, margin: "-100px" }}
+              viewport={viewportSettings}
             >
               <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl overflow-hidden border border-gray-100 dark:border-gray-700">
                 <div className="p-8 md:p-12 text-center">
@@ -810,10 +855,10 @@ export default function HomePage() {
           <div className="container mx-auto px-4 text-center">
             <motion.div
               className="max-w-4xl mx-auto"
-              variants={fadeInUp}
+              variants={conditionalFadeInUp}
               initial="hidden"
               whileInView="visible"
-              viewport={{ once: true, margin: "-100px" }}
+              viewport={viewportSettings}
             >
               <h2 className="text-4xl md:text-5xl font-bold mb-8 leading-tight">
                 {cta.title}
