@@ -392,14 +392,14 @@ export default function ContactPage({}: Props) {
             <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl overflow-hidden">
               <div className="w-full h-64">
                 <iframe
-                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2918.964964073839!2d-81.2225!3d42.9475!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x882ef1c1b2e2e0e7%3A0x6e7e2e2e2e2e2e2e!2sLondon%20Health%20Sciences%20Centre%20Victoria%20Hospital!5e0!3m2!1sen!2sca!4v1685641234567!5m2!1sen!2sca"
+                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d5979841.431727101!2d-90.98107327499999!3d42.960482299999995!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x882ef0fa90d42453%3A0x1e8dae5de3acaae!2sVictoria%20Hospital%20%26%20Children&#39;s%20Hospital!5e0!3m2!1sen!2sca!4v1751160990375!5m2!1sen!2sca"
                   width="100%"
-                  height="100%"
+                  height="400"
                   style={{ border: 0 }}
                   allowFullScreen
                   loading="lazy"
                   referrerPolicy="no-referrer-when-downgrade"
-                  title="4C Research Lab Location"
+                  title="Victoria Hospital & Children's Hospital"
                   className="rounded-2xl"
                 ></iframe>
               </div>
