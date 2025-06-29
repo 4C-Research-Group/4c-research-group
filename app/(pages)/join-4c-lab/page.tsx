@@ -97,8 +97,8 @@ export default function Join4CLabPage() {
             className="text-center mb-12"
           >
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-6">
-              Read more about previous students' experiences with Mission 4C
-              below!
+              Read more about previous students&apos; experiences with Mission
+              4C below!
             </h2>
             <div className="w-32 h-1.5 bg-gradient-to-r from-cognition-500 via-consciousness-500 to-care-500 rounded-full mx-auto" />
           </motion.div>
@@ -329,7 +329,9 @@ export default function Join4CLabPage() {
                     <span className="bg-consciousness-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm font-bold mr-3 mt-0.5">
                       4
                     </span>
-                    <span>We'll contact you for an interview if selected</span>
+                    <span>
+                      We&apos;ll contact you for an interview if selected
+                    </span>
                   </li>
                 </ul>
               </div>
