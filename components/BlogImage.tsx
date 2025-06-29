@@ -77,18 +77,11 @@ export default function BlogImage({
 
   if (imageError || !src || !isValidImageUrl(src)) {
     console.log("BlogImage: Showing fallback for:", { src, imageError, title });
-    const initials = title
-      .split(" ")
-      .map((n) => n[0])
-      .join("")
-      .toUpperCase()
-      .slice(0, 3);
-
     return (
       <div
-        className={`flex items-center justify-center w-full h-full bg-gradient-to-br from-cognition-600 to-cognition-800 text-white font-bold ${className}`}
+        className={`flex items-center justify-center w-full h-full bg-gradient-to-br from-cognition-600 to-cognition-800 ${className}`}
       >
-        <span className="text-4xl md:text-6xl">{initials}</span>
+        {/* No initials or text, just background */}
       </div>
     );
   }
