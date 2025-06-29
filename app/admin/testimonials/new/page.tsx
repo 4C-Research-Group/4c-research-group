@@ -35,7 +35,7 @@ export default function NewTestimonialPage() {
 
     try {
       await createTestimonial(formData);
-      router.push("/admin/team");
+      router.push("/admin/testimonials");
     } catch (error) {
       console.error("Error creating testimonial:", error);
       alert("Failed to create testimonial");
@@ -65,11 +65,11 @@ export default function NewTestimonialPage() {
     <div className="container mx-auto px-4 py-8">
       <div className="mb-8">
         <Link
-          href="/admin/team"
+          href="/admin/testimonials"
           className="inline-flex items-center text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white mb-4"
         >
           <FaArrowLeft className="mr-2" />
-          Back to Team Management
+          Back to Testimonials
         </Link>
         <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
           Add New Testimonial
@@ -185,7 +185,7 @@ export default function NewTestimonialPage() {
 
             {/* Submit Button */}
             <div className="flex justify-end space-x-4">
-              <Link href="/admin/team">
+              <Link href="/admin/testimonials">
                 <Button type="button" variant="outline">
                   Cancel
                 </Button>

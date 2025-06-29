@@ -264,6 +264,12 @@ export default function PagesLayout({
                           Publications
                         </Link>
                         <Link
+                          href="/join-4c-lab"
+                          className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700"
+                        >
+                          Join 4C Lab
+                        </Link>
+                        <Link
                           href="/contact"
                           className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700"
                         >
@@ -301,7 +307,7 @@ export default function PagesLayout({
                 name: "Knowledge Mobilization",
                 href: "/knowledge-mobilization",
               },
-              { name: "Join Mission 4C", href: "/team" },
+              { name: "Join 4C Lab", href: "/join-4c-lab" },
               { name: "Publications", href: "/publications" },
               { name: "Contact", href: "/contact" },
             ]}

@@ -118,6 +118,7 @@ export default async function AdminLayout({
         children: [
           { name: "Team Members", href: "/admin/team" },
           { name: "Add Member", href: "/admin/team/new" },
+          { name: "Testimonials", href: "/admin/testimonials" },
           { name: "Add Testimonial", href: "/admin/testimonials/new" },
         ],
       },

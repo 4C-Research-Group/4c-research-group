@@ -13,4 +13,5 @@ export const navigationConfig: NavItem[] = [
   { title: "Publications", href: "/publications" },
   { title: "Our Team", href: "/team" },
   { title: "4C Blogs", href: "/4c-blogs" },
+  { title: "Join 4C Lab", href: "/join-4c-lab" },
 ];

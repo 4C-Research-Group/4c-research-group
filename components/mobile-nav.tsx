@@ -14,6 +14,7 @@ import {
   FileText,
   Users,
   FileSpreadsheet,
+  UserPlus,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { navigationConfig } from "@/lib/navigation";
@@ -35,6 +36,7 @@ const iconMap: Record<string, React.ReactNode> = {
   Publications: <FileText className="h-5 w-5" />,
   "Our Team": <Users className="h-5 w-5" />,
   "4C Blogs": <BookOpen className="h-5 w-5" />,
+  "Join 4C Lab": <UserPlus className="h-5 w-5" />,
 };
 
 export default function MobileNav() {

@@ -187,6 +187,21 @@ export async function getAllTestimonials(): Promise<Testimonial[]> {
   return (data as unknown as Testimonial[]) || [];
 }
 
+export async function getTestimonial(id: string): Promise<Testimonial> {
+  const { data, error } = await supabase
+    .from("testimonials")
+    .select("*")
+    .eq("id", id)
+    .single();
+
+  if (error) {
+    console.error("Error fetching testimonial:", error);
+    throw error;
+  }
+
+  return data as unknown as Testimonial;
+}
+
 export async function createTestimonial(
   data: CreateTestimonialData
 ): Promise<Testimonial> {

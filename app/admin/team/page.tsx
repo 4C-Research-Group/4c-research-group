@@ -3,22 +3,18 @@
 import { useState, useEffect } from "react";
 import {
   getAllTeamMembers,
-  getAllTestimonials,
   deleteTeamMember,
-  deleteTestimonial,
   type TeamMember,
-  type Testimonial,
 } from "@/lib/supabase/team";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { FaEdit, FaTrash, FaPlus, FaUser, FaQuoteLeft } from "react-icons/fa";
+import { FaEdit, FaTrash, FaPlus, FaUser } from "react-icons/fa";
 import Link from "next/link";
 import Image from "next/image";
 
 export default function AdminTeamPage() {
   const [teamMembers, setTeamMembers] = useState<TeamMember[]>([]);
-  const [testimonials, setTestimonials] = useState<Testimonial[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -27,12 +23,8 @@ export default function AdminTeamPage() {
 
   async function loadData() {
     try {
-      const [members, testimonialData] = await Promise.all([
-        getAllTeamMembers(),
-        getAllTestimonials(),
-      ]);
+      const members = await getAllTeamMembers();
       setTeamMembers(members);
-      setTestimonials(testimonialData);
     } catch (error) {
       console.error("Error loading data:", error);
     } finally {
@@ -48,20 +40,6 @@ export default function AdminTeamPage() {
       } catch (error) {
         console.error("Error deleting team member:", error);
         alert("Failed to delete team member");
-      }
-    }
-  }
-
-  async function handleDeleteTestimonial(id: string) {
-    if (confirm("Are you sure you want to delete this testimonial?")) {
-      try {
-        await deleteTestimonial(id);
-        setTestimonials((prev) =>
-          prev.filter((testimonial) => testimonial.id !== id)
-        );
-      } catch (error) {
-        console.error("Error deleting testimonial:", error);
-        alert("Failed to delete testimonial");
       }
     }
   }
@@ -83,9 +61,7 @@ export default function AdminTeamPage() {
         <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
           Team Management
         </h1>
-        <p className="text-gray-600 dark:text-gray-300">
-          Manage team members and testimonials
-        </p>
+        <p className="text-gray-600 dark:text-gray-300">Manage team members</p>
       </div>
 
       {/* Team Members Section */}
@@ -157,80 +133,6 @@ export default function AdminTeamPage() {
                     size="sm"
                     variant="outline"
                     onClick={() => handleDeleteTeamMember(member.id)}
-                    className="text-red-600 hover:text-red-700"
-                  >
-                    <FaTrash className="w-3 h-3" />
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
-      </div>
-
-      {/* Testimonials Section */}
-      <div>
-        <div className="flex justify-between items-center mb-6">
-          <h2 className="text-2xl font-bold text-gray-900 dark:text-white flex items-center">
-            <FaQuoteLeft className="mr-2" />
-            Testimonials ({testimonials.length})
-          </h2>
-          <Link href="/admin/testimonials/new">
-            <Button className="bg-cognition-600 hover:bg-cognition-700">
-              <FaPlus className="mr-2" />
-              Add Testimonial
-            </Button>
-          </Link>
-        </div>
-
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {testimonials.map((testimonial) => (
-            <Card key={testimonial.id} className="overflow-hidden">
-              <div className="relative h-48 bg-gray-100 dark:bg-gray-800">
-                {testimonial.image_url ? (
-                  <Image
-                    src={testimonial.image_url}
-                    alt={testimonial.name}
-                    fill
-                    className="object-cover"
-                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                  />
-                ) : (
-                  <div className="w-full h-full bg-gradient-to-br from-cognition-400 to-cognition-600 flex items-center justify-center">
-                    <span className="text-4xl text-white font-bold">
-                      {testimonial.name
-                        .split(" ")
-                        .map((n) => n[0])
-                        .join("")}
-                    </span>
-                  </div>
-                )}
-                <div className="absolute top-2 right-2">
-                  {!testimonial.is_active && (
-                    <Badge variant="secondary">Inactive</Badge>
-                  )}
-                </div>
-              </div>
-              <CardHeader className="pb-2">
-                <CardTitle className="text-lg">{testimonial.name}</CardTitle>
-                <p className="text-sm text-gray-600 dark:text-gray-400">
-                  {testimonial.role}
-                </p>
-              </CardHeader>
-              <CardContent>
-                <p className="text-sm text-gray-700 dark:text-gray-300 mb-3 line-clamp-3">
-                  &ldquo;{testimonial.quote.substring(0, 100)}...&rdquo;
-                </p>
-                <div className="flex justify-end space-x-2">
-                  <Link href={`/admin/testimonials/edit/${testimonial.id}`}>
-                    <Button size="sm" variant="outline">
-                      <FaEdit className="w-3 h-3" />
-                    </Button>
-                  </Link>
-                  <Button
-                    size="sm"
-                    variant="outline"
-                    onClick={() => handleDeleteTestimonial(testimonial.id)}
                     className="text-red-600 hover:text-red-700"
                   >
                     <FaTrash className="w-3 h-3" />
