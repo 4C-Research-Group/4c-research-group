@@ -14,11 +14,11 @@ export default function ResearchDiagramPage() {
           <div className="absolute top-40 right-20 w-96 h-96 bg-consciousness-200/20 dark:bg-consciousness-700/10 rounded-full animate-pulse-slow" />
           <div className="absolute bottom-20 left-1/4 w-80 h-80 bg-care-200/20 dark:bg-care-700/10 rounded-full animate-pulse-slow" />
         </div>
-        
+
         <div className="container mx-auto px-4 py-20 md:py-24 relative z-10">
           <div className="max-w-4xl mx-auto text-center">
             <motion.h1
-              className="text-5xl md:text-6xl lg:text-7xl font-bold text-cognition-900 dark:text-white mb-6 leading-tight"
+              className="text-5xl md:text-6xl font-bold text-cognition-900 dark:text-white mb-6 leading-tight"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
@@ -34,7 +34,8 @@ export default function ResearchDiagramPage() {
               transition={{ duration: 0.5, delay: 0.1 }}
             >
               Explore our comprehensive research areas organized around the four
-              core pillars: Cognition, Consciousness, Critical Care, and Comfort.
+              core pillars: Cognition, Consciousness, Critical Care, and
+              Comfort.
             </motion.p>
           </div>
         </div>
@@ -45,20 +46,20 @@ export default function ResearchDiagramPage() {
       <section className="py-16 px-4">
         <div className="container mx-auto">
           <ResearchDiagram />
-          
-          <motion.div 
+
+          <motion.div
             className="mt-12 text-center"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.2 }}
           >
             <p className="text-gray-500 text-sm">
-              Click on any project to view details • Hover over sections for more
-              information
+              Click on any project to view details • Hover over sections for
+              more information
             </p>
           </motion.div>
         </div>
       </section>
     </div>
   );
-} 
+}

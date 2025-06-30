@@ -133,7 +133,7 @@ export default function AboutPage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
           >
-            <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold text-cognition-900 dark:text-white mb-6 leading-tight">
+            <h1 className="text-5xl md:text-6xl font-bold text-cognition-900 dark:text-white mb-6 leading-tight">
               <span className="bg-gradient-to-r from-cognition-600 via-consciousness-600 to-care-600 bg-clip-text text-transparent">
                 {hero.title || "About 4C Research"}
               </span>

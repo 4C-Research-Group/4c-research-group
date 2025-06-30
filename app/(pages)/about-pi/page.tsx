@@ -45,7 +45,7 @@ export default function AboutPIPage() {
               transition={{ duration: 0.6, delay: 0.1 }}
               className="max-w-3xl"
             >
-              <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold mb-6 leading-tight">
+              <h1 className="text-5xl md:text-6xl font-bold mb-6 leading-tight">
                 <span className="bg-gradient-to-r from-cognition-600 via-consciousness-600 to-care-600 bg-clip-text text-transparent">
                   Dr. Rishi Ganesan
                 </span>

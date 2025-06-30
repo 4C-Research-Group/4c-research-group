@@ -102,7 +102,7 @@ export default function CognitionResearchPage() {
         <div className="container mx-auto px-4 py-20 md:py-24 relative z-10">
           <div className="max-w-4xl mx-auto text-center">
             <motion.h1
-              className="text-5xl md:text-6xl lg:text-7xl font-bold text-cognition-900 dark:text-white mb-6 leading-tight"
+              className="text-5xl md:text-6xl font-bold text-cognition-900 dark:text-white mb-6 leading-tight"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
