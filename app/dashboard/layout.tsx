@@ -5,9 +5,9 @@ import { redirect } from "next/navigation";
 import { Toaster } from "sonner";
 import Link from "next/link";
 import { LogOut, LayoutDashboard, User, Settings } from "lucide-react";
-
+import { useState } from "react";
 const inter = Inter({ subsets: ["latin"] });
-
+import AdminPanelButton from "./AdminPanelButton";
 export default async function DashboardLayout({
   children,
 }: {
@@ -76,7 +76,7 @@ export default async function DashboardLayout({
 
     const handleSignOut = async () => {
       "use server";
-      const cookieStore = await cookies();
+      const cookieStore = cookies();
       const supabase = createServerClient(
         process.env.NEXT_PUBLIC_SUPABASE_URL!,
         process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
@@ -168,6 +168,40 @@ export default async function DashboardLayout({
 
         <main>
           <div className="mx-auto max-w-7xl py-6 sm:px-6 lg:px-8">
+            <div className="bg-white shadow rounded-lg p-6 mb-6">
+              <div className="flex flex-col md:flex-row md:items-start md:justify-between">
+                <div className="flex-1 min-w-0">
+                  <h2 className="text-2xl font-bold text-gray-900 mb-4">
+                    Welcome to your Dashboard
+                  </h2>
+                  <p className="text-gray-600 mb-4">
+                    You are logged in as: {user.email}
+                  </p>
+                  {userData && (
+                    <p className="text-gray-600 mb-4">
+                      Name: {userData.name} | Role: {userData.role}
+                    </p>
+                  )}
+                  <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
+                    <p className="text-blue-800">
+                      This is your user dashboard. If you have admin privileges,
+                      you can access the admin panel.
+                    </p>
+                  </div>
+                </div>
+                <div className="md:ml-8 flex-shrink-0 mb-2 md:mb-0 flex items-start">
+                  <AdminPanelButton isAdmin={userData?.role === "admin"} />
+                </div>
+              </div>
+              <div className="mb-6 mt-2">
+                <a
+                  href="/"
+                  className="inline-block px-4 py-2 bg-gray-100 text-gray-800 rounded border border-gray-300 hover:bg-gray-200 transition-colors font-medium"
+                >
+                  Visit Site Homepage
+                </a>
+              </div>
+            </div>
             {children}
           </div>
         </main>
