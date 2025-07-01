@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useParams, useRouter } from "next/navigation";
 import {
   getTestimonial,
@@ -26,11 +26,7 @@ export default function EditTestimonialPage() {
 
   const testimonialId = params.id as string;
 
-  useEffect(() => {
-    loadTestimonial();
-  }, [testimonialId]);
-
-  async function loadTestimonial() {
+  const loadTestimonial = useCallback(async () => {
     try {
       setError(null);
       const data = await getTestimonial(testimonialId);
@@ -41,7 +37,11 @@ export default function EditTestimonialPage() {
     } finally {
       setLoading(false);
     }
-  }
+  }, [testimonialId]);
+
+  useEffect(() => {
+    loadTestimonial();
+  }, [loadTestimonial]);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
