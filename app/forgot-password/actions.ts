@@ -20,7 +20,7 @@ export async function handleResetPassword(formData: FormData) {
 
   try {
     const { error } = await supabase.auth.resetPasswordForEmail(email, {
-      redirectTo: `${process.env.NEXT_PUBLIC_SITE_URL}/api/auth/confirm?type=recovery&redirectUrl=${process.env.NEXT_PUBLIC_SITE_URL}/update-password`,
+      redirectTo: `${process.env.NEXT_PUBLIC_SITE_URL}/update-password`,
     });
 
     if (error) {
