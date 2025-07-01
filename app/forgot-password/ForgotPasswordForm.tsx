@@ -2,19 +2,53 @@
 import { useFormState } from "react-dom";
 import { handleResetPassword } from "./actions";
 import Link from "next/link";
+import { useEffect, useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 
 const initialState: { success?: boolean; error?: string } = {};
 
 async function resetPasswordReducer(
   state: typeof initialState,
-  payload: FormData
+  formData: FormData
 ): Promise<typeof initialState> {
-  const result = await handleResetPassword(payload);
+  const result = await handleResetPassword(formData);
   return result;
 }
 
 export default function ForgotPasswordForm() {
   const [state, formAction] = useFormState(resetPasswordReducer, initialState);
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const supabase = createClientComponentClient();
+
+  // Add a loading state for session setup
+  const [sessionReady, setSessionReady] = useState(false);
+
+  useEffect(() => {
+    const access_token = searchParams.get("access_token");
+    const type = searchParams.get("type");
+    if (access_token && type === "recovery") {
+      supabase.auth
+        .setSession({
+          access_token,
+          refresh_token: "",
+        })
+        .then(() => setSessionReady(true));
+    } else {
+      // If no token, assume session is ready (for direct access)
+      setSessionReady(true);
+    }
+  }, [searchParams, supabase.auth]);
+
+  // Show loading spinner until session is ready
+  if (!sessionReady) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-lg text-gray-600">Preparing password reset...</div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-background">

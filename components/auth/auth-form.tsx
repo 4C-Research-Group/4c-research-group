@@ -353,6 +353,17 @@ export default function AuthForm({ initialMode = "login" }: AuthFormProps) {
                   )}
                 </div>
 
+                {isLogin && (
+                  <div className="text-right mb-2">
+                    <a
+                      href="/forgot-password"
+                      className="text-sm text-cognition-600 hover:text-cognition-800 dark:text-cognition-400 dark:hover:text-cognition-200 underline"
+                    >
+                      Forgot password?
+                    </a>
+                  </div>
+                )}
+
                 {!isLogin && (
                   <div className="space-y-2">
                     <Label
