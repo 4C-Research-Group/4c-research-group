@@ -446,6 +446,18 @@ export default function AuthForm({ initialMode = "login" }: AuthFormProps) {
                     : "Already have an account? Sign in"}
                 </button>
               </div>
+
+              {/* Add OTP login button below the login form, only in login mode */}
+              {isLogin && (
+                <div className="mt-6 text-center">
+                  <a
+                    href="/login-otp"
+                    className="inline-block text-cognition-600 hover:text-cognition-800 dark:text-cognition-400 dark:hover:text-cognition-200 underline font-medium"
+                  >
+                    Log in with a one-time code (OTP)
+                  </a>
+                </div>
+              )}
             </CardContent>
           </Card>
         </div>
