@@ -353,7 +353,7 @@ export default function AuthForm({ initialMode = "login" }: AuthFormProps) {
                   )}
                 </div>
 
-                {isLogin && (
+                {/* {isLogin && (
                   <div className="text-right mb-2">
                     <a
                       href="/forgot-password"
@@ -362,7 +362,7 @@ export default function AuthForm({ initialMode = "login" }: AuthFormProps) {
                       Forgot password?
                     </a>
                   </div>
-                )}
+                )} */}
 
                 {!isLogin && (
                   <div className="space-y-2">
