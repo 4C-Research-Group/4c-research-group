@@ -1,28 +1,56 @@
 "use client";
 
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+import { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useState, useEffect } from "react";
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 
 export default function UpdatePassword() {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [loading, setLoading] = useState(false);
+  const [sessionRecovered, setSessionRecovered] = useState(false);
   const [message, setMessage] = useState<{
     type: "success" | "error";
     text: string;
+    showForgotLink: boolean;
   } | null>(null);
+
   const router = useRouter();
   const supabase = createClientComponentClient();
   const searchParams = useSearchParams();
 
   useEffect(() => {
-    const access_token = searchParams.get("access_token");
-    const type = searchParams.get("type");
-    if (access_token && type === "recovery") {
-      supabase.auth.setSession({
-        access_token,
-        refresh_token: "",
+    const code = searchParams.get("code");
+    console.log("Reset code from URL:", code);
+    if (code) {
+      supabase.auth.exchangeCodeForSession(code).then(({ data, error }) => {
+        console.log("exchangeCodeForSession result:", { data, error });
+        if (error) {
+          let friendlyMessage = error.message;
+          let showForgotLink = false;
+          if (
+            friendlyMessage.includes(
+              "both auth code and code verifier should be non-empty"
+            )
+          ) {
+            friendlyMessage =
+              "This password reset link cannot be used because your browser session is missing a security code. Please request a new password reset and be sure to click the link in the same browser and device where you requested it.";
+            showForgotLink = true;
+          }
+          setMessage({
+            type: "error",
+            text: friendlyMessage + (showForgotLink ? "\n" : ""),
+            showForgotLink,
+          });
+        } else {
+          setSessionRecovered(true);
+        }
+      });
+    } else {
+      setMessage({
+        type: "error",
+        text: "No password reset code found in the URL.",
+        showForgotLink: false,
       });
     }
   }, [searchParams, supabase.auth]);
@@ -32,26 +60,29 @@ export default function UpdatePassword() {
     setLoading(true);
     setMessage(null);
 
-    // Validate passwords match
     if (password !== confirmPassword) {
-      setMessage({ type: "error", text: "Passwords do not match" });
+      setMessage({
+        type: "error",
+        text: "Passwords do not match",
+        showForgotLink: false,
+      });
       setLoading(false);
       return;
     }
 
-    // Validate password strength (at least 6 characters)
     if (password.length < 6) {
       setMessage({
         type: "error",
         text: "Password must be at least 6 characters",
+        showForgotLink: false,
       });
       setLoading(false);
       return;
     }
 
     try {
-      const { error } = await supabase.auth.updateUser({
-        password,
+      const { data, error } = await supabase.auth.updateUser({
+        password: password,
       });
 
       if (error) throw error;
@@ -59,16 +90,22 @@ export default function UpdatePassword() {
       setMessage({
         type: "success",
         text: "Password updated successfully! Redirecting to login...",
+        showForgotLink: false,
       });
 
-      // Redirect to login after a short delay
+      await supabase.auth.signOut();
+
       setTimeout(() => {
         router.push("/login");
       }, 2000);
     } catch (error: any) {
+      console.error("Password update error:", error);
       setMessage({
         type: "error",
-        text: error.message || "An error occurred while updating your password",
+        text:
+          error.message ||
+          "An error occurred while updating your password. Please try again.",
+        showForgotLink: false,
       });
     } finally {
       setLoading(false);
@@ -78,7 +115,6 @@ export default function UpdatePassword() {
   return (
     <div className="min-h-screen bg-background">
       <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-cognition-50 via-white to-consciousness-50 dark:from-cognition-900 dark:via-gray-900 dark:to-consciousness-900">
-        {/* Background Bubbles */}
         <div className="absolute inset-0 pointer-events-none">
           <div className="absolute top-20 left-10 w-72 h-72 bg-cognition-200/20 dark:bg-cognition-700/10 rounded-full animate-pulse-slow" />
           <div className="absolute top-40 right-20 w-96 h-96 bg-consciousness-200/20 dark:bg-consciousness-700/10 rounded-full animate-pulse-slow" />
@@ -92,6 +128,14 @@ export default function UpdatePassword() {
             <p className="text-center text-gray-600 dark:text-gray-300 mb-6">
               Please enter your new password below
             </p>
+
+            {!sessionRecovered && (
+              <p className="text-sm text-center text-red-500 mb-4">
+                Awaiting secure session... please make sure you clicked the
+                password reset link from your email.
+              </p>
+            )}
+
             {message && (
               <div
                 className={`rounded-md p-4 mb-4 ${message.type === "success" ? "bg-green-50" : "bg-red-50"}`}
@@ -99,10 +143,23 @@ export default function UpdatePassword() {
                 <div
                   className={`text-sm ${message.type === "success" ? "text-green-800" : "text-red-800"}`}
                 >
-                  {message.text}
+                  {message.text.split("\n").map((line, idx) => (
+                    <div key={idx}>{line}</div>
+                  ))}
+                  {message.showForgotLink && (
+                    <div className="mt-2 text-center">
+                      <a
+                        href="/forgot-password"
+                        className="text-cognition-600 hover:text-cognition-800 dark:text-cognition-400 dark:hover:text-cognition-200 underline"
+                      >
+                        Request a new password reset link
+                      </a>
+                    </div>
+                  )}
                 </div>
               </div>
             )}
+
             <form className="space-y-6" onSubmit={handleSubmit}>
               <div>
                 <label
@@ -142,10 +199,10 @@ export default function UpdatePassword() {
               </div>
               <button
                 type="submit"
-                disabled={loading}
+                disabled={loading || !sessionRecovered}
                 className={`w-full mt-2 font-semibold py-3 rounded-md shadow-lg hover:shadow-xl transition-all duration-300 ${
-                  loading
-                    ? "bg-cognition-400 text-white"
+                  loading || !sessionRecovered
+                    ? "bg-gray-400 cursor-not-allowed text-white"
                     : "bg-gradient-to-r from-cognition-600 to-consciousness-600 hover:from-cognition-700 hover:to-consciousness-700 text-white"
                 }`}
               >

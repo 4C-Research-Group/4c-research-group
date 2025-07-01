@@ -24,28 +24,161 @@ export default function ForgotPasswordForm() {
 
   // Add a loading state for session setup
   const [sessionReady, setSessionReady] = useState(false);
+  // New states for password recovery
+  const [isPasswordRecovery, setIsPasswordRecovery] = useState(false);
+  const [newPassword, setNewPassword] = useState("");
+  const [resetStatus, setResetStatus] = useState<{
+    success?: string;
+    error?: string;
+  }>({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
-    const access_token = searchParams.get("access_token");
-    const type = searchParams.get("type");
-    if (access_token && type === "recovery") {
-      supabase.auth
-        .setSession({
-          access_token,
-          refresh_token: "",
-        })
-        .then(() => setSessionReady(true));
+    const code = searchParams.get("code");
+    console.log("Reset code from URL:", code);
+    if (code) {
+      supabase.auth.exchangeCodeForSession(code).then(({ data, error }) => {
+        console.log("exchangeCodeForSession result:", { data, error });
+        if (error) {
+          setResetStatus({
+            error: error.message,
+          });
+        } else {
+          setSessionReady(true);
+        }
+      });
     } else {
-      // If no token, assume session is ready (for direct access)
-      setSessionReady(true);
+      setResetStatus({
+        error: "No password reset code found in the URL.",
+      });
     }
   }, [searchParams, supabase.auth]);
+
+  // Listen for PASSWORD_RECOVERY event
+  useEffect(() => {
+    if (!sessionReady) return;
+    const { data: listener } = supabase.auth.onAuthStateChange(
+      (event, session) => {
+        if (event === "PASSWORD_RECOVERY") {
+          setIsPasswordRecovery(true);
+        }
+      }
+    );
+    // If the user lands directly with a recovery token, set recovery mode
+    if (
+      searchParams.get("access_token") &&
+      searchParams.get("type") === "recovery"
+    ) {
+      setIsPasswordRecovery(true);
+    }
+    return () => {
+      listener?.subscription.unsubscribe();
+    };
+  }, [sessionReady, supabase.auth, searchParams]);
+
+  // Handler for password reset form
+  const handlePasswordReset = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    setResetStatus({});
+    const { data, error } = await supabase.auth.updateUser({
+      password: newPassword,
+    });
+    if (error) {
+      setResetStatus({ error: error.message });
+    } else {
+      setResetStatus({
+        success:
+          "Password updated successfully! You can now log in with your new password.",
+      });
+      setIsPasswordRecovery(false);
+      setNewPassword("");
+    }
+    setIsSubmitting(false);
+  };
 
   // Show loading spinner until session is ready
   if (!sessionReady) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <div className="text-lg text-gray-600">Preparing password reset...</div>
+        <div className="text-lg text-gray-600">
+          Awaiting secure session... please make sure you clicked the password
+          reset link from your email.
+          <br />
+          {resetStatus.error && <div>{resetStatus.error}</div>}
+        </div>
+      </div>
+    );
+  }
+
+  // Show password reset form if in recovery mode
+  if (isPasswordRecovery) {
+    return (
+      <div className="min-h-screen bg-background">
+        <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-cognition-50 via-white to-consciousness-50 dark:from-cognition-900 dark:via-gray-900 dark:to-consciousness-900">
+          <div className="absolute inset-0 pointer-events-none">
+            <div className="absolute top-20 left-10 w-72 h-72 bg-cognition-200/20 dark:bg-cognition-700/10 rounded-full animate-pulse-slow" />
+            <div className="absolute top-40 right-20 w-96 h-96 bg-consciousness-200/20 dark:bg-consciousness-700/10 rounded-full animate-pulse-slow" />
+            <div className="absolute bottom-20 left-1/4 w-80 h-80 bg-care-200/20 dark:bg-care-700/10 rounded-full animate-pulse-slow" />
+          </div>
+          <div className="relative z-10 w-full max-w-md mx-auto px-4">
+            <div className="w-full bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm border-0 shadow-2xl rounded-lg p-8">
+              <h2 className="text-3xl font-bold text-center mb-2 bg-gradient-to-r from-cognition-600 via-consciousness-600 to-care-600 bg-clip-text text-transparent">
+                Set a new password
+              </h2>
+              <p className="text-center text-gray-600 dark:text-gray-300 mb-6">
+                Enter your new password below.
+              </p>
+              {resetStatus.success && (
+                <div className="mb-4 rounded bg-green-50 text-green-800 p-3 text-center">
+                  {resetStatus.success}
+                </div>
+              )}
+              {resetStatus.error && (
+                <div className="mb-4 rounded bg-red-50 text-red-800 p-3 text-center">
+                  {resetStatus.error}
+                </div>
+              )}
+              <form className="space-y-6" onSubmit={handlePasswordReset}>
+                <div>
+                  <label
+                    htmlFor="new-password"
+                    className="block text-sm font-medium text-gray-700 dark:text-gray-300"
+                  >
+                    New Password
+                  </label>
+                  <input
+                    id="new-password"
+                    name="new-password"
+                    type="password"
+                    autoComplete="new-password"
+                    required
+                    minLength={6}
+                    className="mt-1 block w-full rounded-md border border-gray-300 dark:border-gray-600 px-3 py-2 placeholder-gray-400 shadow-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-cognition-500 focus:border-cognition-500 sm:text-sm"
+                    value={newPassword}
+                    onChange={(e) => setNewPassword(e.target.value)}
+                    disabled={isSubmitting}
+                  />
+                </div>
+                <button
+                  type="submit"
+                  className="w-full mt-2 bg-gradient-to-r from-cognition-600 to-consciousness-600 hover:from-cognition-700 hover:to-consciousness-700 text-white font-semibold py-3 rounded-md shadow-lg hover:shadow-xl transition-all duration-300"
+                  disabled={isSubmitting}
+                >
+                  {isSubmitting ? "Resetting..." : "Set new password"}
+                </button>
+              </form>
+              <div className="mt-6 text-center">
+                <Link
+                  href="/login"
+                  className="text-sm text-cognition-600 hover:text-cognition-800 dark:text-cognition-400 dark:hover:text-cognition-200 underline"
+                >
+                  Back to sign in
+                </Link>
+              </div>
+            </div>
+          </div>
+        </section>
       </div>
     );
   }
