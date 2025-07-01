@@ -43,11 +43,37 @@ export default async function DashboardPage() {
             Name: {userData.name} | Role: {userData.role}
           </p>
         )}
-        <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+        <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
           <p className="text-blue-800">
             This is your user dashboard. If you have admin privileges, you can
             access the admin panel.
           </p>
+        </div>
+
+        {/* Admin Panel Link or Message */}
+        <div className="mb-2">
+          {userData?.role === "admin" ? (
+            <a
+              href="/admin"
+              className="inline-block px-4 py-2 bg-blue-600 text-white rounded border border-blue-700 hover:bg-blue-700 transition-colors font-medium mb-2"
+            >
+              Go to Admin Panel
+            </a>
+          ) : (
+            <div className="bg-yellow-50 border border-yellow-200 rounded p-4 text-yellow-800 mb-2">
+              You do not have access to the admin panel. Please contact your
+              admin to grant you access.
+            </div>
+          )}
+        </div>
+        {/* Visit Site Homepage Link */}
+        <div className="mb-6">
+          <a
+            href="/"
+            className="inline-block px-4 py-2 bg-gray-100 text-gray-800 rounded border border-gray-300 hover:bg-gray-200 transition-colors font-medium"
+          >
+            Visit Site Homepage
+          </a>
         </div>
 
         <div className="mt-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">

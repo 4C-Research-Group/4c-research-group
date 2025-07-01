@@ -32,7 +32,7 @@ export default async function AdminLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const cookieStore = await cookies();
+  const cookieStore = cookies();
   const supabase = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
@@ -41,47 +41,69 @@ export default async function AdminLayout({
         get(name: string) {
           return cookieStore.get(name)?.value;
         },
+        set(name: string, value: string, options: any) {
+          try {
+            cookieStore.set({ name, value, ...options });
+          } catch (error) {
+            console.error("Error setting cookie:", error);
+          }
+        },
+        remove(name: string, options: any) {
+          try {
+            cookieStore.set({ name, value: "", ...options, maxAge: 0 });
+          } catch (error) {
+            console.error("Error removing cookie:", error);
+          }
+        },
       },
     }
   );
+
+  // Get the session first
+  const {
+    data: { session },
+    error: sessionError,
+  } = await supabase.auth.getSession();
+
+  if (sessionError || !session) {
+    console.error("❌ No session found or error:", sessionError);
+    redirect("/login?message=You need to sign in to access this page");
+  }
 
   try {
     console.log("🔍 Admin layout: Checking authentication...");
     const {
       data: { user },
-      error: authError,
+      error: userError,
     } = await supabase.auth.getUser();
 
-    if (authError) {
-      console.error("❌ Auth error in admin layout:", authError);
-      redirect("/login");
-    }
-
-    if (!user) {
-      console.log("❌ No user found in admin layout");
-      redirect("/login");
+    if (userError || !user) {
+      console.error("❌ Error getting user:", userError);
+      redirect("/login?message=You need to sign in to access this page");
     }
 
     console.log("✅ User authenticated in admin layout:", user.id);
 
     // Check admin status
     console.log("🔍 Admin layout: Checking user role...");
-    const { data: userData, error } = await supabase
+    const { data: userData, error: roleError } = await supabase
       .from("users")
       .select("name, role")
       .eq("id", user.id)
       .single();
 
-    if (error) {
-      console.error("❌ Error checking admin status:", error);
-      redirect("/login");
+    if (roleError || !userData) {
+      console.error("❌ Error checking admin status:", roleError);
+      redirect("/dashboard?message=Error verifying your permissions");
     }
 
     console.log("👤 User role in admin layout:", userData?.role);
 
     if (userData?.role !== "admin") {
       console.log("❌ User is not admin, redirecting to dashboard");
-      redirect("/dashboard");
+      redirect(
+        "/dashboard?message=You don't have permission to access this page"
+      );
     }
 
     console.log("✅ Admin access granted - rendering admin layout");

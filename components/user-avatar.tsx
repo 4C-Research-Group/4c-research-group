@@ -65,7 +65,7 @@ export function UserAvatar() {
 
   const handleSignOut = async () => {
     await signOut();
-    window.location.href = "/";
+    router.push("/");
   };
 
   return (
@@ -90,9 +90,9 @@ export function UserAvatar() {
           </div>
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
-        {!loading && userRole === "admin" && (
+        {!loading && (
           <DropdownMenuItem onClick={() => router.push("/dashboard")}>
-            Admin Dashboard
+            Dashboard
           </DropdownMenuItem>
         )}
         <DropdownMenuSeparator />
