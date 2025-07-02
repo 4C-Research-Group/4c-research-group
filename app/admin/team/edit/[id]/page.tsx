@@ -105,8 +105,13 @@ export default function EditTeamMemberPage() {
     try {
       const imageUrl = formData.image_url;
       if (imageUrl) {
-        const filePath = imageUrl.split("/team/")[1];
-        await supabase.storage.from("team").remove([filePath]);
+        // This will extract everything after '/object/public/team/'
+        const url = new URL(imageUrl);
+        const match = url.pathname.match(/\/object\/public\/team\/(.+)$/);
+        const filePath = match ? match[1] : null;
+        if (filePath) {
+          await supabase.storage.from("team").remove([filePath]);
+        }
       }
       await deleteTeamMember(id);
       router.push("/admin/team");
