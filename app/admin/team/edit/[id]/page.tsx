@@ -6,6 +6,7 @@ import {
   getTeamMemberById,
   updateTeamMember,
   type CreateTeamMemberData,
+  deleteTeamMember,
 } from "@/lib/supabase/team";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -93,6 +94,29 @@ export default function EditTeamMemberPage() {
       router.push("/admin/team");
     } catch (error) {
       alert("Failed to update team member");
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const handleDelete = async () => {
+    if (!id || !formData) return;
+    setSaving(true);
+    try {
+      // 1. Parse the file path from the image_url
+      const imageUrl = formData.image_url; // e.g., https://.../object/public/team/avatars/filename.jpg
+      const filePath = imageUrl.split("/team/")[1]; // gives 'avatars/filename.jpg'
+
+      // 2. Delete the file from storage
+      await supabase.storage.from("team").remove([filePath]);
+
+      // 3. Then delete the team member from the database
+      await deleteTeamMember(id);
+
+      router.push("/admin/team");
+    } catch (error) {
+      console.error("Error deleting team member:", error);
+      alert("Failed to delete team member");
     } finally {
       setSaving(false);
     }
