@@ -103,16 +103,12 @@ export default function EditTeamMemberPage() {
     if (!id || !formData) return;
     setSaving(true);
     try {
-      // 1. Parse the file path from the image_url
-      const imageUrl = formData.image_url; // e.g., https://.../object/public/team/avatars/filename.jpg
-      const filePath = imageUrl.split("/team/")[1]; // gives 'avatars/filename.jpg'
-
-      // 2. Delete the file from storage
-      await supabase.storage.from("team").remove([filePath]);
-
-      // 3. Then delete the team member from the database
+      const imageUrl = formData.image_url;
+      if (imageUrl) {
+        const filePath = imageUrl.split("/team/")[1];
+        await supabase.storage.from("team").remove([filePath]);
+      }
       await deleteTeamMember(id);
-
       router.push("/admin/team");
     } catch (error) {
       console.error("Error deleting team member:", error);
@@ -296,15 +292,8 @@ export default function EditTeamMemberPage() {
                     <img
                       src={formData.image_url}
                       alt="Preview"
-                      className="h-24 w-24 object-cover rounded"
-                      onError={(e) => {
-                        console.error(
-                          "Error loading image:",
-                          formData.image_url
-                        );
-                        // Optionally set a fallback image
-                        // e.currentTarget.src = '/path/to/fallback.jpg';
-                      }}
+                      className="object-cover rounded w-full max-w-xs h-auto"
+                      style={{ maxWidth: "150px" }}
                     />
                   </div>
                 )}
