@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import {
   FaMapMarkerAlt,
@@ -12,6 +12,7 @@ import {
   FaCheck,
   FaExclamationTriangle,
 } from "react-icons/fa";
+import type { ContactPage } from "@/lib/types/contact-page";
 
 type Props = {};
 
@@ -22,6 +23,22 @@ interface FormData {
   subject: string;
   message: string;
 }
+
+const DEFAULT_CONTACT: ContactPage = {
+  id: "",
+  address: "800 Commissioners Rd E\nLondon, ON N6A 5W9",
+  phone: "(519) 685-8500 Ext. 74702",
+  email: "rishi.ganesan@lhsc.on.ca",
+  research_coordinator_name: "Ms. Maysaa Assaf",
+  research_coordinator_email: "Maysaa.Assaf@lhsc.on.ca",
+  hours: "Monday - Friday: 9:00 AM - 5:00 PM\nSaturday - Sunday: Closed",
+  hero_title: "Get In Touch",
+  hero_description:
+    "Let us know if you are interested in learning more about our research, collaborating with our team, or contributing to our mission. If you are a student looking for opportunities to participate in research, please do not hesitate to reach out!",
+  map_embed_url:
+    "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d5979841.431727101!2d-90.98107327499999!3d42.960482299999995!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x882ef0fa90d42453%3A0x1e8dae5de3acaae!2sVictoria%20Hospital%20%26%20Children's%20Hospital!5e0!3m2!1sen!2sca!4v1751160990375!5m2!1sen!2sca",
+  updated_at: "",
+};
 
 export default function ContactPage({}: Props) {
   const [formData, setFormData] = useState<FormData>({
@@ -36,6 +53,7 @@ export default function ContactPage({}: Props) {
     type: "success" | "error" | null;
     message: string;
   }>({ type: null, message: "" });
+  const [contact, setContact] = useState<ContactPage>(DEFAULT_CONTACT);
 
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -92,6 +110,13 @@ export default function ContactPage({}: Props) {
     }
   };
 
+  useEffect(() => {
+    fetch("/api/contact/page")
+      .then((res) => (res.ok ? res.json() : Promise.reject()))
+      .then((data) => setContact(data))
+      .catch(() => setContact(DEFAULT_CONTACT));
+  }, []);
+
   return (
     <div className="min-h-screen bg-background">
       {/* Hero Section */}
@@ -111,7 +136,7 @@ export default function ContactPage({}: Props) {
               transition={{ duration: 0.5 }}
             >
               <span className="bg-gradient-to-r from-cognition-600 via-consciousness-600 to-care-600 bg-clip-text text-transparent">
-                Get In Touch
+                {contact.hero_title}
               </span>
             </motion.h1>
             <motion.p
@@ -120,10 +145,7 @@ export default function ContactPage({}: Props) {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.1 }}
             >
-              Let us know if you are interested in learning more about our
-              research, collaborating with our team, or contributing to our
-              mission. If you are a student looking for opportunities to
-              participate in research, please do not hesitate to reach out!
+              {contact.hero_description}
             </motion.p>
           </div>
         </div>
@@ -309,9 +331,7 @@ export default function ContactPage({}: Props) {
                       Location
                     </h3>
                     <p className="text-gray-600 dark:text-gray-300">
-                      800 Commissioners Rd E
-                      <br />
-                      London, ON N6A 5W9
+                      {contact.address}
                     </p>
                   </div>
                 </div>
@@ -325,7 +345,7 @@ export default function ContactPage({}: Props) {
                       Phone
                     </h3>
                     <p className="text-gray-600 dark:text-gray-300">
-                      (519) 685-8500 Ext. 74702
+                      {contact.phone}
                     </p>
                   </div>
                 </div>
@@ -340,10 +360,10 @@ export default function ContactPage({}: Props) {
                     </h3>
                     <p className="text-gray-600 dark:text-gray-300">
                       <a
-                        href="mailto:rishi.ganesan@lhsc.on.ca"
+                        href={`mailto:${contact.email}`}
                         className="hover:text-cognition-600 dark:hover:text-cognition-400 transition-colors"
                       >
-                        rishi.ganesan@lhsc.on.ca
+                        {contact.email}
                       </a>
                     </p>
                   </div>
@@ -358,13 +378,13 @@ export default function ContactPage({}: Props) {
                       Research Coordinator
                     </h3>
                     <p className="text-gray-600 dark:text-gray-300">
-                      Ms. Maysaa Assaf
+                      {contact.research_coordinator_name}
                       <br />
                       <a
-                        href="mailto:Maysaa.Assaf@lhsc.on.ca"
+                        href={`mailto:${contact.research_coordinator_email}`}
                         className="hover:text-cognition-600 dark:hover:text-cognition-400 transition-colors"
                       >
-                        Maysaa.Assaf@lhsc.on.ca
+                        {contact.research_coordinator_email}
                       </a>
                     </p>
                   </div>
@@ -379,9 +399,7 @@ export default function ContactPage({}: Props) {
                       Hours
                     </h3>
                     <p className="text-gray-600 dark:text-gray-300">
-                      Monday - Friday: 9:00 AM - 5:00 PM
-                      <br />
-                      Saturday - Sunday: Closed
+                      {contact.hours}
                     </p>
                   </div>
                 </div>
@@ -392,7 +410,7 @@ export default function ContactPage({}: Props) {
             <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl overflow-hidden">
               <div className="w-full h-64">
                 <iframe
-                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d5979841.431727101!2d-90.98107327499999!3d42.960482299999995!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x882ef0fa90d42453%3A0x1e8dae5de3acaae!2sVictoria%20Hospital%20%26%20Children&#39;s%20Hospital!5e0!3m2!1sen!2sca!4v1751160990375!5m2!1sen!2sca"
+                  src={contact.map_embed_url}
                   width="100%"
                   height="400"
                   style={{ border: 0 }}

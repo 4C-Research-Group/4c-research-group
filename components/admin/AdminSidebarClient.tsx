@@ -48,6 +48,7 @@ export default function AdminSidebarClient({
       children: [
         { name: "Home Page", href: "/admin/edit-home" },
         { name: "About Page", href: "/admin/edit-about" },
+        { name: "Contact Page", href: "/admin/edit-contact" },
         { name: "New Page", href: "/admin/pages/new" },
       ],
     },

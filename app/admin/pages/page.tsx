@@ -10,15 +10,21 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import type { ContactPage } from "@/lib/types/contact-page";
 
 export default async function AdminPages() {
   const supabase = createClient();
 
-  // Fetch all pages
-  const { data: pagesData, error } = await supabase
-    .from("pages")
-    .select("slug, updated_at, content, title")
-    .order("updated_at", { ascending: false });
+  // Fetch all pages and contact page
+  const [{ data: pagesData, error }, { data: contactData }] = await Promise.all(
+    [
+      supabase
+        .from("pages")
+        .select("slug, updated_at, content, title")
+        .order("updated_at", { ascending: false }),
+      supabase.from("contact_page").select("updated_at").limit(1).single(),
+    ]
+  );
 
   if (error) {
     console.error("Error fetching pages:", error);
@@ -64,6 +70,21 @@ export default async function AdminPages() {
         : false,
     };
   });
+
+  // Add contact page as a card
+  if (contactData) {
+    pages.push({
+      slug: "contact",
+      title: "Contact Page",
+      path: "/contact",
+      editPath: "/admin/edit-contact",
+      description: "Contact information, research coordinator, and location.",
+      lastModified: contactData.updated_at,
+      size: 0,
+      exists: true,
+      hasContent: true,
+    });
+  }
 
   return (
     <div className="container mx-auto px-4 py-8">
