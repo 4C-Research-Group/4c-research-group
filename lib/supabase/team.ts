@@ -157,6 +157,21 @@ export async function deleteTeamMember(id: string): Promise<void> {
   }
 }
 
+export async function getTeamMemberById(
+  id: string
+): Promise<TeamMember | null> {
+  const { data, error } = await supabase
+    .from("team_members")
+    .select("*")
+    .eq("id", id)
+    .single();
+  if (error) {
+    console.error("Error fetching team member by id:", error);
+    return null;
+  }
+  return data as unknown as TeamMember;
+}
+
 // Testimonials functions
 export async function getTestimonials(): Promise<Testimonial[]> {
   const { data, error } = await supabase

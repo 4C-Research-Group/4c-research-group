@@ -88,6 +88,12 @@ const nextConfig = {
         protocol: "https",
         hostname: "plus.unsplash.com", // Unsplash plus CDN
       },
+      {
+        protocol: "https",
+        hostname: "rlefnhfbszcuuhvupvme.supabase.co",
+        port: "",
+        pathname: "/storage/v1/object/public/team/avatars/**",
+      },
     ],
   },
 };

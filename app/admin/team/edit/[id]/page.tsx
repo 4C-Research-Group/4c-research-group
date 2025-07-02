@@ -1,9 +1,10 @@
 "use client";
 
-import { useState, useRef } from "react";
-import { useRouter } from "next/navigation";
+import { useEffect, useState, useRef } from "react";
+import { useRouter, useParams } from "next/navigation";
 import {
-  createTeamMember,
+  getTeamMemberById,
+  updateTeamMember,
   type CreateTeamMemberData,
 } from "@/lib/supabase/team";
 import { Button } from "@/components/ui/button";
@@ -16,58 +17,35 @@ import { FaArrowLeft, FaSave } from "react-icons/fa";
 import Link from "next/link";
 import { supabase } from "@/lib/supabase/client";
 
-export default function NewTeamMemberPage() {
+export default function EditTeamMemberPage() {
   const router = useRouter();
-  const [loading, setLoading] = useState(false);
-  const [formData, setFormData] = useState<CreateTeamMemberData>({
-    name: "",
-    role: "",
-    superpower: "",
-    bio: "",
-    education: "",
-    location: "",
-    image_url: "",
-    email: "",
-    linkedin_url: "",
-    twitter_url: "",
-    phone: "",
-    is_principal_investigator: false,
-    display_order: 0,
-    is_active: true,
-  });
+  const params = useParams();
+  const id = params?.id as string;
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
+  const [formData, setFormData] = useState<CreateTeamMemberData | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [uploading, setUploading] = useState(false);
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
-
-    try {
-      await createTeamMember(formData);
-      router.push("/admin/team");
-    } catch (error) {
-      console.error("Error creating team member:", error);
-      alert("Failed to create team member");
-    } finally {
+  useEffect(() => {
+    async function fetchMember() {
+      setLoading(true);
+      const member = await getTeamMemberById(id);
+      setFormData(member);
       setLoading(false);
     }
-  };
+    if (id) fetchMember();
+  }, [id]);
 
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+    setFormData((prev) => (prev ? { ...prev, [name]: value } : prev));
   };
 
   const handleCheckboxChange = (name: string, checked: boolean) => {
-    setFormData((prev) => ({
-      ...prev,
-      [name]: checked,
-    }));
+    setFormData((prev) => (prev ? { ...prev, [name]: checked } : prev));
   };
 
   const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -76,32 +54,55 @@ export default function NewTeamMemberPage() {
     setUploading(true);
     try {
       const filePath = `avatars/${Date.now()}-${file.name}`;
-      const { error } = await supabase.storage
+      // First upload the file
+      const { error: uploadError } = await supabase.storage
         .from("team")
         .upload(filePath, file, {
           cacheControl: "3600",
           upsert: false,
         });
-      if (error) throw error;
-      const { data: publicUrlData } = supabase.storage
-        .from("team")
-        .getPublicUrl(filePath);
-      if (publicUrlData?.publicUrl) {
-        setFormData((prev) => ({
-          ...prev,
-          image_url: publicUrlData.publicUrl,
-        }));
-        console.log("Set image_url to public URL:", publicUrlData.publicUrl);
+      if (uploadError) throw uploadError;
+
+      // Get a public URL that won't expire
+      const {
+        data: { publicUrl },
+      } = supabase.storage.from("team").getPublicUrl(filePath);
+
+      console.log("Generated public URL:", publicUrl);
+
+      if (publicUrl) {
+        setFormData((prev) =>
+          prev ? { ...prev, image_url: publicUrl } : prev
+        );
       } else {
-        alert("Failed to get public URL for image.");
+        throw new Error("Failed to generate public URL");
       }
     } catch (err) {
-      console.error(err);
-      alert("Image upload failed.");
+      console.error("Upload error:", err);
+      alert("Image upload failed. Please try again.");
     } finally {
       setUploading(false);
     }
   };
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!formData) return;
+    setSaving(true);
+    try {
+      await updateTeamMember(id, formData);
+      router.push("/admin/team");
+    } catch (error) {
+      alert("Failed to update team member");
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  if (loading || !formData) {
+    return <div className="p-8 text-center">Loading...</div>;
+  }
+
+  console.log("Image URL:", formData.image_url);
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -114,13 +115,13 @@ export default function NewTeamMemberPage() {
           Back to Team Management
         </Link>
         <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
-          Add New Team Member
+          Edit Team Member
         </h1>
       </div>
 
       <Card className="max-w-2xl">
         <CardHeader>
-          <CardTitle>Team Member Information</CardTitle>
+          <CardTitle>Edit Team Member Information</CardTitle>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-6">
@@ -267,11 +268,21 @@ export default function NewTeamMemberPage() {
                   <span className="text-sm text-gray-500">Uploading...</span>
                 )}
                 {formData.image_url && (
-                  <img
-                    src={formData.image_url}
-                    alt="Preview"
-                    className="h-12 w-12 object-cover rounded"
-                  />
+                  <div className="mt-2">
+                    <img
+                      src={formData.image_url}
+                      alt="Preview"
+                      className="h-24 w-24 object-cover rounded"
+                      onError={(e) => {
+                        console.error(
+                          "Error loading image:",
+                          formData.image_url
+                        );
+                        // Optionally set a fallback image
+                        // e.currentTarget.src = '/path/to/fallback.jpg';
+                      }}
+                    />
+                  </div>
                 )}
               </div>
             </div>
@@ -325,15 +336,15 @@ export default function NewTeamMemberPage() {
               </Link>
               <Button
                 type="submit"
-                disabled={loading}
+                disabled={saving}
                 className="bg-cognition-600 hover:bg-cognition-700"
               >
-                {loading ? (
+                {saving ? (
                   <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
                 ) : (
                   <>
                     <FaSave className="mr-2" />
-                    Create Team Member
+                    Save Changes
                   </>
                 )}
               </Button>
