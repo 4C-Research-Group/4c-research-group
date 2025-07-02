@@ -23,32 +23,42 @@ export default async function AdminDashboard() {
   const supabase = createClient();
 
   // Fetch some basic stats
-  const [pagesData, teamData, projectsData, usersData, contactPageRes] =
-    await Promise.all([
-      supabase
-        .from("pages")
-        .select("slug, updated_at")
-        .order("updated_at", { ascending: false })
-        .limit(5),
-      supabase
-        .from("team_members")
-        .select("id, name, is_active")
-        .eq("is_active", true),
-      supabase
-        .from("projects")
-        .select("id, title, is_active")
-        .eq("is_active", true)
-        .order("title"),
-      supabase.from("users").select("id, name, role").limit(5),
-      supabase.from("contact_page").select("updated_at").limit(1).single(),
-    ]);
+  const [
+    pagesData,
+    teamData,
+    projectsData,
+    usersData,
+    contactPageRes,
+    join4cLabPageRes,
+  ] = await Promise.all([
+    supabase
+      .from("pages")
+      .select("slug, updated_at")
+      .order("updated_at", { ascending: false })
+      .limit(5),
+    supabase
+      .from("team_members")
+      .select("id, name, is_active")
+      .eq("is_active", true),
+    supabase
+      .from("projects")
+      .select("id, title, is_active")
+      .eq("is_active", true)
+      .order("title"),
+    supabase.from("users").select("id, name, role").limit(5),
+    supabase.from("contact_page").select("updated_at").limit(1).single(),
+    supabase.from("join_4c_lab_page").select("updated_at").limit(1).single(),
+  ]);
 
-  // Combine pages and contact page for stats and recent pages
+  // Combine pages, contact page, and join-4c-lab page for stats and recent pages
   type PageLike = { slug: string; updated_at: string };
   const allPages: PageLike[] = [
     ...(pagesData.data || []),
     contactPageRes.data
       ? { slug: "contact", updated_at: contactPageRes.data.updated_at }
+      : undefined,
+    join4cLabPageRes.data
+      ? { slug: "join-4c-lab", updated_at: join4cLabPageRes.data.updated_at }
       : undefined,
   ].filter((p): p is PageLike => !!p && !!p.slug && !!p.updated_at);
 
@@ -243,7 +253,9 @@ export default async function AdminDashboard() {
                         <p className="font-medium text-gray-900 dark:text-white capitalize">
                           {page.slug === "contact"
                             ? "Contact Page"
-                            : `${page.slug} Page`}
+                            : page.slug === "join-4c-lab"
+                              ? "Join 4C Lab Page"
+                              : `${page.slug} Page`}
                         </p>
                         <p className="text-sm text-gray-500 dark:text-gray-400">
                           Updated{" "}
@@ -255,7 +267,9 @@ export default async function AdminDashboard() {
                       href={
                         page.slug === "contact"
                           ? "/admin/edit-contact"
-                          : `/admin/edit-${page.slug}`
+                          : page.slug === "join-4c-lab"
+                            ? "/admin/edit-join-4c-lab"
+                            : `/admin/edit-${page.slug}`
                       }
                     >
                       <Button size="sm" variant="outline">

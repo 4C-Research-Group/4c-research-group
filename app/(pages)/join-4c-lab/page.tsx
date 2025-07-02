@@ -12,11 +12,38 @@ import {
 import { getTestimonials, type Testimonial } from "@/lib/supabase/team";
 import Image from "next/image";
 import LoadingSpinner from "@/components/ui/loading-spinner";
+import type { Join4CLabPage } from "@/lib/types/join-4c-lab-page";
+
+const DEFAULT_JOIN: Join4CLabPage = {
+  id: "",
+  hero_title: "Join Mission 4C",
+  hero_description:
+    "We are always looking for passionate students to join our team. If you are interested in joining our team, please send your CV to:",
+  hero_email: "rishi.ganesan@lhsc.on.ca",
+  intro_title:
+    "Read more about previous students' experiences with Mission 4C below!",
+  card1_title: "Research Excellence",
+  card1_description:
+    "Work on cutting-edge research in cognition, consciousness, and critical care. Gain hands-on experience with state-of-the-art methodologies and technologies.",
+  card2_title: "Collaborative Environment",
+  card2_description:
+    "Join a diverse team of researchers, clinicians, and students. Learn from experts and contribute to meaningful research that makes a difference.",
+  card3_title: "Innovation & Growth",
+  card3_description:
+    "Develop your skills in a supportive environment that encourages innovation and personal growth. Build your research portfolio and network.",
+  cta_title: "Ready to Join Our Mission?",
+  cta_description:
+    "Send your CV today and take the first step towards contributing to groundbreaking research in cognition, consciousness, and critical care.",
+  cta_button_text: "Send Your CV",
+  cta_button_link: "mailto:rishi.ganesan@lhsc.on.ca",
+  updated_at: "",
+};
 
 export default function Join4CLabPage() {
   const [testimonials, setTestimonials] = useState<Testimonial[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [joinContent, setJoinContent] = useState<Join4CLabPage>(DEFAULT_JOIN);
 
   useEffect(() => {
     async function loadTestimonials() {
@@ -34,6 +61,13 @@ export default function Join4CLabPage() {
     }
 
     loadTestimonials();
+  }, []);
+
+  useEffect(() => {
+    fetch("/api/join-4c-lab-page")
+      .then((res) => (res.ok ? res.json() : Promise.reject()))
+      .then((data) => setJoinContent(data))
+      .catch(() => setJoinContent(DEFAULT_JOIN));
   }, []);
 
   return (
@@ -55,7 +89,7 @@ export default function Join4CLabPage() {
               transition={{ duration: 0.5 }}
             >
               <span className="bg-gradient-to-r from-cognition-600 via-consciousness-600 to-care-600 bg-clip-text text-transparent">
-                Join Mission 4C
+                {joinContent.hero_title}
               </span>
             </motion.h1>
             <motion.p
@@ -64,8 +98,7 @@ export default function Join4CLabPage() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.1 }}
             >
-              We are always looking for passionate students to join our team. If
-              you are interested in joining our team, please send your CV to:
+              {joinContent.hero_description}
             </motion.p>
             <motion.div
               className="flex items-center justify-center space-x-2 text-xl md:text-2xl font-semibold text-cognition-600 dark:text-cognition-400"
@@ -75,10 +108,10 @@ export default function Join4CLabPage() {
             >
               <FaEnvelope className="text-2xl" />
               <a
-                href="mailto:rishi.ganesan@lhsc.on.ca"
+                href={joinContent.hero_email}
                 className="hover:text-cognition-800 dark:hover:text-cognition-300 transition-colors"
               >
-                rishi.ganesan@lhsc.on.ca
+                {joinContent.hero_email}
               </a>
             </motion.div>
           </div>
@@ -97,8 +130,7 @@ export default function Join4CLabPage() {
             className="text-center mb-12"
           >
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-6">
-              Read more about previous students&apos; experiences with Mission
-              4C below!
+              {joinContent.intro_title}
             </h2>
             <div className="w-32 h-1.5 bg-gradient-to-r from-cognition-500 via-consciousness-500 to-care-500 rounded-full mx-auto" />
           </motion.div>
@@ -116,12 +148,10 @@ export default function Join4CLabPage() {
                 <FaUserGraduate className="text-2xl text-cognition-600 dark:text-cognition-400" />
               </div>
               <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-4">
-                Research Excellence
+                {joinContent.card1_title}
               </h3>
               <p className="text-gray-600 dark:text-gray-300">
-                Work on cutting-edge research in cognition, consciousness, and
-                critical care. Gain hands-on experience with state-of-the-art
-                methodologies and technologies.
+                {joinContent.card1_description}
               </p>
             </div>
 
@@ -130,12 +160,10 @@ export default function Join4CLabPage() {
                 <FaUsers className="text-2xl text-consciousness-600 dark:text-consciousness-400" />
               </div>
               <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-4">
-                Collaborative Environment
+                {joinContent.card2_title}
               </h3>
               <p className="text-gray-600 dark:text-gray-300">
-                Join a diverse team of researchers, clinicians, and students.
-                Learn from experts and contribute to meaningful research that
-                makes a difference.
+                {joinContent.card2_description}
               </p>
             </div>
 
@@ -144,12 +172,10 @@ export default function Join4CLabPage() {
                 <FaLightbulb className="text-2xl text-care-600 dark:text-care-400" />
               </div>
               <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-4">
-                Innovation & Growth
+                {joinContent.card3_title}
               </h3>
               <p className="text-gray-600 dark:text-gray-300">
-                Develop your skills in a supportive environment that encourages
-                innovation and personal growth. Build your research portfolio
-                and network.
+                {joinContent.card3_description}
               </p>
             </div>
           </motion.div>
@@ -346,20 +372,16 @@ export default function Join4CLabPage() {
             viewport={{ once: true }}
             className="bg-gradient-to-r from-cognition-600 to-consciousness-600 rounded-2xl shadow-xl p-8 text-center text-white"
           >
-            <h2 className="text-2xl font-bold mb-4">
-              Ready to Join Our Mission?
-            </h2>
+            <h2 className="text-2xl font-bold mb-4">{joinContent.cta_title}</h2>
             <p className="text-lg mb-6 opacity-90">
-              Send your CV today and take the first step towards contributing to
-              groundbreaking research in cognition, consciousness, and critical
-              care.
+              {joinContent.cta_description}
             </p>
             <a
-              href="mailto:rishi.ganesan@lhsc.on.ca"
+              href={joinContent.cta_button_link}
               className="inline-flex items-center bg-white text-cognition-600 hover:bg-gray-100 font-semibold py-3 px-6 rounded-lg transition-colors"
             >
               <FaEnvelope className="mr-2" />
-              Send Your CV
+              {joinContent.cta_button_text}
             </a>
           </motion.div>
         </div>
