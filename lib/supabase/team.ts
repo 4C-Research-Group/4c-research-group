@@ -261,3 +261,17 @@ export async function deleteTestimonial(id: string): Promise<void> {
     throw error;
   }
 }
+
+export async function deleteTeamMemberAndImage(id: string): Promise<void> {
+  // 1. Fetch team member
+  const member = await getTeamMemberById(id);
+  // 2. Delete image from storage if present
+  if (member?.image_url) {
+    const filePath = member.image_url.split("/team/")[1];
+    if (filePath) {
+      await supabase.storage.from("team").remove([filePath]);
+    }
+  }
+  // 3. Delete DB record
+  await deleteTeamMember(id);
+}

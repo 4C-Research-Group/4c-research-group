@@ -6,6 +6,7 @@ import {
   getTestimonial,
   updateTestimonial,
   type Testimonial,
+  deleteTestimonial,
 } from "@/lib/supabase/team";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -16,6 +17,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { FaSave, FaArrowLeft, FaSpinner } from "react-icons/fa";
 import Link from "next/link";
 import { supabase } from "@/lib/supabase/client";
+import Image from "next/image";
 
 export default function EditTestimonialPage() {
   const params = useParams();
@@ -269,14 +271,17 @@ export default function EditTestimonialPage() {
                 />
                 {testimonial.image_url && (
                   <div className="max-w-xs w-full mt-2">
-                    <img
+                    <Image
                       src={testimonial.image_url}
                       alt="Preview"
+                      width={400}
+                      height={400}
                       className="w-full h-auto object-cover rounded"
                       onError={(e) => {
                         e.currentTarget.onerror = null;
                         e.currentTarget.src = "/fallback-avatar.png";
                       }}
+                      priority
                     />
                   </div>
                 )}
@@ -352,4 +357,18 @@ export default function EditTestimonialPage() {
       </Card>
     </div>
   );
+}
+
+export async function deleteTestimonialAndImage(id: string): Promise<void> {
+  // 1. Fetch testimonial
+  const testimonial = await getTestimonial(id);
+  // 2. Delete image from storage if present
+  if (testimonial?.image_url) {
+    const filePath = testimonial.image_url.split("/team/")[1];
+    if (filePath) {
+      await supabase.storage.from("team").remove([filePath]);
+    }
+  }
+  // 3. Delete DB record
+  await deleteTestimonial(id);
 }

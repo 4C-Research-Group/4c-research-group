@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import {
   getAllTeamMembers,
-  deleteTeamMember,
+  deleteTeamMemberAndImage,
   type TeamMember,
 } from "@/lib/supabase/team";
 import { Button } from "@/components/ui/button";
@@ -35,7 +35,7 @@ export default function AdminTeamPage() {
   async function handleDeleteTeamMember(id: string) {
     if (confirm("Are you sure you want to delete this team member?")) {
       try {
-        await deleteTeamMember(id);
+        await deleteTeamMemberAndImage(id);
         setTeamMembers((prev) => prev.filter((member) => member.id !== id));
       } catch (error) {
         console.error("Error deleting team member:", error);

@@ -17,6 +17,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { FaArrowLeft, FaSave } from "react-icons/fa";
 import Link from "next/link";
 import { supabase } from "@/lib/supabase/client";
+import Image from "next/image";
 
 export default function EditTeamMemberPage() {
   const router = useRouter();
@@ -289,10 +290,13 @@ export default function EditTeamMemberPage() {
                 )}
                 {formData.image_url && (
                   <div className="max-w-xs w-full mt-2">
-                    <img
+                    <Image
                       src={formData.image_url}
                       alt="Preview"
                       className="w-full h-auto object-cover rounded"
+                      width={100}
+                      height={100}
+                      priority
                       onError={(e) => {
                         e.currentTarget.onerror = null;
                         e.currentTarget.src = "/fallback-avatar.png";
