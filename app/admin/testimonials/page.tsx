@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import {
   getAllTestimonials,
-  deleteTestimonial,
+  deleteTestimonialAndImage,
   type Testimonial,
 } from "@/lib/supabase/team";
 import { Button } from "@/components/ui/button";
@@ -35,7 +35,7 @@ export default function AdminTestimonialsPage() {
   async function handleDeleteTestimonial(id: string) {
     if (confirm("Are you sure you want to delete this testimonial?")) {
       try {
-        await deleteTestimonial(id);
+        await deleteTestimonialAndImage(id);
         setTestimonials((prev) =>
           prev.filter((testimonial) => testimonial.id !== id)
         );

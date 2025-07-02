@@ -262,6 +262,20 @@ export async function deleteTestimonial(id: string): Promise<void> {
   }
 }
 
+export async function deleteTestimonialAndImage(id: string): Promise<void> {
+  // 1. Fetch testimonial
+  const testimonial = await getTestimonial(id);
+  // 2. Delete image from storage if present
+  if (testimonial?.image_url) {
+    const filePath = testimonial.image_url.split("/team/")[1];
+    if (filePath) {
+      await supabase.storage.from("team").remove([filePath]);
+    }
+  }
+  // 3. Delete DB record
+  await deleteTestimonial(id);
+}
+
 export async function deleteTeamMemberAndImage(id: string): Promise<void> {
   // 1. Fetch team member
   const member = await getTeamMemberById(id);
