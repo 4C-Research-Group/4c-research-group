@@ -187,20 +187,22 @@ export default async function AdminDashboard() {
           {quickActions.map((action) => (
             <Card
               key={action.title}
-              className="hover:shadow-lg transition-all hover:-translate-y-1"
+              className="hover:shadow-lg transition-all hover:-translate-y-1 h-full flex flex-col"
             >
-              <CardContent className="p-6">
-                <div className="flex flex-col sm:flex-row items-start sm:space-x-4 space-y-4 sm:space-y-0">
-                  <div className={`p-3 rounded-lg ${action.bgColor}`}>
+              <CardContent className="p-6 flex flex-col flex-1">
+                <div className="flex flex-col flex-1">
+                  <div
+                    className={`p-3 rounded-lg ${action.bgColor} mb-4 w-fit`}
+                  >
                     <action.icon className={`h-6 w-6 ${action.color}`} />
                   </div>
-                  <div className="flex-1 w-full min-w-0">
-                    <h3 className="font-semibold text-gray-900 dark:text-white mb-1 break-words">
-                      {action.title}
-                    </h3>
-                    <p className="text-sm text-gray-600 dark:text-gray-400 mb-3 break-words">
-                      {action.description}
-                    </p>
+                  <h3 className="font-semibold text-gray-900 dark:text-white mb-1 break-words">
+                    {action.title}
+                  </h3>
+                  <p className="text-sm text-gray-600 dark:text-gray-400 mb-3 break-words">
+                    {action.description}
+                  </p>
+                  <div className="mt-auto pt-2">
                     <Link href={action.href} className="block w-full min-w-0">
                       <Button
                         size="sm"
