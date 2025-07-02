@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { useRouter } from "next/navigation";
 import {
   createTestimonial,
@@ -14,6 +14,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
 import { FaArrowLeft, FaSave } from "react-icons/fa";
 import Link from "next/link";
+import { supabase } from "@/lib/supabase/client";
 
 export default function NewTestimonialPage() {
   const router = useRouter();
@@ -28,6 +29,7 @@ export default function NewTestimonialPage() {
     display_order: 0,
     is_active: true,
   });
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -59,6 +61,28 @@ export default function NewTestimonialPage() {
       ...prev,
       [name]: checked,
     }));
+  };
+
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const filePath = `testimonials/${Date.now()}-${file.name}`;
+    const { error: uploadError } = await supabase.storage
+      .from("team")
+      .upload(filePath, file, {
+        cacheControl: "3600",
+        upsert: false,
+      });
+    if (uploadError) {
+      alert("Image upload failed.");
+      return;
+    }
+    const { data } = supabase.storage.from("team").getPublicUrl(filePath);
+    if (data?.publicUrl) {
+      setFormData((prev) => ({ ...prev, image_url: data.publicUrl }));
+    } else {
+      alert("Failed to get public URL for image.");
+    }
   };
 
   return (
@@ -157,6 +181,28 @@ export default function NewTestimonialPage() {
                 onChange={handleInputChange}
                 placeholder="/team/testimonial.jpg"
               />
+              <div className="mt-2 flex flex-col items-start gap-2 w-full">
+                <input
+                  type="file"
+                  accept="image/*"
+                  ref={fileInputRef}
+                  onChange={handleImageUpload}
+                  className="block w-full"
+                />
+                {formData.image_url && (
+                  <div className="max-w-xs w-full mt-2">
+                    <img
+                      src={formData.image_url}
+                      alt="Preview"
+                      className="w-full h-auto object-cover rounded"
+                      onError={(e) => {
+                        e.currentTarget.onerror = null;
+                        e.currentTarget.src = "/fallback-avatar.png";
+                      }}
+                    />
+                  </div>
+                )}
+              </div>
             </div>
 
             {/* Settings */}

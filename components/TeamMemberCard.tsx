@@ -21,14 +21,11 @@ export default function TeamMemberCard({ member, index }: TeamMemberCardProps) {
       {/* Profile image container */}
       <div className="relative w-36 h-36 mb-6 rounded-full overflow-hidden border-4 border-white dark:border-gray-800 shadow-lg">
         {member.image ? (
-          <Image
+          <img
             src={member.image}
             alt={member.name}
-            fill
-            className="object-cover"
-            sizes="(max-width: 768px) 100vw, 33vw"
-            priority={index < 3}
-            loading={index > 2 ? "lazy" : undefined}
+            className="object-cover w-full h-full"
+            style={{ borderRadius: "9999px" }}
           />
         ) : (
           <div className="w-full h-full bg-gradient-to-br from-cognition-400 to-cognition-600 flex items-center justify-center">

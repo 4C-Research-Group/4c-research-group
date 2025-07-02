@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { useParams, useRouter } from "next/navigation";
 import {
   getTestimonial,
@@ -15,6 +15,7 @@ import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { FaSave, FaArrowLeft, FaSpinner } from "react-icons/fa";
 import Link from "next/link";
+import { supabase } from "@/lib/supabase/client";
 
 export default function EditTestimonialPage() {
   const params = useParams();
@@ -23,6 +24,7 @@ export default function EditTestimonialPage() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const testimonialId = params.id as string;
 
@@ -68,6 +70,59 @@ export default function EditTestimonialPage() {
       setError("Failed to update testimonial");
     } finally {
       setSaving(false);
+    }
+  }
+
+  async function handleImageUpload(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    // Optional: validate file type/size
+    const filePath = `testimonials/${Date.now()}-${file.name}`;
+    const { error: uploadError } = await supabase.storage
+      .from("team")
+      .upload(filePath, file, {
+        cacheControl: "3600",
+        upsert: false,
+      });
+    if (uploadError) {
+      alert("Image upload failed.");
+      return;
+    }
+    const { data } = supabase.storage.from("team").getPublicUrl(filePath);
+    if (data?.publicUrl) {
+      setTestimonial((prev) =>
+        prev ? { ...prev, image_url: data.publicUrl } : prev
+      );
+    } else {
+      alert("Failed to get public URL for image.");
+    }
+  }
+
+  // Add delete handler
+  async function handleDelete() {
+    if (!testimonial) return;
+    try {
+      // 1. Parse the file path from the image_url
+      const imageUrl = testimonial.image_url;
+      if (imageUrl) {
+        const filePath = imageUrl.split("/team/")[1]; // gives 'testimonials/filename.jpg'
+        if (filePath) {
+          const { error } = await supabase.storage
+            .from("team")
+            .remove([filePath]);
+          if (error) {
+            console.error("Delete error:", error);
+            alert("Failed to delete image: " + error.message);
+          }
+        }
+      }
+      // 2. Delete the testimonial from the database (implement deleteTestimonial if needed)
+      // await deleteTestimonial(testimonial.id);
+      // router.push("/admin/testimonials");
+      alert("Image deleted from storage. Implement DB delete as needed.");
+    } catch (error) {
+      console.error("Error deleting testimonial or image:", error);
+      alert("Failed to delete testimonial or image");
     }
   }
 
@@ -198,12 +253,34 @@ export default function EditTestimonialPage() {
               <Label htmlFor="image_url">Image URL</Label>
               <Input
                 id="image_url"
-                value={testimonial.image_url || ""}
+                value={testimonial.image_url}
                 onChange={(e) =>
                   setTestimonial({ ...testimonial, image_url: e.target.value })
                 }
-                placeholder="https://example.com/image.jpg"
+                placeholder="/team/testimonial.jpg"
               />
+              <div className="mt-2 flex flex-col items-start gap-2 w-full">
+                <input
+                  type="file"
+                  accept="image/*"
+                  ref={fileInputRef}
+                  onChange={handleImageUpload}
+                  className="block w-full"
+                />
+                {testimonial.image_url && (
+                  <div className="max-w-xs w-full mt-2">
+                    <img
+                      src={testimonial.image_url}
+                      alt="Preview"
+                      className="w-full h-auto object-cover rounded"
+                      onError={(e) => {
+                        e.currentTarget.onerror = null;
+                        e.currentTarget.src = "/fallback-avatar.png";
+                      }}
+                    />
+                  </div>
+                )}
+              </div>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -244,6 +321,13 @@ export default function EditTestimonialPage() {
             )}
 
             <div className="flex justify-end space-x-4">
+              <Button
+                type="button"
+                variant="destructive"
+                onClick={handleDelete}
+              >
+                Delete Testimonial & Image
+              </Button>
               <Link href="/admin/testimonials">
                 <Button type="button" variant="outline">
                   Cancel

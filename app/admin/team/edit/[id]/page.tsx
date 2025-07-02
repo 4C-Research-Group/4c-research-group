@@ -105,13 +105,8 @@ export default function EditTeamMemberPage() {
     try {
       const imageUrl = formData.image_url;
       if (imageUrl) {
-        // This will extract everything after '/object/public/team/'
-        const url = new URL(imageUrl);
-        const match = url.pathname.match(/\/object\/public\/team\/(.+)$/);
-        const filePath = match ? match[1] : null;
-        if (filePath) {
-          await supabase.storage.from("team").remove([filePath]);
-        }
+        const filePath = imageUrl.split("/team/")[1];
+        await supabase.storage.from("team").remove([filePath]);
       }
       await deleteTeamMember(id);
       router.push("/admin/team");
@@ -280,25 +275,28 @@ export default function EditTeamMemberPage() {
                 onChange={handleInputChange}
                 placeholder="/team/team-member.jpg"
               />
-              <div className="mt-2 flex items-center gap-2">
+              <div className="mt-2 flex flex-col items-start gap-2 w-full">
                 <input
                   type="file"
                   accept="image/*"
                   ref={fileInputRef}
                   onChange={handleImageUpload}
                   disabled={uploading}
-                  className="block"
+                  className="block w-full"
                 />
                 {uploading && (
                   <span className="text-sm text-gray-500">Uploading...</span>
                 )}
                 {formData.image_url && (
-                  <div className="mt-2">
+                  <div className="max-w-xs w-full mt-2">
                     <img
                       src={formData.image_url}
                       alt="Preview"
-                      className="object-cover rounded w-full max-w-xs h-auto"
-                      style={{ maxWidth: "150px" }}
+                      className="w-full h-auto object-cover rounded"
+                      onError={(e) => {
+                        e.currentTarget.onerror = null;
+                        e.currentTarget.src = "/fallback-avatar.png";
+                      }}
                     />
                   </div>
                 )}
