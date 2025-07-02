@@ -16,15 +16,18 @@ export default async function AdminPages() {
   const supabase = createClient();
 
   // Fetch all pages and contact page
-  const [{ data: pagesData, error }, { data: contactData }] = await Promise.all(
-    [
-      supabase
-        .from("pages")
-        .select("slug, updated_at, content, title")
-        .order("updated_at", { ascending: false }),
-      supabase.from("contact_page").select("updated_at").limit(1).single(),
-    ]
-  );
+  const [
+    { data: pagesData, error },
+    { data: contactData },
+    { data: join4cLabData },
+  ] = await Promise.all([
+    supabase
+      .from("pages")
+      .select("slug, updated_at, content, title")
+      .order("updated_at", { ascending: false }),
+    supabase.from("contact_page").select("updated_at").limit(1).single(),
+    supabase.from("join_4c_lab_page").select("updated_at").limit(1).single(),
+  ]);
 
   if (error) {
     console.error("Error fetching pages:", error);
@@ -80,6 +83,21 @@ export default async function AdminPages() {
       editPath: "/admin/edit-contact",
       description: "Contact information, research coordinator, and location.",
       lastModified: contactData.updated_at,
+      size: 0,
+      exists: true,
+      hasContent: true,
+    });
+  }
+
+  // Add join-4c-lab page as a card
+  if (join4cLabData) {
+    pages.push({
+      slug: "join-4c-lab",
+      title: "Join 4C Lab Page",
+      path: "/join-4c-lab",
+      editPath: "/admin/edit-join-4c-lab",
+      description: "Student recruitment, why join, and call-to-action.",
+      lastModified: join4cLabData.updated_at,
       size: 0,
       exists: true,
       hasContent: true,
