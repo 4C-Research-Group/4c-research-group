@@ -9,6 +9,7 @@ import {
   FaBookReader,
 } from "react-icons/fa";
 import { motion } from "framer-motion";
+import { useState } from "react";
 
 type ResourceCardProps = {
   title: string;
@@ -62,6 +63,8 @@ const ResourceCard = ({
 );
 
 export default function KnowledgeMobilization() {
+  const [showBanner, setShowBanner] = useState(true);
+
   const patientResources = [
     {
       title: "Understanding Delirium",
@@ -136,109 +139,136 @@ export default function KnowledgeMobilization() {
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Hero Section */}
-      <section className="relative min-h-[60vh] flex items-center justify-center overflow-hidden bg-gradient-to-br from-cognition-50 via-white to-consciousness-50 dark:from-cognition-900 dark:via-gray-900 dark:to-consciousness-900">
-        {/* Background Bubbles */}
-        <div className="absolute inset-0 pointer-events-none">
-          <div className="absolute top-20 left-10 w-72 h-72 bg-cognition-200/20 dark:bg-cognition-700/10 rounded-full animate-pulse-slow" />
-          <div className="absolute top-40 right-20 w-96 h-96 bg-consciousness-200/20 dark:bg-consciousness-700/10 rounded-full animate-pulse-slow" />
-          <div className="absolute bottom-20 left-1/4 w-80 h-80 bg-care-200/20 dark:bg-care-700/10 rounded-full animate-pulse-slow" />
-        </div>
-        <div className="container mx-auto px-4 py-20 md:py-24 relative z-10">
-          <div className="text-center max-w-4xl mx-auto">
-            <motion.h1
-              className="text-5xl md:text-6xl font-bold text-cognition-900 dark:text-white mb-6 leading-tight"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5 }}
-            >
-              <span className="bg-gradient-to-r from-cognition-600 via-consciousness-600 to-care-600 bg-clip-text text-transparent">
-                Knowledge Mobilization
-              </span>
-            </motion.h1>
-            <motion.p
-              className="text-xl md:text-2xl text-gray-700 dark:text-gray-300 mb-8 leading-relaxed"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.1 }}
-            >
-              Bridging the gap between research and practice through education
-              and resources for patients, nurses, and healthcare professionals.
-            </motion.p>
+      {/* Under Development Notice - Floating Overlay */}
+      {showBanner && (
+        <div
+          className="fixed bottom-6 right-6 z-50 bg-yellow-100/80 backdrop-blur-md border border-yellow-400 text-yellow-800 px-6 py-4 rounded-xl shadow-lg flex items-center space-x-4"
+          role="alert"
+          style={{ pointerEvents: "auto" }}
+        >
+          <div>
+            <span className="font-bold">Page Under Development: </span>
+            <span>
+              This page is currently under development. Content and resources
+              may change.
+            </span>
           </div>
+          <button
+            onClick={() => setShowBanner(false)}
+            className="ml-2 text-yellow-800 hover:text-yellow-900 font-bold text-2xl focus:outline-none"
+            aria-label="Dismiss notice"
+          >
+            &times;
+          </button>
         </div>
-        <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-white to-transparent dark:from-gray-900 dark:to-transparent"></div>
-      </section>
-
-      {/* Main Content */}
-      <div className="container mx-auto px-4 py-16">
-        {/* Patients Section */}
-        <section className="mb-20">
-          <div className="flex items-center mb-8">
-            <div className="p-3 rounded-full bg-cognition-100 dark:bg-cognition-900 mr-4">
-              <FaBookMedical className="text-2xl text-cognition-600 dark:text-cognition-400" />
+      )}
+      {/* Main Page Content */}
+      <div>
+        {/* Hero Section */}
+        <section className="relative min-h-[60vh] flex items-center justify-center overflow-hidden bg-gradient-to-br from-cognition-50 via-white to-consciousness-50 dark:from-cognition-900 dark:via-gray-900 dark:to-consciousness-900">
+          {/* Background Bubbles */}
+          <div className="absolute inset-0 pointer-events-none">
+            <div className="absolute top-20 left-10 w-72 h-72 bg-cognition-200/20 dark:bg-cognition-700/10 rounded-full animate-pulse-slow" />
+            <div className="absolute top-40 right-20 w-96 h-96 bg-consciousness-200/20 dark:bg-consciousness-700/10 rounded-full animate-pulse-slow" />
+            <div className="absolute bottom-20 left-1/4 w-80 h-80 bg-care-200/20 dark:bg-care-700/10 rounded-full animate-pulse-slow" />
+          </div>
+          <div className="container mx-auto px-4 py-20 md:py-24 relative z-10">
+            <div className="text-center max-w-4xl mx-auto">
+              <motion.h1
+                className="text-5xl md:text-6xl font-bold text-cognition-900 dark:text-white mb-6 leading-tight"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5 }}
+              >
+                <span className="bg-gradient-to-r from-cognition-600 via-consciousness-600 to-care-600 bg-clip-text text-transparent">
+                  Knowledge Mobilization
+                </span>
+              </motion.h1>
+              <motion.p
+                className="text-xl md:text-2xl text-gray-700 dark:text-gray-300 mb-8 leading-relaxed"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.1 }}
+              >
+                Bridging the gap between research and practice through education
+                and resources for patients, nurses, and healthcare
+                professionals.
+              </motion.p>
             </div>
-            <h2 className="text-3xl font-bold text-gray-900 dark:text-white">
-              For Patients & Families
-            </h2>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {patientResources.map((resource, index) => (
-              <ResourceCard key={index} {...resource} />
-            ))}
-          </div>
+          <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-white to-transparent dark:from-gray-900 dark:to-transparent"></div>
         </section>
 
-        {/* Nurses Section */}
-        <section className="mb-20">
-          <div className="flex items-center mb-8">
-            <div className="p-3 rounded-full bg-cognition-100 dark:bg-cognition-900 mr-4">
-              <FaUserNurse className="text-2xl text-cognition-600 dark:text-cognition-400" />
+        {/* Main Content */}
+        <div className="container mx-auto px-4 py-16">
+          {/* Patients Section */}
+          <section className="mb-20">
+            <div className="flex items-center mb-8">
+              <div className="p-3 rounded-full bg-cognition-100 dark:bg-cognition-900 mr-4">
+                <FaBookMedical className="text-2xl text-cognition-600 dark:text-cognition-400" />
+              </div>
+              <h2 className="text-3xl font-bold text-gray-900 dark:text-white">
+                For Patients & Families
+              </h2>
             </div>
-            <h2 className="text-3xl font-bold text-gray-900 dark:text-white">
-              For Nurses & Healthcare Staff
-            </h2>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {nurseResources.map((resource, index) => (
-              <ResourceCard key={index} {...resource} />
-            ))}
-          </div>
-        </section>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {patientResources.map((resource, index) => (
+                <ResourceCard key={index} {...resource} />
+              ))}
+            </div>
+          </section>
 
-        {/* Doctors Section */}
-        <section>
-          <div className="flex items-center mb-8">
-            <div className="p-3 rounded-full bg-cognition-100 dark:bg-cognition-900 mr-4">
-              <FaUserMd className="text-2xl text-cognition-600 dark:text-cognition-400" />
+          {/* Nurses Section */}
+          <section className="mb-20">
+            <div className="flex items-center mb-8">
+              <div className="p-3 rounded-full bg-cognition-100 dark:bg-cognition-900 mr-4">
+                <FaUserNurse className="text-2xl text-cognition-600 dark:text-cognition-400" />
+              </div>
+              <h2 className="text-3xl font-bold text-gray-900 dark:text-white">
+                For Nurses & Healthcare Staff
+              </h2>
             </div>
-            <h2 className="text-3xl font-bold text-gray-900 dark:text-white">
-              For Physicians & Researchers
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {nurseResources.map((resource, index) => (
+                <ResourceCard key={index} {...resource} />
+              ))}
+            </div>
+          </section>
+
+          {/* Doctors Section */}
+          <section>
+            <div className="flex items-center mb-8">
+              <div className="p-3 rounded-full bg-cognition-100 dark:bg-cognition-900 mr-4">
+                <FaUserMd className="text-2xl text-cognition-600 dark:text-cognition-400" />
+              </div>
+              <h2 className="text-3xl font-bold text-gray-900 dark:text-white">
+                For Physicians & Researchers
+              </h2>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {doctorResources.map((resource, index) => (
+                <ResourceCard key={index} {...resource} />
+              ))}
+            </div>
+          </section>
+        </div>
+
+        {/* CTA Section */}
+        <section className="bg-cognition-700 dark:bg-cognition-900 py-16">
+          <div className="container mx-auto px-4 text-center">
+            <h2 className="text-3xl font-bold text-white mb-6">
+              Have Questions or Need More Information?
             </h2>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {doctorResources.map((resource, index) => (
-              <ResourceCard key={index} {...resource} />
-            ))}
+            <p className="text-xl text-cognition-100 mb-8 max-w-3xl mx-auto">
+              Our team is here to help. Reach out to us for more resources or to
+              learn about our research.
+            </p>
+            <button className="bg-white text-cognition-700 hover:bg-gray-100 font-semibold py-3 px-8 rounded-full transition-colors duration-300">
+              Contact Us
+            </button>
           </div>
         </section>
       </div>
-
-      {/* CTA Section */}
-      <section className="bg-cognition-700 dark:bg-cognition-900 py-16">
-        <div className="container mx-auto px-4 text-center">
-          <h2 className="text-3xl font-bold text-white mb-6">
-            Have Questions or Need More Information?
-          </h2>
-          <p className="text-xl text-cognition-100 mb-8 max-w-3xl mx-auto">
-            Our team is here to help. Reach out to us for more resources or to
-            learn about our research.
-          </p>
-          <button className="bg-white text-cognition-700 hover:bg-gray-100 font-semibold py-3 px-8 rounded-full transition-colors duration-300">
-            Contact Us
-          </button>
-        </div>
-      </section>
     </div>
   );
 }

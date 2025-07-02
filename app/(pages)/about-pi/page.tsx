@@ -56,14 +56,14 @@ export default function AboutPIPage() {
               </p>
               <div className="flex justify-center space-x-4">
                 <a
-                  href="#"
+                  href="https://www.linkedin.com/in/dr-saptharishi-ganesan-b1730a60/"
                   className="p-2 rounded-full bg-cognition-100/80 dark:bg-cognition-800/50 hover:bg-cognition-200/80 dark:hover:bg-cognition-700/50 transition-colors"
                   aria-label="LinkedIn Profile"
                 >
                   <FaLinkedin className="w-5 h-5 text-cognition-600 dark:text-cognition-400" />
                 </a>
                 <a
-                  href="#"
+                  href="https://scholar.google.com/citations?user=iuxSVQwAAAAJ&hl=en"
                   className="p-2 rounded-full bg-cognition-100/80 dark:bg-cognition-800/50 hover:bg-cognition-200/80 dark:hover:bg-cognition-700/50 transition-colors"
                   aria-label="Google Scholar Profile"
                 >
