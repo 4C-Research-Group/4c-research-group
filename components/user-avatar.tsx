@@ -13,6 +13,7 @@ import {
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase/client";
+import { fullSignOut } from "@/lib/utils/signout";
 
 export function UserAvatar() {
   const { user, signOut } = useAuth();
@@ -64,8 +65,7 @@ export function UserAvatar() {
   };
 
   const handleSignOut = async () => {
-    await signOut();
-    router.push("/");
+    await fullSignOut(signOut);
   };
 
   return (

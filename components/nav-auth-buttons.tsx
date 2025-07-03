@@ -5,6 +5,7 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { UserAvatar } from "@/components/user-avatar";
 import { useEffect, useState } from "react";
+import { fullSignOut } from "@/lib/utils/signout";
 
 interface NavAuthButtonsProps {
   className?: string;
@@ -70,21 +71,8 @@ export function NavAuthButtons({
             Admin Dashboard
           </Link>
           <button
-            onClick={async (e) => {
-              console.log("Signing out...");
-              await signOut();
-              localStorage.clear();
-              sessionStorage.clear();
-              document.cookie.split(";").forEach(function (c) {
-                document.cookie = c
-                  .replace(/^ +/, "")
-                  .replace(
-                    /=.*/,
-                    "=;expires=" + new Date().toUTCString() + ";path=/"
-                  );
-              });
-              window.location.href = "/";
-              onClick?.();
+            onClick={async () => {
+              await fullSignOut(signOut, onClick);
             }}
             className="w-full lg:w-auto px-4 py-3 lg:py-2 rounded-xl text-base font-medium text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800 transition-all duration-200 hover:shadow-sm border border-gray-200 dark:border-gray-700"
           >
@@ -98,27 +86,6 @@ export function NavAuthButtons({
     return (
       <div className={`flex items-center gap-3 ${className}`}>
         <UserAvatar />
-        <button
-          onClick={async (e) => {
-            console.log("Signing out...");
-            await signOut();
-            localStorage.clear();
-            sessionStorage.clear();
-            document.cookie.split(";").forEach(function (c) {
-              document.cookie = c
-                .replace(/^ +/, "")
-                .replace(
-                  /=.*/,
-                  "=;expires=" + new Date().toUTCString() + ";path=/"
-                );
-            });
-            window.location.href = "/";
-            onClick?.();
-          }}
-          className="w-full lg:w-auto px-4 py-3 lg:py-2 rounded-xl text-base font-medium text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800 transition-all duration-200 hover:shadow-sm border border-gray-200 dark:border-gray-700"
-        >
-          Sign Out
-        </button>
       </div>
     );
   }
