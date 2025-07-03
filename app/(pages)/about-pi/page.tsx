@@ -86,8 +86,8 @@ export default function AboutPIPage() {
             Paediatrics and the Dept. of Physiology & Pharmacology at the
             Schulich School of Medicine (Western University),{" "}
             <b>Associate Scientist</b> at the Lawson Health Research Institute,{" "}
-            <b>Associate Scientist</b> at the Children's Health Research
-            Institute, <b>Associate Member</b> of the Brain & Mind Institute
+            <b>Associate Scientist</b> at the Children&apos;s Health Research
+            Institute, <b>Associate Member</b> of the Brain &amp; Mind Institute
             (Western University), <b>Hospital Donation Physician (TGLN)</b> and{" "}
             <b>
               Interim Program Director (PCCM Sub-specialty residency program)
