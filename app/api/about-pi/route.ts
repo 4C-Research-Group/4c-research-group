@@ -64,13 +64,45 @@ export async function PUT(request: NextRequest) {
     const updates = await request.json();
 
     // Use service role client to update data (bypasses RLS)
-    const { data, error } = await supabaseAdmin
+    // First, get the first row (there should only be one)
+    const { data: existingData, error: fetchError } = await supabaseAdmin
       .from("about_pi")
-      .update({ ...updates, updated_at: new Date().toISOString() })
-      .order("updated_at", { ascending: false })
+      .select("id")
       .limit(1)
-      .select("*")
       .single();
+
+    if (fetchError && fetchError.code !== "PGRST116") {
+      console.error("Error fetching about PI:", fetchError);
+      return NextResponse.json(
+        { error: `Database error: ${fetchError.message}` },
+        { status: 500 }
+      );
+    }
+
+    let data, error;
+
+    if (existingData) {
+      // Update existing row
+      const { data: updateData, error: updateError } = await supabaseAdmin
+        .from("about_pi")
+        .update({ ...updates, updated_at: new Date().toISOString() })
+        .eq("id", existingData.id)
+        .select("*")
+        .single();
+
+      data = updateData;
+      error = updateError;
+    } else {
+      // Insert new row if none exists
+      const { data: insertData, error: insertError } = await supabaseAdmin
+        .from("about_pi")
+        .insert({ ...updates, updated_at: new Date().toISOString() })
+        .select("*")
+        .single();
+
+      data = insertData;
+      error = insertError;
+    }
 
     if (error) {
       console.error("Error updating about PI:", error);
