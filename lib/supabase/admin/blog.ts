@@ -231,3 +231,59 @@ export async function getBlogPostById(postId: string) {
 
   return data;
 }
+
+export async function deleteBlogPost(postId: string) {
+  const cookieStore = await cookies();
+  const supabase = createServerClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    {
+      cookies: {
+        get(name: string) {
+          return cookieStore.get(name)?.value;
+        },
+      },
+    }
+  );
+
+  // Create service role client for admin operations
+  const supabaseAdmin = createServerClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.SUPABASE_SERVICE_ROLE_KEY!,
+    {
+      cookies: {
+        get(name: string) {
+          return cookieStore.get(name)?.value;
+        },
+      },
+    }
+  );
+
+  // Check if user is admin
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  const { data: userRecord, error: userError } = await supabase
+    .from("users")
+    .select("role")
+    .eq("id", user?.id)
+    .eq("role", "admin")
+    .single();
+
+  if (userError || !userRecord) {
+    throw new Error("Unauthorized");
+  }
+
+  const { error } = await supabaseAdmin
+    .from("blog_posts")
+    .delete()
+    .eq("id", postId);
+
+  if (error) {
+    console.error("Error deleting blog post:", error);
+    throw error;
+  }
+
+  revalidatePath("/4c-blogs");
+  revalidatePath("/admin");
+}

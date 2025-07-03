@@ -23,6 +23,7 @@ import { supabase } from "@/lib/supabase/client";
 import { Button } from "@/components/ui/button";
 import BlogImage from "@/components/BlogImage";
 import LikeButton from "@/components/LikeButton";
+import DeleteBlogButton from "@/components/DeleteBlogButton";
 import LoadingSpinner from "@/components/ui/loading-spinner";
 
 export default function BlogPage() {
@@ -290,13 +291,18 @@ export default function BlogPage() {
                     </div>
                   </Link>
                   {isAdmin && (
-                    <div className="p-4 text-right">
+                    <div className="p-4 text-right space-x-2">
                       <Link
                         href={`/admin/blog/edit/${post.id}`}
-                        className="inline-block px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 text-xs mt-2"
+                        className="inline-block px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 text-xs"
                       >
                         Edit
                       </Link>
+                      <DeleteBlogButton
+                        postId={post.id}
+                        postTitle={post.title}
+                        className="inline-block"
+                      />
                     </div>
                   )}
                 </motion.article>
