@@ -29,6 +29,19 @@ export async function PUT(request: NextRequest) {
       }
     );
 
+    // Create service role client for admin operations
+    const supabaseAdmin = createServerClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.SUPABASE_SERVICE_ROLE_KEY!,
+      {
+        cookies: {
+          get(name: string) {
+            return cookieStore.get(name)?.value;
+          },
+        },
+      }
+    );
+
     // Check if user is admin
     const {
       data: { user },
@@ -49,12 +62,28 @@ export async function PUT(request: NextRequest) {
     }
 
     const updates = await request.json();
-    const data = await updateAboutPI(updates);
+
+    // Use service role client to update data (bypasses RLS)
+    const { data, error } = await supabaseAdmin
+      .from("about_pi")
+      .update({ ...updates, updated_at: new Date().toISOString() })
+      .order("updated_at", { ascending: false })
+      .limit(1)
+      .select("*")
+      .single();
+
+    if (error) {
+      console.error("Error updating about PI:", error);
+      return NextResponse.json(
+        { error: `Database error: ${error.message}` },
+        { status: 500 }
+      );
+    }
 
     if (!data) {
       return NextResponse.json(
-        { error: "Failed to update about PI data" },
-        { status: 500 }
+        { error: "No data found to update" },
+        { status: 404 }
       );
     }
 
@@ -62,7 +91,9 @@ export async function PUT(request: NextRequest) {
   } catch (error) {
     console.error("Error updating about PI:", error);
     return NextResponse.json(
-      { error: "Internal server error" },
+      {
+        error: `Internal server error: ${error instanceof Error ? error.message : "Unknown error"}`,
+      },
       { status: 500 }
     );
   }

@@ -25,13 +25,18 @@ export default function EditAboutPIPage() {
       try {
         const response = await fetch("/api/about-pi");
         if (!response.ok) {
-          throw new Error("Failed to fetch about PI data");
+          const errorData = await response.json().catch(() => ({}));
+          throw new Error(
+            errorData.error || `HTTP ${response.status}: ${response.statusText}`
+          );
         }
         const aboutData = await response.json();
         setData(aboutData);
       } catch (err) {
         console.error("Error fetching data:", err);
-        setError("Failed to load about PI data. Please check your connection.");
+        setError(
+          `Failed to load about PI data: ${err instanceof Error ? err.message : "Unknown error"}`
+        );
       } finally {
         setLoading(false);
       }
@@ -55,14 +60,21 @@ export default function EditAboutPIPage() {
       });
 
       if (!response.ok) {
-        throw new Error("Failed to save changes");
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(
+          errorData.error || `HTTP ${response.status}: ${response.statusText}`
+        );
       }
 
+      const result = await response.json();
+      console.log("Save successful:", result);
       alert("About PI page updated successfully!");
       router.refresh();
     } catch (err) {
       console.error("Error saving:", err);
-      setError("Failed to save changes. Please try again.");
+      setError(
+        `Failed to save changes: ${err instanceof Error ? err.message : "Unknown error"}`
+      );
     } finally {
       setSaving(false);
     }

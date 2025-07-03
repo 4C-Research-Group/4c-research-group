@@ -30,6 +30,7 @@ export default async function AdminDashboard() {
     usersData,
     contactPageRes,
     join4cLabPageRes,
+    aboutPiPageRes,
   ] = await Promise.all([
     supabase
       .from("pages")
@@ -48,9 +49,10 @@ export default async function AdminDashboard() {
     supabase.from("users").select("id, name, role").limit(5),
     supabase.from("contact_page").select("updated_at").limit(1).single(),
     supabase.from("join_4c_lab_page").select("updated_at").limit(1).single(),
+    supabase.from("about_pi").select("updated_at").limit(1).single(),
   ]);
 
-  // Combine pages, contact page, and join-4c-lab page for stats and recent pages
+  // Combine pages, contact page, join-4c-lab page, and about-pi page for stats and recent pages
   type PageLike = { slug: string; updated_at: string };
   const allPages: PageLike[] = [
     ...(pagesData.data || []),
@@ -59,6 +61,9 @@ export default async function AdminDashboard() {
       : undefined,
     join4cLabPageRes.data
       ? { slug: "join-4c-lab", updated_at: join4cLabPageRes.data.updated_at }
+      : undefined,
+    aboutPiPageRes.data
+      ? { slug: "about-pi", updated_at: aboutPiPageRes.data.updated_at }
       : undefined,
   ].filter((p): p is PageLike => !!p && !!p.slug && !!p.updated_at);
 
@@ -107,6 +112,14 @@ export default async function AdminDashboard() {
       bgColor: "bg-blue-50",
     },
     {
+      title: "Edit About PI Page",
+      description: "Update Principal Investigator profile and information",
+      icon: FileEdit,
+      href: "/admin/edit-about-pi",
+      color: "text-indigo-600",
+      bgColor: "bg-indigo-50",
+    },
+    {
       title: "Add Team Member",
       description: "Add new team member or researcher",
       icon: TeamIcon,
@@ -121,14 +134,6 @@ export default async function AdminDashboard() {
       href: "/admin/projects/new",
       color: "text-purple-600",
       bgColor: "bg-purple-50",
-    },
-    {
-      title: "Manage Users",
-      description: "View and manage user accounts and roles",
-      icon: Users,
-      href: "/admin/users",
-      color: "text-orange-600",
-      bgColor: "bg-orange-50",
     },
   ];
 
@@ -255,7 +260,9 @@ export default async function AdminDashboard() {
                             ? "Contact Page"
                             : page.slug === "join-4c-lab"
                               ? "Join 4C Lab Page"
-                              : `${page.slug} Page`}
+                              : page.slug === "about-pi"
+                                ? "About PI Page"
+                                : `${page.slug} Page`}
                         </p>
                         <p className="text-sm text-gray-500 dark:text-gray-400">
                           Updated{" "}
@@ -269,7 +276,9 @@ export default async function AdminDashboard() {
                           ? "/admin/edit-contact"
                           : page.slug === "join-4c-lab"
                             ? "/admin/edit-join-4c-lab"
-                            : `/admin/edit-${page.slug}`
+                            : page.slug === "about-pi"
+                              ? "/admin/edit-about-pi"
+                              : `/admin/edit-${page.slug}`
                       }
                     >
                       <Button size="sm" variant="outline">

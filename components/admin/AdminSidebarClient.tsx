@@ -48,6 +48,7 @@ export default function AdminSidebarClient({
       children: [
         { name: "Home Page", href: "/admin/edit-home" },
         { name: "About Page", href: "/admin/edit-about" },
+        { name: "About PI Page", href: "/admin/edit-about-pi" },
         { name: "Contact Page", href: "/admin/edit-contact" },
         { name: "Join 4C Lab Page", href: "/admin/edit-join-4c-lab" },
         { name: "New Page", href: "/admin/pages/new" },
