@@ -78,21 +78,24 @@ export default function MobileNav() {
         }}
       >
         <div className="flex h-full flex-col">
-          <div className="flex items-center justify-between px-4 py-4 border-b border-cognition-100/50 dark:border-cognition-800/50">
+          <div className="flex items-center justify-between px-6 py-6 border-b border-cognition-100/50 dark:border-cognition-800/50 bg-gradient-to-r from-cognition-50/50 to-consciousness-50/50 dark:from-cognition-900/20 dark:to-consciousness-900/20">
             <SheetHeader>
-              <SheetTitle className="text-lg font-bold bg-gradient-to-r from-cognition-600 to-consciousness-600 bg-clip-text text-transparent dark:from-cognition-400 dark:to-consciousness-400">
+              <SheetTitle className="text-xl font-bold bg-gradient-to-r from-cognition-600 to-consciousness-600 bg-clip-text text-transparent dark:from-cognition-400 dark:to-consciousness-400">
                 4C Research
               </SheetTitle>
             </SheetHeader>
-            <SheetClose asChild>
-              <button className="rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none">
-                <X className="h-5 w-5" />
-                <span className="sr-only">Close</span>
-              </button>
-            </SheetClose>
+            <div className="flex items-center gap-2">
+              <SimpleThemeToggle />
+              <SheetClose asChild>
+                <button className="p-2 rounded-lg bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm opacity-70 ring-offset-background transition-all duration-200 hover:opacity-100 hover:bg-white dark:hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-cognition-500">
+                  <X className="h-5 w-5" />
+                  <span className="sr-only">Close</span>
+                </button>
+              </SheetClose>
+            </div>
           </div>
 
-          <nav className="flex-1 overflow-y-auto p-4 space-y-1">
+          <nav className="flex-1 overflow-y-auto p-6 space-y-2">
             {navigationConfig.map((item) => {
               const Icon = iconMap[item.title] || null;
               const isActive = isCurrentPath(item.href);
@@ -102,14 +105,18 @@ export default function MobileNav() {
                   <Link
                     href={item.href}
                     className={cn(
-                      "flex items-center px-3 py-3 rounded-lg text-sm font-medium transition-colors",
+                      "flex items-center px-4 py-4 rounded-xl text-base font-medium transition-all duration-200",
                       isActive
-                        ? "bg-cognition-100 text-cognition-900 dark:bg-cognition-900/50 dark:text-white"
-                        : "text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800"
+                        ? "bg-gradient-to-r from-cognition-100 to-consciousness-100 text-cognition-900 dark:from-cognition-900/50 dark:to-consciousness-900/50 dark:text-white shadow-sm"
+                        : "text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800 hover:shadow-sm"
                     )}
                     onClick={() => setIsOpen(false)}
                   >
-                    {Icon && <span className="mr-3">{Icon}</span>}
+                    {Icon && (
+                      <span className="mr-4 text-cognition-600 dark:text-cognition-400">
+                        {Icon}
+                      </span>
+                    )}
                     {item.title}
                   </Link>
                 </SheetClose>
@@ -117,12 +124,14 @@ export default function MobileNav() {
             })}
           </nav>
 
-          <div className="p-4 border-t border-cognition-100/50 dark:border-cognition-800/50">
+          <div className="p-6 border-t border-cognition-100/50 dark:border-cognition-800/50 bg-gradient-to-b from-transparent to-gray-50/50 dark:to-gray-800/30">
             <div className="space-y-4">
-              <SimpleThemeToggle />
-              <div className="pt-2 border-t border-gray-200 dark:border-gray-700">
+              <div className="pt-2">
+                <h3 className="text-sm font-semibold text-gray-600 dark:text-gray-400 mb-4 uppercase tracking-wide">
+                  Account
+                </h3>
                 <NavAuthButtons
-                  className="flex-col space-y-3"
+                  className="flex-col lg:flex-row lg:space-y-0 lg:space-x-3 space-y-3"
                   onClick={() => setIsOpen(false)}
                 />
               </div>

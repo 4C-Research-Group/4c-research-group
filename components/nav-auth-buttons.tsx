@@ -65,7 +65,7 @@ export function NavAuthButtons({
           <Link
             href="/admin"
             onClick={onClick}
-            className="w-full px-4 py-3 rounded-lg text-base font-medium text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800 transition-colors"
+            className="w-full lg:w-auto px-4 py-3 lg:py-2 rounded-xl text-base font-medium text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800 transition-all duration-200 hover:shadow-sm border border-gray-200 dark:border-gray-700"
           >
             Admin Dashboard
           </Link>
@@ -86,7 +86,7 @@ export function NavAuthButtons({
               window.location.href = "/";
               onClick?.();
             }}
-            className="w-full px-4 py-3 rounded-lg text-base font-medium text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800 transition-colors"
+            className="w-full lg:w-auto px-4 py-3 lg:py-2 rounded-xl text-base font-medium text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800 transition-all duration-200 hover:shadow-sm border border-gray-200 dark:border-gray-700"
           >
             Sign Out
           </button>
@@ -115,7 +115,7 @@ export function NavAuthButtons({
             window.location.href = "/";
             onClick?.();
           }}
-          className="w-full px-4 py-3 rounded-lg text-base font-medium text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800 transition-colors"
+          className="w-full lg:w-auto px-4 py-3 lg:py-2 rounded-xl text-base font-medium text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800 transition-all duration-200 hover:shadow-sm border border-gray-200 dark:border-gray-700"
         >
           Sign Out
         </button>
@@ -131,18 +131,18 @@ export function NavAuthButtons({
           onClick?.();
           router.push("/login");
         }}
-        className="w-full px-4 py-3 rounded-lg text-base font-medium text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800 transition-colors"
+        className="w-full lg:w-auto px-4 py-3 lg:py-2 rounded-xl text-base font-medium text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800 transition-all duration-200 hover:shadow-sm border border-gray-200 dark:border-gray-700"
       >
         Login
       </button>
-      <div className="relative group w-full">
-        <div className="absolute -inset-0.5 bg-gradient-to-r from-cognition-600 to-consciousness-600 rounded-lg opacity-75 group-hover:opacity-100 blur transition duration-200"></div>
+      <div className="relative group w-full lg:w-auto">
+        <div className="absolute -inset-0.5 bg-gradient-to-r from-cognition-600 to-consciousness-600 rounded-xl opacity-75 group-hover:opacity-100 blur transition duration-200"></div>
         <button
           onClick={() => {
             onClick?.();
             router.push("/signup");
           }}
-          className="relative w-full px-4 py-3 rounded-lg text-base font-medium text-white bg-gradient-to-r from-cognition-600 to-consciousness-600 hover:opacity-90 transition-opacity duration-200"
+          className="relative w-full lg:w-auto px-4 py-3 lg:py-2 rounded-xl text-base font-medium text-white bg-gradient-to-r from-cognition-600 to-consciousness-600 hover:opacity-90 transition-all duration-200 hover:shadow-lg"
         >
           Sign Up
         </button>
