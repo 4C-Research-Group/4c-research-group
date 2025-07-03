@@ -27,6 +27,7 @@ import {
   SheetTitle,
   SheetTrigger,
   SheetClose,
+  SheetDescription,
 } from "@/components/ui/sheet";
 
 const iconMap: Record<string, React.ReactNode> = {
@@ -83,6 +84,9 @@ export default function MobileNav() {
               <SheetTitle className="text-xl font-bold bg-gradient-to-r from-cognition-600 to-consciousness-600 bg-clip-text text-transparent dark:from-cognition-400 dark:to-consciousness-400">
                 4C Research
               </SheetTitle>
+              <SheetDescription className="sr-only">
+                Navigation menu for 4C Research Lab website
+              </SheetDescription>
             </SheetHeader>
             <div className="flex items-center gap-2">
               <SimpleThemeToggle />

@@ -3,6 +3,17 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { deleteBlogPost } from "@/lib/supabase/admin/blog";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 
 interface DeleteBlogButtonProps {
   postId: string;
@@ -16,7 +27,6 @@ export default function DeleteBlogButton({
   className = "",
 }: DeleteBlogButtonProps) {
   const [isDeleting, setIsDeleting] = useState(false);
-  const [showConfirm, setShowConfirm] = useState(false);
   const [error, setError] = useState("");
   const router = useRouter();
 
@@ -26,7 +36,6 @@ export default function DeleteBlogButton({
 
     try {
       await deleteBlogPost(postId);
-      setShowConfirm(false);
       router.push("/4c-blogs");
     } catch (err) {
       console.error("Error deleting blog post:", err);
@@ -39,51 +48,41 @@ export default function DeleteBlogButton({
   };
 
   return (
-    <>
-      <button
-        onClick={() => setShowConfirm(true)}
-        className={`px-3 py-1 bg-red-600 text-white rounded hover:bg-red-700 text-xs transition-colors ${className}`}
-        disabled={isDeleting}
-      >
-        {isDeleting ? "Deleting..." : "Delete"}
-      </button>
+    <AlertDialog>
+      <AlertDialogTrigger asChild>
+        <button
+          className={`px-3 py-1 bg-red-600 text-white rounded hover:bg-red-700 text-xs transition-colors ${className}`}
+          disabled={isDeleting}
+        >
+          {isDeleting ? "Deleting..." : "Delete"}
+        </button>
+      </AlertDialogTrigger>
+      <AlertDialogContent>
+        <AlertDialogHeader>
+          <AlertDialogTitle>Delete Blog Post</AlertDialogTitle>
+          <AlertDialogDescription>
+            Are you sure you want to delete &quot;{postTitle}&quot;? This action
+            cannot be undone.
+          </AlertDialogDescription>
+        </AlertDialogHeader>
 
-      {showConfirm && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white dark:bg-gray-800 rounded-lg p-6 max-w-md w-full mx-4">
-            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-              Delete Blog Post
-            </h3>
-            <p className="text-gray-600 dark:text-gray-300 mb-6">
-              Are you sure you want to delete &quot;{postTitle}&quot;? This
-              action cannot be undone.
-            </p>
-
-            {error && (
-              <div className="bg-red-50 border-l-4 border-red-400 p-4 mb-4">
-                <p className="text-sm text-red-700">{error}</p>
-              </div>
-            )}
-
-            <div className="flex gap-3 justify-end">
-              <button
-                onClick={() => setShowConfirm(false)}
-                className="px-4 py-2 text-gray-700 bg-gray-200 rounded hover:bg-gray-300 transition-colors"
-                disabled={isDeleting}
-              >
-                Cancel
-              </button>
-              <button
-                onClick={handleDelete}
-                className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 transition-colors"
-                disabled={isDeleting}
-              >
-                {isDeleting ? "Deleting..." : "Delete"}
-              </button>
-            </div>
+        {error && (
+          <div className="bg-red-50 border-l-4 border-red-400 p-4 mb-4">
+            <p className="text-sm text-red-700">{error}</p>
           </div>
-        </div>
-      )}
-    </>
+        )}
+
+        <AlertDialogFooter>
+          <AlertDialogCancel disabled={isDeleting}>Cancel</AlertDialogCancel>
+          <AlertDialogAction
+            onClick={handleDelete}
+            disabled={isDeleting}
+            className="bg-red-600 hover:bg-red-700"
+          >
+            {isDeleting ? "Deleting..." : "Delete"}
+          </AlertDialogAction>
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
   );
 }
