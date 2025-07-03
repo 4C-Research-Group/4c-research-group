@@ -19,6 +19,7 @@ import {
 import { cn } from "@/lib/utils";
 import { navigationConfig } from "@/lib/navigation";
 import { SimpleThemeToggle } from "@/components/simple-theme-toggle";
+import { NavAuthButtons } from "@/components/nav-auth-buttons";
 import {
   Sheet,
   SheetContent,
@@ -117,7 +118,15 @@ export default function MobileNav() {
           </nav>
 
           <div className="p-4 border-t border-cognition-100/50 dark:border-cognition-800/50">
-            <SimpleThemeToggle />
+            <div className="space-y-4">
+              <SimpleThemeToggle />
+              <div className="pt-2 border-t border-gray-200 dark:border-gray-700">
+                <NavAuthButtons
+                  className="flex-col space-y-3"
+                  onClick={() => setIsOpen(false)}
+                />
+              </div>
+            </div>
           </div>
         </div>
       </SheetContent>
