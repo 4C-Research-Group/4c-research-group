@@ -10,14 +10,16 @@ import {
   FaBrain,
   FaFlask,
   FaMicroscope,
+  FaHeart,
+  FaComment,
 } from "react-icons/fa";
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import {
-  getAllBlogPosts,
+  getAllBlogPostsWithStats,
   getCategories,
-  type BlogPost,
+  type BlogPostWithStats,
 } from "@/lib/supabase/blog";
 import { supabase } from "@/lib/supabase/client";
 import { Button } from "@/components/ui/button";
@@ -29,7 +31,7 @@ import LoadingSpinner from "@/components/ui/loading-spinner";
 export default function BlogPage() {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState<string>("");
-  const [posts, setPosts] = useState<BlogPost[]>([]);
+  const [posts, setPosts] = useState<BlogPostWithStats[]>([]);
   const [categories, setCategories] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
   const [isAdmin, setIsAdmin] = useState(false);
@@ -39,7 +41,7 @@ export default function BlogPage() {
       try {
         setLoading(true);
         const [postsData, categoriesData] = await Promise.all([
-          getAllBlogPosts(),
+          getAllBlogPostsWithStats(),
           getCategories(),
         ]);
         setPosts(postsData);
@@ -285,7 +287,13 @@ export default function BlogPage() {
                             Read more
                             <FaArrowRight className="ml-2" />
                           </span>
-                          <LikeButton blogPostId={post.id} showCount={true} />
+                          <div className="flex items-center gap-4 text-sm text-gray-500 dark:text-gray-400">
+                            <LikeButton blogPostId={post.id} showCount={true} />
+                            <div className="flex items-center gap-1">
+                              <FaComment className="w-4 h-4" />
+                              <span>{post.commentCount}</span>
+                            </div>
+                          </div>
                         </div>
                       </div>
                     </div>

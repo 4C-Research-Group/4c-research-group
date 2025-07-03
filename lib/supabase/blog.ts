@@ -1,4 +1,6 @@
 import { supabase } from "./client";
+import { getCommentCount } from "./comments";
+import { getLikeStats } from "./likes";
 
 export type BlogPost = {
   id: string;
@@ -93,4 +95,31 @@ export async function getCategories() {
     ...new Set((data ?? []).map((item: { category: string }) => item.category)),
   ];
   return categories as string[];
+}
+
+export type BlogPostWithStats = BlogPost & {
+  likeCount: number;
+  commentCount: number;
+};
+
+export async function getAllBlogPostsWithStats(): Promise<BlogPostWithStats[]> {
+  const posts = await getAllBlogPosts();
+
+  // Get stats for each post
+  const postsWithStats = await Promise.all(
+    posts.map(async (post) => {
+      const [likeStats, commentCount] = await Promise.all([
+        getLikeStats(post.id),
+        getCommentCount(post.id),
+      ]);
+
+      return {
+        ...post,
+        likeCount: likeStats.total_likes,
+        commentCount: commentCount,
+      };
+    })
+  );
+
+  return postsWithStats;
 }
