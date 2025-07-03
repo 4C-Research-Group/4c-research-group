@@ -47,7 +47,7 @@ export function AdminEditButton({ postId }: { postId: string }) {
     <div className="my-6 text-right space-x-3">
       <Link
         href={`/admin/blog/edit/${postId}`}
-        className="inline-block px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
+        className="inline-block px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 transition text-xs"
       >
         Edit Post
       </Link>
