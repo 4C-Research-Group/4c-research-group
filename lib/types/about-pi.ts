@@ -36,14 +36,12 @@ export interface Education {
 
 export interface Experience {
   title: string;
-  institution: string;
-  period: string;
+  subtitle: string;
 }
 
 export interface Award {
   title: string;
-  description: string;
-  year: string;
+  subtitle: string;
 }
 
 export interface SkillCategory {

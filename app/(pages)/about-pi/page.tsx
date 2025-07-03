@@ -278,7 +278,7 @@ export default function AboutPIPage() {
                   {item.title}
                 </div>
                 <div className="text-sm text-gray-700 dark:text-gray-300">
-                  {item.institution} ({item.period})
+                  {item.subtitle}
                 </div>
               </div>
             ))}
@@ -309,10 +309,7 @@ export default function AboutPIPage() {
                   {item.title}
                 </div>
                 <div className="text-sm text-gray-700 dark:text-gray-300">
-                  {item.description}
-                </div>
-                <div className="text-xs text-gray-500 dark:text-gray-400 mt-1">
-                  {item.year}
+                  {item.subtitle}
                 </div>
               </div>
             ))}

@@ -362,6 +362,115 @@ export default function EditAboutPIPage() {
           </CardContent>
         </Card>
 
+        {/* Professional Experience */}
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center justify-between">
+              Professional Experience
+              <Button
+                size="sm"
+                onClick={() =>
+                  addArrayItem("professional_experience", {
+                    title: "",
+                    subtitle: "",
+                  })
+                }
+              >
+                <Plus className="w-4 h-4" />
+              </Button>
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            {data.professional_experience.map((exp, index) => (
+              <div key={index} className="flex gap-2 items-start">
+                <div className="flex-1 space-y-2">
+                  <Input
+                    placeholder="Title (e.g., Assistant Professor)"
+                    value={exp.title}
+                    onChange={(e) =>
+                      updateArrayItem("professional_experience", index, {
+                        title: e.target.value,
+                      })
+                    }
+                  />
+                  <Input
+                    placeholder="Subtitle (e.g., Western University (Aug 2019 – Present))"
+                    value={exp.subtitle}
+                    onChange={(e) =>
+                      updateArrayItem("professional_experience", index, {
+                        subtitle: e.target.value,
+                      })
+                    }
+                  />
+                </div>
+                <Button
+                  size="sm"
+                  variant="outline"
+                  onClick={() =>
+                    removeArrayItem("professional_experience", index)
+                  }
+                >
+                  <X className="w-4 h-4" />
+                </Button>
+              </div>
+            ))}
+          </CardContent>
+        </Card>
+
+        {/* Research & Awards */}
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center justify-between">
+              Research & Awards
+              <Button
+                size="sm"
+                onClick={() =>
+                  addArrayItem("research_awards", {
+                    title: "",
+                    subtitle: "",
+                  })
+                }
+              >
+                <Plus className="w-4 h-4" />
+              </Button>
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            {data.research_awards.map((award, index) => (
+              <div key={index} className="flex gap-2 items-start">
+                <div className="flex-1 space-y-2">
+                  <Input
+                    placeholder="Title (e.g., Research Focus, Awards, Teaching)"
+                    value={award.title}
+                    onChange={(e) =>
+                      updateArrayItem("research_awards", index, {
+                        title: e.target.value,
+                      })
+                    }
+                  />
+                  <Textarea
+                    placeholder="Subtitle (e.g., Early identification and mitigation of neurological insults in critically ill children...)"
+                    value={award.subtitle}
+                    onChange={(e) =>
+                      updateArrayItem("research_awards", index, {
+                        subtitle: e.target.value,
+                      })
+                    }
+                    rows={3}
+                  />
+                </div>
+                <Button
+                  size="sm"
+                  variant="outline"
+                  onClick={() => removeArrayItem("research_awards", index)}
+                >
+                  <X className="w-4 h-4" />
+                </Button>
+              </div>
+            ))}
+          </CardContent>
+        </Card>
+
         {/* Publications */}
         <Card>
           <CardHeader>
