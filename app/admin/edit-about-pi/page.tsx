@@ -7,19 +7,8 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import {
-  Plus,
-  X,
-  Save,
-  ArrowLeft,
-  Trash2,
-  Upload,
-  Linkedin,
-  AlertTriangle,
-  CheckCircle,
-} from "lucide-react";
+import { Plus, X, Save } from "lucide-react";
 import type { AboutPI } from "@/lib/types/about-pi";
-import { LinkedInDataExtractor } from "@/lib/utils/linkedin-scraper";
 
 export default function EditAboutPIPage() {
   const [data, setData] = useState<AboutPI | null>(null);
@@ -27,8 +16,6 @@ export default function EditAboutPIPage() {
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
-  const [linkedinUrl, setLinkedinUrl] = useState("");
-  const [importingLinkedin, setImportingLinkedin] = useState(false);
 
   useEffect(() => {
     async function fetchData() {
@@ -93,71 +80,6 @@ export default function EditAboutPIPage() {
     }
   };
 
-  const handleLinkedinImport = async () => {
-    if (!linkedinUrl.trim()) {
-      setError("Please enter a LinkedIn URL");
-      return;
-    }
-
-    if (!LinkedInDataExtractor.isValidLinkedInURL(linkedinUrl)) {
-      setError("Please enter a valid LinkedIn URL");
-      return;
-    }
-
-    setImportingLinkedin(true);
-    setError(null);
-
-    try {
-      // Show warning about LinkedIn scraping
-      const proceed = window.confirm(
-        "⚠️ IMPORTANT: LinkedIn scraping may violate their Terms of Service.\n\n" +
-          "This tool is for educational purposes only. Please ensure you have permission " +
-          "to use the data and respect LinkedIn&apos;s terms.\n\n" +
-          "Do you want to proceed with the demo data import?"
-      );
-
-      if (!proceed) {
-        setImportingLinkedin(false);
-        return;
-      }
-
-      // Extract data (this will return mock data for demo)
-      const linkedinData =
-        await LinkedInDataExtractor.extractFromURL(linkedinUrl);
-
-      if (linkedinData && data) {
-        // Convert to AboutPI format
-        const convertedData =
-          LinkedInDataExtractor.convertToAboutPI(linkedinData);
-
-        // Merge with existing data, preserving non-empty fields
-        const mergedData: AboutPI = {
-          ...data,
-          ...convertedData,
-          // Preserve existing URLs if they're already set
-          linkedin_url: data.linkedin_url || linkedinUrl,
-          google_scholar_url: data.google_scholar_url || "",
-          researchgate_url: data.researchgate_url || "",
-          orcid_url: data.orcid_url || "",
-          // Preserve existing image if set
-          image_url: data.image_url || convertedData.image_url,
-        };
-
-        setData(mergedData);
-        setError(
-          "LinkedIn data imported successfully! Please review and edit as needed before saving."
-        );
-      } else {
-        setError("Failed to extract data from LinkedIn");
-      }
-    } catch (error) {
-      console.error("Error importing LinkedIn data:", error);
-      setError("Failed to import LinkedIn data");
-    } finally {
-      setImportingLinkedin(false);
-    }
-  };
-
   const addArrayItem = (field: keyof AboutPI, item: any) => {
     if (!data) return;
     setData({
@@ -207,39 +129,6 @@ export default function EditAboutPIPage() {
       </div>
 
       <div className="space-y-6">
-        {/* LinkedIn Import Section */}
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center space-x-2">
-              <Linkedin className="h-5 w-5 text-blue-600" />
-              <span>LinkedIn Data Import</span>
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="flex space-x-2">
-              <Input
-                placeholder="Enter LinkedIn profile URL"
-                value={linkedinUrl}
-                onChange={(e) => setLinkedinUrl(e.target.value)}
-                className="flex-1"
-              />
-              <Button
-                onClick={handleLinkedinImport}
-                disabled={importingLinkedin || !linkedinUrl.trim()}
-                variant="outline"
-                className="flex items-center space-x-2"
-              >
-                <Upload className="h-4 w-4" />
-                <span>{importingLinkedin ? "Importing..." : "Import"}</span>
-              </Button>
-            </div>
-            <p className="text-sm text-gray-500 mt-2">
-              ⚠️ This feature uses demo data for educational purposes. Always
-              respect LinkedIn&apos;s Terms of Service.
-            </p>
-          </CardContent>
-        </Card>
-
         {/* Hero Section */}
         <Card>
           <CardHeader>

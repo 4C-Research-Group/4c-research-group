@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect } from "react";
 import { FaComments, FaSignInAlt } from "react-icons/fa";
 import { Button } from "@/components/ui/button";
 import CommentForm from "./CommentForm";
@@ -20,6 +20,11 @@ export default function CommentsSection({ blogPostId }: CommentsSectionProps) {
   const [isAdmin, setIsAdmin] = useState(false);
   const [showLoginPrompt, setShowLoginPrompt] = useState(false);
 
+  useEffect(() => {
+    checkUser();
+    fetchComments();
+  }, [blogPostId]);
+
   const checkUser = async () => {
     const {
       data: { user },
@@ -38,7 +43,7 @@ export default function CommentsSection({ blogPostId }: CommentsSectionProps) {
     }
   };
 
-  const fetchComments = useCallback(async () => {
+  const fetchComments = async () => {
     try {
       setLoading(true);
       const response = await fetch(`/api/comments?blogPostId=${blogPostId}`);
@@ -54,12 +59,7 @@ export default function CommentsSection({ blogPostId }: CommentsSectionProps) {
     } finally {
       setLoading(false);
     }
-  }, [blogPostId]);
-
-  useEffect(() => {
-    checkUser();
-    fetchComments();
-  }, [fetchComments]);
+  };
 
   const handleCommentAdded = () => {
     fetchComments();
