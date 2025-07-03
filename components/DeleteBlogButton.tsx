@@ -55,8 +55,8 @@ export default function DeleteBlogButton({
               Delete Blog Post
             </h3>
             <p className="text-gray-600 dark:text-gray-300 mb-6">
-              Are you sure you want to delete "{postTitle}"? This action cannot
-              be undone.
+              Are you sure you want to delete &quot;{postTitle}&quot;? This
+              action cannot be undone.
             </p>
 
             {error && (

@@ -12,6 +12,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
+import Image from "next/image";
 import { FaArrowLeft, FaSave } from "react-icons/fa";
 import Link from "next/link";
 import { supabase } from "@/lib/supabase/client";
@@ -267,10 +268,12 @@ export default function NewTeamMemberPage() {
                   <span className="text-sm text-gray-500">Uploading...</span>
                 )}
                 {formData.image_url && (
-                  <img
+                  <Image
                     src={formData.image_url}
                     alt="Preview"
-                    className="h-12 w-12 object-cover rounded"
+                    width={48}
+                    height={48}
+                    className="object-cover rounded"
                   />
                 )}
               </div>

@@ -12,6 +12,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
+import Image from "next/image";
 import { FaArrowLeft, FaSave } from "react-icons/fa";
 import Link from "next/link";
 import { supabase } from "@/lib/supabase/client";
@@ -191,13 +192,14 @@ export default function NewTestimonialPage() {
                 />
                 {formData.image_url && (
                   <div className="max-w-xs w-full mt-2">
-                    <img
+                    <Image
                       src={formData.image_url}
                       alt="Preview"
+                      width={300}
+                      height={200}
                       className="w-full h-auto object-cover rounded"
-                      onError={(e) => {
-                        e.currentTarget.onerror = null;
-                        e.currentTarget.src = "/fallback-avatar.png";
+                      onError={() => {
+                        // Fallback handled by Next.js Image component
                       }}
                     />
                   </div>

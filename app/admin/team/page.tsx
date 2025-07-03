@@ -84,10 +84,11 @@ export default function AdminTeamPage() {
             <Card key={member.id} className="overflow-hidden">
               <div className="relative h-48 bg-gray-100 dark:bg-gray-800">
                 {member.image_url ? (
-                  <img
+                  <Image
                     src={member.image_url}
                     alt={member.name}
-                    className="object-cover w-full h-full"
+                    fill
+                    className="object-cover"
                   />
                 ) : (
                   <div className="w-full h-full bg-gradient-to-br from-cognition-400 to-cognition-600 flex items-center justify-center">
