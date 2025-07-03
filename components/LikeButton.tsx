@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { FaHeart } from "react-icons/fa";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/lib/supabase/client";
@@ -21,11 +21,6 @@ export default function LikeButton({
   const [isLoading, setIsLoading] = useState(false);
   const [user, setUser] = useState<any>(null);
 
-  useEffect(() => {
-    checkUser();
-    fetchLikeStats();
-  }, [blogPostId]);
-
   const checkUser = async () => {
     const {
       data: { user },
@@ -33,7 +28,7 @@ export default function LikeButton({
     setUser(user);
   };
 
-  const fetchLikeStats = async () => {
+  const fetchLikeStats = useCallback(async () => {
     try {
       const response = await fetch(`/api/likes?blogPostId=${blogPostId}`);
       if (response.ok) {
@@ -44,7 +39,12 @@ export default function LikeButton({
     } catch (error) {
       console.error("Error fetching like stats:", error);
     }
-  };
+  }, [blogPostId]);
+
+  useEffect(() => {
+    checkUser();
+    fetchLikeStats();
+  }, [fetchLikeStats]);
 
   const handleLike = async () => {
     if (!user) {

@@ -112,7 +112,7 @@ export default function EditAboutPIPage() {
       const proceed = window.confirm(
         "⚠️ IMPORTANT: LinkedIn scraping may violate their Terms of Service.\n\n" +
           "This tool is for educational purposes only. Please ensure you have permission " +
-          "to use the data and respect LinkedIn's terms.\n\n" +
+          "to use the data and respect LinkedIn&apos;s terms.\n\n" +
           "Do you want to proceed with the demo data import?"
       );
 
@@ -235,7 +235,7 @@ export default function EditAboutPIPage() {
             </div>
             <p className="text-sm text-gray-500 mt-2">
               ⚠️ This feature uses demo data for educational purposes. Always
-              respect LinkedIn's Terms of Service.
+              respect LinkedIn&apos;s Terms of Service.
             </p>
           </CardContent>
         </Card>
