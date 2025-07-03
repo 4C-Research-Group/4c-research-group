@@ -537,12 +537,12 @@ export default function AboutPIPage() {
                 team
               </div>
               <div className="text-base text-gray-700 dark:text-gray-300 italic">
-                "Rishi is someone you absolutely love as a colleague. He is a
-                hard working and disciplined clinician, an earnest teacher and a
-                gifted researcher. Most importantly, he remains the helpful
+                &quot;Rishi is someone you absolutely love as a colleague. He is
+                a hard working and disciplined clinician, an earnest teacher and
+                a gifted researcher. Most importantly, he remains the helpful
                 generous person he has always been. He has a charming
                 personality and is a great team player, fun to be around with,
-                in and out of the hospital!"
+                in and out of the hospital!&quot;
               </div>
             </div>
           </div>
@@ -637,6 +637,35 @@ export default function AboutPIPage() {
                 )}
               </div>
             ))}
+          </div>
+        </motion.section>
+
+        {/* Organizations */}
+        <motion.section
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6, delay: 0.75 }}
+          className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-6 md:p-8"
+        >
+          <div className="flex items-center mb-4">
+            <FaStar className="w-6 h-6 text-care-500 mr-3" />
+            <h2 className="text-2xl font-bold bg-gradient-to-r from-care-600 to-cognition-500 bg-clip-text text-transparent">
+              Organizations
+            </h2>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 gap-4">
+            <div className="bg-gray-50 dark:bg-gray-700/30 p-4 rounded-xl shadow-sm flex flex-col h-full">
+              <div className="font-semibold text-cognition-700 dark:text-cognition-200 mb-1">
+                American Clinical Neurophysiology Society
+              </div>
+              <div className="text-sm text-gray-700 dark:text-gray-300 mb-1">
+                Member
+              </div>
+              <div className="text-xs text-gray-500 dark:text-gray-400 mb-1">
+                Jan 2017 - Present
+              </div>
+            </div>
           </div>
         </motion.section>
 
