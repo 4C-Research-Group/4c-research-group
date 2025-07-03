@@ -482,8 +482,8 @@ export default function EditAboutPIPage() {
                   addArrayItem("publications", {
                     title: "",
                     journal: "",
-                    year: "",
-                    doi: "",
+                    date: "",
+                    summary: "",
                   })
                 }
               >
@@ -496,7 +496,7 @@ export default function EditAboutPIPage() {
               <div key={index} className="flex gap-2 items-start">
                 <div className="flex-1 space-y-2">
                   <Input
-                    placeholder="Title"
+                    placeholder="Title (e.g., Airway Pressure Release Ventilation in Pediatric Acute Respiratory Distress Syndrome)"
                     value={pub.title}
                     onChange={(e) =>
                       updateArrayItem("publications", index, {
@@ -505,7 +505,7 @@ export default function EditAboutPIPage() {
                     }
                   />
                   <Input
-                    placeholder="Journal"
+                    placeholder="Journal (e.g., American Journal of Respiratory & Critical Care Medicine)"
                     value={pub.journal}
                     onChange={(e) =>
                       updateArrayItem("publications", index, {
@@ -513,26 +513,25 @@ export default function EditAboutPIPage() {
                       })
                     }
                   />
-                  <div className="flex gap-2">
-                    <Input
-                      placeholder="Year"
-                      value={pub.year}
-                      onChange={(e) =>
-                        updateArrayItem("publications", index, {
-                          year: e.target.value,
-                        })
-                      }
-                    />
-                    <Input
-                      placeholder="DOI"
-                      value={pub.doi}
-                      onChange={(e) =>
-                        updateArrayItem("publications", index, {
-                          doi: e.target.value,
-                        })
-                      }
-                    />
-                  </div>
+                  <Input
+                    placeholder="Date (e.g., Nov 1, 2018)"
+                    value={pub.date}
+                    onChange={(e) =>
+                      updateArrayItem("publications", index, {
+                        date: e.target.value,
+                      })
+                    }
+                  />
+                  <Textarea
+                    placeholder="Summary (e.g., A randomized controlled trial comparing APRV and conventional low–tidal volume ventilation...)"
+                    value={pub.summary}
+                    onChange={(e) =>
+                      updateArrayItem("publications", index, {
+                        summary: e.target.value,
+                      })
+                    }
+                    rows={3}
+                  />
                 </div>
                 <Button
                   size="sm"

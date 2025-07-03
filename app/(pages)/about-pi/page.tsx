@@ -666,13 +666,11 @@ export default function AboutPIPage() {
                   {item.journal}
                 </div>
                 <div className="text-xs text-gray-500 dark:text-gray-400 mb-2">
-                  {item.year}
+                  {item.date}
                 </div>
-                {item.doi && (
-                  <div className="text-xs text-gray-500 dark:text-gray-400 mb-2">
-                    DOI: {item.doi}
-                  </div>
-                )}
+                <div className="text-xs text-gray-700 dark:text-gray-300">
+                  {item.summary}
+                </div>
               </div>
             ))}
           </div>

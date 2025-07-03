@@ -76,6 +76,6 @@ export interface Organization {
 export interface Publication {
   title: string;
   journal: string;
-  year: string;
-  doi: string;
+  date: string;
+  summary: string;
 }
