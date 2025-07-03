@@ -16,6 +16,7 @@ import {
   FaGoogle,
 } from "react-icons/fa";
 import { SiOrcid } from "react-icons/si";
+import RichTextContent from "@/components/ui/rich-text-content";
 import type { AboutPI } from "@/lib/types/about-pi";
 
 export default function AboutPIPage() {
@@ -179,7 +180,10 @@ export default function AboutPIPage() {
             About
           </h2>
           <div className="text-base text-gray-700 dark:text-gray-300 leading-relaxed">
-            {data.about_content}
+            <RichTextContent
+              content={data.about_content}
+              className="text-base text-gray-700 dark:text-gray-300 leading-relaxed"
+            />
           </div>
         </motion.section>
 

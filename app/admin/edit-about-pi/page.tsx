@@ -8,6 +8,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Plus, X, Save } from "lucide-react";
+import RichTextEditor from "@/components/ui/rich-text-editor";
 import type { AboutPI } from "@/lib/types/about-pi";
 
 export default function EditAboutPIPage() {
@@ -238,12 +239,11 @@ export default function EditAboutPIPage() {
             <CardTitle>About Content</CardTitle>
           </CardHeader>
           <CardContent>
-            <Textarea
+            <RichTextEditor
               value={data.about_content}
-              onChange={(e) =>
-                setData({ ...data, about_content: e.target.value })
-              }
-              rows={8}
+              onChange={(value) => setData({ ...data, about_content: value })}
+              placeholder="Write the about content with rich formatting..."
+              label="About Content"
             />
           </CardContent>
         </Card>
