@@ -10,7 +10,10 @@ import {
   FaBook,
   FaChalkboardTeacher,
   FaStar,
+  FaLinkedin,
+  FaResearchgate,
 } from "react-icons/fa";
+import { SiOrcid } from "react-icons/si";
 
 export default function AboutPIPage() {
   return (
@@ -57,6 +60,36 @@ export default function AboutPIPage() {
               <span className="px-3 py-1 rounded-full bg-consciousness-100 dark:bg-consciousness-800 text-consciousness-700 dark:text-consciousness-200 font-semibold text-sm">
                 Neurocritical Care Specialist
               </span>
+            </div>
+            {/* Social Links */}
+            <div className="flex justify-center gap-4 mb-4 mt-2">
+              <a
+                href="https://www.linkedin.com/in/dr-saptharishi-ganesan-b1730a60/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="p-2 rounded-full bg-cognition-100 dark:bg-cognition-800 hover:bg-cognition-200 dark:hover:bg-cognition-700 transition-colors shadow"
+                aria-label="LinkedIn"
+              >
+                <FaLinkedin className="w-6 h-6 text-cognition-600 dark:text-cognition-300" />
+              </a>
+              <a
+                href="https://www.researchgate.net/profile/Saptharishi-Ganesan"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="p-2 rounded-full bg-care-100 dark:bg-care-800 hover:bg-care-200 dark:hover:bg-care-700 transition-colors shadow"
+                aria-label="ResearchGate"
+              >
+                <FaResearchgate className="w-6 h-6 text-care-600 dark:text-care-300" />
+              </a>
+              <a
+                href="https://orcid.org/0000-0002-1234-5678"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="p-2 rounded-full bg-consciousness-100 dark:bg-consciousness-800 hover:bg-consciousness-200 dark:hover:bg-consciousness-700 transition-colors shadow"
+                aria-label="ORCID"
+              >
+                <SiOrcid className="w-6 h-6 text-consciousness-600 dark:text-consciousness-300" />
+              </a>
             </div>
             <p className="text-lg md:text-xl text-gray-700 dark:text-gray-300 mb-4 leading-relaxed">
               Head, 4C - Cognition, Consciousness & Critical Care Research Group
