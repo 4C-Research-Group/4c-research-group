@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import Image from "next/image";
+import { useEffect, useState } from "react";
 import {
   FaUserMd,
   FaUniversity,
@@ -15,8 +16,54 @@ import {
   FaGoogle,
 } from "react-icons/fa";
 import { SiOrcid } from "react-icons/si";
+import type { AboutPI } from "@/lib/types/about-pi";
 
 export default function AboutPIPage() {
+  const [data, setData] = useState<AboutPI | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const response = await fetch("/api/about-pi");
+        if (response.ok) {
+          const aboutData = await response.json();
+          setData(aboutData);
+        }
+      } catch (error) {
+        console.error("Error fetching about PI data:", error);
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchData();
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-cognition-600 mx-auto"></div>
+          <p className="mt-4 text-gray-600">Loading...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (!data) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <div className="text-center">
+          <h1 className="text-2xl font-bold text-gray-800 mb-4">
+            Page Not Available
+          </h1>
+          <p className="text-gray-600">
+            The About PI page is currently unavailable.
+          </p>
+        </div>
+      </div>
+    );
+  }
   return (
     <div className="min-h-screen bg-background">
       {/* Hero Section */}
@@ -49,61 +96,70 @@ export default function AboutPIPage() {
             className="max-w-2xl"
           >
             <h1 className="text-3xl md:text-4xl font-bold mb-2 leading-tight bg-gradient-to-r from-cognition-600 via-consciousness-600 to-care-600 bg-clip-text text-transparent">
-              Dr. Saptharishi (Rishi) Ganesan
+              {data.name}
             </h1>
             <div className="text-base md:text-lg text-gray-700 dark:text-gray-300 mb-2 flex items-center justify-center gap-2">
               <span className="px-3 py-1 rounded-full bg-cognition-100 dark:bg-cognition-800 text-cognition-700 dark:text-cognition-200 font-semibold text-sm">
-                He/Him
+                {data.pronouns}
               </span>
-              <span className="px-3 py-1 rounded-full bg-care-100 dark:bg-care-800 text-care-700 dark:text-care-200 font-semibold text-sm">
-                Pediatric Critical Care Physician
-              </span>
-              <span className="px-3 py-1 rounded-full bg-consciousness-100 dark:bg-consciousness-800 text-consciousness-700 dark:text-consciousness-200 font-semibold text-sm">
-                Neurocritical Care Specialist
-              </span>
+              {data.title.split("|").map((title, index) => (
+                <span
+                  key={index}
+                  className="px-3 py-1 rounded-full bg-care-100 dark:bg-care-800 text-care-700 dark:text-care-200 font-semibold text-sm"
+                >
+                  {title.trim()}
+                </span>
+              ))}
             </div>
             {/* Social Links */}
             <div className="flex justify-center gap-4 mb-4 mt-2">
-              <a
-                href="https://www.linkedin.com/in/dr-saptharishi-ganesan-b1730a60/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="p-2 rounded-full bg-cognition-100 dark:bg-cognition-800 hover:bg-cognition-200 dark:hover:bg-cognition-700 transition-colors shadow"
-                aria-label="LinkedIn"
-              >
-                <FaLinkedin className="w-6 h-6 text-cognition-600 dark:text-cognition-300" />
-              </a>
-              <a
-                href="http://scholar.google.com/citations?user=iuxSVQwAAAAJ&hl=en"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="p-2 rounded-full bg-care-100 dark:bg-care-800 hover:bg-care-200 dark:hover:bg-care-700 transition-colors shadow"
-                aria-label="Google Scholar"
-              >
-                <FaGoogle className="w-6 h-6 text-care-600 dark:text-care-300" />
-              </a>
-              <a
-                href="https://www.researchgate.net/profile/Saptharishi-Lalgudi-Ganesan"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="p-2 rounded-full bg-consciousness-100 dark:bg-consciousness-800 hover:bg-consciousness-200 dark:hover:bg-consciousness-700 transition-colors shadow"
-                aria-label="ResearchGate"
-              >
-                <FaResearchgate className="w-6 h-6 text-consciousness-600 dark:text-consciousness-300" />
-              </a>
-              <a
-                href="https://orcid.org/0000-0002-2599-9119"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="p-2 rounded-full bg-cognition-100 dark:bg-cognition-800 hover:bg-cognition-200 dark:hover:bg-cognition-700 transition-colors shadow"
-                aria-label="ORCID"
-              >
-                <SiOrcid className="w-6 h-6 text-cognition-600 dark:text-cognition-300" />
-              </a>
+              {data.linkedin_url && (
+                <a
+                  href={data.linkedin_url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="p-2 rounded-full bg-cognition-100 dark:bg-cognition-800 hover:bg-cognition-200 dark:hover:bg-cognition-700 transition-colors shadow"
+                  aria-label="LinkedIn"
+                >
+                  <FaLinkedin className="w-6 h-6 text-cognition-600 dark:text-cognition-300" />
+                </a>
+              )}
+              {data.google_scholar_url && (
+                <a
+                  href={data.google_scholar_url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="p-2 rounded-full bg-care-100 dark:bg-care-800 hover:bg-care-200 dark:hover:bg-care-700 transition-colors shadow"
+                  aria-label="Google Scholar"
+                >
+                  <FaGoogle className="w-6 h-6 text-care-600 dark:text-care-300" />
+                </a>
+              )}
+              {data.researchgate_url && (
+                <a
+                  href={data.researchgate_url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="p-2 rounded-full bg-consciousness-100 dark:bg-consciousness-800 hover:bg-consciousness-200 dark:hover:bg-consciousness-700 transition-colors shadow"
+                  aria-label="ResearchGate"
+                >
+                  <FaResearchgate className="w-6 h-6 text-consciousness-600 dark:text-consciousness-300" />
+                </a>
+              )}
+              {data.orcid_url && (
+                <a
+                  href={data.orcid_url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="p-2 rounded-full bg-cognition-100 dark:bg-cognition-800 hover:bg-cognition-200 dark:hover:bg-cognition-700 transition-colors shadow"
+                  aria-label="ORCID"
+                >
+                  <SiOrcid className="w-6 h-6 text-cognition-600 dark:text-cognition-300" />
+                </a>
+              )}
             </div>
             <p className="text-lg md:text-xl text-gray-700 dark:text-gray-300 mb-4 leading-relaxed">
-              Head, 4C - Cognition, Consciousness & Critical Care Research Group
-              | Western Institute for Neuroscience (WIN) | Western University
+              {data.hero_description}
             </p>
           </motion.div>
         </div>
@@ -123,31 +179,7 @@ export default function AboutPIPage() {
             About
           </h2>
           <div className="text-base text-gray-700 dark:text-gray-300 leading-relaxed">
-            I am a pediatric critical care physician with clinical and research
-            expertise in Paediatric Neurocritical Care. I hold the following
-            appointments: <b>Assistant Professor</b> in the Department of
-            Paediatrics and the Dept. of Physiology & Pharmacology at the
-            Schulich School of Medicine (Western University),{" "}
-            <b>Associate Scientist</b> at the Lawson Health Research Institute,{" "}
-            <b>Associate Scientist</b> at the Children&apos;s Health Research
-            Institute, <b>Associate Member</b> of the Brain &amp; Mind Institute
-            (Western University), <b>Hospital Donation Physician (TGLN)</b> and{" "}
-            <b>
-              Interim Program Director (PCCM Sub-specialty residency program)
-            </b>
-            .<br />
-            <br />
-            My research program aims to improve the long-term cognitive and
-            functional outcomes in critically ill children through the
-            development, validation and implementation of electrical
-            neuroimaging-based monitoring tools that provide real-time
-            information regarding brain states. This program would enable
-            bedside critical care providers to identify evolving brain
-            pathologies quickly, deliver neuroprotective or neurorestorative
-            interventions in a timely manner and determine prognosis objectively
-            in high-risk critically ill children. This inter-disciplinary
-            research program sits at the intersection of computational
-            neuroscience, artificial intelligence and functional neuroimaging.
+            {data.about_content}
           </div>
         </motion.section>
 
@@ -166,26 +198,7 @@ export default function AboutPIPage() {
             </h2>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 gap-4">
-            {[
-              {
-                title: "Assistant Professor",
-                subtitle:
-                  "Schulich School of Medicine & Dentistry, Western University (Sep 2019 – Present)",
-              },
-              {
-                title: "Paediatric Intensivist",
-                subtitle: "London Health Sciences Centre (Aug 2019 – Present)",
-              },
-              {
-                title: "Head",
-                subtitle:
-                  "4C - Cognition, Consciousness & Critical Care Research Group",
-              },
-              {
-                title: "Member",
-                subtitle: "Western Institute for Neuroscience (WIN)",
-              },
-            ].map((item, idx) => (
+            {data.current_positions.map((item, idx) => (
               <div
                 key={idx}
                 className="bg-gray-50 dark:bg-gray-700/30 p-4 rounded-xl shadow-sm flex flex-col justify-between h-full"
@@ -216,47 +229,17 @@ export default function AboutPIPage() {
             </h2>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 gap-4">
-            {[
-              {
-                title:
-                  "Clinical-Research Fellowship, Pediatric Critical Care Medicine Residency Program",
-                subtitle: "University of Toronto (2017–2018)",
-              },
-              {
-                title: "Advanced Fellowship, Pediatric Neurocritical Care",
-                subtitle: "University of Toronto (2016–2017)",
-              },
-              {
-                title: "Doctorate in Medicine (D.M.), Pediatric Critical Care",
-                subtitle: "PGIMER, Chandigarh, India (2013–2016)",
-                note: "Outstanding – Best resident – Bronze medal",
-              },
-              {
-                title: "M.D., Pediatrics Residency Program",
-                subtitle: "PGIMER, Chandigarh, India (2010–2012)",
-                note: "Outstanding – Best resident – Bronze medal",
-              },
-              {
-                title: "MBBS, Medicine",
-                subtitle: "JIPMER, Puducherry (2004–2009)",
-                note: "Outstanding – Best outgoing Graduate\nPresident, JIPMER Students Association (2007); Secretary, JSA-RDA joint committee for Student Rights; President, Consortium of Medical Students Against Reservation",
-              },
-            ].map((item, idx) => (
+            {data.education.map((item, idx) => (
               <div
                 key={idx}
                 className="bg-gray-50 dark:bg-gray-700/30 p-4 rounded-xl shadow-sm flex flex-col justify-between h-full"
               >
                 <div className="font-semibold text-care-700 dark:text-care-200 mb-1">
-                  {item.title}
+                  {item.degree}
                 </div>
                 <div className="text-sm text-gray-700 dark:text-gray-300">
-                  {item.subtitle}
+                  {item.institution} ({item.year})
                 </div>
-                {item.note && (
-                  <div className="text-xs text-gray-500 dark:text-gray-400 mt-1 whitespace-pre-line">
-                    {item.note}
-                  </div>
-                )}
               </div>
             ))}
           </div>
@@ -277,51 +260,7 @@ export default function AboutPIPage() {
             </h2>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 gap-4">
-            {[
-              {
-                title: "Assistant Professor",
-                subtitle: "Western University (Aug 2019 – Present)",
-              },
-              {
-                title: "Program Director",
-                subtitle: "Western University (Jun 2020 – Aug 2022)",
-              },
-              {
-                title: "Paediatric Intensivist",
-                subtitle: "London Health Sciences Centre (Aug 2019 – Present)",
-              },
-              {
-                title: "Assistant Staff Physician",
-                subtitle:
-                  "The Hospital for Sick Children, Toronto (Sep 2018 – Jun 2019)",
-              },
-              {
-                title:
-                  "Clinical Neurocritical Care Fellow & RESTRACOMP/C-BMH Integrative Research Fellow",
-                subtitle: "SickKids, Toronto (Jul 2017 – Sep 2018)",
-              },
-              {
-                title: "Neurocritical Care Specialty Fellow",
-                subtitle: "SickKids, Toronto (Jul 2016 – Jun 2017)",
-              },
-              {
-                title: "Critical Care Fellow",
-                subtitle: "PGIMER, Chandigarh (Jul 2013 – Jun 2016)",
-              },
-              {
-                title:
-                  "Senior Resident Physician in Pediatric Emergency Medicine",
-                subtitle: "PGIMER, Chandigarh (Jan 2013 – Jun 2013)",
-              },
-              {
-                title: "Resident Physician",
-                subtitle: "PGIMER, Chandigarh (Jan 2010 – Dec 2012)",
-              },
-              {
-                title: "Internship",
-                subtitle: "JIPMER, Puducherry (Jan 2009 – Dec 2009)",
-              },
-            ].map((item, idx) => (
+            {data.professional_experience.map((item, idx) => (
               <div
                 key={idx}
                 className="bg-gray-50 dark:bg-gray-700/30 p-4 rounded-xl shadow-sm flex flex-col justify-between h-full"
@@ -330,7 +269,7 @@ export default function AboutPIPage() {
                   {item.title}
                 </div>
                 <div className="text-sm text-gray-700 dark:text-gray-300">
-                  {item.subtitle}
+                  {item.institution} ({item.period})
                 </div>
               </div>
             ))}
@@ -352,28 +291,7 @@ export default function AboutPIPage() {
             </h2>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 gap-4">
-            {[
-              {
-                title: "Research Focus",
-                subtitle:
-                  "Early identification and mitigation of neurological insults in critically ill children, quantitative EEG, systems neuroscience, and improving long-term quality of life in ICU survivors.",
-              },
-              {
-                title: "Publication",
-                subtitle:
-                  "Published research on healthcare associated infections in critically ill children, including a validated risk score (Journal of Critical Care).",
-              },
-              {
-                title: "Awards",
-                subtitle:
-                  "Recipient of the S. T. Achar award, IJP Best Thesis award, and Global Health award for research excellence.",
-              },
-              {
-                title: "Teaching",
-                subtitle:
-                  "Consistently evaluated as a 'teacher par excellence' by trainees.",
-              },
-            ].map((item, idx) => (
+            {data.research_awards.map((item, idx) => (
               <div
                 key={idx}
                 className="bg-gray-50 dark:bg-gray-700/30 p-4 rounded-xl shadow-sm flex flex-col justify-between h-full"
@@ -382,7 +300,10 @@ export default function AboutPIPage() {
                   {item.title}
                 </div>
                 <div className="text-sm text-gray-700 dark:text-gray-300">
-                  {item.subtitle}
+                  {item.description}
+                </div>
+                <div className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                  {item.year}
                 </div>
               </div>
             ))}
@@ -727,49 +648,7 @@ export default function AboutPIPage() {
             </h2>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 gap-4 mb-6">
-            {[
-              {
-                title:
-                  "Airway Pressure Release Ventilation in Pediatric Acute Respiratory Distress Syndrome. A Randomized Controlled Trial",
-                journal:
-                  "American Journal of Respiratory & Critical Care Medicine (AJRCCM)",
-                date: "Nov 1, 2018",
-                summary:
-                  "A randomized controlled trial comparing APRV and conventional low–tidal volume ventilation in children with ARDS. The trial was terminated early due to higher mortality in the intervention arm. Ventilator-free days were similar, but APRV showed a trend toward higher mortality. Limitations should be considered while interpreting these results.",
-              },
-              {
-                title:
-                  "Clinical profile of scrub typhus in children and its association with hemophagocytic lymphohistiocytosis.",
-                journal: "Indian Pediatrics",
-                date: "Aug 1, 2014",
-                summary:
-                  "Study of children with scrub typhus and its association with hemophagocytic lymphohistiocytosis. Scrub typhus is a common cause of unexplained fever in children in northern India, and HLH can occasionally complicate scrub typhus.",
-              },
-              {
-                title:
-                  "Hyperactivity, Unexplained Speech Delay, and Coarse Facies—Is It Sanfilippo Syndrome?",
-                journal: "Journal of Child Neurology",
-                date: "Jun 12, 2013",
-                summary:
-                  "Case report of a girl with mucopolysaccharidosis-IIIB (Sanfilippo-B syndrome), highlighting the need to consider this diagnosis in children with unexplained speech delay and hyperactivity.",
-              },
-              {
-                title:
-                  "Non-pharmacological Interventions in Hypertension: A Community-based Cross-over Randomized Controlled Trial",
-                journal: "Indian Journal of Community Medicine",
-                date: "Jul 1, 2011",
-                summary:
-                  "Community-based cross-over RCT testing physical exercise, salt reduction, and yoga for controlling hypertension in young adults. All interventions were effective, with exercise being most effective.",
-              },
-              {
-                title:
-                  "Community-based randomized controlled trial of non-pharmacological interventions in prevention and control of hypertension among young adults",
-                journal: "Indian Journal of Community Medicine",
-                date: "Oct 1, 2009",
-                summary:
-                  "RCT measuring the efficacy of physical exercise, salt reduction, and yoga in lowering BP among young pre-hypertensives and hypertensives. All interventions were effective; exercise was most effective.",
-              },
-            ].map((item, idx) => (
+            {data.publications.map((item, idx) => (
               <div
                 key={idx}
                 className="bg-gray-50 dark:bg-gray-700/30 p-4 rounded-xl shadow-sm flex flex-col h-full"
@@ -781,11 +660,13 @@ export default function AboutPIPage() {
                   {item.journal}
                 </div>
                 <div className="text-xs text-gray-500 dark:text-gray-400 mb-2">
-                  {item.date}
+                  {item.year}
                 </div>
-                <div className="text-xs text-gray-700 dark:text-gray-300">
-                  {item.summary}
-                </div>
+                {item.doi && (
+                  <div className="text-xs text-gray-500 dark:text-gray-400 mb-2">
+                    DOI: {item.doi}
+                  </div>
+                )}
               </div>
             ))}
           </div>

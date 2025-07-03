@@ -51,6 +51,13 @@ export default async function AdminPages() {
       description: "About page with mission, PI info, and research focus",
     },
     {
+      slug: "about-pi",
+      title: "About PI Page",
+      path: "/about-pi",
+      editPath: "/admin/edit-about-pi",
+      description: "Principal Investigator profile with detailed information",
+    },
+    {
       slug: "research",
       title: "Research Projects",
       path: "/research",
