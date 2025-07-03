@@ -239,11 +239,16 @@ export default function AboutPIPage() {
                 className="bg-gray-50 dark:bg-gray-700/30 p-4 rounded-xl shadow-sm flex flex-col justify-between h-full"
               >
                 <div className="font-semibold text-care-700 dark:text-care-200 mb-1">
-                  {item.degree}
+                  {item.title}
                 </div>
                 <div className="text-sm text-gray-700 dark:text-gray-300">
-                  {item.institution} ({item.year})
+                  {item.subtitle}
                 </div>
+                {item.note && (
+                  <div className="text-xs text-gray-500 dark:text-gray-400 mt-1 whitespace-pre-line">
+                    {item.note}
+                  </div>
+                )}
               </div>
             ))}
           </div>

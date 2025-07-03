@@ -307,9 +307,9 @@ export default function EditAboutPIPage() {
                 size="sm"
                 onClick={() =>
                   addArrayItem("education", {
-                    degree: "",
-                    institution: "",
-                    year: "",
+                    title: "",
+                    subtitle: "",
+                    note: "",
                   })
                 }
               >
@@ -322,31 +322,32 @@ export default function EditAboutPIPage() {
               <div key={index} className="flex gap-2 items-start">
                 <div className="flex-1 space-y-2">
                   <Input
-                    placeholder="Degree"
-                    value={edu.degree}
+                    placeholder="Title (e.g., Clinical-Research Fellowship, Pediatric Critical Care Medicine Residency Program)"
+                    value={edu.title}
                     onChange={(e) =>
                       updateArrayItem("education", index, {
-                        degree: e.target.value,
+                        title: e.target.value,
                       })
                     }
                   />
                   <Input
-                    placeholder="Institution"
-                    value={edu.institution}
+                    placeholder="Subtitle (e.g., University of Toronto (2017–2018))"
+                    value={edu.subtitle}
                     onChange={(e) =>
                       updateArrayItem("education", index, {
-                        institution: e.target.value,
+                        subtitle: e.target.value,
                       })
                     }
                   />
-                  <Input
-                    placeholder="Year"
-                    value={edu.year}
+                  <Textarea
+                    placeholder="Note/Awards (e.g., Outstanding – Best resident – Bronze medal)"
+                    value={edu.note || ""}
                     onChange={(e) =>
                       updateArrayItem("education", index, {
-                        year: e.target.value,
+                        note: e.target.value,
                       })
                     }
+                    rows={2}
                   />
                 </div>
                 <Button

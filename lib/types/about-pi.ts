@@ -29,9 +29,9 @@ export interface Position {
 }
 
 export interface Education {
-  degree: string;
-  institution: string;
-  year: string;
+  title: string;
+  subtitle: string;
+  note?: string;
 }
 
 export interface Experience {
