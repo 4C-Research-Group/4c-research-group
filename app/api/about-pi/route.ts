@@ -3,26 +3,61 @@ import { getAboutPI, updateAboutPI } from "@/lib/supabase/about-pi";
 import { createServerClient } from "@supabase/ssr";
 import { cookies } from "next/headers";
 
+// Enable CORS for the API route
+const corsHeaders = {
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Methods": "GET, PUT, OPTIONS",
+  "Access-Control-Allow-Headers": "Content-Type, Authorization",
+};
+
 export async function GET() {
-  const data = await getAboutPI();
-  if (!data) {
+  try {
+    const data = await getAboutPI();
+    if (!data) {
+      return NextResponse.json(
+        { error: "About PI data not found" },
+        { status: 404, headers: corsHeaders }
+      );
+    }
+    return new NextResponse(JSON.stringify(data), {
+      status: 200,
+      headers: {
+        ...corsHeaders,
+        "Content-Type": "application/json",
+      },
+    });
+  } catch (error) {
+    console.error("Error in GET /api/about-pi:", error);
     return NextResponse.json(
-      { error: "About PI data not found" },
-      { status: 404 }
+      { error: "Internal server error" },
+      { status: 500, headers: corsHeaders }
     );
   }
-  return NextResponse.json(data);
 }
 
 export async function PUT(request: NextRequest) {
   console.log("PUT /api/about-pi called");
-  let body = null;
+
+  // Handle CORS preflight
+  if (request.method === "OPTIONS") {
+    return new NextResponse(null, {
+      status: 204,
+      headers: corsHeaders,
+    });
+  }
+
+  let body;
   try {
     body = await request.json();
-    console.log("Request body:", body);
+    console.log("Request body received:", body);
   } catch (e) {
     console.error("Failed to parse request body:", e);
+    return NextResponse.json(
+      { error: "Invalid request body" },
+      { status: 400, headers: corsHeaders }
+    );
   }
+
   try {
     const cookieStore = await cookies();
     const supabase = createServerClient(
@@ -50,13 +85,16 @@ export async function PUT(request: NextRequest) {
       }
     );
 
-    // Check if user is admin
+    // Verify user is authenticated and has admin role
     const {
       data: { user },
     } = await supabase.auth.getUser();
 
     if (!user) {
-      return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
+      return NextResponse.json(
+        { error: "Unauthorized" },
+        { status: 401, headers: corsHeaders }
+      );
     }
 
     const { data: userData } = await supabase
@@ -66,9 +104,13 @@ export async function PUT(request: NextRequest) {
       .single();
 
     if (userData?.role !== "admin") {
-      return NextResponse.json({ error: "Not authorized" }, { status: 403 });
+      return NextResponse.json(
+        { error: "Forbidden" },
+        { status: 403, headers: corsHeaders }
+      );
     }
 
+    // Update the about PI data
     const updates = body;
 
     // Use service role client to update data (bypasses RLS)
@@ -83,7 +125,7 @@ export async function PUT(request: NextRequest) {
       console.error("Error fetching about PI:", fetchError);
       return NextResponse.json(
         { error: `Database error: ${fetchError.message}` },
-        { status: 500 }
+        { status: 500, headers: corsHeaders }
       );
     }
 
@@ -116,25 +158,37 @@ export async function PUT(request: NextRequest) {
       console.error("Error updating about PI:", error);
       return NextResponse.json(
         { error: `Database error: ${error.message}` },
-        { status: 500 }
+        { status: 500, headers: corsHeaders }
       );
     }
 
     if (!data) {
       return NextResponse.json(
         { error: "No data found to update" },
-        { status: 404 }
+        { status: 404, headers: corsHeaders }
       );
     }
 
-    return NextResponse.json(data);
-  } catch (error) {
-    console.error("Error updating about PI:", error);
-    return NextResponse.json(
-      {
-        error: `Internal server error: ${error instanceof Error ? error.message : "Unknown error"}`,
+    return new NextResponse(JSON.stringify(data), {
+      status: 200,
+      headers: {
+        ...corsHeaders,
+        "Content-Type": "application/json",
       },
-      { status: 500 }
+    });
+  } catch (error) {
+    console.error("Error in PUT /api/about-pi:", error);
+    return NextResponse.json(
+      { error: "Internal server error" },
+      { status: 500, headers: corsHeaders }
     );
   }
+}
+
+// Add this to handle CORS preflight requests
+export async function OPTIONS() {
+  return new NextResponse(null, {
+    status: 204,
+    headers: corsHeaders,
+  });
 }
