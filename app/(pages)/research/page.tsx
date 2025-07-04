@@ -226,7 +226,6 @@ export default function ProjectsPage() {
                     className="object-cover"
                     sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-br from-cognition-100 to-cognition-300 dark:from-cognition-800 dark:to-cognition-900 opacity-50"></div>
                   <div className="absolute top-4 right-4">
                     {getStatusBadge(project.status)}
                   </div>
