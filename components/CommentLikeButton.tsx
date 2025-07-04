@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback, memo } from "react";
 import { Heart } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -15,7 +15,7 @@ interface CommentLikeButtonProps {
   }) => void;
 }
 
-export default function CommentLikeButton({
+function CommentLikeButton({
   commentId,
   initialLikes = 0,
   initialIsLiked = false,
@@ -26,9 +26,10 @@ export default function CommentLikeButton({
   const [isLiked, setIsLiked] = useState(initialIsLiked);
   const [isLoading, setIsLoading] = useState(false);
   const [isAnimating, setIsAnimating] = useState(false);
+  const [hasHydrated, setHasHydrated] = useState(false);
 
   // Get localStorage key for this comment
-  const getStorageKey = (commentId: string) => `comment_like_${commentId}`;
+  const getStorageKey = useCallback((id: string) => `comment_like_${id}`, []);
 
   // Load like state from localStorage on mount
   useEffect(() => {
@@ -39,7 +40,7 @@ export default function CommentLikeButton({
         setLikes(storedData.total_likes);
         setIsLiked(storedData.is_liked_by_user);
       } else {
-        // Use initial props if no stored data
+        // If no stored data, use the initial props
         setLikes(initialLikes);
         setIsLiked(initialIsLiked);
       }
@@ -47,20 +48,13 @@ export default function CommentLikeButton({
       console.error("Error loading like state from localStorage:", error);
       setLikes(initialLikes);
       setIsLiked(initialIsLiked);
+    } finally {
+      setHasHydrated(true);
     }
-  }, [commentId, initialLikes, initialIsLiked]);
+  }, [commentId, getStorageKey, initialLikes, initialIsLiked]);
 
-  // Update local state when props change (but only if we don't have stored data)
-  useEffect(() => {
-    const stored = localStorage.getItem(getStorageKey(commentId));
-    if (!stored) {
-      setLikes(initialLikes);
-      setIsLiked(initialIsLiked);
-    }
-  }, [commentId, initialLikes, initialIsLiked]);
-
-  const handleLike = async () => {
-    if (isLoading) return;
+  const handleLike = useCallback(async () => {
+    if (isLoading || !hasHydrated) return;
 
     setIsLoading(true);
     try {
@@ -74,6 +68,8 @@ export default function CommentLikeButton({
 
       if (response.ok) {
         const data = await response.json();
+
+        // Update local state
         setLikes(data.total_likes);
         setIsLiked(data.is_liked_by_user);
 
@@ -91,17 +87,28 @@ export default function CommentLikeButton({
 
         // Trigger animation
         setIsAnimating(true);
-        setTimeout(() => setIsAnimating(false), 300);
+        const timer = setTimeout(() => setIsAnimating(false), 300);
+        return () => clearTimeout(timer);
       } else {
-        const error = await response.json();
-        console.error("Failed to like comment:", error);
+        const errorData = await response.json();
+        console.error("Failed to like comment:", errorData);
       }
     } catch (error) {
       console.error("Error liking comment:", error);
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [commentId, isLoading, onLikeChange, getStorageKey, hasHydrated]);
+
+  // Don't render anything until hydration is complete
+  if (!hasHydrated) {
+    return (
+      <div className="flex items-center gap-1.5 px-2 py-1 text-sm opacity-50">
+        <Heart className="w-4 h-4" />
+        {likes > 0 && <span className="text-xs font-medium">{likes}</span>}
+      </div>
+    );
+  }
 
   return (
     <button
@@ -126,3 +133,5 @@ export default function CommentLikeButton({
     </button>
   );
 }
+
+export default memo(CommentLikeButton);

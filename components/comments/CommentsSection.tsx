@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { FaComments, FaSignInAlt } from "react-icons/fa";
 import { Button } from "@/components/ui/button";
 import CommentForm from "./CommentForm";
@@ -19,24 +19,102 @@ export default function CommentsSection({ blogPostId }: CommentsSectionProps) {
   const [user, setUser] = useState<any>(null);
   const [isAdmin, setIsAdmin] = useState(false);
   const [showLoginPrompt, setShowLoginPrompt] = useState(false);
+  const [commentLikeStats, setCommentLikeStats] = useState<{
+    [commentId: string]: { total_likes: number; is_liked_by_user: boolean };
+  }>({});
 
-  const fetchComments = async () => {
+  // Cache for in-flight requests to prevent duplicates
+  const requestCache = useRef<{
+    [key: string]:
+      | Promise<{ total_likes: number; is_liked_by_user: boolean }>
+      | undefined;
+  }>({});
+
+  // Fetch like stats for a single comment with deduplication
+  const fetchCommentLikeStats = useCallback(async (commentId: string) => {
+    const cacheKey = `comment-${commentId}`;
+
+    // Return existing promise if request is in flight
+    const cachedRequest = requestCache.current[cacheKey];
+    if (cachedRequest) {
+      return cachedRequest;
+    }
+
+    // Create and cache the request
+    const request = (async () => {
+      try {
+        const response = await fetch(
+          `/api/comment-likes?commentId=${commentId}`
+        );
+        if (!response.ok) throw new Error("Failed to fetch like stats");
+        return await response.json();
+      } finally {
+        // Clean up the cache after request completes
+        delete requestCache.current[cacheKey];
+      }
+    })();
+
+    requestCache.current[cacheKey] = request;
+    return request;
+  }, []);
+
+  const fetchComments = useCallback(async () => {
     try {
       setLoading(true);
+
+      // Fetch comments
       const response = await fetch(`/api/comments?blogPostId=${blogPostId}`);
-
-      if (!response.ok) {
-        throw new Error("Failed to fetch comments");
-      }
-
+      if (!response.ok) throw new Error("Failed to fetch comments");
       const data = await response.json();
       setComments(data);
+
+      // Collect all comment IDs (including replies)
+      const allComments: BlogComment[] = [];
+      const flatten = (arr: BlogComment[]) => {
+        arr.forEach((c) => {
+          allComments.push(c);
+          if (c.replies?.length) flatten(c.replies);
+        });
+      };
+      flatten(data);
+
+      // Only fetch stats for comments we don't already have data for
+      const commentIds = allComments
+        .map((c) => c.id)
+        .filter((id) => !commentLikeStats[id]);
+
+      if (commentIds.length === 0) return;
+
+      // Fetch stats in parallel with deduplication
+      const statsPromises = commentIds.map((commentId) =>
+        fetchCommentLikeStats(commentId)
+          .then((stat) => ({ commentId, stat }))
+          .catch((error) => {
+            console.error(`Failed to fetch stats for comment:`, error);
+            return {
+              commentId,
+              stat: { total_likes: 0, is_liked_by_user: false },
+            };
+          })
+      );
+
+      const statsResults = await Promise.all(statsPromises);
+
+      // Update state with new stats
+      setCommentLikeStats((prev) => ({
+        ...prev,
+        ...Object.fromEntries(
+          statsResults
+            .filter(Boolean)
+            .map(({ commentId, stat }) => [commentId, stat])
+        ),
+      }));
     } catch (err: any) {
       setError(err.message);
     } finally {
       setLoading(false);
     }
-  };
+  }, [blogPostId, fetchCommentLikeStats, commentLikeStats]);
 
   useEffect(() => {
     checkUser();
@@ -79,6 +157,38 @@ export default function CommentsSection({ blogPostId }: CommentsSectionProps) {
     if (count === 1) return "1 comment";
     return `${count} comments`;
   };
+
+  // Helper to flatten all comments and replies
+  const flattenComments = (arr: BlogComment[]): BlogComment[] => {
+    let all: BlogComment[] = [];
+    arr.forEach((c) => {
+      all.push(c);
+      if (c.replies && c.replies.length > 0) {
+        all = all.concat(flattenComments(c.replies));
+      }
+    });
+    return all;
+  };
+
+  // Recursive render for comments and replies
+  const renderComments = (commentsArr: BlogComment[]) =>
+    commentsArr.map((comment) => (
+      <CommentItem
+        key={comment.id}
+        comment={comment}
+        likeStats={commentLikeStats[comment.id]}
+        onCommentUpdated={handleCommentUpdated}
+        onCommentDeleted={handleCommentDeleted}
+        currentUserId={user?.id}
+        isAdmin={isAdmin}
+        // Recursively render replies
+        renderReplies={() =>
+          comment.replies && comment.replies.length > 0
+            ? renderComments(comment.replies)
+            : null
+        }
+      />
+    ));
 
   if (loading) {
     return (
@@ -155,16 +265,7 @@ export default function CommentsSection({ blogPostId }: CommentsSectionProps) {
                 <p>Be the first to comment on this post!</p>
               </div>
             ) : (
-              comments.map((comment) => (
-                <CommentItem
-                  key={comment.id}
-                  comment={comment}
-                  onCommentUpdated={handleCommentUpdated}
-                  onCommentDeleted={handleCommentDeleted}
-                  currentUserId={user?.id}
-                  isAdmin={isAdmin}
-                />
-              ))
+              renderComments(comments)
             )}
           </div>
 

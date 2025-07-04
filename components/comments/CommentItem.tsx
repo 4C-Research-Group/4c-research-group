@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { FaReply, FaEdit, FaTrash, FaUser } from "react-icons/fa";
 import { Button } from "@/components/ui/button";
 import CommentForm from "./CommentForm";
@@ -11,6 +11,7 @@ import { UserAvatar } from "@/components/user-avatar";
 import { Textarea } from "@/components/ui/textarea";
 import CommentLikeButton from "@/components/CommentLikeButton";
 import { CommentLikeStats } from "@/lib/types/comment-likes";
+import { memo } from "react";
 
 interface CommentItemProps {
   comment: BlogComment;
@@ -19,7 +20,11 @@ interface CommentItemProps {
   depth?: number;
   currentUserId?: string;
   isAdmin?: boolean;
+  likeStats?: CommentLikeStats;
+  renderReplies?: () => React.ReactNode;
 }
+
+const MemoizedCommentLikeButton = memo(CommentLikeButton);
 
 export default function CommentItem({
   comment,
@@ -28,49 +33,35 @@ export default function CommentItem({
   depth = 0,
   currentUserId,
   isAdmin = false,
+  likeStats,
+  renderReplies,
 }: CommentItemProps) {
   const [isReplying, setIsReplying] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [currentUser, setCurrentUser] = useState<any>(null);
-  const [likeStats, setLikeStats] = useState<CommentLikeStats>({
-    total_likes: 0,
-    is_liked_by_user: false,
-  });
+  const [localLikeStats, setLocalLikeStats] = useState<CommentLikeStats>(
+    likeStats || { total_likes: 0, is_liked_by_user: false }
+  );
 
-  // Check if current user is the comment author
-  useState(() => {
-    (async () => {
+  useEffect(() => {
+    if (likeStats) setLocalLikeStats(likeStats);
+  }, [likeStats]);
+
+  // Get current user on mount
+  useEffect(() => {
+    const getUser = async () => {
       const {
         data: { user },
       } = await supabase.auth.getUser();
       setCurrentUser(user);
-    })();
-  });
+    };
+    getUser();
+  }, []);
 
   const isAuthor = currentUser?.id === comment.user_id;
   const maxDepth = 3; // Limit nesting depth
-
   const canDelete = isAdmin || comment.user_id === currentUserId;
-
-  useEffect(() => {
-    // Fetch like stats for this comment
-    const fetchLikeStats = async () => {
-      try {
-        const response = await fetch(
-          `/api/comment-likes?commentId=${comment.id}`
-        );
-        if (response.ok) {
-          const stats = await response.json();
-          setLikeStats(stats);
-        }
-      } catch (error) {
-        console.error("Error fetching comment like stats:", error);
-      }
-    };
-
-    fetchLikeStats();
-  }, [comment.id]);
 
   const handleDelete = async () => {
     if (!confirm("Are you sure you want to delete this comment?")) return;
@@ -104,12 +95,12 @@ export default function CommentItem({
     });
   };
 
-  const handleLikeChange = (newStats: {
-    total_likes: number;
-    is_liked_by_user: boolean;
-  }) => {
-    setLikeStats(newStats);
-  };
+  const handleLikeChange = useCallback(
+    (newStats: { total_likes: number; is_liked_by_user: boolean }) => {
+      setLocalLikeStats(newStats);
+    },
+    []
+  );
 
   return (
     <div
@@ -145,12 +136,15 @@ export default function CommentItem({
             </div>
 
             <div className="flex items-center gap-2 text-sm">
-              <CommentLikeButton
-                commentId={comment.id}
-                initialLikes={likeStats.total_likes}
-                initialIsLiked={likeStats.is_liked_by_user}
-                onLikeChange={handleLikeChange}
-              />
+              <div className="mt-2 flex items-center">
+                <MemoizedCommentLikeButton
+                  key={`like-${comment.id}`}
+                  commentId={comment.id}
+                  initialLikes={localLikeStats.total_likes}
+                  initialIsLiked={localLikeStats.is_liked_by_user}
+                  onLikeChange={handleLikeChange}
+                />
+              </div>
 
               <Button
                 variant="ghost"
@@ -220,10 +214,15 @@ export default function CommentItem({
               depth={depth + 1}
               currentUserId={currentUserId}
               isAdmin={isAdmin}
+              likeStats={localLikeStats}
+              renderReplies={renderReplies}
             />
           ))}
         </div>
       )}
+
+      {/* Render replies recursively if provided */}
+      {renderReplies && renderReplies()}
     </div>
   );
 }

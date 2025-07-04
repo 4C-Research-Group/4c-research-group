@@ -3,6 +3,8 @@ import { createServerClient } from "@supabase/ssr";
 import { cookies } from "next/headers";
 
 export async function GET(request: NextRequest) {
+  console.log("GET /api/comment-likes called", request.url, new Date());
+  console.log("Referer:", request.headers.get("referer"));
   const { searchParams } = new URL(request.url);
   const commentId = searchParams.get("commentId");
 
@@ -69,6 +71,63 @@ export async function GET(request: NextRequest) {
 }
 
 export async function POST(request: NextRequest) {
+  // If this is a batch request
+  const url = new URL(request.url);
+  if (url.pathname.endsWith("/batch")) {
+    try {
+      const cookieStore = await cookies();
+      const supabase = createServerClient(
+        process.env.NEXT_PUBLIC_SUPABASE_URL!,
+        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+        {
+          cookies: {
+            get(name: string) {
+              return cookieStore.get(name)?.value;
+            },
+          },
+        }
+      );
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+      const body = await request.json();
+      const { commentIds } = body;
+      if (!Array.isArray(commentIds) || commentIds.length === 0) {
+        return NextResponse.json(
+          { error: "commentIds array required" },
+          { status: 400 }
+        );
+      }
+      // Fetch all like stats in one query
+      const { data: likesData, error } = await supabase
+        .from("comment_likes")
+        .select("comment_id, user_id")
+        .in("comment_id", commentIds);
+      if (error) {
+        return NextResponse.json({ error: error.message }, { status: 500 });
+      }
+      // Build stats
+      const stats: Record<
+        string,
+        { total_likes: number; is_liked_by_user: boolean }
+      > = {};
+      for (const id of commentIds) {
+        const likesForComment = likesData.filter((l) => l.comment_id === id);
+        stats[id] = {
+          total_likes: likesForComment.length,
+          is_liked_by_user: !!(
+            user && likesForComment.some((l) => l.user_id === user.id)
+          ),
+        };
+      }
+      return NextResponse.json(stats);
+    } catch (error) {
+      return NextResponse.json(
+        { error: "Internal server error" },
+        { status: 500 }
+      );
+    }
+  }
   try {
     const cookieStore = await cookies();
     const supabase = createServerClient(

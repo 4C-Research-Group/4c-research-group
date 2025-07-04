@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { FaHeart } from "react-icons/fa";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/lib/supabase/client";
@@ -20,8 +20,9 @@ export default function LikeButton({
   const [isLiked, setIsLiked] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [user, setUser] = useState<any>(null);
+  const initialFetchDone = useRef(false);
 
-  const fetchLikeStats = async () => {
+  const fetchLikeStats = useCallback(async () => {
     try {
       const response = await fetch(`/api/likes?blogPostId=${blogPostId}`);
       if (response.ok) {
@@ -32,19 +33,23 @@ export default function LikeButton({
     } catch (error) {
       console.error("Error fetching like stats:", error);
     }
-  };
+  }, [blogPostId]);
 
   useEffect(() => {
-    checkUser();
-    fetchLikeStats();
-  }, [blogPostId, fetchLikeStats]);
+    const checkUser = async () => {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+      setUser(user);
+    };
 
-  const checkUser = async () => {
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
-    setUser(user);
-  };
+    // Only run the initial fetch if it hasn't been done yet
+    if (!initialFetchDone.current) {
+      checkUser();
+      fetchLikeStats();
+      initialFetchDone.current = true;
+    }
+  }, [fetchLikeStats, blogPostId]);
 
   const handleLike = async () => {
     if (!user) {
