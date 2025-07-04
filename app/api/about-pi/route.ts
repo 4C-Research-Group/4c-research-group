@@ -15,6 +15,14 @@ export async function GET() {
 }
 
 export async function PUT(request: NextRequest) {
+  console.log("PUT /api/about-pi called");
+  let body = null;
+  try {
+    body = await request.json();
+    console.log("Request body:", body);
+  } catch (e) {
+    console.error("Failed to parse request body:", e);
+  }
   try {
     const cookieStore = await cookies();
     const supabase = createServerClient(
@@ -61,7 +69,7 @@ export async function PUT(request: NextRequest) {
       return NextResponse.json({ error: "Not authorized" }, { status: 403 });
     }
 
-    const updates = await request.json();
+    const updates = body;
 
     // Use service role client to update data (bypasses RLS)
     // First, get the first row (there should only be one)
