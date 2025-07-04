@@ -676,7 +676,7 @@ export default function AboutPIPage() {
           </div>
           <div className="flex justify-center">
             <a
-              href="http://localhost:3000/publications"
+              href="https://4c-research.vercel.app/publications"
               className="inline-block px-6 py-2 rounded-full bg-gradient-to-r from-cognition-600 to-care-600 text-white font-semibold shadow hover:from-cognition-700 hover:to-care-700 transition-colors text-base"
               target="_blank"
               rel="noopener noreferrer"
