@@ -213,19 +213,19 @@ export default function HomePage() {
   ];
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background overflow-x-hidden">
       {/* Hero Section */}
       {hero && (
         <section className="relative -mt-12 min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-cognition-50 via-white to-consciousness-50 dark:from-cognition-900 dark:via-gray-900 dark:to-consciousness-900">
           {/* Simple Background Elements */}
-          <div className="absolute inset-0">
-            <div className="absolute top-20 left-10 w-72 h-72 bg-cognition-200/20 dark:bg-cognition-700/10 rounded-full" />
-            <div className="absolute top-40 right-20 w-96 h-96 bg-consciousness-200/20 dark:bg-consciousness-700/10 rounded-full" />
-            <div className="absolute bottom-20 left-1/4 w-80 h-80 bg-care-200/20 dark:bg-care-700/10 rounded-full" />
+          <div className="absolute inset-0 overflow-hidden">
+            <div className="absolute top-20 left-10 w-48 md:w-72 h-48 md:h-72 bg-cognition-200/20 dark:bg-cognition-700/10 rounded-full" />
+            <div className="absolute top-40 right-10 md:right-20 w-64 md:w-96 h-64 md:h-96 bg-consciousness-200/20 dark:bg-consciousness-700/10 rounded-full" />
+            <div className="absolute bottom-20 left-1/4 w-56 md:w-80 h-56 md:h-80 bg-care-200/20 dark:bg-care-700/10 rounded-full" />
           </div>
 
-          <div className="container mx-auto px-4 py-20 relative z-10">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+          <div className="container mx-auto px-4 py-20 relative z-10 max-w-full">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-center">
               {/* Left Column - Content */}
               <motion.div
                 className="text-center lg:text-left"
@@ -245,7 +245,7 @@ export default function HomePage() {
                 </motion.div>
 
                 <motion.h1
-                  className="text-5xl md:text-6xl font-bold text-cognition-900 dark:text-white mb-8 leading-tight"
+                  className="text-4xl md:text-6xl font-bold text-cognition-900 dark:text-white mb-8 leading-tight"
                   variants={conditionalFadeInUp}
                   initial="hidden"
                   animate="visible"
@@ -297,7 +297,7 @@ export default function HomePage() {
 
               {/* Right Column - Visual */}
               <motion.div
-                className="relative h-96 md:h-[32rem] lg:h-[36rem]"
+                className="relative h-96 md:h-[32rem] lg:h-[36rem] overflow-hidden"
                 variants={conditionalFadeInRight}
                 initial="hidden"
                 animate="visible"
@@ -306,19 +306,19 @@ export default function HomePage() {
                 {/* Floating Bubbles */}
                 <div className="absolute inset-0 overflow-hidden">
                   {/* Large bubble - top right of logo */}
-                  <div className="absolute top-1/4 right-1/4 w-28 h-28 bg-cognition-200/40 dark:bg-cognition-600/30 rounded-full" />
+                  <div className="absolute top-1/4 right-1/4 w-20 md:w-28 h-20 md:h-28 bg-cognition-200/40 dark:bg-cognition-600/30 rounded-full" />
 
                   {/* Medium bubble - bottom left of logo */}
-                  <div className="absolute bottom-1/4 left-1/4 w-24 h-24 bg-consciousness-200/40 dark:bg-consciousness-600/30 rounded-full" />
+                  <div className="absolute bottom-1/4 left-1/4 w-16 md:w-24 h-16 md:h-24 bg-consciousness-200/40 dark:bg-consciousness-600/30 rounded-full" />
 
                   {/* Small bubble - top left of logo */}
-                  <div className="absolute top-1/3 left-1/3 w-20 h-20 bg-care-200/40 dark:bg-care-600/30 rounded-full" />
+                  <div className="absolute top-1/3 left-1/3 w-14 md:w-20 h-14 md:h-20 bg-care-200/40 dark:bg-care-600/30 rounded-full" />
 
                   {/* Extra small bubble - bottom right of logo */}
-                  <div className="absolute bottom-1/3 right-1/3 w-16 h-16 bg-cognition-300/40 dark:bg-cognition-500/30 rounded-full" />
+                  <div className="absolute bottom-1/3 right-1/3 w-12 md:w-16 h-12 md:h-16 bg-cognition-300/40 dark:bg-cognition-500/30 rounded-full" />
 
                   {/* Additional small bubble - center top of logo */}
-                  <div className="absolute top-1/5 left-1/2 w-18 h-18 bg-consciousness-300/30 dark:bg-consciousness-500/25 rounded-full" />
+                  <div className="absolute top-1/5 left-1/2 w-14 md:w-18 h-14 md:h-18 bg-consciousness-300/30 dark:bg-consciousness-500/25 rounded-full" />
                 </div>
 
                 <div className="absolute inset-0 bg-gradient-to-br from-cognition-100/50 to-consciousness-100/50 dark:from-cognition-800/30 dark:to-consciousness-800/30 rounded-3xl transform rotate-6"></div>
@@ -328,7 +328,7 @@ export default function HomePage() {
                   <div className="absolute inset-0 overflow-hidden rounded-2xl">
                     {/* Large bubble - top right corner */}
                     <motion.div
-                      className="absolute top-4 right-4 w-36 h-36 bg-cognition-200/40 dark:bg-cognition-600/30 rounded-full"
+                      className="absolute top-4 right-4 w-24 md:w-36 h-24 md:h-36 bg-cognition-200/40 dark:bg-cognition-600/30 rounded-full"
                       animate={{
                         y: [0, -15, 0],
                         scale: [1, 1.05, 1],
@@ -341,7 +341,7 @@ export default function HomePage() {
 
                     {/* Medium bubble - bottom left corner */}
                     <motion.div
-                      className="absolute bottom-4 left-4 w-32 h-32 bg-consciousness-200/40 dark:bg-consciousness-600/30 rounded-full"
+                      className="absolute bottom-4 left-4 w-20 md:w-32 h-20 md:h-32 bg-consciousness-200/40 dark:bg-consciousness-600/30 rounded-full"
                       animate={{
                         y: [0, 12, 0],
                         x: [0, 8, 0],
@@ -355,7 +355,7 @@ export default function HomePage() {
 
                     {/* Small bubble - top left corner */}
                     <motion.div
-                      className="absolute top-6 left-6 w-28 h-28 bg-care-200/40 dark:bg-care-600/30 rounded-full"
+                      className="absolute top-6 left-6 w-18 md:w-28 h-18 md:h-28 bg-care-200/40 dark:bg-care-600/30 rounded-full"
                       animate={{
                         y: [0, -10, 0],
                         scale: [1, 0.95, 1],
@@ -369,7 +369,7 @@ export default function HomePage() {
 
                     {/* Extra small bubble - bottom right corner */}
                     <motion.div
-                      className="absolute bottom-6 right-6 w-24 h-24 bg-cognition-300/40 dark:bg-cognition-500/30 rounded-full"
+                      className="absolute bottom-6 right-6 w-16 md:w-24 h-16 md:h-24 bg-cognition-300/40 dark:bg-cognition-500/30 rounded-full"
                       animate={{
                         y: [0, 8, 0],
                         x: [0, -6, 0],
@@ -383,7 +383,7 @@ export default function HomePage() {
 
                     {/* Additional small bubble - top center */}
                     <motion.div
-                      className="absolute top-8 left-1/2 transform -translate-x-1/2 w-30 h-30 bg-consciousness-300/30 dark:bg-consciousness-500/25 rounded-full"
+                      className="absolute top-8 left-1/2 transform -translate-x-1/2 w-20 md:w-30 h-20 md:h-30 bg-consciousness-300/30 dark:bg-consciousness-500/25 rounded-full"
                       animate={{
                         y: [0, -8, 0],
                         x: [0, 5, 0],
@@ -397,7 +397,7 @@ export default function HomePage() {
 
                     {/* Another bubble - bottom center */}
                     <motion.div
-                      className="absolute bottom-8 left-1/2 transform -translate-x-1/2 w-26 h-26 bg-care-300/35 dark:bg-care-500/25 rounded-full"
+                      className="absolute bottom-8 left-1/2 transform -translate-x-1/2 w-18 md:w-26 h-18 md:h-26 bg-care-300/35 dark:bg-care-500/25 rounded-full"
                       animate={{
                         y: [0, 6, 0],
                         x: [0, -4, 0],
@@ -411,14 +411,14 @@ export default function HomePage() {
                   </div>
 
                   <div className="relative w-full h-full">
-                    <div className="absolute inset-0 flex items-center justify-center">
-                      <div className="text-6xl text-cognition-800 dark:text-cognition-200">
+                    <div className="absolute inset-0 flex items-center justify-center p-4">
+                      <div className="text-4xl md:text-6xl text-cognition-800 dark:text-cognition-200">
                         <Image
                           src={hero.logo || "/logo.png"}
                           alt="4C Lab Logo"
                           width={512}
                           height={512}
-                          className="drop-shadow-2xl"
+                          className="drop-shadow-2xl w-full h-auto max-w-[80%] md:max-w-none"
                           priority
                         />
                       </div>
