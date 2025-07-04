@@ -2,9 +2,11 @@ import { createServerClient } from "@supabase/ssr";
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 
+export const dynamic = "force-dynamic"; // Force dynamic route
+
 export async function GET() {
   try {
-    const cookieStore = await cookies();
+    const cookieStore = cookies();
     const supabase = createServerClient(
       process.env.NEXT_PUBLIC_SUPABASE_URL!,
       process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
@@ -33,13 +35,12 @@ export async function GET() {
       .eq("id", user.id)
       .single();
 
-    return NextResponse.json({
-      isAdmin: userData?.role === "admin",
-    });
+    const isAdmin = userData?.role === "admin";
+    return NextResponse.json({ isAdmin });
   } catch (error) {
     console.error("Error checking admin status:", error);
     return NextResponse.json(
-      { error: "Internal server error" },
+      { error: "Failed to check admin status" },
       { status: 500 }
     );
   }
