@@ -245,7 +245,7 @@ export default function HomePage() {
                 </motion.div>
 
                 <motion.h1
-                  className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-cognition-900 dark:text-white mb-6 md:mb-8 leading-tight"
+                  className="text-4xl md:text-6xl font-bold text-cognition-900 dark:text-white mb-8 leading-tight"
                   variants={conditionalFadeInUp}
                   initial="hidden"
                   animate="visible"
@@ -257,7 +257,7 @@ export default function HomePage() {
                 </motion.h1>
 
                 <motion.p
-                  className="text-base sm:text-lg md:text-xl lg:text-2xl text-gray-700 dark:text-gray-300 mb-8 md:mb-10 max-w-2xl mx-auto lg:mx-0 leading-relaxed"
+                  className="text-xl md:text-2xl text-gray-700 dark:text-gray-300 mb-10 max-w-2xl mx-auto lg:mx-0 leading-relaxed"
                   variants={conditionalFadeInUp}
                   initial="hidden"
                   animate="visible"
@@ -268,7 +268,7 @@ export default function HomePage() {
                 />
 
                 <motion.div
-                  className="flex flex-col sm:flex-row gap-4 sm:gap-6 justify-center lg:justify-start"
+                  className="flex flex-col sm:flex-row gap-6 justify-center lg:justify-start"
                   variants={conditionalFadeInUp}
                   initial="hidden"
                   animate="visible"
@@ -277,7 +277,7 @@ export default function HomePage() {
                   {hero.primaryText && hero.primaryLink && (
                     <Link
                       href={hero.primaryLink}
-                      className="group inline-flex items-center justify-center px-6 sm:px-8 py-3 sm:py-4 bg-gradient-to-r from-cognition-600 to-cognition-700 hover:from-cognition-700 hover:to-cognition-800 text-white text-sm sm:text-base font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300"
+                      className="group inline-flex items-center justify-center px-8 py-4 bg-gradient-to-r from-cognition-600 to-cognition-700 hover:from-cognition-700 hover:to-cognition-800 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300"
                     >
                       {hero.primaryText}
                       <FaArrowRight className="ml-2 group-hover:translate-x-1 transition-transform duration-300" />
@@ -286,7 +286,7 @@ export default function HomePage() {
                   {hero.secondaryText && hero.secondaryLink && (
                     <Link
                       href={hero.secondaryLink}
-                      className="group inline-flex items-center justify-center px-6 sm:px-8 py-3 sm:py-4 border-2 border-cognition-600 text-cognition-700 hover:bg-cognition-50 dark:border-cognition-400 dark:text-cognition-300 dark:hover:bg-cognition-900/50 text-sm sm:text-base font-semibold rounded-xl transition-all duration-300"
+                      className="group inline-flex items-center justify-center px-8 py-4 border-2 border-cognition-600 text-cognition-700 hover:bg-cognition-50 dark:border-cognition-400 dark:text-cognition-300 dark:hover:bg-cognition-900/50 font-semibold rounded-xl transition-all duration-300"
                     >
                       <FaPlay className="mr-2 group-hover:scale-110 transition-transform duration-300" />
                       {hero.secondaryText}
@@ -443,18 +443,18 @@ export default function HomePage() {
         <section className="py-24 bg-gradient-to-b from-white to-gray-50 dark:from-gray-900 dark:to-gray-800">
           <div className="container mx-auto px-4">
             <motion.div
-              className="text-center mb-12 md:mb-20"
+              className="text-center mb-20"
               variants={conditionalFadeInUp}
               initial="hidden"
               whileInView="visible"
               viewport={viewportSettings}
             >
-              <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 dark:text-white mb-4 md:mb-6">
+              <h2 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-6">
                 <span className="bg-gradient-to-r from-cognition-600 to-consciousness-600 bg-clip-text text-transparent">
                   {projects.title}
                 </span>
               </h2>
-              <div className="w-24 md:w-32 h-1 bg-gradient-to-r from-cognition-500 via-consciousness-500 to-care-500 rounded-full mx-auto" />
+              <div className="w-32 h-1.5 bg-gradient-to-r from-cognition-500 via-consciousness-500 to-care-500 rounded-full mx-auto" />
             </motion.div>
 
             <motion.div
@@ -495,12 +495,12 @@ export default function HomePage() {
                       {iconMap[i]}
                     </div>
 
-                    <h3 className="text-base sm:text-lg font-bold text-gray-900 dark:text-white mb-2 md:mb-3 text-center group-hover:text-cognition-600 dark:group-hover:text-cognition-400 transition-colors duration-300">
+                    <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-3 text-center group-hover:text-cognition-600 dark:group-hover:text-cognition-400 transition-colors duration-300">
                       {project.title}
                     </h3>
 
                     <p
-                      className="text-gray-600 dark:text-gray-400 text-center leading-relaxed group-hover:text-gray-700 dark:group-hover:text-gray-300 transition-colors duration-300 text-xs sm:text-sm"
+                      className="text-gray-600 dark:text-gray-400 text-center leading-relaxed group-hover:text-gray-700 dark:group-hover:text-gray-300 transition-colors duration-300 text-sm"
                       dangerouslySetInnerHTML={
                         project.description
                           ? { __html: project.description }
@@ -528,29 +528,29 @@ export default function HomePage() {
                 viewport={viewportSettings}
                 className="flex flex-col h-full"
               >
-                <div className="mb-6 md:mb-8">
-                  <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 dark:text-white mb-4 md:mb-6 leading-tight">
+                <div className="mb-8">
+                  <h2 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-6 leading-tight">
                     <span className="bg-gradient-to-r from-cognition-600 to-consciousness-600 bg-clip-text text-transparent">
                       {mission.title}
                     </span>
                   </h2>
-                  <div className="w-24 md:w-32 h-1 bg-gradient-to-r from-cognition-500 via-consciousness-500 to-care-500 rounded-full" />
+                  <div className="w-32 h-1.5 bg-gradient-to-r from-cognition-500 via-consciousness-500 to-care-500 rounded-full" />
                 </div>
 
-                <div className="space-y-6 md:space-y-8">
+                <div className="space-y-8">
                   <div
-                    className="text-base sm:text-lg md:text-xl text-gray-600 dark:text-gray-300 leading-relaxed"
+                    className="text-xl text-gray-600 dark:text-gray-300 leading-relaxed"
                     dangerouslySetInnerHTML={
                       mission.description
                         ? { __html: mission.description }
                         : undefined
                     }
                   />
-                  <div className="flex flex-col sm:flex-row gap-4 sm:gap-6">
+                  <div className="flex flex-col sm:flex-row gap-6">
                     {mission.primaryText && mission.primaryLink && (
                       <Link
                         href={mission.primaryLink}
-                        className="group inline-flex items-center justify-center px-6 sm:px-8 py-3 sm:py-4 bg-gradient-to-r from-cognition-600 to-cognition-700 hover:from-cognition-700 hover:to-cognition-800 text-white text-sm sm:text-base font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300"
+                        className="group inline-flex items-center justify-center px-8 py-4 bg-gradient-to-r from-cognition-600 to-cognition-700 hover:from-cognition-700 hover:to-cognition-800 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300"
                       >
                         {mission.primaryText}
                         <FaArrowRight className="ml-2 group-hover:translate-x-1 transition-transform duration-300" />
@@ -559,7 +559,7 @@ export default function HomePage() {
                     {mission.secondaryText && mission.secondaryLink && (
                       <Link
                         href={mission.secondaryLink}
-                        className="group inline-flex items-center justify-center px-6 sm:px-8 py-3 sm:py-4 border-2 border-cognition-600 text-cognition-700 hover:bg-cognition-50 dark:border-cognition-400 dark:text-cognition-300 dark:hover:bg-cognition-900/50 text-sm sm:text-base font-semibold rounded-xl transition-all duration-300"
+                        className="group inline-flex items-center justify-center px-8 py-4 border-2 border-cognition-600 text-cognition-700 hover:bg-cognition-50 dark:border-cognition-400 dark:text-cognition-300 dark:hover:bg-cognition-900/50 font-semibold rounded-xl transition-all duration-300"
                       >
                         {mission.secondaryText}
                       </Link>
@@ -576,13 +576,13 @@ export default function HomePage() {
                 whileInView="visible"
                 viewport={viewportSettings}
               >
-                <div className="mb-6 md:mb-8 text-center">
-                  <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 dark:text-white mb-4 md:mb-6 leading-tight">
+                <div className="mb-8 text-center">
+                  <h2 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-6 leading-tight">
                     <span className="bg-gradient-to-r from-cognition-600 to-consciousness-600 bg-clip-text text-transparent">
                       {mission.fourCsTitle || "The 4C's"}
                     </span>
                   </h2>
-                  <div className="w-24 md:w-32 h-1 bg-gradient-to-r from-cognition-500 via-consciousness-500 to-care-500 rounded-full mx-auto" />
+                  <div className="w-32 h-1.5 bg-gradient-to-r from-cognition-500 via-consciousness-500 to-care-500 rounded-full mx-auto" />
                 </div>
 
                 <div className="relative w-full h-64 md:h-80 lg:h-96 max-w-4xl mx-auto">
@@ -608,18 +608,18 @@ export default function HomePage() {
         <section className="py-24 bg-gradient-to-br from-white to-gray-50 dark:from-gray-900 dark:to-gray-800">
           <div className="container mx-auto px-4">
             <motion.div
-              className="text-center mb-12 md:mb-20"
+              className="text-center mb-20"
               variants={conditionalFadeInUp}
               initial="hidden"
               whileInView="visible"
               viewport={viewportSettings}
             >
-              <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 dark:text-white mb-4 md:mb-6">
+              <h2 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-6">
                 <span className="bg-gradient-to-r from-cognition-600 to-consciousness-600 bg-clip-text text-transparent">
                   {services.title}
                 </span>
               </h2>
-              <div className="w-24 md:w-32 h-1 bg-gradient-to-r from-cognition-500 via-consciousness-500 to-care-500 rounded-full mx-auto" />
+              <div className="w-32 h-1.5 bg-gradient-to-r from-cognition-500 via-consciousness-500 to-care-500 rounded-full mx-auto" />
             </motion.div>
 
             <motion.div
@@ -640,12 +640,12 @@ export default function HomePage() {
                       {iconMap[i]}
                     </div>
 
-                    <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-center text-gray-900 dark:text-white mb-4 md:mb-6 group-hover:text-cognition-600 dark:group-hover:text-cognition-400 transition-colors duration-300">
+                    <h3 className="text-2xl font-bold text-center text-gray-900 dark:text-white mb-6 group-hover:text-cognition-600 dark:group-hover:text-cognition-400 transition-colors duration-300">
                       {card.title}
                     </h3>
 
                     <p
-                      className="text-gray-600 dark:text-gray-400 text-center leading-relaxed group-hover:text-gray-700 dark:group-hover:text-gray-300 transition-colors duration-300 text-sm sm:text-base"
+                      className="text-gray-600 dark:text-gray-400 text-center leading-relaxed group-hover:text-gray-700 dark:group-hover:text-gray-300 transition-colors duration-300"
                       dangerouslySetInnerHTML={
                         card.description
                           ? { __html: card.description }
@@ -675,12 +675,12 @@ export default function HomePage() {
                 <motion.div
                   key={i}
                   variants={conditionalFadeInUp}
-                  className="p-4 md:p-8"
+                  className="p-8"
                 >
-                  <div className="text-3xl sm:text-4xl md:text-5xl font-bold mb-2 md:mb-4 bg-gradient-to-r from-white to-cognition-100 bg-clip-text text-transparent">
+                  <div className="text-5xl font-bold mb-4 bg-gradient-to-r from-white to-cognition-100 bg-clip-text text-transparent">
                     {stat.value}
                   </div>
-                  <div className="text-base sm:text-lg md:text-xl text-cognition-100 dark:text-gray-300 font-medium">
+                  <div className="text-xl text-cognition-100 dark:text-gray-300 font-medium">
                     {stat.label}
                   </div>
                 </motion.div>
@@ -695,21 +695,21 @@ export default function HomePage() {
         <section className="py-24 bg-gradient-to-br from-gray-50 to-white dark:from-gray-800 dark:to-gray-900">
           <div className="container mx-auto px-4">
             <motion.div
-              className="text-center mb-12 md:mb-20"
+              className="text-center mb-20"
               variants={conditionalFadeInUp}
               initial="hidden"
               whileInView="visible"
               viewport={viewportSettings}
             >
-              <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 dark:text-white mb-4 md:mb-6">
+              <h2 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-6">
                 <span className="bg-gradient-to-r from-cognition-600 to-consciousness-600 bg-clip-text text-transparent">
                   {partners.title}
                 </span>
               </h2>
-              <p className="text-base sm:text-lg md:text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto leading-relaxed">
+              <p className="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto leading-relaxed">
                 {partners.subtitle}
               </p>
-              <div className="w-24 md:w-32 h-1 bg-gradient-to-r from-cognition-500 via-consciousness-500 to-care-500 rounded-full mx-auto mt-6 md:mt-8" />
+              <div className="w-32 h-1.5 bg-gradient-to-r from-cognition-500 via-consciousness-500 to-care-500 rounded-full mx-auto mt-8" />
             </motion.div>
 
             {partners.cards && partners.cards.length > 0 && (
@@ -747,18 +747,18 @@ export default function HomePage() {
         <section className="py-24 bg-gradient-to-br from-white to-gray-50 dark:from-gray-900 dark:to-gray-800">
           <div className="container mx-auto px-4">
             <motion.div
-              className="text-center mb-12 md:mb-20"
+              className="text-center mb-20"
               variants={conditionalFadeInUp}
               initial="hidden"
               whileInView="visible"
               viewport={viewportSettings}
             >
-              <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 dark:text-white mb-4 md:mb-6">
+              <h2 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-6">
                 <span className="bg-gradient-to-r from-cognition-600 to-consciousness-600 bg-clip-text text-transparent">
                   {news.title}
                 </span>
               </h2>
-              <div className="w-24 md:w-32 h-1 bg-gradient-to-r from-cognition-500 via-consciousness-500 to-care-500 rounded-full mx-auto" />
+              <div className="w-32 h-1.5 bg-gradient-to-r from-cognition-500 via-consciousness-500 to-care-500 rounded-full mx-auto" />
             </motion.div>
 
             <motion.div
@@ -770,10 +770,10 @@ export default function HomePage() {
             >
               <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl overflow-hidden border border-gray-100 dark:border-gray-700">
                 <div className="p-8 md:p-12">
-                  <h3 className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-900 dark:text-white mb-4 md:mb-6 leading-tight">
+                  <h3 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white mb-6 leading-tight">
                     {news.headline}
                   </h3>
-                  <div className="text-base sm:text-lg text-gray-600 dark:text-gray-300 mb-6 md:mb-8 leading-relaxed">
+                  <div className="text-lg text-gray-600 dark:text-gray-300 mb-8 leading-relaxed">
                     {getFirstSentenceFromHtml(news.description)}
                   </div>
                   {news.link && (
@@ -799,18 +799,18 @@ export default function HomePage() {
         <section className="py-24 bg-gradient-to-br from-gray-50 to-white dark:from-gray-800 dark:to-gray-900">
           <div className="container mx-auto px-4">
             <motion.div
-              className="text-center mb-12 md:mb-20"
+              className="text-center mb-20"
               variants={conditionalFadeInUp}
               initial="hidden"
               whileInView="visible"
               viewport={viewportSettings}
             >
-              <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 dark:text-white mb-4 md:mb-6">
+              <h2 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-6">
                 <span className="bg-gradient-to-r from-cognition-600 to-consciousness-600 bg-clip-text text-transparent">
                   {social.title}
                 </span>
               </h2>
-              <div className="w-24 md:w-32 h-1 bg-gradient-to-r from-cognition-500 via-consciousness-500 to-care-500 rounded-full mx-auto" />
+              <div className="w-32 h-1.5 bg-gradient-to-r from-cognition-500 via-consciousness-500 to-care-500 rounded-full mx-auto" />
             </motion.div>
 
             <motion.div
@@ -822,12 +822,12 @@ export default function HomePage() {
             >
               <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl overflow-hidden border border-gray-100 dark:border-gray-700">
                 <div className="p-8 md:p-12 text-center">
-                  <div className="mb-6 md:mb-8">
-                    <h3 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white mb-4 md:mb-6">
+                  <div className="mb-8">
+                    <h3 className="text-3xl font-bold text-gray-900 dark:text-white mb-6">
                       {social.platformTitle}
                     </h3>
                     <div
-                      className="text-base sm:text-lg text-gray-600 dark:text-gray-300 mb-6 md:mb-8 leading-relaxed"
+                      className="text-lg text-gray-600 dark:text-gray-300 mb-8 leading-relaxed"
                       dangerouslySetInnerHTML={
                         social.description
                           ? { __html: social.description }
@@ -839,7 +839,7 @@ export default function HomePage() {
                         href={social.link}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="group inline-flex items-center justify-center gap-3 px-6 sm:px-8 py-3 sm:py-4 rounded-xl bg-gradient-to-r from-cognition-600 to-cognition-700 hover:from-cognition-700 hover:to-cognition-800 text-white text-sm sm:text-base font-semibold transition-all duration-300 shadow-lg hover:shadow-xl"
+                        className="group inline-flex items-center justify-center gap-3 px-8 py-4 rounded-xl bg-gradient-to-r from-cognition-600 to-cognition-700 hover:from-cognition-700 hover:to-cognition-800 text-white font-semibold transition-all duration-300 shadow-lg hover:shadow-xl"
                       >
                         <svg
                           className="w-6 h-6 group-hover:scale-110 transition-transform duration-300"
@@ -870,20 +870,20 @@ export default function HomePage() {
               whileInView="visible"
               viewport={viewportSettings}
             >
-              <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-6 md:mb-8 leading-tight">
+              <h2 className="text-4xl md:text-5xl font-bold mb-8 leading-tight">
                 {cta.title}
               </h2>
               <div
-                className="text-base sm:text-lg md:text-xl text-cognition-100 dark:text-gray-300 mb-8 md:mb-12 leading-relaxed"
+                className="text-xl text-cognition-100 dark:text-gray-300 mb-12 leading-relaxed"
                 dangerouslySetInnerHTML={
                   cta.description ? { __html: cta.description } : undefined
                 }
               />
-              <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 justify-center">
+              <div className="flex flex-col sm:flex-row gap-6 justify-center">
                 {cta.primaryText && cta.primaryLink && (
                   <Link
                     href={cta.primaryLink}
-                    className="group inline-flex items-center justify-center px-6 sm:px-8 py-3 sm:py-4 border border-transparent text-sm sm:text-base md:text-lg font-semibold rounded-xl shadow-lg text-cognition-900 dark:text-white bg-white dark:bg-gray-900 hover:bg-gray-50 dark:hover:bg-gray-800 transition-all duration-300"
+                    className="group inline-flex items-center justify-center px-8 py-4 border border-transparent text-lg font-semibold rounded-xl shadow-lg text-cognition-900 dark:text-white bg-white dark:bg-gray-900 hover:bg-gray-50 dark:hover:bg-gray-800 transition-all duration-300"
                   >
                     {cta.primaryText}
                     <FaArrowRight className="ml-2 group-hover:translate-x-1 transition-transform duration-300" />
@@ -892,7 +892,7 @@ export default function HomePage() {
                 {cta.secondaryText && cta.secondaryLink && (
                   <Link
                     href={cta.secondaryLink}
-                    className="group inline-flex items-center justify-center px-6 sm:px-8 py-3 sm:py-4 border-2 border-white dark:border-gray-700 text-sm sm:text-base md:text-lg font-semibold rounded-xl text-white dark:text-gray-200 hover:bg-white/10 dark:hover:bg-gray-900/50 transition-all duration-300"
+                    className="group inline-flex items-center justify-center px-8 py-4 border-2 border-white dark:border-gray-700 text-lg font-semibold rounded-xl text-white dark:text-gray-200 hover:bg-white/10 dark:hover:bg-gray-900/50 transition-all duration-300"
                   >
                     {cta.secondaryText}
                   </Link>
