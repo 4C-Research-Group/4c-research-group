@@ -20,10 +20,28 @@ export default function CommentsSection({ blogPostId }: CommentsSectionProps) {
   const [isAdmin, setIsAdmin] = useState(false);
   const [showLoginPrompt, setShowLoginPrompt] = useState(false);
 
+  const fetchComments = async () => {
+    try {
+      setLoading(true);
+      const response = await fetch(`/api/comments?blogPostId=${blogPostId}`);
+
+      if (!response.ok) {
+        throw new Error("Failed to fetch comments");
+      }
+
+      const data = await response.json();
+      setComments(data);
+    } catch (err: any) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
     checkUser();
     fetchComments();
-  }, [blogPostId]);
+  }, [blogPostId, fetchComments]);
 
   const checkUser = async () => {
     const {
@@ -40,24 +58,6 @@ export default function CommentsSection({ blogPostId }: CommentsSectionProps) {
         .single();
 
       setIsAdmin(profile?.role === "admin");
-    }
-  };
-
-  const fetchComments = async () => {
-    try {
-      setLoading(true);
-      const response = await fetch(`/api/comments?blogPostId=${blogPostId}`);
-
-      if (!response.ok) {
-        throw new Error("Failed to fetch comments");
-      }
-
-      const data = await response.json();
-      setComments(data);
-    } catch (err: any) {
-      setError(err.message);
-    } finally {
-      setLoading(false);
     }
   };
 

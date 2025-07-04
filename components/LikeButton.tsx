@@ -21,18 +21,6 @@ export default function LikeButton({
   const [isLoading, setIsLoading] = useState(false);
   const [user, setUser] = useState<any>(null);
 
-  useEffect(() => {
-    checkUser();
-    fetchLikeStats();
-  }, [blogPostId]);
-
-  const checkUser = async () => {
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
-    setUser(user);
-  };
-
   const fetchLikeStats = async () => {
     try {
       const response = await fetch(`/api/likes?blogPostId=${blogPostId}`);
@@ -44,6 +32,18 @@ export default function LikeButton({
     } catch (error) {
       console.error("Error fetching like stats:", error);
     }
+  };
+
+  useEffect(() => {
+    checkUser();
+    fetchLikeStats();
+  }, [blogPostId, fetchLikeStats]);
+
+  const checkUser = async () => {
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+    setUser(user);
   };
 
   const handleLike = async () => {
