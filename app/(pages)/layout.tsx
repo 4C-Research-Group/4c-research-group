@@ -199,7 +199,7 @@ export default function PagesLayout({
                     className="flex-shrink-0"
                   />
                   <span className="text-xl font-bold bg-gradient-to-r from-cognition-600 to-consciousness-600 bg-clip-text text-transparent dark:from-cognition-400 dark:to-consciousness-400 flex-shrink-0">
-                    4C Research
+                    4C RESEARCH
                   </span>
                 </Link>
                 <span className="text-[0.5rem] md:text-[0.75rem] text-muted-foreground ml-10 lg:ml-0 lg:pl-4 lg:border-l lg:border-gray-200 dark:lg:border-gray-700 lg:mt-0 mt-1 flex-shrink-0">
