@@ -225,7 +225,7 @@ export default function HomePage() {
           </div>
 
           <div className="container mx-auto px-4 py-20 relative z-10 max-w-full">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-center">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-center lg:mx-4">
               {/* Left Column - Content */}
               <motion.div
                 className="text-center lg:text-left"
