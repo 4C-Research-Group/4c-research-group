@@ -11,6 +11,7 @@ export interface Project {
   start_date: string;
   end_date?: string;
   image?: string;
+  main_image?: string;
   images?: string[];
   tags?: string[];
   link?: string;

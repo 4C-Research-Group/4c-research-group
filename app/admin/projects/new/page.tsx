@@ -24,7 +24,9 @@ export default function NewProjectPage() {
     status: "upcoming" as "active" | "completed" | "upcoming",
     start_date: "",
     end_date: "",
+    main_image: "",
     image: "",
+    images: [] as string[],
     tags: [] as string[],
     link: "",
     funding: "",
@@ -90,7 +92,7 @@ export default function NewProjectPage() {
       await createProject({
         ...formData,
         slug,
-        images: formData.image ? [formData.image] : [],
+        images: formData.images,
         publications: [],
       });
 
@@ -260,13 +262,18 @@ export default function NewProjectPage() {
             <h2 className="text-xl font-semibold mb-4">Media & Links</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <Label htmlFor="image">Main Image URL</Label>
+                <Label htmlFor="main_image">Main Project Image</Label>
                 <Input
-                  id="image"
-                  value={formData.image}
-                  onChange={(e) => handleInputChange("image", e.target.value)}
-                  placeholder="/images/project-1.png"
+                  id="main_image"
+                  value={formData.main_image}
+                  onChange={(e) =>
+                    handleInputChange("main_image", e.target.value)
+                  }
+                  placeholder="https://example.com/image.jpg"
                 />
+                <p className="text-xs text-muted-foreground mt-1">
+                  This will be the primary image displayed for the project
+                </p>
               </div>
               <div>
                 <Label htmlFor="link">Project Link</Label>
@@ -274,9 +281,22 @@ export default function NewProjectPage() {
                   id="link"
                   value={formData.link}
                   onChange={(e) => handleInputChange("link", e.target.value)}
-                  placeholder="/research/project-slug"
+                  placeholder="https://..."
                 />
               </div>
+            </div>
+
+            <div className="mt-4">
+              <Label htmlFor="image">Legacy Image URL (Optional)</Label>
+              <Input
+                id="image"
+                value={formData.image}
+                onChange={(e) => handleInputChange("image", e.target.value)}
+                placeholder="/images/project-1.png"
+              />
+              <p className="text-xs text-muted-foreground mt-1">
+                For backward compatibility with existing projects
+              </p>
             </div>
           </section>
 

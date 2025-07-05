@@ -133,7 +133,29 @@ export default function AdminProjects() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.3, delay: index * 0.1 }}
             >
-              <Card className="h-full flex flex-col hover:shadow-lg transition-shadow">
+              <Card className="h-full flex flex-col hover:shadow-lg transition-shadow overflow-hidden">
+                {/* Project Image */}
+                {(project.main_image || project.image) && (
+                  <div className="relative h-48 bg-gray-100 dark:bg-gray-800">
+                    <img
+                      src={project.main_image || project.image}
+                      alt={project.title}
+                      className="w-full h-full object-cover"
+                      onError={(e) => {
+                        const target = e.target as HTMLImageElement;
+                        target.style.display = "none";
+                        target.parentElement!.innerHTML = `
+                          <div class="w-full h-full flex items-center justify-center text-gray-400">
+                            <svg class="w-12 h-12" fill="currentColor" viewBox="0 0 20 20">
+                              <path fill-rule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" clip-rule="evenodd" />
+                            </svg>
+                          </div>
+                        `;
+                      }}
+                    />
+                  </div>
+                )}
+
                 <CardHeader className="pb-3">
                   <div className="flex items-start justify-between">
                     <CardTitle className="text-lg font-medium line-clamp-2">
@@ -195,12 +217,12 @@ export default function AdminProjects() {
                     </Button>
                   </Link>
                   <Link
-                    href={`/admin/research/edit/${project.slug}`}
+                    href={`/admin/projects/edit/${project.id}`}
                     className="flex-1"
                   >
                     <Button variant="secondary" className="w-full">
                       <Edit className="h-4 w-4 mr-2" />
-                      Edit Page
+                      Edit Project
                     </Button>
                   </Link>
                   <AlertDialog>
