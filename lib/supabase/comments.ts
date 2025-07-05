@@ -22,17 +22,50 @@ export async function getCommentsByBlogPost(
     return [];
   }
 
-  // Get replies for each comment
+  // Recursive function to get all replies for a comment
+  const getRepliesRecursively = async (parentId: string): Promise<any[]> => {
+    const { data: replies } = await supabase
+      .from("blog_comments")
+      .select("*")
+      .eq("parent_id", parentId)
+      .eq("is_approved", true)
+      .eq("is_spam", false)
+      .order("created_at", { ascending: true });
+
+    if (!replies || replies.length === 0) {
+      return [];
+    }
+
+    // Get user data for replies and recursively get nested replies
+    const repliesWithUsers = await Promise.all(
+      replies.map(async (reply: any) => {
+        let replyUserData = null;
+        if (reply.user_id) {
+          const { data: user } = await supabase
+            .from("users")
+            .select("id, email, name")
+            .eq("id", reply.user_id)
+            .single();
+          replyUserData = user;
+        }
+
+        // Recursively get replies for this reply
+        const nestedReplies = await getRepliesRecursively(reply.id);
+
+        return {
+          ...reply,
+          user: replyUserData,
+          replies: nestedReplies,
+        };
+      })
+    );
+
+    return repliesWithUsers;
+  };
+
+  // Get replies for each comment (recursively)
   const commentsWithReplies = await Promise.all(
     (data || []).map(async (comment: any) => {
-      const { data: replies } = await supabase
-        .from("blog_comments")
-        .select("*")
-        .eq("parent_id", comment.id)
-        .eq("is_approved", true)
-        .eq("is_spam", false)
-        .order("created_at", { ascending: true });
-
       // Get user data for the comment
       let userData = null;
       if (comment.user_id) {
@@ -44,29 +77,13 @@ export async function getCommentsByBlogPost(
         userData = user;
       }
 
-      // Get user data for replies
-      const repliesWithUsers = await Promise.all(
-        (replies || []).map(async (reply: any) => {
-          let replyUserData = null;
-          if (reply.user_id) {
-            const { data: user } = await supabase
-              .from("users")
-              .select("id, email, name")
-              .eq("id", reply.user_id)
-              .single();
-            replyUserData = user;
-          }
-          return {
-            ...reply,
-            user: replyUserData,
-          };
-        })
-      );
+      // Get replies recursively
+      const replies = await getRepliesRecursively(comment.id);
 
       return {
         ...comment,
         user: userData,
-        replies: repliesWithUsers,
+        replies: replies,
       };
     })
   );

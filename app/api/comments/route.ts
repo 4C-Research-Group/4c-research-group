@@ -46,17 +46,38 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    // Get replies for each comment
+    // Recursive function to get all replies for a comment
+    const getRepliesRecursively = async (parentId: string): Promise<any[]> => {
+      const { data: replies } = await supabase
+        .from("blog_comments")
+        .select("*")
+        .eq("parent_id", parentId)
+        // .eq("is_approved", true) // Comment this out for testing
+        .eq("is_spam", false)
+        .order("created_at", { ascending: true });
+
+      if (!replies || replies.length === 0) {
+        return [];
+      }
+
+      // Recursively get replies for each reply
+      const repliesWithNestedReplies = await Promise.all(
+        replies.map(async (reply: any) => {
+          const nestedReplies = await getRepliesRecursively(reply.id);
+          return {
+            ...reply,
+            replies: nestedReplies,
+          };
+        })
+      );
+
+      return repliesWithNestedReplies;
+    };
+
+    // Get replies for each comment (recursively)
     const commentsWithReplies = await Promise.all(
       (data || []).map(async (comment: any) => {
-        const { data: replies } = await supabase
-          .from("blog_comments")
-          .select("*")
-          .eq("parent_id", comment.id)
-          // .eq("is_approved", true) // Comment this out for testing
-          .eq("is_spam", false)
-          .order("created_at", { ascending: true });
-
+        const replies = await getRepliesRecursively(comment.id);
         return {
           ...comment,
           replies: replies || [],
