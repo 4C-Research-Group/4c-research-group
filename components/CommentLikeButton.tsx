@@ -37,8 +37,20 @@ function CommentLikeButton({
       const stored = localStorage.getItem(getStorageKey(commentId));
       if (stored) {
         const storedData = JSON.parse(stored);
-        setLikes(storedData.total_likes);
-        setIsLiked(storedData.is_liked_by_user);
+        // Only use stored data if it's valid and matches the current comment
+        if (
+          storedData &&
+          typeof storedData.total_likes === "number" &&
+          typeof storedData.is_liked_by_user === "boolean"
+        ) {
+          setLikes(storedData.total_likes);
+          setIsLiked(storedData.is_liked_by_user);
+        } else {
+          // Clear invalid stored data
+          localStorage.removeItem(getStorageKey(commentId));
+          setLikes(initialLikes);
+          setIsLiked(initialIsLiked);
+        }
       } else {
         // If no stored data, use the initial props
         setLikes(initialLikes);
@@ -46,12 +58,20 @@ function CommentLikeButton({
       }
     } catch (error) {
       console.error("Error loading like state from localStorage:", error);
+      // Clear corrupted stored data
+      localStorage.removeItem(getStorageKey(commentId));
       setLikes(initialLikes);
       setIsLiked(initialIsLiked);
     } finally {
       setHasHydrated(true);
     }
   }, [commentId, getStorageKey, initialLikes, initialIsLiked]);
+
+  // Update state when initial props change (for new comments)
+  useEffect(() => {
+    setLikes(initialLikes);
+    setIsLiked(initialIsLiked);
+  }, [initialLikes, initialIsLiked]);
 
   const handleLike = useCallback(async () => {
     if (isLoading || !hasHydrated) return;
