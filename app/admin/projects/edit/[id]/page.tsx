@@ -92,40 +92,68 @@ export default function EditProjectPage() {
     setSaving(true);
     setError(null);
 
-    // Validate URLs if provided
-    const validateUrl = (url: string) => {
-      if (!url.trim()) return true; // Empty is valid
+    // Helper function to normalize and validate URLs
+    const normalizeUrl = (url: string) => {
+      if (!url.trim()) return null; // Empty is valid
+
+      let normalizedUrl = url.trim();
+
+      // Add protocol if missing
+      if (
+        !normalizedUrl.startsWith("http://") &&
+        !normalizedUrl.startsWith("https://")
+      ) {
+        normalizedUrl = "https://" + normalizedUrl;
+      }
+
       try {
-        new URL(url);
-        return true;
+        new URL(normalizedUrl);
+        return normalizedUrl;
       } catch {
-        return false;
+        return false; // Invalid URL
       }
     };
 
-    // Check if provided URLs are valid
-    if (link && !validateUrl(link)) {
-      setError(
-        "Please enter a valid URL for the external link or leave it empty"
-      );
-      setSaving(false);
-      return;
-    }
-
-    if (mainImage && !validateUrl(mainImage)) {
-      setError("Please enter a valid URL for the main image or leave it empty");
-      setSaving(false);
-      return;
-    }
-
-    // Check additional images
-    for (let i = 0; i < images.length; i++) {
-      if (images[i] && !validateUrl(images[i])) {
+    // Check if provided URLs are valid and normalize them
+    let normalizedLink = null;
+    if (link) {
+      normalizedLink = normalizeUrl(link);
+      if (normalizedLink === false) {
         setError(
-          `Please enter a valid URL for additional image ${i + 1} or leave it empty`
+          "Please enter a valid URL for the external link (e.g., 'example.com' or 'https://example.com') or leave it empty"
         );
         setSaving(false);
         return;
+      }
+    }
+
+    let normalizedMainImage = null;
+    if (mainImage) {
+      normalizedMainImage = normalizeUrl(mainImage);
+      if (normalizedMainImage === false) {
+        setError(
+          "Please enter a valid URL for the main image (e.g., 'example.com/image.jpg' or 'https://example.com/image.jpg') or leave it empty"
+        );
+        setSaving(false);
+        return;
+      }
+    }
+
+    // Check and normalize additional images
+    const normalizedImages = [];
+    for (let i = 0; i < images.length; i++) {
+      if (images[i]) {
+        const normalized = normalizeUrl(images[i]);
+        if (normalized === false) {
+          setError(
+            `Please enter a valid URL for additional image ${i + 1} (e.g., 'example.com/image.jpg') or leave it empty`
+          );
+          setSaving(false);
+          return;
+        }
+        if (normalized) {
+          normalizedImages.push(normalized);
+        }
       }
     }
 
@@ -137,9 +165,9 @@ export default function EditProjectPage() {
       start_date: startDate,
       end_date: endDate || null,
       funding,
-      link: link.trim() || null,
-      main_image: mainImage.trim() || null,
-      images: images.filter((img) => img.trim() !== ""),
+      link: normalizedLink,
+      main_image: normalizedMainImage,
+      images: normalizedImages,
     };
 
     const { error } = await supabase

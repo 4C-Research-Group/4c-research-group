@@ -81,34 +81,60 @@ export default function NewProjectPage() {
         throw new Error("Please fill in all required fields");
       }
 
-      // Validate URLs if provided
-      const validateUrl = (url: string) => {
-        if (!url.trim()) return true; // Empty is valid
+      // Helper function to normalize and validate URLs
+      const normalizeUrl = (url: string) => {
+        if (!url.trim()) return null; // Empty is valid
+
+        let normalizedUrl = url.trim();
+
+        // Add protocol if missing
+        if (
+          !normalizedUrl.startsWith("http://") &&
+          !normalizedUrl.startsWith("https://")
+        ) {
+          normalizedUrl = "https://" + normalizedUrl;
+        }
+
         try {
-          new URL(url);
-          return true;
+          new URL(normalizedUrl);
+          return normalizedUrl;
         } catch {
-          return false;
+          return false; // Invalid URL
         }
       };
 
-      // Check if provided URLs are valid
-      if (formData.link && !validateUrl(formData.link)) {
-        throw new Error(
-          "Please enter a valid URL for the project link or leave it empty"
-        );
+      // Check if provided URLs are valid and normalize them
+      let normalizedLink: string | undefined = undefined;
+      if (formData.link) {
+        const result = normalizeUrl(formData.link);
+        if (result === false) {
+          throw new Error(
+            "Please enter a valid URL for the project link (e.g., 'example.com' or 'https://example.com') or leave it empty"
+          );
+        }
+        normalizedLink = result || undefined;
       }
 
-      if (formData.main_image && !validateUrl(formData.main_image)) {
-        throw new Error(
-          "Please enter a valid URL for the main image or leave it empty"
-        );
+      let normalizedMainImage: string | undefined = undefined;
+      if (formData.main_image) {
+        const result = normalizeUrl(formData.main_image);
+        if (result === false) {
+          throw new Error(
+            "Please enter a valid URL for the main image (e.g., 'example.com/image.jpg' or 'https://example.com/image.jpg') or leave it empty"
+          );
+        }
+        normalizedMainImage = result || undefined;
       }
 
-      if (formData.image && !validateUrl(formData.image)) {
-        throw new Error(
-          "Please enter a valid URL for the legacy image or leave it empty"
-        );
+      let normalizedImage: string | undefined = undefined;
+      if (formData.image) {
+        const result = normalizeUrl(formData.image);
+        if (result === false) {
+          throw new Error(
+            "Please enter a valid URL for the legacy image (e.g., 'example.com/image.jpg') or leave it empty"
+          );
+        }
+        normalizedImage = result || undefined;
       }
 
       // Create slug from title if not provided
@@ -122,9 +148,9 @@ export default function NewProjectPage() {
       await createProject({
         ...formData,
         slug,
-        link: formData.link.trim() || undefined,
-        main_image: formData.main_image.trim() || undefined,
-        image: formData.image.trim() || undefined,
+        link: normalizedLink,
+        main_image: normalizedMainImage,
+        image: normalizedImage,
         images: formData.images,
         publications: [],
       });
