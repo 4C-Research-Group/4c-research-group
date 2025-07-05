@@ -152,6 +152,16 @@ export default function CommentsSection({ blogPostId }: CommentsSectionProps) {
     fetchComments();
   };
 
+  const handleLikeChange = (
+    commentId: string,
+    newStats: { total_likes: number; is_liked_by_user: boolean }
+  ) => {
+    setCommentLikeStats((prev) => ({
+      ...prev,
+      [commentId]: newStats,
+    }));
+  };
+
   const formatCommentCount = (count: number) => {
     if (count === 0) return "No comments yet";
     if (count === 1) return "1 comment";
@@ -179,6 +189,7 @@ export default function CommentsSection({ blogPostId }: CommentsSectionProps) {
         likeStats={commentLikeStats[comment.id]}
         onCommentUpdated={handleCommentUpdated}
         onCommentDeleted={handleCommentDeleted}
+        onLikeChange={handleLikeChange}
         currentUserId={user?.id}
         isAdmin={isAdmin}
       />

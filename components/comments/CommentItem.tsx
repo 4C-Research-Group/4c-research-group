@@ -17,6 +17,10 @@ interface CommentItemProps {
   comment: BlogComment;
   onCommentUpdated: () => void;
   onCommentDeleted: () => void;
+  onLikeChange?: (
+    commentId: string,
+    stats: { total_likes: number; is_liked_by_user: boolean }
+  ) => void;
   depth?: number;
   currentUserId?: string;
   isAdmin?: boolean;
@@ -29,6 +33,7 @@ export default function CommentItem({
   comment,
   onCommentUpdated,
   onCommentDeleted,
+  onLikeChange,
   depth = 0,
   currentUserId,
   isAdmin = false,
@@ -96,8 +101,12 @@ export default function CommentItem({
   const handleLikeChange = useCallback(
     (newStats: { total_likes: number; is_liked_by_user: boolean }) => {
       setLocalLikeStats(newStats);
+      // Notify parent component of the change
+      if (onLikeChange) {
+        onLikeChange(comment.id, newStats);
+      }
     },
-    []
+    [comment.id, onLikeChange]
   );
 
   return (
@@ -209,6 +218,7 @@ export default function CommentItem({
               comment={reply}
               onCommentUpdated={onCommentUpdated}
               onCommentDeleted={onCommentDeleted}
+              onLikeChange={onLikeChange}
               depth={depth + 1}
               currentUserId={currentUserId}
               isAdmin={isAdmin}
