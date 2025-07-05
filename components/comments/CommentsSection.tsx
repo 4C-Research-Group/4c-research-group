@@ -192,6 +192,7 @@ export default function CommentsSection({ blogPostId }: CommentsSectionProps) {
         onLikeChange={handleLikeChange}
         currentUserId={user?.id}
         isAdmin={isAdmin}
+        commentLikeStats={commentLikeStats} // Pass the entire like stats object
       />
     ));
 

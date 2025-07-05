@@ -25,6 +25,9 @@ interface CommentItemProps {
   currentUserId?: string;
   isAdmin?: boolean;
   likeStats?: CommentLikeStats;
+  commentLikeStats?: {
+    [commentId: string]: { total_likes: number; is_liked_by_user: boolean };
+  };
 }
 
 const MemoizedCommentLikeButton = memo(CommentLikeButton);
@@ -38,6 +41,7 @@ export default function CommentItem({
   currentUserId,
   isAdmin = false,
   likeStats,
+  commentLikeStats,
 }: CommentItemProps) {
   const [isReplying, setIsReplying] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
@@ -222,7 +226,8 @@ export default function CommentItem({
               depth={depth + 1}
               currentUserId={currentUserId}
               isAdmin={isAdmin}
-              // Don't pass parent's likeStats - let each reply get its own stats
+              commentLikeStats={commentLikeStats}
+              likeStats={commentLikeStats?.[reply.id]}
             />
           ))}
         </div>
