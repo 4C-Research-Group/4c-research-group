@@ -86,7 +86,12 @@ export default function NewProjectPage() {
 
         let normalizedUrl = url.trim();
 
-        // Add protocol if missing
+        // If it's a relative path (starts with /), accept as-is
+        if (normalizedUrl.startsWith("/")) {
+          return normalizedUrl;
+        }
+
+        // Add protocol if missing for external URLs
         if (
           !normalizedUrl.startsWith("http://") &&
           !normalizedUrl.startsWith("https://")
