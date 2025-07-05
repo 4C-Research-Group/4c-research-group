@@ -207,7 +207,13 @@ export default async function DashboardLayout({
         </main>
       </div>
     );
-  } catch (error) {
+  } catch (error: any) {
+    // Check if this is a Next.js redirect (which is not an actual error)
+    if (error?.digest?.startsWith("NEXT_REDIRECT")) {
+      // This is a normal redirect, not an error
+      throw error; // Re-throw to let Next.js handle the redirect
+    }
+
     console.error("❌ Dashboard layout error:", error);
     redirect("/login");
   }
