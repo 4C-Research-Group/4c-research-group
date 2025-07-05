@@ -24,7 +24,6 @@ export default function NewProjectPage() {
     status: "upcoming" as "active" | "completed" | "upcoming",
     start_date: "",
     end_date: "",
-    main_image: "",
     image: "",
     images: [] as string[],
     tags: [] as string[],
@@ -115,18 +114,18 @@ export default function NewProjectPage() {
         normalizedLink = result || undefined;
       }
 
-      let normalizedMainImage: string | undefined = undefined;
-      if (formData.main_image) {
-        const result = normalizeUrl(formData.main_image);
+      let normalizedImage: string | undefined = undefined;
+      if (formData.image) {
+        const result = normalizeUrl(formData.image);
         if (result === false) {
           throw new Error(
             "Please enter a valid URL for the main image (e.g., 'example.com/image.jpg' or 'https://example.com/image.jpg') or leave it empty"
           );
         }
-        normalizedMainImage = result || undefined;
+        normalizedImage = result || undefined;
       }
 
-      let normalizedImage: string | undefined = undefined;
+      let normalizedLegacyImage: string | undefined = undefined;
       if (formData.image) {
         const result = normalizeUrl(formData.image);
         if (result === false) {
@@ -134,7 +133,7 @@ export default function NewProjectPage() {
             "Please enter a valid URL for the legacy image (e.g., 'example.com/image.jpg') or leave it empty"
           );
         }
-        normalizedImage = result || undefined;
+        normalizedLegacyImage = result || undefined;
       }
 
       // Create slug from title if not provided
@@ -149,7 +148,6 @@ export default function NewProjectPage() {
         ...formData,
         slug,
         link: normalizedLink,
-        main_image: normalizedMainImage,
         image: normalizedImage,
         images: formData.images,
         publications: [],
@@ -321,16 +319,12 @@ export default function NewProjectPage() {
             <h2 className="text-xl font-semibold mb-4">Media & Links</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <Label htmlFor="main_image">
-                  Main Project Image (Optional)
-                </Label>
+                <Label htmlFor="image">Main Project Image (Optional)</Label>
                 <Input
-                  id="main_image"
+                  id="image"
                   type="text"
-                  value={formData.main_image}
-                  onChange={(e) =>
-                    handleInputChange("main_image", e.target.value)
-                  }
+                  value={formData.image}
+                  onChange={(e) => handleInputChange("image", e.target.value)}
                   placeholder="https://example.com/image.jpg"
                 />
                 <p className="text-xs text-muted-foreground mt-1">

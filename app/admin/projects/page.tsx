@@ -135,10 +135,10 @@ export default function AdminProjects() {
             >
               <Card className="h-full flex flex-col hover:shadow-lg transition-shadow overflow-hidden">
                 {/* Project Image */}
-                {(project.main_image || project.image) && (
+                {project.image && (
                   <div className="relative h-48 bg-gray-100 dark:bg-gray-800">
                     <img
-                      src={project.main_image || project.image}
+                      src={project.image}
                       alt={project.title}
                       className="w-full h-full object-cover"
                       onError={(e) => {

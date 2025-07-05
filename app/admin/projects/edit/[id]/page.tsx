@@ -37,7 +37,7 @@ export default function EditProjectPage() {
   const [endDate, setEndDate] = useState("");
   const [funding, setFunding] = useState("");
   const [link, setLink] = useState("");
-  const [mainImage, setMainImage] = useState("");
+  const [image, setImage] = useState("");
   const [images, setImages] = useState<string[]>([]);
 
   useEffect(() => {
@@ -65,7 +65,7 @@ export default function EditProjectPage() {
       setEndDate(data.end_date ? data.end_date.split("T")[0] : "");
       setFunding(data.funding || "");
       setLink(data.link || "");
-      setMainImage(data.main_image || "");
+      setImage(data.image || "");
       setImages(data.images || []);
       setLoading(false);
     }
@@ -127,10 +127,10 @@ export default function EditProjectPage() {
       }
     }
 
-    let normalizedMainImage = null;
-    if (mainImage) {
-      normalizedMainImage = normalizeUrl(mainImage);
-      if (normalizedMainImage === false) {
+    let normalizedImage = null;
+    if (image) {
+      normalizedImage = normalizeUrl(image);
+      if (normalizedImage === false) {
         setError(
           "Please enter a valid URL for the main image (e.g., 'example.com/image.jpg' or 'https://example.com/image.jpg') or leave it empty"
         );
@@ -166,7 +166,7 @@ export default function EditProjectPage() {
       end_date: endDate || null,
       funding,
       link: normalizedLink,
-      main_image: normalizedMainImage,
+      image: normalizedImage,
       images: normalizedImages,
     };
 
@@ -345,12 +345,12 @@ export default function EditProjectPage() {
           {/* Image Section */}
           <div className="space-y-4">
             <div>
-              <Label htmlFor="mainImage">Main Project Image (Optional)</Label>
+              <Label htmlFor="image">Main Project Image (Optional)</Label>
               <Input
-                id="mainImage"
+                id="image"
                 type="text"
-                value={mainImage}
-                onChange={(e) => setMainImage(e.target.value)}
+                value={image}
+                onChange={(e) => setImage(e.target.value)}
                 placeholder="https://example.com/image.jpg"
               />
               <p className="text-sm text-gray-500 mt-1">
