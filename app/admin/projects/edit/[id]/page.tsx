@@ -92,6 +92,43 @@ export default function EditProjectPage() {
     setSaving(true);
     setError(null);
 
+    // Validate URLs if provided
+    const validateUrl = (url: string) => {
+      if (!url.trim()) return true; // Empty is valid
+      try {
+        new URL(url);
+        return true;
+      } catch {
+        return false;
+      }
+    };
+
+    // Check if provided URLs are valid
+    if (link && !validateUrl(link)) {
+      setError(
+        "Please enter a valid URL for the external link or leave it empty"
+      );
+      setSaving(false);
+      return;
+    }
+
+    if (mainImage && !validateUrl(mainImage)) {
+      setError("Please enter a valid URL for the main image or leave it empty");
+      setSaving(false);
+      return;
+    }
+
+    // Check additional images
+    for (let i = 0; i < images.length; i++) {
+      if (images[i] && !validateUrl(images[i])) {
+        setError(
+          `Please enter a valid URL for additional image ${i + 1} or leave it empty`
+        );
+        setSaving(false);
+        return;
+      }
+    }
+
     const updateData = {
       title,
       description,
@@ -100,8 +137,8 @@ export default function EditProjectPage() {
       start_date: startDate,
       end_date: endDate || null,
       funding,
-      link,
-      main_image: mainImage,
+      link: link.trim() || null,
+      main_image: mainImage.trim() || null,
       images: images.filter((img) => img.trim() !== ""),
     };
 
@@ -267,26 +304,30 @@ export default function EditProjectPage() {
             <Label htmlFor="link">External Link (Optional)</Label>
             <Input
               id="link"
-              type="url"
+              type="text"
               value={link}
               onChange={(e) => setLink(e.target.value)}
               placeholder="https://..."
             />
+            <p className="text-sm text-gray-500 mt-1">
+              Leave empty if no external link is available
+            </p>
           </div>
 
           {/* Image Section */}
           <div className="space-y-4">
             <div>
-              <Label htmlFor="mainImage">Main Project Image</Label>
+              <Label htmlFor="mainImage">Main Project Image (Optional)</Label>
               <Input
                 id="mainImage"
-                type="url"
+                type="text"
                 value={mainImage}
                 onChange={(e) => setMainImage(e.target.value)}
                 placeholder="https://example.com/image.jpg"
               />
               <p className="text-sm text-gray-500 mt-1">
-                This will be the primary image displayed for the project
+                This will be the primary image displayed for the project. Leave
+                empty if no image is available.
               </p>
             </div>
 
@@ -317,7 +358,7 @@ export default function EditProjectPage() {
                   {images.map((image, index) => (
                     <div key={index} className="flex items-center gap-2">
                       <Input
-                        type="url"
+                        type="text"
                         value={image}
                         onChange={(e) => updateImage(index, e.target.value)}
                         placeholder="https://example.com/image.jpg"

@@ -81,6 +81,36 @@ export default function NewProjectPage() {
         throw new Error("Please fill in all required fields");
       }
 
+      // Validate URLs if provided
+      const validateUrl = (url: string) => {
+        if (!url.trim()) return true; // Empty is valid
+        try {
+          new URL(url);
+          return true;
+        } catch {
+          return false;
+        }
+      };
+
+      // Check if provided URLs are valid
+      if (formData.link && !validateUrl(formData.link)) {
+        throw new Error(
+          "Please enter a valid URL for the project link or leave it empty"
+        );
+      }
+
+      if (formData.main_image && !validateUrl(formData.main_image)) {
+        throw new Error(
+          "Please enter a valid URL for the main image or leave it empty"
+        );
+      }
+
+      if (formData.image && !validateUrl(formData.image)) {
+        throw new Error(
+          "Please enter a valid URL for the legacy image or leave it empty"
+        );
+      }
+
       // Create slug from title if not provided
       const slug =
         formData.slug ||
@@ -92,6 +122,9 @@ export default function NewProjectPage() {
       await createProject({
         ...formData,
         slug,
+        link: formData.link.trim() || undefined,
+        main_image: formData.main_image.trim() || undefined,
+        image: formData.image.trim() || undefined,
         images: formData.images,
         publications: [],
       });
@@ -262,9 +295,12 @@ export default function NewProjectPage() {
             <h2 className="text-xl font-semibold mb-4">Media & Links</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <Label htmlFor="main_image">Main Project Image</Label>
+                <Label htmlFor="main_image">
+                  Main Project Image (Optional)
+                </Label>
                 <Input
                   id="main_image"
+                  type="text"
                   value={formData.main_image}
                   onChange={(e) =>
                     handleInputChange("main_image", e.target.value)
@@ -272,17 +308,22 @@ export default function NewProjectPage() {
                   placeholder="https://example.com/image.jpg"
                 />
                 <p className="text-xs text-muted-foreground mt-1">
-                  This will be the primary image displayed for the project
+                  This will be the primary image displayed for the project.
+                  Leave empty if no image is available.
                 </p>
               </div>
               <div>
-                <Label htmlFor="link">Project Link</Label>
+                <Label htmlFor="link">Project Link (Optional)</Label>
                 <Input
                   id="link"
+                  type="text"
                   value={formData.link}
                   onChange={(e) => handleInputChange("link", e.target.value)}
                   placeholder="https://..."
                 />
+                <p className="text-xs text-muted-foreground mt-1">
+                  Leave empty if no external link is available
+                </p>
               </div>
             </div>
 
@@ -290,12 +331,14 @@ export default function NewProjectPage() {
               <Label htmlFor="image">Legacy Image URL (Optional)</Label>
               <Input
                 id="image"
+                type="text"
                 value={formData.image}
                 onChange={(e) => handleInputChange("image", e.target.value)}
                 placeholder="/images/project-1.png"
               />
               <p className="text-xs text-muted-foreground mt-1">
-                For backward compatibility with existing projects
+                For backward compatibility with existing projects. Leave empty
+                if not needed.
               </p>
             </div>
           </section>
