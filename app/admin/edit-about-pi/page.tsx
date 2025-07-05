@@ -153,14 +153,6 @@ export default function EditAboutPIPage() {
               />
             </div>
             <div>
-              <Label htmlFor="pronouns">Pronouns</Label>
-              <Input
-                id="pronouns"
-                value={data.pronouns}
-                onChange={(e) => setData({ ...data, pronouns: e.target.value })}
-              />
-            </div>
-            <div>
               <Label htmlFor="image_url">Image URL</Label>
               <Input
                 id="image_url"

@@ -100,9 +100,6 @@ export default function AboutPIPage() {
               {data.name}
             </h1>
             <div className="text-base md:text-lg text-gray-700 dark:text-gray-300 mb-2 flex items-center justify-center gap-2">
-              <span className="px-3 py-1 rounded-full bg-cognition-100 dark:bg-cognition-800 text-cognition-700 dark:text-cognition-200 font-semibold text-sm">
-                {data.pronouns}
-              </span>
               {data.title.split("|").map((title, index) => (
                 <span
                   key={index}

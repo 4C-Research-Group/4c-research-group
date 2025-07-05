@@ -2,7 +2,6 @@ export interface AboutPI {
   id: string;
   name: string;
   title: string;
-  pronouns: string;
   image_url: string;
   hero_description: string;
   linkedin_url?: string;

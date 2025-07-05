@@ -5,7 +5,6 @@ create table if not exists about_pi (
   -- Hero Section
   name text not null,
   title text not null,
-  pronouns text not null,
   image_url text not null,
   hero_description text not null,
   
@@ -55,7 +54,6 @@ create table if not exists about_pi (
 insert into about_pi (
   name,
   title,
-  pronouns,
   image_url,
   hero_description,
   linkedin_url,
@@ -76,7 +74,6 @@ insert into about_pi (
 ) values (
   'Dr. Saptharishi (Rishi) Ganesan',
   'Pediatric Critical Care Physician | Neurocritical Care Specialist',
-  'He/Him',
   '/team/team-1.jpg',
   'Head, 4C - Cognition, Consciousness & Critical Care Research Group | Western Institute for Neuroscience (WIN) | Western University',
   'https://www.linkedin.com/in/dr-saptharishi-ganesan-b1730a60/',

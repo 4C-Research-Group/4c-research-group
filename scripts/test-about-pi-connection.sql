@@ -23,14 +23,13 @@ WHERE tablename = 'about_pi';
 
 -- Test insert (should work if you're admin)
 INSERT INTO about_pi (
-  name, title, pronouns, image_url, hero_description, about_content,
+  name, title, image_url, hero_description, about_content,
   current_positions, education, professional_experience, research_awards,
   skills, volunteering, recommendations, licenses_certifications,
   organizations, publications
 ) VALUES (
   'Test PI',
   'Test Title',
-  'They/Them',
   '/test.jpg',
   'Test description',
   'Test content',
