@@ -149,16 +149,16 @@ export default function EditResearchProjectPage() {
       category,
       status,
       start_date: startDate,
-      end_date: endDate,
-      funding,
-      link,
+      end_date: endDate || null, // Convert empty string to null
+      funding: funding || null,
+      link: link || null,
       images: images.filter((img) => img.trim() !== ""),
       tags: tags.filter((tag) => tag.trim() !== ""),
       objectives: objectives.filter((obj) => obj.trim() !== ""),
       team_members: teamMembers.filter(
         (member) => member.name.trim() !== "" && member.role.trim() !== ""
       ),
-      additional_info: additionalInfo,
+      additional_info: additionalInfo || null,
     };
 
     const { error } = await supabase

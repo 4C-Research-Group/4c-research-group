@@ -169,7 +169,7 @@ export default function EditProjectPage() {
       status,
       start_date: startDate,
       end_date: endDate || null,
-      funding,
+      funding: funding || null,
       link: normalizedLink,
       image: normalizedImage,
       images: normalizedImages,
