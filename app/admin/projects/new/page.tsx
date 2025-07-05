@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { createProject } from "@/lib/supabase/projects";
+import { createProject, getProjectBySlug } from "@/lib/supabase/projects";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -71,7 +71,6 @@ export default function NewProjectPage() {
     try {
       // Validate required fields
       if (
-        !formData.slug ||
         !formData.title ||
         !formData.description ||
         !formData.category ||
@@ -130,24 +129,27 @@ export default function NewProjectPage() {
         normalizedImage = result || undefined;
       }
 
-      let normalizedLegacyImage: string | undefined = undefined;
-      if (formData.image) {
-        const result = normalizeUrl(formData.image);
-        if (result === false) {
-          throw new Error(
-            "Please enter a valid URL for the legacy image (e.g., 'example.com/image.jpg') or leave it empty"
-          );
-        }
-        normalizedLegacyImage = result || undefined;
-      }
+      // Remove unused legacy image normalization
 
       // Create slug from title if not provided
-      const slug =
+      let slug =
         formData.slug ||
         formData.title
           .toLowerCase()
           .replace(/[^a-z0-9]+/g, "-")
           .replace(/(^-|-$)/g, "");
+
+      // Check if slug already exists and add a number if it does
+      let counter = 1;
+      let originalSlug = slug;
+      while (true) {
+        const existingProject = await getProjectBySlug(slug);
+        if (!existingProject) {
+          break; // Slug is available
+        }
+        slug = `${originalSlug}-${counter}`;
+        counter++;
+      }
 
       await createProject({
         ...formData,
@@ -160,7 +162,14 @@ export default function NewProjectPage() {
 
       router.push("/admin/projects");
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Failed to create project");
+      console.error("Project creation error:", err);
+      if (err instanceof Error) {
+        setError(err.message);
+      } else {
+        setError(
+          "Failed to create project. Please check all required fields and try again."
+        );
+      }
     } finally {
       setLoading(false);
     }
