@@ -29,7 +29,6 @@ export default function BlogImage({
   // Check if the URL is valid and likely to be an image
   const isValidImageUrl = (url: string) => {
     if (!url) {
-      console.log("BlogImage: No URL provided");
       return false;
     }
 
@@ -37,7 +36,6 @@ export default function BlogImage({
     try {
       new URL(url);
     } catch {
-      console.log("BlogImage: Invalid URL format:", url);
       return false;
     }
 
@@ -62,18 +60,10 @@ export default function BlogImage({
       urlLower.includes(domain)
     );
 
-    console.log("BlogImage Debug:", {
-      url,
-      hasImageExtension,
-      isFromImageDomain,
-      isValid: hasImageExtension || isFromImageDomain,
-    });
-
     return hasImageExtension || isFromImageDomain;
   };
 
   if (imageError || !src || !isValidImageUrl(src)) {
-    console.log("BlogImage: Showing fallback for:", { src, imageError, title });
     return (
       <div
         className={`flex items-center justify-center w-full h-full bg-gradient-to-br from-cognition-600 to-cognition-800 ${className}`}
@@ -82,8 +72,6 @@ export default function BlogImage({
       </div>
     );
   }
-
-  console.log("BlogImage: Attempting to load:", src);
   return (
     <Image
       src={src}
@@ -94,11 +82,10 @@ export default function BlogImage({
       width={width}
       height={height}
       onError={(e) => {
-        console.log("BlogImage: Error loading image:", src, e);
         setImageError(true);
       }}
       onLoad={() => {
-        console.log("BlogImage: Successfully loaded:", src);
+        // Image loaded successfully
       }}
     />
   );
