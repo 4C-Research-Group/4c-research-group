@@ -36,8 +36,6 @@ export async function GET() {
 }
 
 export async function PUT(request: NextRequest) {
-  console.log("PUT /api/about-pi called");
-
   // Handle CORS preflight
   if (request.method === "OPTIONS") {
     return new NextResponse(null, {
@@ -49,7 +47,6 @@ export async function PUT(request: NextRequest) {
   let body;
   try {
     body = await request.json();
-    console.log("Request body received:", body);
   } catch (e) {
     console.error("Failed to parse request body:", e);
     return NextResponse.json(
