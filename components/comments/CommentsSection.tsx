@@ -181,12 +181,6 @@ export default function CommentsSection({ blogPostId }: CommentsSectionProps) {
         onCommentDeleted={handleCommentDeleted}
         currentUserId={user?.id}
         isAdmin={isAdmin}
-        // Recursively render replies
-        renderReplies={() =>
-          comment.replies && comment.replies.length > 0
-            ? renderComments(comment.replies)
-            : null
-        }
       />
     ));
 

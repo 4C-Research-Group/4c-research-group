@@ -21,7 +21,6 @@ interface CommentItemProps {
   currentUserId?: string;
   isAdmin?: boolean;
   likeStats?: CommentLikeStats;
-  renderReplies?: () => React.ReactNode;
 }
 
 const MemoizedCommentLikeButton = memo(CommentLikeButton);
@@ -34,7 +33,6 @@ export default function CommentItem({
   currentUserId,
   isAdmin = false,
   likeStats,
-  renderReplies,
 }: CommentItemProps) {
   const [isReplying, setIsReplying] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
@@ -215,14 +213,10 @@ export default function CommentItem({
               currentUserId={currentUserId}
               isAdmin={isAdmin}
               likeStats={localLikeStats}
-              renderReplies={renderReplies}
             />
           ))}
         </div>
       )}
-
-      {/* Render replies recursively if provided */}
-      {renderReplies && renderReplies()}
     </div>
   );
 }
