@@ -88,15 +88,12 @@ export default function MobileNav() {
                 Navigation menu for 4C Research Lab website
               </SheetDescription>
             </SheetHeader>
-            <div className="flex items-center gap-2">
-              <SimpleThemeToggle />
-              <SheetClose asChild>
-                <button className="p-2 rounded-lg bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm opacity-70 ring-offset-background transition-all duration-200 hover:opacity-100 hover:bg-white dark:hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-cognition-500">
-                  <X className="h-5 w-5" />
-                  <span className="sr-only">Close</span>
-                </button>
-              </SheetClose>
-            </div>
+            <SheetClose asChild>
+              <button className="p-2 rounded-lg bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm opacity-70 ring-offset-background transition-all duration-200 hover:opacity-100 hover:bg-white dark:hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-cognition-500">
+                <X className="h-5 w-5" />
+                <span className="sr-only">Close</span>
+              </button>
+            </SheetClose>
           </div>
 
           <nav className="flex-1 overflow-y-auto p-6 space-y-2">
@@ -127,6 +124,16 @@ export default function MobileNav() {
               );
             })}
           </nav>
+
+          {/* Theme Toggle Section */}
+          <div className="px-6 py-4 border-t border-cognition-100/50 dark:border-cognition-800/50">
+            <div className="flex items-center justify-between">
+              <span className="text-sm font-medium text-gray-600 dark:text-gray-400">
+                Theme
+              </span>
+              <SimpleThemeToggle />
+            </div>
+          </div>
 
           <div className="p-6 border-t border-cognition-100/50 dark:border-cognition-800/50 bg-gradient-to-b from-transparent to-gray-50/50 dark:to-gray-800/30">
             <div className="space-y-4">
