@@ -57,6 +57,8 @@ export async function getProjectBySlug(slug: string) {
 export async function createProject(
   project: Omit<Project, "id" | "created_at" | "updated_at">
 ) {
+  console.log("createProject called with:", project);
+
   const { data, error } = await supabase
     .from("projects")
     .insert(project)
@@ -64,10 +66,17 @@ export async function createProject(
     .single();
 
   if (error) {
-    console.error("Error creating project:", error);
+    console.error("Supabase error creating project:", error);
+    console.error("Error details:", {
+      message: error.message,
+      details: error.details,
+      hint: error.hint,
+      code: error.code,
+    });
     throw error;
   }
 
+  console.log("Project created successfully:", data);
   return data;
 }
 

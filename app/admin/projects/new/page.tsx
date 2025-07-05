@@ -151,14 +151,22 @@ export default function NewProjectPage() {
         counter++;
       }
 
-      await createProject({
+      const projectData = {
         ...formData,
         slug,
         link: normalizedLink,
         image: normalizedImage,
         images: formData.images,
         publications: [],
-      });
+        // Convert empty strings to undefined for optional fields
+        end_date: formData.end_date || undefined,
+        funding: formData.funding || undefined,
+        additional_info: formData.additional_info || undefined,
+      };
+
+      console.log("Creating project with data:", projectData);
+
+      await createProject(projectData);
 
       router.push("/admin/projects");
     } catch (err) {
