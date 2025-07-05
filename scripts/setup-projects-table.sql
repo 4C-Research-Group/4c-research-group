@@ -109,7 +109,7 @@ VALUES
         '/images/project-1.png',
         '["/images/project-1.png", "/images/placeholder.jpg", "/images/placeholder.jpg"]',
         '["Neuromonitoring", "EEG", "Seizure Detection", "Pediatric Critical Care"]',
-        '/research/nuanced',
+        NULL,
         'AMOSO Opportunities Fund',
         '["Develop a nurse-led qEEG-based seizure screening program", "Reduce time to seizure detection and treatment", "Establish baseline data on current seizure detection practices", "Improve outcomes for critically ill children with encephalopathy"]',
         '[{"name": "Dr. Ganesan", "role": "Principal Investigator"}, {"name": "LHSC Team", "role": "Clinical Partners"}]'
@@ -126,7 +126,7 @@ VALUES
         '/images/project-2.jpg',
         '["/images/project-2.jpg", "/images/placeholder.jpg", "/images/placeholder.jpg"]',
         '["Brain Connectivity", "Delirium", "Pediatric Critical Care", "EEG", "fNIRS", "Neuroimaging"]',
-        '/research/transience',
+        NULL,
         'Brain Canada Future Leaders in Brain Research Award',
         '["Characterize brain connectivity patterns in children at risk for PICU delirium", "Identify objective neurophysiological markers of delirium", "Develop early detection methods using EEG and fNIRS", "Improve understanding of delirium pathophysiology in critically ill children"]',
         '[{"name": "Dr. Ganesan", "role": "Principal Investigator"}, {"name": "LHSC Team", "role": "Clinical Partners"}]'
@@ -143,7 +143,7 @@ VALUES
         '/images/project-3.png',
         '["/images/project-3.png", "/images/placeholder.jpg", "/images/placeholder.jpg"]',
         '["Acquired Brain Injury", "Outcome Prediction", "Neuroimaging", "EEG", "fMRI", "fNIRS", "Pediatric Critical Care"]',
-        '/research/predict-abi',
+        NULL,
         'AMOSO Innovation Fund',
         '["Develop accurate outcome prediction models for children with ABI", "Utilize multimodal neuroimaging for comprehensive assessment", "Identify early biomarkers of neurological recovery", "Improve prognostic accuracy in unresponsive pediatric patients"]',
         '[{"name": "Dr. Ganesan", "role": "Principal Investigator"}, {"name": "LHSC Team", "role": "Clinical Partners"}]'
@@ -160,7 +160,7 @@ VALUES
         '/images/project-4.jpeg',
         '["/images/project-4.jpeg", "/images/placeholder.jpg", "/images/placeholder.jpg"]',
         '["Clinical Trial", "Delirium", "Mechanical Ventilation", "Inhaled Anesthetics", "Pediatric Critical Care", "Multicenter Study"]',
-        '/research/above',
+        NULL,
         'Investigator Initiated Trial',
         '["Assess feasibility of patient accrual and intervention delivery", "Compare effectiveness of inhaled anesthetics vs. IV sedatives", "Evaluate impact on delirium in mechanically ventilated children", "Establish protocols for definitive multicenter trial"]',
         '[{"name": "Dr. Ganesan", "role": "Co-Principal Investigator"}, {"name": "Dr. Angela Jerath", "role": "Principal Investigator (Sunnybrook)"}, {"name": "SickKids Team", "role": "Collaborating Site"}, {"name": "Sunnybrook Team", "role": "Lead Site"}]'
@@ -177,7 +177,7 @@ VALUES
         '/images/project-5.jpeg',
         '["/images/project-5.jpeg", "/images/placeholder.jpg", "/images/placeholder.jpg"]',
         '["Epilepsy", "Status Epilepticus", "Biomarkers", "Registry", "Multicenter Study"]',
-        '/research/norse',
+        NULL,
         'Registry Study',
         '["Collect comprehensive health data on NORSE patients", "Identify key determinants of outcome", "Determine optimal management strategies", "Establish multicenter registry"]',
         '[{"name": "Dr. Ganesan", "role": "Site Investigator"}, {"name": "LHSC Team", "role": "Clinical Partners"}]'

@@ -10,6 +10,7 @@ import {
 } from "react-icons/fa";
 import { useState, useEffect } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { getProjects, Project } from "@/lib/supabase/projects";
 
 const statuses = ["active", "completed", "upcoming"] as const;
@@ -225,6 +226,9 @@ export default function ProjectsPage() {
                     fill
                     className="object-cover"
                     sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                    onError={(e) => {
+                      console.log("Image failed to load:", project.image);
+                    }}
                   />
                   <div className="absolute top-4 right-4">
                     {getStatusBadge(project.status)}
@@ -250,24 +254,49 @@ export default function ProjectsPage() {
                   </div>
                   <div className="mt-auto pt-4 border-t border-gray-200 dark:border-gray-700">
                     {project.link && (
-                      <a
-                        href={project.link}
-                        className="w-full inline-flex justify-center items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-cognition-600 hover:bg-cognition-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cognition-500 transition-colors duration-200"
-                      >
-                        Learn More
-                        <svg
-                          className="ml-2 -mr-1 w-4 h-4"
-                          fill="currentColor"
-                          viewBox="0 0 20 20"
-                          xmlns="http://www.w3.org/2000/svg"
-                        >
-                          <path
-                            fillRule="evenodd"
-                            d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z"
-                            clipRule="evenodd"
-                          />
-                        </svg>
-                      </a>
+                      <>
+                        {project.link.startsWith("/") ? (
+                          <Link
+                            href={project.link}
+                            className="w-full inline-flex justify-center items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-cognition-600 hover:bg-cognition-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cognition-500 transition-colors duration-200"
+                          >
+                            Learn More
+                            <svg
+                              className="ml-2 -mr-1 w-4 h-4"
+                              fill="currentColor"
+                              viewBox="0 0 20 20"
+                              xmlns="http://www.w3.org/2000/svg"
+                            >
+                              <path
+                                fillRule="evenodd"
+                                d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z"
+                                clipRule="evenodd"
+                              />
+                            </svg>
+                          </Link>
+                        ) : (
+                          <a
+                            href={project.link}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="w-full inline-flex justify-center items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-cognition-600 hover:bg-cognition-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cognition-500 transition-colors duration-200"
+                          >
+                            Learn More
+                            <svg
+                              className="ml-2 -mr-1 w-4 h-4"
+                              fill="currentColor"
+                              viewBox="0 0 20 20"
+                              xmlns="http://www.w3.org/2000/svg"
+                            >
+                              <path
+                                fillRule="evenodd"
+                                d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z"
+                                clipRule="evenodd"
+                              />
+                            </svg>
+                          </a>
+                        )}
+                      </>
                     )}
                   </div>
                 </div>

@@ -35,6 +35,7 @@ export async function getProjects(): Promise<Project[]> {
     return [];
   }
 
+  console.log("Fetched projects from database:", data);
   return (data as unknown as Project[]) || [];
 }
 

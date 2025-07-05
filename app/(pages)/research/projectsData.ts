@@ -49,7 +49,7 @@ export const projects: Project[] = [
       "Seizure Detection",
       "Pediatric Critical Care",
     ],
-    link: "/research/nuanced",
+    link: undefined,
     funding: "AMOSO Opportunities Fund",
     objectives: [
       "Develop a nurse-led qEEG-based seizure screening program",
@@ -85,7 +85,7 @@ export const projects: Project[] = [
       "fNIRS",
       "Neuroimaging",
     ],
-    link: "/research/transience",
+    link: undefined,
     funding: "Brain Canada Future Leaders in Brain Research Award",
     objectives: [
       "Characterize brain connectivity patterns in children at risk for PICU delirium",
@@ -122,7 +122,7 @@ export const projects: Project[] = [
       "fNIRS",
       "Pediatric Critical Care",
     ],
-    link: "/research/predict-abi",
+    link: undefined,
     funding: "AMOSO Innovation Fund",
     objectives: [
       "Develop accurate outcome prediction models for children with ABI",
@@ -158,7 +158,7 @@ export const projects: Project[] = [
       "Pediatric Critical Care",
       "Multicenter Study",
     ],
-    link: "/research/above",
+    link: undefined,
     funding: "Investigator Initiated Trial",
     objectives: [
       "Assess feasibility of patient accrual and intervention delivery",
@@ -200,7 +200,7 @@ export const projects: Project[] = [
       "Multicenter Study",
       "North American Collaboration",
     ],
-    link: "/research/norse",
+    link: undefined,
     funding: "Yale University (Lead Site)",
     objectives: [
       "Understand the causes of cryptogenic NORSE",
