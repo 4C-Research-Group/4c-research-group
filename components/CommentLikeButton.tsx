@@ -142,15 +142,15 @@ function CommentLikeButton({
   }
 
   return (
-    <button
-      type="button"
+    <a
+      href="#"
       onClick={handleLike}
-      disabled={isLoading}
       className={cn(
-        "flex items-center gap-1.5 px-2 py-1 rounded-full text-sm transition-all duration-200 hover:bg-gray-100 dark:hover:bg-gray-800 disabled:opacity-50",
+        "flex items-center gap-1.5 px-2 py-1 rounded-full text-sm transition-all duration-200 hover:bg-gray-100 dark:hover:bg-gray-800 cursor-pointer no-underline",
         isLiked && "text-red-500",
         !isLiked &&
           "text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200",
+        isLoading && "opacity-50 pointer-events-none",
         className
       )}
     >
@@ -162,7 +162,7 @@ function CommentLikeButton({
         )}
       />
       {likes > 0 && <span className="text-xs font-medium">{likes}</span>}
-    </button>
+    </a>
   );
 }
 
