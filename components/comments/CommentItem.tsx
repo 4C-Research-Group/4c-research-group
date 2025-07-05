@@ -147,7 +147,10 @@ export default function CommentItem({
             </div>
 
             <div className="flex items-center gap-2 text-sm">
-              <div className="mt-2 flex items-center">
+              <div
+                className="mt-2 flex items-center"
+                onClick={(e) => e.stopPropagation()}
+              >
                 <MemoizedCommentLikeButton
                   key={`like-${comment.id}`}
                   commentId={comment.id}

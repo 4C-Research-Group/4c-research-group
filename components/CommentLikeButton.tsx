@@ -73,52 +73,63 @@ function CommentLikeButton({
     setIsLiked(initialIsLiked);
   }, [initialLikes, initialIsLiked]);
 
-  const handleLike = useCallback(async () => {
-    if (isLoading || !hasHydrated) return;
+  const handleLike = useCallback(
+    async (e: React.MouseEvent) => {
+      e.preventDefault();
+      e.stopPropagation();
+      console.log("Like button clicked for comment:", commentId);
+      if (isLoading || !hasHydrated) return;
 
-    setIsLoading(true);
-    try {
-      const response = await fetch("/api/comment-likes", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ comment_id: commentId }),
-      });
+      setIsLoading(true);
+      try {
+        console.log("Making API request to like comment:", commentId);
+        const response = await fetch("/api/comment-likes", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ comment_id: commentId }),
+        });
 
-      if (response.ok) {
-        const data = await response.json();
+        if (response.ok) {
+          const data = await response.json();
+          console.log("Like API response:", data);
 
-        // Update local state
-        setLikes(data.total_likes);
-        setIsLiked(data.is_liked_by_user);
+          // Update local state
+          setLikes(data.total_likes);
+          setIsLiked(data.is_liked_by_user);
 
-        // Store in localStorage
-        try {
-          localStorage.setItem(getStorageKey(commentId), JSON.stringify(data));
-        } catch (error) {
-          console.error("Error saving like state to localStorage:", error);
+          // Store in localStorage
+          try {
+            localStorage.setItem(
+              getStorageKey(commentId),
+              JSON.stringify(data)
+            );
+          } catch (error) {
+            console.error("Error saving like state to localStorage:", error);
+          }
+
+          // Notify parent component of the change
+          if (onLikeChange) {
+            onLikeChange(data);
+          }
+
+          // Trigger animation
+          setIsAnimating(true);
+          const timer = setTimeout(() => setIsAnimating(false), 300);
+          return () => clearTimeout(timer);
+        } else {
+          const errorData = await response.json();
+          console.error("Failed to like comment:", errorData);
         }
-
-        // Notify parent component of the change
-        if (onLikeChange) {
-          onLikeChange(data);
-        }
-
-        // Trigger animation
-        setIsAnimating(true);
-        const timer = setTimeout(() => setIsAnimating(false), 300);
-        return () => clearTimeout(timer);
-      } else {
-        const errorData = await response.json();
-        console.error("Failed to like comment:", errorData);
+      } catch (error) {
+        console.error("Error liking comment:", error);
+      } finally {
+        setIsLoading(false);
       }
-    } catch (error) {
-      console.error("Error liking comment:", error);
-    } finally {
-      setIsLoading(false);
-    }
-  }, [commentId, isLoading, onLikeChange, getStorageKey, hasHydrated]);
+    },
+    [commentId, isLoading, onLikeChange, getStorageKey, hasHydrated]
+  );
 
   // Don't render anything until hydration is complete
   if (!hasHydrated) {
@@ -132,6 +143,7 @@ function CommentLikeButton({
 
   return (
     <button
+      type="button"
       onClick={handleLike}
       disabled={isLoading}
       className={cn(
