@@ -212,7 +212,7 @@ export default function CommentItem({
               depth={depth + 1}
               currentUserId={currentUserId}
               isAdmin={isAdmin}
-              likeStats={localLikeStats}
+              // Don't pass parent's likeStats - let each reply get its own stats
             />
           ))}
         </div>
