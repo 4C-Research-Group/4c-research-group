@@ -74,7 +74,7 @@ export function NavAuthButtons({
             onClick={async () => {
               await fullSignOut(signOut, onClick);
             }}
-            className="w-full lg:w-auto px-4 py-3 lg:py-2 rounded-xl text-base font-medium text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800 transition-all duration-200 hover:shadow-sm border border-gray-200 dark:border-gray-700"
+            className="lg:hidden w-full lg:w-auto px-4 py-3 lg:py-2 rounded-xl text-base font-medium text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800 transition-all duration-200 hover:shadow-sm border border-gray-200 dark:border-gray-700"
           >
             Sign Out
           </button>
@@ -90,7 +90,7 @@ export function NavAuthButtons({
           onClick={async () => {
             await fullSignOut(signOut, onClick);
           }}
-          className="w-full lg:w-auto px-4 py-3 lg:py-2 rounded-xl text-base font-medium text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800 transition-all duration-200 hover:shadow-sm border border-gray-200 dark:border-gray-700"
+          className="lg:hidden w-full lg:w-auto px-4 py-3 lg:py-2 rounded-xl text-base font-medium text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800 transition-all duration-200 hover:shadow-sm border border-gray-200 dark:border-gray-700"
         >
           Sign Out
         </button>
