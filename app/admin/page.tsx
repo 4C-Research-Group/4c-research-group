@@ -120,6 +120,14 @@ export default async function AdminDashboard() {
       bgColor: "bg-indigo-50",
     },
     {
+      title: "Edit Join 4C Lab Page",
+      description: "Update join page content and call-to-action",
+      icon: FileEdit,
+      href: "/admin/edit-join-4c-lab",
+      color: "text-teal-600",
+      bgColor: "bg-teal-50",
+    },
+    {
       title: "Add Team Member",
       description: "Add new team member or researcher",
       icon: TeamIcon,
@@ -198,7 +206,7 @@ export default async function AdminDashboard() {
             </Button>
           </Link>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
           {quickActions.map((action) => (
             <Card
               key={action.title}
