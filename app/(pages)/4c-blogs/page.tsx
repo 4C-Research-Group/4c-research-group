@@ -219,7 +219,7 @@ export default function BlogPage() {
   }
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background scroll-smooth">
       {/* Hero Section */}
       <PageHero
         title="4C Research Blog"
@@ -251,6 +251,21 @@ export default function BlogPage() {
               Featured
             </div>
           </div>
+        </div>
+
+        {/* View All Articles Button */}
+        <div className="flex justify-center mb-6">
+          <Button
+            asChild
+            size="lg"
+            className="bg-cognition-600 hover:bg-cognition-700 text-white px-8 py-3 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300"
+          >
+            <Link href="#all-articles" className="flex items-center gap-2">
+              <FaNewspaper className="w-5 h-5" />
+              View All Articles
+              <FaArrowRight className="w-4 h-4" />
+            </Link>
+          </Button>
         </div>
       </PageHero>
 
@@ -392,7 +407,7 @@ export default function BlogPage() {
       )}
 
       {/* All Articles Section */}
-      <div className="w-4/5 mx-auto py-8">
+      <div id="all-articles" className="w-4/5 mx-auto py-8 -mt-16 pt-24">
         <div className="text-center mb-8">
           <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
             All Articles
