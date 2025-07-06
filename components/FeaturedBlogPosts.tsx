@@ -50,7 +50,7 @@ export default function FeaturedBlogPosts({
             </span>
           </motion.h2>
           <motion.p
-            className="text-lg md:text-xl text-gray-700 dark:text-gray-300 mb-6 leading-relaxed max-w-2xl mx-auto"
+            className="text-lg md:text-xl text-gray-700 dark:text-gray-300 mb-4 leading-relaxed max-w-2xl mx-auto"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.1 }}
@@ -58,6 +58,17 @@ export default function FeaturedBlogPosts({
             Discover our most important research insights and breakthrough
             findings
           </motion.p>
+          {/* Solid Lines */}
+          <motion.div
+            className="flex justify-center items-center gap-2"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+          >
+            <div className="w-8 h-1 bg-cognition-600"></div>
+            <div className="w-2 h-1 bg-consciousness-600"></div>
+            <div className="w-8 h-1 bg-care-600"></div>
+          </motion.div>
         </motion.div>
 
         {/* Featured Posts Grid/List */}

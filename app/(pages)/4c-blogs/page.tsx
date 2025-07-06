@@ -409,12 +409,20 @@ export default function BlogPage() {
       {/* All Articles Section */}
       <div id="all-articles" className="w-4/5 mx-auto py-8 -mt-16 pt-24">
         <div className="text-center mb-8">
-          <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
-            All Articles
+          <h2 className="text-3xl font-bold mb-2">
+            <span className="bg-gradient-to-r from-cognition-600 via-consciousness-600 to-care-600 bg-clip-text text-transparent">
+              All Articles
+            </span>
           </h2>
-          <p className="text-gray-600 dark:text-gray-400">
+          <p className="text-gray-600 dark:text-gray-400 mb-4">
             Explore our complete collection of research insights and updates
           </p>
+          {/* Solid Lines */}
+          <div className="flex justify-center items-center gap-2">
+            <div className="w-8 h-1 bg-cognition-600"></div>
+            <div className="w-2 h-1 bg-consciousness-600"></div>
+            <div className="w-8 h-1 bg-care-600"></div>
+          </div>
         </div>
       </div>
 
