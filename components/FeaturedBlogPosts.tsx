@@ -156,20 +156,48 @@ export default function FeaturedBlogPosts({
                     {post.excerpt}
                   </p>
 
-                  {/* Category */}
-                  <div className="mb-3">
+                  {/* Category and Tags */}
+                  <div className="mb-3 flex flex-wrap gap-2">
                     <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-300">
                       {post.category}
                     </span>
+                    {post.tags && post.tags.length > 0 && (
+                      <div className="flex flex-wrap gap-1">
+                        {post.tags.slice(0, 2).map((tag, tagIndex) => (
+                          <span
+                            key={tagIndex}
+                            className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-cognition-100 text-cognition-700 dark:bg-cognition-900 dark:text-cognition-300"
+                          >
+                            {tag}
+                          </span>
+                        ))}
+                        {post.tags.length > 2 && (
+                          <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-600 dark:bg-gray-700 dark:text-gray-400">
+                            +{post.tags.length - 2}
+                          </span>
+                        )}
+                      </div>
+                    )}
                   </div>
 
                   {/* Author Info - Compact */}
                   {post.author_name && (
                     <div className="flex items-center mb-3">
-                      <div className="w-6 h-6 rounded-full bg-gray-200 dark:bg-gray-700 flex items-center justify-center mr-2">
-                        <span className="text-xs font-semibold text-gray-700 dark:text-gray-300">
-                          {post.author_name.charAt(0).toUpperCase()}
-                        </span>
+                      <div className="w-6 h-6 rounded-full overflow-hidden flex-shrink-0 mr-2">
+                        {post.author_image_url ? (
+                          <BlogImage
+                            src={post.author_image_url}
+                            alt={post.author_name}
+                            title={post.author_name}
+                            width={24}
+                            height={24}
+                            className="object-cover w-full h-full"
+                          />
+                        ) : (
+                          <div className="flex items-center justify-center w-full h-full bg-gradient-to-br from-cognition-600 to-cognition-700 text-white font-bold text-xs">
+                            {post.author_name.charAt(0).toUpperCase()}
+                          </div>
+                        )}
                       </div>
                       <div>
                         <div className="text-xs font-medium text-gray-900 dark:text-white">

@@ -577,10 +577,21 @@ export default function BlogPage() {
                       {/* Author Info */}
                       {post.author_name && (
                         <div className="flex items-center mb-3">
-                          <div className="w-6 h-6 rounded-full bg-gray-200 dark:bg-gray-700 flex items-center justify-center mr-2">
-                            <span className="text-xs font-semibold text-gray-700 dark:text-gray-300">
-                              {post.author_name.charAt(0).toUpperCase()}
-                            </span>
+                          <div className="w-6 h-6 rounded-full overflow-hidden flex-shrink-0 mr-2">
+                            {post.author_image_url ? (
+                              <BlogImage
+                                src={post.author_image_url}
+                                alt={post.author_name}
+                                title={post.author_name}
+                                width={24}
+                                height={24}
+                                className="object-cover w-full h-full"
+                              />
+                            ) : (
+                              <div className="flex items-center justify-center w-full h-full bg-gradient-to-br from-cognition-600 to-cognition-700 text-white font-bold text-xs">
+                                {post.author_name.charAt(0).toUpperCase()}
+                              </div>
+                            )}
                           </div>
                           <div>
                             <div className="text-xs font-medium text-gray-900 dark:text-white">
