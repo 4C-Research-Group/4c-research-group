@@ -450,10 +450,28 @@ export default function BlogPage() {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.3, delay: index * 0.05 }}
-                  className={`bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300 ${
+                  className={`relative bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300 ${
                     viewMode === "list" ? "flex" : "flex flex-col"
                   }`}
                 >
+                  {/* Admin Actions - Top Right (for list mode) */}
+                  {isAdmin && viewMode === "list" && (
+                    <div className="absolute top-2 right-2 z-10 flex gap-1">
+                      <Link
+                        href={`/admin/blog/edit/${post.id}`}
+                        className="inline-block px-2 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 text-xs shadow-lg backdrop-blur-sm bg-opacity-90"
+                        onClick={(e) => e.stopPropagation()}
+                      >
+                        Edit
+                      </Link>
+                      <DeleteBlogButton
+                        postId={post.id}
+                        postTitle={post.title}
+                        className="inline-block px-2 py-1 text-xs shadow-lg backdrop-blur-sm bg-opacity-90"
+                      />
+                    </div>
+                  )}
+
                   <Link
                     href={`/4c-blogs/${post.slug}`}
                     className={`block ${viewMode === "list" ? "flex-1 flex" : ""}`}
@@ -470,8 +488,8 @@ export default function BlogPage() {
                         className="object-cover"
                       />
 
-                      {/* Admin Actions - Top Right */}
-                      {isAdmin && (
+                      {/* Admin Actions - Top Right (for grid mode) */}
+                      {isAdmin && viewMode === "grid" && (
                         <div className="absolute top-2 right-2 flex gap-1">
                           <Link
                             href={`/admin/blog/edit/${post.id}`}

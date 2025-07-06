@@ -31,7 +31,7 @@ export default function FeaturedBlogPosts({
 
   return (
     <section className="py-12 md:py-16 bg-gradient-to-br from-cognition-50 via-white to-consciousness-50 dark:from-cognition-900 dark:via-gray-900 dark:to-consciousness-900">
-      <div className="container mx-auto px-4">
+      <div className="w-4/5 mx-auto">
         {/* Section Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -75,8 +75,8 @@ export default function FeaturedBlogPosts({
         <div
           className={
             viewMode === "grid"
-              ? "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-4/5 mx-auto"
-              : "space-y-6 w-4/5 mx-auto"
+              ? "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+              : "space-y-6"
           }
         >
           {featuredPosts.map((post, index) => (
