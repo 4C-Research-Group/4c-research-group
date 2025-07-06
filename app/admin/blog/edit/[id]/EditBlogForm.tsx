@@ -204,6 +204,10 @@ export default function EditBlogForm({ post }: { post: BlogPost }) {
             Featured Post
           </label>
         </div>
+        <p className="text-sm text-gray-500 dark:text-gray-400 -mt-4">
+          Featured posts will be prominently displayed at the top of the blog
+          page
+        </p>
 
         <div>
           <label

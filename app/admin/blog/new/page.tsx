@@ -25,6 +25,7 @@ export default function NewBlogPost() {
   const [isSlugManuallyEdited, setIsSlugManuallyEdited] = useState(false);
   const [authorName, setAuthorName] = useState("");
   const [authorRole, setAuthorRole] = useState("Admin");
+  const [isFeatured, setIsFeatured] = useState(false);
 
   // Check admin status and get user info
   useState(() => {
@@ -130,6 +131,9 @@ export default function NewBlogPost() {
         formData.set("author_image_url", user.user_metadata?.avatar_url || "");
         formData.set("author_role", authorRole || "Admin");
       }
+
+      // Set featured status
+      formData.set("featured", isFeatured.toString());
 
       console.log("Calling createBlogPost...");
       const result = (await createBlogPost(formData)) as Array<{
@@ -393,6 +397,28 @@ export default function NewBlogPost() {
             placeholder="5 min read"
           />
         </div>
+
+        {/* Featured Toggle */}
+        <div className="flex items-center">
+          <input
+            type="checkbox"
+            name="featured"
+            id="featured"
+            checked={isFeatured}
+            onChange={(e) => setIsFeatured(e.target.checked)}
+            className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+          />
+          <label
+            htmlFor="featured"
+            className="ml-2 block text-sm font-medium text-gray-700 dark:text-gray-300"
+          >
+            Mark as Featured Post
+          </label>
+        </div>
+        <p className="text-sm text-gray-500 dark:text-gray-400 -mt-4">
+          Featured posts will be prominently displayed at the top of the blog
+          page
+        </p>
 
         {/* Author Information */}
         <div className="border-t border-gray-200 dark:border-gray-700 pt-6">

@@ -123,3 +123,27 @@ export async function getAllBlogPostsWithStats(): Promise<BlogPostWithStats[]> {
 
   return postsWithStats;
 }
+
+export async function getFeaturedPostsWithStats(): Promise<
+  BlogPostWithStats[]
+> {
+  const featuredPosts = await getFeaturedPosts();
+
+  // Get stats for each featured post
+  const featuredPostsWithStats = await Promise.all(
+    featuredPosts.map(async (post) => {
+      const [likeStats, commentCount] = await Promise.all([
+        getLikeStats(post.id),
+        getCommentCount(post.id),
+      ]);
+
+      return {
+        ...post,
+        likeCount: likeStats.total_likes,
+        commentCount: commentCount,
+      };
+    })
+  );
+
+  return featuredPostsWithStats;
+}
