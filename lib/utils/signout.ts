@@ -10,6 +10,7 @@ export async function fullSignOut(
       .replace(/^ +/, "")
       .replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/");
   });
-  window.location.href = "/";
+  // Stay on current page instead of redirecting to home
+  window.location.reload();
   onClick?.();
 }

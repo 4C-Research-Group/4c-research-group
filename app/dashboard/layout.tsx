@@ -95,7 +95,8 @@ export default async function DashboardLayout({
         }
       );
       await supabase.auth.signOut();
-      redirect("/");
+      // Stay on current page instead of redirecting to home
+      redirect("/login");
     };
 
     return (

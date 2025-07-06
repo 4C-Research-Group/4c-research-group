@@ -7,7 +7,8 @@ export default function AdminSignOutButton() {
     <button
       onClick={async () => {
         await supabase.auth.signOut();
-        window.location.href = "/";
+        // Stay on current page instead of redirecting to home
+        window.location.reload();
       }}
       className="text-gray-600 dark:text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium flex items-center"
     >
