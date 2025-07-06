@@ -391,6 +391,18 @@ export default function BlogPage() {
         />
       )}
 
+      {/* All Articles Section */}
+      <div className="w-4/5 mx-auto py-8">
+        <div className="text-center mb-8">
+          <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
+            All Articles
+          </h2>
+          <p className="text-gray-600 dark:text-gray-400">
+            Explore our complete collection of research insights and updates
+          </p>
+        </div>
+      </div>
+
       {/* Blog Posts Grid/List */}
       <div className="w-4/5 mx-auto pb-12">
         {paginatedPosts.length > 0 ? (
@@ -434,6 +446,24 @@ export default function BlogPage() {
                         fill
                         className="object-cover"
                       />
+
+                      {/* Admin Actions - Top Right */}
+                      {isAdmin && (
+                        <div className="absolute top-2 right-2 flex gap-1">
+                          <Link
+                            href={`/admin/blog/edit/${post.id}`}
+                            className="inline-block px-2 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 text-xs shadow-lg backdrop-blur-sm bg-opacity-90"
+                            onClick={(e) => e.stopPropagation()}
+                          >
+                            Edit
+                          </Link>
+                          <DeleteBlogButton
+                            postId={post.id}
+                            postTitle={post.title}
+                            className="inline-block px-2 py-1 text-xs shadow-lg backdrop-blur-sm bg-opacity-90"
+                          />
+                        </div>
+                      )}
                     </div>
 
                     {/* Content */}
@@ -542,23 +572,6 @@ export default function BlogPage() {
                       </div>
                     </div>
                   </Link>
-
-                  {/* Admin Actions */}
-                  {isAdmin && (
-                    <div className="p-4 text-right space-x-2 border-t border-gray-200 dark:border-gray-700">
-                      <Link
-                        href={`/admin/blog/edit/${post.id}`}
-                        className="inline-block px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 text-xs"
-                      >
-                        Edit
-                      </Link>
-                      <DeleteBlogButton
-                        postId={post.id}
-                        postTitle={post.title}
-                        className="inline-block"
-                      />
-                    </div>
-                  )}
                 </motion.article>
               ))}
             </div>
