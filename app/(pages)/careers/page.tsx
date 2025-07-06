@@ -9,6 +9,7 @@ import {
   FaBuilding,
 } from "react-icons/fa";
 import Link from "next/link";
+import PageHero from "@/components/PageHero";
 
 interface JobPosition {
   id: string;
@@ -132,33 +133,10 @@ export default function CareersPage() {
   return (
     <div className="min-h-screen bg-background">
       {/* Hero Section */}
-      <section className="relative min-h-[60vh] flex items-center justify-center overflow-hidden bg-gradient-to-br from-cognition-50 via-white to-consciousness-50 dark:from-cognition-900 dark:via-gray-900 dark:to-consciousness-900">
-        {/* Background Bubbles */}
-        <div className="absolute inset-0 pointer-events-none">
-          <div className="absolute top-20 left-10 w-72 h-72 bg-cognition-200/20 dark:bg-cognition-700/10 rounded-full animate-pulse-slow" />
-          <div className="absolute top-40 right-20 w-96 h-96 bg-consciousness-200/20 dark:bg-consciousness-700/10 rounded-full animate-pulse-slow" />
-          <div className="absolute bottom-20 left-1/4 w-80 h-80 bg-care-200/20 dark:bg-care-700/10 rounded-full animate-pulse-slow" />
-        </div>
-        <div className="container mx-auto px-4 py-20 md:py-24 relative z-10">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            className="text-center max-w-4xl mx-auto"
-          >
-            <h1 className="text-5xl md:text-6xl font-bold text-cognition-900 dark:text-white mb-6 leading-tight">
-              <span className="bg-gradient-to-r from-cognition-600 via-consciousness-600 to-care-600 bg-clip-text text-transparent">
-                Join Our Team
-              </span>
-            </h1>
-            <p className="text-xl md:text-2xl text-gray-700 dark:text-gray-300 leading-relaxed">
-              Work on groundbreaking research that makes a difference in
-              critical care and cognitive health.
-            </p>
-          </motion.div>
-        </div>
-        <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-white to-transparent dark:from-gray-900 dark:to-transparent"></div>
-      </section>
+      <PageHero
+        title="Join Our Team"
+        subtitle="Work on groundbreaking research that makes a difference in critical care and cognitive health."
+      />
 
       {/* Main Content */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">

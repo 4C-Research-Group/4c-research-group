@@ -13,6 +13,7 @@ import { getTestimonials, type Testimonial } from "@/lib/supabase/team";
 import Image from "next/image";
 import LoadingSpinner from "@/components/ui/loading-spinner";
 import type { Join4CLabPage } from "@/lib/types/join-4c-lab-page";
+import PageHero from "@/components/PageHero";
 
 const DEFAULT_JOIN: Join4CLabPage = {
   id: "",
@@ -73,51 +74,20 @@ export default function Join4CLabPage() {
   return (
     <div className="min-h-screen bg-background">
       {/* Hero Section */}
-      <section className="relative min-h-[60vh] flex items-center justify-center overflow-hidden bg-gradient-to-br from-cognition-50 via-white to-consciousness-50 dark:from-cognition-900 dark:via-gray-900 dark:to-consciousness-900">
-        {/* Background Bubbles */}
-        <div className="absolute inset-0 pointer-events-none">
-          <div className="absolute top-20 left-10 w-72 h-72 bg-cognition-200/20 dark:bg-cognition-700/10 rounded-full animate-pulse-slow" />
-          <div className="absolute top-40 right-20 w-96 h-96 bg-consciousness-200/20 dark:bg-consciousness-700/10 rounded-full animate-pulse-slow" />
-          <div className="absolute bottom-20 left-1/4 w-80 h-80 bg-care-200/20 dark:bg-care-700/10 rounded-full animate-pulse-slow" />
+      <PageHero
+        title={joinContent.hero_title}
+        subtitle={joinContent.hero_description}
+      >
+        <div className="flex items-center justify-center space-x-2 text-xl md:text-2xl font-semibold text-cognition-600 dark:text-cognition-400">
+          <FaEnvelope className="text-2xl" />
+          <a
+            href={joinContent.hero_email}
+            className="hover:text-cognition-800 dark:hover:text-cognition-300 transition-colors"
+          >
+            {joinContent.hero_email}
+          </a>
         </div>
-        <div className="container mx-auto px-4 py-20 md:py-24 relative z-10">
-          <div className="text-center max-w-4xl mx-auto">
-            <motion.h1
-              className="text-5xl md:text-6xl font-bold text-cognition-900 dark:text-white mb-6 leading-tight"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5 }}
-            >
-              <span className="bg-gradient-to-r from-cognition-600 via-consciousness-600 to-care-600 bg-clip-text text-transparent">
-                {joinContent.hero_title}
-              </span>
-            </motion.h1>
-            <motion.p
-              className="text-xl md:text-2xl text-gray-700 dark:text-gray-300 mb-8 leading-relaxed"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.1 }}
-            >
-              {joinContent.hero_description}
-            </motion.p>
-            <motion.div
-              className="flex items-center justify-center space-x-2 text-xl md:text-2xl font-semibold text-cognition-600 dark:text-cognition-400"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.2 }}
-            >
-              <FaEnvelope className="text-2xl" />
-              <a
-                href={joinContent.hero_email}
-                className="hover:text-cognition-800 dark:hover:text-cognition-300 transition-colors"
-              >
-                {joinContent.hero_email}
-              </a>
-            </motion.div>
-          </div>
-        </div>
-        <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-white to-transparent dark:from-gray-900 dark:to-transparent"></div>
-      </section>
+      </PageHero>
 
       {/* Main Content */}
       <section className="py-16">

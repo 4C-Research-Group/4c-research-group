@@ -10,6 +10,7 @@ import {
   FaOrcid,
 } from "react-icons/fa";
 import LoadingSpinner from "@/components/ui/loading-spinner";
+import PageHero from "@/components/PageHero";
 
 const ORCID_PROFILE_URL = "https://orcid.org/0000-0002-2599-9119";
 
@@ -48,73 +49,41 @@ export default function PublicationsPage() {
   return (
     <div className="min-h-screen bg-background overflow-x-hidden">
       {/* Hero Section */}
-      <section className="relative min-h-[60vh] flex items-center justify-center overflow-hidden bg-gradient-to-br from-cognition-50 via-white to-consciousness-50 dark:from-cognition-900 dark:via-gray-900 dark:to-consciousness-900">
-        {/* Background Bubbles */}
-        <div className="absolute inset-0 pointer-events-none">
-          <div className="absolute top-20 left-10 w-72 h-72 bg-cognition-200/20 dark:bg-cognition-700/10 rounded-full animate-pulse-slow" />
-          <div className="absolute top-40 right-20 w-96 h-96 bg-consciousness-200/20 dark:bg-consciousness-700/10 rounded-full animate-pulse-slow" />
-          <div className="absolute bottom-20 left-1/4 w-80 h-80 bg-care-200/20 dark:bg-care-700/10 rounded-full animate-pulse-slow" />
+      <PageHero
+        title="Publications"
+        subtitle="Our latest research contributions and scholarly work"
+      >
+        {/* Profile Links */}
+        <div className="flex flex-col sm:flex-row flex-wrap justify-center gap-3 sm:gap-4 mb-6 sm:mb-8 px-2">
+          <a
+            href="https://www.researchgate.net/profile/Saptharishi-Lalgudi-Ganesan"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center justify-center px-3 sm:px-4 py-2 bg-white dark:bg-gray-800 rounded-lg shadow-md hover:shadow-lg transition-shadow text-sm sm:text-base"
+          >
+            <FaResearchgate className="text-green-600 dark:text-green-400 mr-2 flex-shrink-0" />
+            <span className="truncate">ResearchGate</span>
+          </a>
+          <a
+            href="http://scholar.google.com/citations?user=iuxSVQwAAAAJ&hl=en"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center justify-center px-3 sm:px-4 py-2 bg-white dark:bg-gray-800 rounded-lg shadow-md hover:shadow-lg transition-shadow text-sm sm:text-base"
+          >
+            <FaGoogle className="text-blue-500 dark:text-blue-400 mr-2 flex-shrink-0" />
+            <span className="truncate">Google Scholar</span>
+          </a>
+          <a
+            href={ORCID_PROFILE_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center justify-center px-3 sm:px-4 py-2 bg-white dark:bg-gray-800 rounded-lg shadow-md hover:shadow-lg transition-shadow text-sm sm:text-base"
+          >
+            <FaOrcid className="text-green-700 dark:text-green-500 mr-2 flex-shrink-0" />
+            <span className="truncate">ORCID</span>
+          </a>
         </div>
-        <div className="container mx-auto px-4 py-20 md:py-24 relative z-10 max-w-7xl">
-          <div className="text-center max-w-4xl mx-auto">
-            <motion.h1
-              className="text-5xl md:text-6xl font-bold text-cognition-900 dark:text-white mb-6 leading-tight"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5 }}
-            >
-              <span className="bg-gradient-to-r from-cognition-600 via-consciousness-600 to-care-600 bg-clip-text text-transparent">
-                Publications
-              </span>
-            </motion.h1>
-            <motion.p
-              className="text-xl md:text-2xl text-gray-700 dark:text-gray-300 mb-8 leading-relaxed"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.1 }}
-            >
-              Our latest research contributions and scholarly work
-            </motion.p>
-
-            {/* Profile Links */}
-            <motion.div
-              className="flex flex-col sm:flex-row flex-wrap justify-center gap-3 sm:gap-4 mb-6 sm:mb-8 px-2"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.2 }}
-            >
-              <a
-                href="https://www.researchgate.net/profile/Saptharishi-Lalgudi-Ganesan"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center justify-center px-3 sm:px-4 py-2 bg-white dark:bg-gray-800 rounded-lg shadow-md hover:shadow-lg transition-shadow text-sm sm:text-base"
-              >
-                <FaResearchgate className="text-green-600 dark:text-green-400 mr-2 flex-shrink-0" />
-                <span className="truncate">ResearchGate</span>
-              </a>
-              <a
-                href="http://scholar.google.com/citations?user=iuxSVQwAAAAJ&hl=en"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center justify-center px-3 sm:px-4 py-2 bg-white dark:bg-gray-800 rounded-lg shadow-md hover:shadow-lg transition-shadow text-sm sm:text-base"
-              >
-                <FaGoogle className="text-blue-500 dark:text-blue-400 mr-2 flex-shrink-0" />
-                <span className="truncate">Google Scholar</span>
-              </a>
-              <a
-                href={ORCID_PROFILE_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center justify-center px-3 sm:px-4 py-2 bg-white dark:bg-gray-800 rounded-lg shadow-md hover:shadow-lg transition-shadow text-sm sm:text-base"
-              >
-                <FaOrcid className="text-green-700 dark:text-green-500 mr-2 flex-shrink-0" />
-                <span className="truncate">ORCID</span>
-              </a>
-            </motion.div>
-          </div>
-        </div>
-        <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-white to-transparent dark:from-gray-900 dark:to-transparent"></div>
-      </section>
+      </PageHero>
 
       {/* Publications List */}
       <div className="container mx-auto px-4 py-12 sm:py-16 max-w-7xl">

@@ -10,6 +10,7 @@ import {
 } from "react-icons/fa";
 import { motion } from "framer-motion";
 import { useState } from "react";
+import PageHero from "@/components/PageHero";
 
 type ResourceCardProps = {
   title: string;
@@ -165,39 +166,10 @@ export default function KnowledgeMobilization() {
       {/* Main Page Content */}
       <div>
         {/* Hero Section */}
-        <section className="relative min-h-[60vh] flex items-center justify-center overflow-hidden bg-gradient-to-br from-cognition-50 via-white to-consciousness-50 dark:from-cognition-900 dark:via-gray-900 dark:to-consciousness-900">
-          {/* Background Bubbles */}
-          <div className="absolute inset-0 pointer-events-none">
-            <div className="absolute top-20 left-10 w-72 h-72 bg-cognition-200/20 dark:bg-cognition-700/10 rounded-full animate-pulse-slow" />
-            <div className="absolute top-40 right-20 w-96 h-96 bg-consciousness-200/20 dark:bg-consciousness-700/10 rounded-full animate-pulse-slow" />
-            <div className="absolute bottom-20 left-1/4 w-80 h-80 bg-care-200/20 dark:bg-care-700/10 rounded-full animate-pulse-slow" />
-          </div>
-          <div className="container mx-auto px-4 py-20 md:py-24 relative z-10">
-            <div className="text-center max-w-4xl mx-auto">
-              <motion.h1
-                className="text-5xl md:text-6xl font-bold text-cognition-900 dark:text-white mb-6 leading-tight"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5 }}
-              >
-                <span className="bg-gradient-to-r from-cognition-600 via-consciousness-600 to-care-600 bg-clip-text text-transparent">
-                  Knowledge Mobilization
-                </span>
-              </motion.h1>
-              <motion.p
-                className="text-xl md:text-2xl text-gray-700 dark:text-gray-300 mb-8 leading-relaxed"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: 0.1 }}
-              >
-                Bridging the gap between research and practice through education
-                and resources for patients, nurses, and healthcare
-                professionals.
-              </motion.p>
-            </div>
-          </div>
-          <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-white to-transparent dark:from-gray-900 dark:to-transparent"></div>
-        </section>
+        <PageHero
+          title="Knowledge Mobilization"
+          subtitle="Bridging the gap between research and practice through education and resources for patients, nurses, and healthcare professionals."
+        />
 
         {/* Main Content */}
         <div className="container mx-auto px-4 py-16">

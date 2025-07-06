@@ -38,6 +38,7 @@ import LoadingSpinner from "@/components/ui/loading-spinner";
 import FeaturedBlogPosts from "@/components/FeaturedBlogPosts";
 import BlogSearchFilters from "@/components/BlogSearchFilters";
 import BlogNewsletterSignup from "@/components/BlogNewsletterSignup";
+import PageHero from "@/components/PageHero";
 
 export default function BlogPage() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -237,65 +238,39 @@ export default function BlogPage() {
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Compact Hero Section */}
-      <section className="relative py-12 md:py-16 bg-gradient-to-br from-cognition-50 via-white to-consciousness-50 dark:from-cognition-900 dark:via-gray-900 dark:to-consciousness-900">
-        {/* Background Elements */}
-        <div className="absolute inset-0 pointer-events-none">
-          <div className="absolute top-10 left-10 w-48 h-48 bg-cognition-200/20 dark:bg-cognition-700/10 rounded-full animate-pulse-slow" />
-          <div className="absolute top-20 right-20 w-64 h-64 bg-consciousness-200/20 dark:bg-consciousness-700/10 rounded-full animate-pulse-slow" />
-          <div className="absolute bottom-10 left-1/4 w-56 h-56 bg-care-200/20 dark:bg-care-700/10 rounded-full animate-pulse-slow" />
-        </div>
-
-        {/* Hero Content */}
-        <div className="relative z-20 container mx-auto px-4">
-          <div className="max-w-4xl mx-auto text-center">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6 }}
-            >
-              <h1 className="text-4xl md:text-5xl font-bold mb-4 leading-tight">
-                <span className="bg-gradient-to-r from-cognition-600 via-consciousness-600 to-care-600 bg-clip-text text-transparent">
-                  4C Research Blog
-                </span>
-              </h1>
-              <p className="text-lg md:text-xl text-gray-700 dark:text-gray-300 mb-6 leading-relaxed max-w-2xl mx-auto">
-                Exploring the frontiers of neuroscience through insights,
-                research updates, and stories from our work in cognition,
-                consciousness, and critical care.
-              </p>
-
-              {/* Quick Stats */}
-              <div className="flex flex-wrap justify-center gap-6 mb-6">
-                <div className="text-center">
-                  <div className="text-xl md:text-2xl font-bold text-cognition-600 dark:text-cognition-400">
-                    {posts.length}
-                  </div>
-                  <div className="text-sm text-gray-600 dark:text-gray-400">
-                    Articles
-                  </div>
-                </div>
-                <div className="text-center">
-                  <div className="text-xl md:text-2xl font-bold text-consciousness-600 dark:text-consciousness-400">
-                    {categories.length}
-                  </div>
-                  <div className="text-sm text-gray-600 dark:text-gray-400">
-                    Categories
-                  </div>
-                </div>
-                <div className="text-center">
-                  <div className="text-xl md:text-2xl font-bold text-care-600 dark:text-care-400">
-                    {featuredPosts.length}
-                  </div>
-                  <div className="text-sm text-gray-600 dark:text-gray-400">
-                    Featured
-                  </div>
-                </div>
-              </div>
-            </motion.div>
+      {/* Hero Section */}
+      <PageHero
+        title="4C Research Blog"
+        subtitle="Exploring the frontiers of neuroscience through insights, research updates, and stories from our work in cognition, consciousness, and critical care."
+      >
+        {/* Quick Stats */}
+        <div className="flex flex-wrap justify-center gap-6 mb-6">
+          <div className="text-center">
+            <div className="text-xl md:text-2xl font-bold text-cognition-600 dark:text-cognition-400">
+              {posts.length}
+            </div>
+            <div className="text-sm text-gray-600 dark:text-gray-400">
+              Articles
+            </div>
+          </div>
+          <div className="text-center">
+            <div className="text-xl md:text-2xl font-bold text-consciousness-600 dark:text-consciousness-400">
+              {categories.length}
+            </div>
+            <div className="text-sm text-gray-600 dark:text-gray-400">
+              Categories
+            </div>
+          </div>
+          <div className="text-center">
+            <div className="text-xl md:text-2xl font-bold text-care-600 dark:text-care-400">
+              {featuredPosts.length}
+            </div>
+            <div className="text-sm text-gray-600 dark:text-gray-400">
+              Featured
+            </div>
           </div>
         </div>
-      </section>
+      </PageHero>
 
       {/* Integrated Search and Filters */}
       <section className="py-8 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
