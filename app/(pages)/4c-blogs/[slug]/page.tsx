@@ -6,9 +6,11 @@ import {
   FaArrowLeft,
   FaShare,
   FaBookmark,
+  FaComment,
 } from "react-icons/fa";
 import Link from "next/link";
 import { getBlogPostBySlug, type BlogPost } from "@/lib/supabase/blog";
+import { getCommentCount } from "@/lib/supabase/comments";
 import { AdminEditButton } from "@/components/AdminEditButton";
 import BlogImage from "@/components/BlogImage";
 import CommentsSection from "@/components/comments/CommentsSection";
@@ -28,6 +30,9 @@ export default async function BlogPostPage({ params }: Props) {
   if (!post) {
     notFound();
   }
+
+  // Get comment count for this post
+  const commentCount = await getCommentCount(post.id);
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
@@ -136,6 +141,10 @@ export default async function BlogPostPage({ params }: Props) {
                 {/* Action Buttons */}
                 <div className="flex items-center gap-3">
                   <LikeButton blogPostId={post.id} />
+                  <div className="flex items-center gap-1 text-gray-500">
+                    <FaComment className="text-lg" />
+                    <span className="text-sm font-medium">{commentCount}</span>
+                  </div>
                   <button className="p-3 text-gray-500 hover:text-cognition-600 transition-colors">
                     <FaShare className="text-lg" />
                   </button>
