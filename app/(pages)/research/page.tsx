@@ -31,6 +31,8 @@ interface Project {
   tags: string[];
   link?: string;
   slug: string;
+  start_date: string;
+  end_date?: string;
   created_at: string;
   updated_at: string;
 }
@@ -192,6 +194,33 @@ export default function ProjectsPage() {
         {config.text}
       </span>
     );
+  };
+
+  const formatProjectDates = (
+    startDate: string,
+    status: string,
+    endDate?: string
+  ) => {
+    const start = new Date(startDate);
+    const startYear = start.getFullYear();
+
+    if (endDate) {
+      const end = new Date(endDate);
+      const endYear = end.getFullYear();
+
+      if (startYear === endYear) {
+        return `${startYear}`;
+      } else {
+        return `${startYear} - ${endYear}`;
+      }
+    } else {
+      // No end date - show start year and indicate ongoing
+      if (status === "active") {
+        return `${startYear} - Present`;
+      } else {
+        return `${startYear}`;
+      }
+    }
   };
 
   if (loading) {
@@ -440,13 +469,10 @@ export default function ProjectsPage() {
                         </span>
                         <span className="flex items-center text-gray-500 dark:text-gray-400">
                           <FaCalendarAlt className="mr-1.5" />
-                          {new Date(project.created_at).toLocaleDateString(
-                            "en-US",
-                            {
-                              year: "numeric",
-                              month: "short",
-                              day: "numeric",
-                            }
+                          {formatProjectDates(
+                            project.start_date,
+                            project.status,
+                            project.end_date
                           )}
                         </span>
                         {project.tags && project.tags.length > 0 && (
@@ -496,28 +522,6 @@ export default function ProjectsPage() {
                       </div>
                     </div>
                   </Link>
-
-                  {/* Admin Actions */}
-                  {isAdmin && (
-                    <div className="p-4 text-right space-x-2 border-t border-gray-200 dark:border-gray-700">
-                      <Link
-                        href={`/admin/projects/edit/${project.id}`}
-                        className="inline-block px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 text-xs"
-                      >
-                        Edit
-                      </Link>
-                      <button
-                        onClick={(e) => {
-                          e.preventDefault();
-                          // TODO: Implement delete functionality
-                          console.log("Delete project:", project.id);
-                        }}
-                        className="inline-block px-3 py-1 bg-red-600 text-white rounded hover:bg-red-700 text-xs"
-                      >
-                        Delete
-                      </button>
-                    </div>
-                  )}
                 </motion.article>
               ))}
             </div>
