@@ -39,9 +39,10 @@ export default function PageHero({
               </span>
             </h1>
             {subtitle && (
-              <p className="text-lg md:text-xl text-gray-700 dark:text-gray-300 mb-6 leading-relaxed max-w-2xl mx-auto">
-                {subtitle}
-              </p>
+              <div
+                className="text-lg md:text-xl text-gray-700 dark:text-gray-300 mb-6 leading-relaxed max-w-2xl mx-auto"
+                dangerouslySetInnerHTML={{ __html: subtitle }}
+              />
             )}
             {children}
           </motion.div>
