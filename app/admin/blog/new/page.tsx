@@ -192,7 +192,7 @@ export default function NewBlogPost() {
   }
 
   return (
-    <div className="container mx-auto p-6 max-w-2xl">
+    <div className="container mx-auto p-6 max-w-4xl">
       <div className="flex justify-between items-center mb-8">
         <h1 className="text-3xl font-bold">New Blog Post</h1>
         <button
