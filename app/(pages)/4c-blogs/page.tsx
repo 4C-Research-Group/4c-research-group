@@ -308,8 +308,8 @@ export default function BlogPage() {
                   </button>
                 )}
 
-                {/* View Toggle */}
-                <div className="flex items-center bg-gray-100 dark:bg-gray-700 rounded-md p-0.5">
+                {/* View Toggle - Hidden on mobile */}
+                <div className="hidden sm:flex items-center bg-gray-100 dark:bg-gray-700 rounded-md p-0.5">
                   <button
                     onClick={() => setViewMode("grid")}
                     className={`p-1.5 rounded transition-colors ${
@@ -344,14 +344,14 @@ export default function BlogPage() {
             {/* Second Row: Category Filter and Sort */}
             <div className="flex flex-col lg:flex-row lg:items-center gap-4">
               {/* Category Filter */}
-              <div className="flex items-center gap-2">
+              <div className="flex flex-col sm:flex-row sm:items-center gap-2">
                 <span className="text-sm font-medium text-gray-700 dark:text-gray-300 whitespace-nowrap">
                   Category:
                 </span>
-                <div className="flex flex-wrap gap-1">
+                <div className="flex flex-wrap gap-1.5 justify-start sm:justify-start">
                   <button
                     onClick={() => setSelectedCategory("")}
-                    className={`px-2 py-1 text-xs rounded-full transition-colors ${
+                    className={`px-3 py-1.5 text-xs rounded-full transition-colors whitespace-nowrap ${
                       !selectedCategory
                         ? "bg-cognition-600 text-white"
                         : "bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600"
@@ -363,7 +363,7 @@ export default function BlogPage() {
                     <button
                       key={category}
                       onClick={() => setSelectedCategory(category)}
-                      className={`px-2 py-1 text-xs rounded-full transition-colors ${
+                      className={`px-3 py-1.5 text-xs rounded-full transition-colors whitespace-nowrap ${
                         selectedCategory === category
                           ? "bg-cognition-600 text-white"
                           : "bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600"

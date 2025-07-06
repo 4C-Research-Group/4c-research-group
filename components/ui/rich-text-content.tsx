@@ -14,7 +14,7 @@ export default function RichTextContent({
   return (
     <div
       className={cn(
-        "rich-text-content prose prose-lg dark:prose-invert max-w-none",
+        "rich-text-content prose prose-sm sm:prose-base lg:prose-lg dark:prose-invert max-w-none overflow-hidden",
         className
       )}
       dangerouslySetInnerHTML={{ __html: content }}

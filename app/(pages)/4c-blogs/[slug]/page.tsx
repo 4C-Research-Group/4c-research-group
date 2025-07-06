@@ -35,9 +35,9 @@ export default async function BlogPostPage({ params }: Props) {
   const commentCount = await getCommentCount(post.id);
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 overflow-x-hidden">
       {/* Hero Section with Featured Image */}
-      <section className="relative">
+      <section className="relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-b from-black/50 to-black/20 z-10"></div>
         <div className="relative h-[60vh] min-h-[400px]">
           <BlogImage
@@ -51,43 +51,52 @@ export default async function BlogPostPage({ params }: Props) {
         </div>
 
         {/* Back Button */}
-        <div className="absolute top-6 left-6 z-40">
+        <div className="absolute top-4 left-4 sm:top-6 sm:left-6 z-40">
           <Link
             href="/4c-blogs"
-            className="inline-flex items-center px-4 py-2 bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-full text-gray-700 dark:text-gray-200 hover:bg-white dark:hover:bg-gray-800 transition-all duration-200 shadow-lg"
+            className="inline-flex items-center px-3 py-2 sm:px-4 sm:py-2 bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-full text-gray-700 dark:text-gray-200 hover:bg-white dark:hover:bg-gray-800 transition-all duration-200 shadow-lg text-sm sm:text-base"
           >
-            <FaArrowLeft className="mr-2" />
-            Back to Blogs
+            <FaArrowLeft className="mr-1 sm:mr-2 w-3 h-3 sm:w-4 sm:h-4" />
+            <span className="hidden sm:inline">Back to Blogs</span>
+            <span className="sm:hidden">Back</span>
           </Link>
         </div>
 
         {/* Hero Content */}
         <div className="absolute inset-0 z-20 flex items-end">
-          <div className="container mx-auto px-4 pb-16">
+          <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-8 sm:pb-16">
             <div className="max-w-4xl mx-auto text-white">
-              <div className="flex items-center gap-4 mb-4 text-sm">
-                <span className="px-3 py-1 bg-white/20 backdrop-blur-sm rounded-full">
+              <div className="flex flex-wrap items-center gap-2 sm:gap-4 mb-4 text-xs sm:text-sm">
+                <span className="px-2 py-1 sm:px-3 sm:py-1 bg-white/20 backdrop-blur-sm rounded-full">
                   {post.category}
                 </span>
                 <span className="flex items-center">
-                  <FaCalendarAlt className="mr-2" />
-                  {new Date(post.created_at).toLocaleDateString("en-US", {
-                    year: "numeric",
-                    month: "long",
-                    day: "numeric",
-                  })}
+                  <FaCalendarAlt className="mr-1 sm:mr-2 w-3 h-3 sm:w-4 sm:h-4" />
+                  <span className="hidden sm:inline">
+                    {new Date(post.created_at).toLocaleDateString("en-US", {
+                      year: "numeric",
+                      month: "long",
+                      day: "numeric",
+                    })}
+                  </span>
+                  <span className="sm:hidden">
+                    {new Date(post.created_at).toLocaleDateString("en-US", {
+                      month: "short",
+                      day: "numeric",
+                    })}
+                  </span>
                 </span>
                 <span className="flex items-center">
-                  <FaClock className="mr-2" />
+                  <FaClock className="mr-1 sm:mr-2 w-3 h-3 sm:w-4 sm:h-4" />
                   {post.read_time}
                 </span>
               </div>
 
-              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight">
+              <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold mb-4 sm:mb-6 leading-tight break-words">
                 {post.title}
               </h1>
 
-              <p className="text-xl md:text-2xl text-gray-100 leading-relaxed max-w-3xl">
+              <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-gray-100 leading-relaxed max-w-3xl break-words">
                 {post.excerpt}
               </p>
             </div>
@@ -96,17 +105,17 @@ export default async function BlogPostPage({ params }: Props) {
       </section>
 
       {/* Main Content */}
-      <section className="py-16 md:py-24">
-        <div className="container mx-auto px-4">
+      <section className="py-8 sm:py-12 md:py-16 lg:py-24">
+        <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-4xl mx-auto">
             {/* Article Header */}
-            <div className="mb-12">
+            <div className="mb-8 sm:mb-12">
               <AdminEditButton postId={post.id} />
 
               {/* Author Info */}
-              <div className="flex items-center justify-between mb-8 p-6 bg-white dark:bg-gray-800 rounded-2xl shadow-sm">
-                <div className="flex items-center gap-4">
-                  <div className="w-16 h-16 rounded-full overflow-hidden">
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 sm:gap-0 mb-8 p-4 sm:p-6 bg-white dark:bg-gray-800 rounded-2xl shadow-sm">
+                <div className="flex items-center gap-3 sm:gap-4">
+                  <div className="w-12 h-12 sm:w-16 sm:h-16 rounded-full overflow-hidden flex-shrink-0">
                     {post.author_image_url ? (
                       <BlogImage
                         src={post.author_image_url}
@@ -117,7 +126,7 @@ export default async function BlogPostPage({ params }: Props) {
                         className="object-cover w-full h-full"
                       />
                     ) : (
-                      <div className="flex items-center justify-center w-full h-full bg-gradient-to-br from-cognition-600 to-cognition-700 text-white font-bold text-2xl">
+                      <div className="flex items-center justify-center w-full h-full bg-gradient-to-br from-cognition-600 to-cognition-700 text-white font-bold text-lg sm:text-2xl">
                         {cleanAuthorName(post.author_name)
                           ? cleanAuthorName(post.author_name)
                               .split(" ")
@@ -128,44 +137,46 @@ export default async function BlogPostPage({ params }: Props) {
                       </div>
                     )}
                   </div>
-                  <div>
-                    <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+                  <div className="min-w-0 flex-1">
+                    <h3 className="text-base sm:text-lg font-semibold text-gray-900 dark:text-white truncate">
                       {cleanAuthorName(post.author_name)}
                     </h3>
-                    <p className="text-gray-600 dark:text-gray-400">
+                    <p className="text-sm text-gray-600 dark:text-gray-400 truncate">
                       {post.author_role}
                     </p>
                   </div>
                 </div>
 
                 {/* Action Buttons */}
-                <div className="flex items-center gap-3">
+                <div className="flex items-center gap-2 sm:gap-3">
                   <LikeButton blogPostId={post.id} />
                   <div className="flex items-center gap-1 text-gray-500">
-                    <FaComment className="text-lg" />
-                    <span className="text-sm font-medium">{commentCount}</span>
+                    <FaComment className="text-base sm:text-lg" />
+                    <span className="text-xs sm:text-sm font-medium">
+                      {commentCount}
+                    </span>
                   </div>
-                  <button className="p-3 text-gray-500 hover:text-cognition-600 transition-colors">
-                    <FaShare className="text-lg" />
+                  <button className="p-2 sm:p-3 text-gray-500 hover:text-cognition-600 transition-colors">
+                    <FaShare className="text-base sm:text-lg" />
                   </button>
-                  <button className="p-3 text-gray-500 hover:text-cognition-600 transition-colors">
-                    <FaBookmark className="text-lg" />
+                  <button className="p-2 sm:p-3 text-gray-500 hover:text-cognition-600 transition-colors">
+                    <FaBookmark className="text-base sm:text-lg" />
                   </button>
                 </div>
               </div>
             </div>
 
             {/* Article Content */}
-            <article className="prose prose-lg dark:prose-invert max-w-none">
+            <article className="prose prose-sm sm:prose-base lg:prose-lg dark:prose-invert max-w-none overflow-hidden">
               <RichTextContent content={post.content} />
             </article>
 
             {/* Tags Section */}
             {post.tags && post.tags.length > 0 && (
-              <div className="mt-12 pt-8 border-t border-gray-200 dark:border-gray-700">
-                <div className="flex items-center gap-3 mb-4">
-                  <FaTags className="text-cognition-600" />
-                  <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+              <div className="mt-8 sm:mt-12 pt-6 sm:pt-8 border-t border-gray-200 dark:border-gray-700">
+                <div className="flex items-center gap-2 sm:gap-3 mb-3 sm:mb-4">
+                  <FaTags className="text-cognition-600 w-4 h-4 sm:w-5 sm:h-5" />
+                  <h3 className="text-base sm:text-lg font-semibold text-gray-900 dark:text-white">
                     Tags
                   </h3>
                 </div>
@@ -173,7 +184,7 @@ export default async function BlogPostPage({ params }: Props) {
                   {post.tags.map((tag) => (
                     <span
                       key={tag}
-                      className="px-4 py-2 bg-cognition-50 dark:bg-cognition-900/30 text-cognition-700 dark:text-cognition-300 rounded-full text-sm font-medium border border-cognition-200 dark:border-cognition-700"
+                      className="px-3 py-1 sm:px-4 sm:py-2 bg-cognition-50 dark:bg-cognition-900/30 text-cognition-700 dark:text-cognition-300 rounded-full text-xs sm:text-sm font-medium border border-cognition-200 dark:border-cognition-700"
                     >
                       {tag}
                     </span>
@@ -200,7 +211,9 @@ export default async function BlogPostPage({ params }: Props) {
       </section>
 
       {/* Comments Section */}
-      <CommentsSection blogPostId={post.id} />
+      <div className="overflow-hidden">
+        <CommentsSection blogPostId={post.id} />
+      </div>
     </div>
   );
 }

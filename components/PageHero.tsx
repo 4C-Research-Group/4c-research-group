@@ -16,7 +16,7 @@ export default function PageHero({
 }: PageHeroProps) {
   return (
     <section
-      className={`relative min-h-[44vh] flex items-center justify-center bg-gradient-to-br from-cognition-50 via-white to-consciousness-50 dark:from-cognition-900 dark:via-gray-900 dark:to-consciousness-900 ${className}`}
+      className={`relative min-h-[50vh] flex items-center justify-center bg-gradient-to-br from-cognition-50 via-white to-consciousness-50 dark:from-cognition-900 dark:via-gray-900 dark:to-consciousness-900 ${className}`}
     >
       {/* Background Elements */}
       <div className="absolute inset-0 pointer-events-none">
