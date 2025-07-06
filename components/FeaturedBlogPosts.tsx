@@ -215,13 +215,19 @@ export default function FeaturedBlogPosts({
           className="text-center mt-8"
         >
           <Link
-            href="#search-section"
+            href="#main-blog-content"
             className="inline-flex items-center px-6 py-3 bg-cognition-600 hover:bg-cognition-700 text-white text-base font-semibold rounded-full shadow-lg hover:shadow-xl transition-all duration-300"
             onClick={(e) => {
               e.preventDefault();
-              document
-                .getElementById("search-section")
-                ?.scrollIntoView({ behavior: "smooth" });
+              const element = document.getElementById("main-blog-content");
+              if (element) {
+                const offset = 80; // Account for any fixed headers
+                const elementPosition = element.offsetTop - offset;
+                window.scrollTo({
+                  top: elementPosition,
+                  behavior: "smooth",
+                });
+              }
             }}
           >
             View All Articles

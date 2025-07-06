@@ -261,7 +261,7 @@ export default function BlogPage() {
       )}
 
       {/* Main Blog Content */}
-      <section className="py-12 md:py-16">
+      <section id="main-blog-content" className="py-12 md:py-16">
         <div className="container mx-auto px-4">
           {/* Results Header */}
           <div className="w-4/5 mx-auto">
