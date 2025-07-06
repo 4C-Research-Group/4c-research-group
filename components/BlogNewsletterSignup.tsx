@@ -42,7 +42,7 @@ export default function BlogNewsletterSignup() {
   return (
     <section className="py-16 bg-gradient-to-r from-cognition-50 to-consciousness-50 dark:from-cognition-900 dark:to-consciousness-900">
       <div className="container mx-auto px-4">
-        <div className="max-w-2xl mx-auto text-center">
+        <div className="w-4/5 mx-auto text-center">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}

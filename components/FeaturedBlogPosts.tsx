@@ -17,11 +17,13 @@ import LikeButton from "@/components/LikeButton";
 interface FeaturedBlogPostsProps {
   featuredPosts: BlogPostWithStats[];
   isAdmin?: boolean;
+  viewMode?: "grid" | "list";
 }
 
 export default function FeaturedBlogPosts({
   featuredPosts,
   isAdmin = false,
+  viewMode = "grid",
 }: FeaturedBlogPostsProps) {
   if (featuredPosts.length === 0) {
     return null;
@@ -58,27 +60,42 @@ export default function FeaturedBlogPosts({
           </motion.p>
         </motion.div>
 
-        {/* Featured Posts Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
+        {/* Featured Posts Grid/List */}
+        <div
+          className={
+            viewMode === "grid"
+              ? "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-4/5 mx-auto"
+              : "space-y-6 w-4/5 mx-auto"
+          }
+        >
           {featuredPosts.map((post, index) => (
             <motion.article
               key={post.id}
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: index * 0.2 }}
-              className="group relative bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300 flex flex-col"
+              className={`group relative bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300 ${
+                viewMode === "list" ? "flex" : "flex flex-col"
+              }`}
             >
               {/* Featured Badge */}
-              <div className="absolute top-3 left-3 z-10">
+              <div
+                className={`absolute z-10 ${viewMode === "list" ? "top-2 left-2" : "top-3 left-3"}`}
+              >
                 <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-semibold bg-cognition-600 text-white shadow-lg">
                   <FaStar className="mr-1 w-3 h-3" />
                   Featured
                 </span>
               </div>
 
-              <Link href={`/4c-blogs/${post.slug}`} className="block">
+              <Link
+                href={`/4c-blogs/${post.slug}`}
+                className={`block ${viewMode === "list" ? "flex-1 flex" : ""}`}
+              >
                 {/* Image */}
-                <div className="h-40 relative">
+                <div
+                  className={`relative ${viewMode === "list" ? "w-48 h-32 flex-shrink-0" : "h-40"}`}
+                >
                   <BlogImage
                     src={post.image_url}
                     alt={post.title}
@@ -89,11 +106,13 @@ export default function FeaturedBlogPosts({
                 </div>
 
                 {/* Content */}
-                <div className="p-4 flex-1 flex flex-col">
+                <div
+                  className={`p-4 flex-1 flex flex-col ${viewMode === "list" ? "min-w-0" : ""}`}
+                >
                   {/* Meta Information */}
-                  <div className="flex items-center text-xs text-gray-500 dark:text-gray-400 mb-2">
-                    <span className="flex items-center mr-3">
-                      <FaCalendarAlt className="mr-1 w-3 h-3" />
+                  <div className="flex items-center text-sm text-gray-500 dark:text-gray-400 mb-3">
+                    <span className="flex items-center mr-4">
+                      <FaCalendarAlt className="mr-1.5" />
                       {new Date(post.created_at).toLocaleDateString("en-US", {
                         year: "numeric",
                         month: "short",
@@ -101,24 +120,34 @@ export default function FeaturedBlogPosts({
                       })}
                     </span>
                     <span className="flex items-center">
-                      <FaClock className="mr-1 w-3 h-3" />
+                      <FaClock className="mr-1.5" />
                       {post.read_time}
                     </span>
                   </div>
 
                   {/* Title */}
-                  <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-2 line-clamp-2">
+                  <h3
+                    className={`font-bold text-gray-900 dark:text-white mb-3 ${
+                      viewMode === "list"
+                        ? "text-lg line-clamp-2"
+                        : "text-xl line-clamp-2"
+                    }`}
+                  >
                     {post.title}
                   </h3>
 
                   {/* Excerpt */}
-                  <p className="text-sm text-gray-600 dark:text-gray-300 mb-3 line-clamp-2">
+                  <p
+                    className={`text-gray-600 dark:text-gray-300 mb-3 ${
+                      viewMode === "list" ? "line-clamp-2" : "line-clamp-2"
+                    }`}
+                  >
                     {post.excerpt}
                   </p>
 
                   {/* Category */}
                   <div className="mb-3">
-                    <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-300">
+                    <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-300">
                       {post.category}
                     </span>
                   </div>
@@ -147,14 +176,14 @@ export default function FeaturedBlogPosts({
                   {/* Stats and Read More */}
                   <div className="mt-auto">
                     <div className="flex items-center justify-between">
-                      <span className="inline-flex items-center text-sm text-cognition-600 dark:text-cognition-400 font-medium">
+                      <span className="inline-flex items-center text-cognition-600 dark:text-cognition-400 font-medium">
                         Read more
-                        <FaArrowRight className="ml-1 w-3 h-3" />
+                        <FaArrowRight className="ml-2" />
                       </span>
-                      <div className="flex items-center gap-3 text-xs text-gray-500 dark:text-gray-400">
+                      <div className="flex items-center gap-4 text-sm text-gray-500 dark:text-gray-400">
                         <LikeButton blogPostId={post.id} showCount={true} />
                         <div className="flex items-center gap-1">
-                          <FaComment className="w-3 h-3" />
+                          <FaComment className="w-4 h-4" />
                           <span>{post.commentCount}</span>
                         </div>
                       </div>

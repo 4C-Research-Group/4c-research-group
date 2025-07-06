@@ -116,7 +116,7 @@ export default function BlogSearchFilters({
     searchTerm || selectedCategory || sortBy !== "newest";
 
   return (
-    <div className="max-w-4xl mx-auto mb-12">
+    <div className="w-4/5 mx-auto mb-12">
       <div className="bg-white dark:bg-gray-800 rounded-xl shadow-md p-6">
         {/* Search Bar */}
         <div className="mb-6">

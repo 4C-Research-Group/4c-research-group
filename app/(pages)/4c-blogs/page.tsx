@@ -253,59 +253,65 @@ export default function BlogPage() {
 
       {/* Featured Blog Posts - Only show if there are featured posts */}
       {featuredPosts.length > 0 && (
-        <FeaturedBlogPosts featuredPosts={featuredPosts} isAdmin={isAdmin} />
+        <FeaturedBlogPosts
+          featuredPosts={featuredPosts}
+          isAdmin={isAdmin}
+          viewMode={viewMode}
+        />
       )}
 
       {/* Main Blog Content */}
       <section className="py-12 md:py-16">
         <div className="container mx-auto px-4">
           {/* Results Header */}
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-8">
-            <div className="mb-4 sm:mb-0">
-              <h2 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white mb-2">
-                {searchTerm || selectedCategory
-                  ? "Search Results"
-                  : "All Articles"}
-              </h2>
-              <p className="text-gray-600 dark:text-gray-400">
-                {filteredPosts.length} of {posts.length} articles
-                {searchTerm && ` matching "${searchTerm}"`}
-                {selectedCategory && ` in ${selectedCategory}`}
-              </p>
-            </div>
-
-            {/* View Toggle and Admin Actions */}
-            <div className="flex items-center gap-4">
-              {/* View Toggle */}
-              <div className="flex items-center bg-gray-100 dark:bg-gray-700 rounded-lg p-1">
-                <button
-                  onClick={() => setViewMode("grid")}
-                  className={`p-2 rounded-md transition-colors ${
-                    viewMode === "grid"
-                      ? "bg-white dark:bg-gray-600 text-cognition-600 dark:text-cognition-400 shadow-sm"
-                      : "text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300"
-                  }`}
-                >
-                  <FaTh className="w-4 h-4" />
-                </button>
-                <button
-                  onClick={() => setViewMode("list")}
-                  className={`p-2 rounded-md transition-colors ${
-                    viewMode === "list"
-                      ? "bg-white dark:bg-gray-600 text-cognition-600 dark:text-cognition-400 shadow-sm"
-                      : "text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300"
-                  }`}
-                >
-                  <FaList className="w-4 h-4" />
-                </button>
+          <div className="w-4/5 mx-auto">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-8">
+              <div className="mb-4 sm:mb-0">
+                <h2 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white mb-2">
+                  {searchTerm || selectedCategory
+                    ? "Search Results"
+                    : "All Articles"}
+                </h2>
+                <p className="text-gray-600 dark:text-gray-400">
+                  {filteredPosts.length} of {posts.length} articles
+                  {searchTerm && ` matching "${searchTerm}"`}
+                  {selectedCategory && ` in ${selectedCategory}`}
+                </p>
               </div>
 
-              {/* Admin Create Button */}
-              {isAdmin && (
-                <Button asChild size="sm">
-                  <Link href="/admin/blog/new">+ Create Blog</Link>
-                </Button>
-              )}
+              {/* View Toggle and Admin Actions */}
+              <div className="flex items-center gap-4">
+                {/* View Toggle */}
+                <div className="flex items-center bg-gray-100 dark:bg-gray-700 rounded-lg p-1">
+                  <button
+                    onClick={() => setViewMode("grid")}
+                    className={`p-2 rounded-md transition-colors ${
+                      viewMode === "grid"
+                        ? "bg-white dark:bg-gray-600 text-cognition-600 dark:text-cognition-400 shadow-sm"
+                        : "text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300"
+                    }`}
+                  >
+                    <FaTh className="w-4 h-4" />
+                  </button>
+                  <button
+                    onClick={() => setViewMode("list")}
+                    className={`p-2 rounded-md transition-colors ${
+                      viewMode === "list"
+                        ? "bg-white dark:bg-gray-600 text-cognition-600 dark:text-cognition-400 shadow-sm"
+                        : "text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300"
+                    }`}
+                  >
+                    <FaList className="w-4 h-4" />
+                  </button>
+                </div>
+
+                {/* Admin Create Button */}
+                {isAdmin && (
+                  <Button asChild size="sm">
+                    <Link href="/admin/blog/new">+ Create Blog</Link>
+                  </Button>
+                )}
+              </div>
             </div>
           </div>
 
@@ -315,8 +321,8 @@ export default function BlogPage() {
               <div
                 className={
                   viewMode === "grid"
-                    ? "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
-                    : "space-y-6"
+                    ? "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-4/5 mx-auto"
+                    : "space-y-6 w-4/5 mx-auto"
                 }
               >
                 {paginatedPosts.map((post, index) => (
@@ -335,7 +341,7 @@ export default function BlogPage() {
                     >
                       {/* Image */}
                       <div
-                        className={`relative ${viewMode === "list" ? "w-48 h-32 flex-shrink-0" : "h-48"}`}
+                        className={`relative ${viewMode === "list" ? "w-48 h-32 flex-shrink-0" : "h-40"}`}
                       >
                         <BlogImage
                           src={post.image_url}
@@ -348,7 +354,7 @@ export default function BlogPage() {
 
                       {/* Content */}
                       <div
-                        className={`p-6 flex-1 flex flex-col ${viewMode === "list" ? "min-w-0" : ""}`}
+                        className={`p-4 flex-1 flex flex-col ${viewMode === "list" ? "min-w-0" : ""}`}
                       >
                         {/* Meta Information */}
                         <div className="flex items-center text-sm text-gray-500 dark:text-gray-400 mb-3">
@@ -382,21 +388,42 @@ export default function BlogPage() {
 
                         {/* Excerpt */}
                         <p
-                          className={`text-gray-600 dark:text-gray-300 mb-4 ${
+                          className={`text-gray-600 dark:text-gray-300 mb-3 ${
                             viewMode === "list"
                               ? "line-clamp-2"
-                              : "line-clamp-3"
+                              : "line-clamp-2"
                           }`}
                         >
                           {post.excerpt}
                         </p>
 
                         {/* Category */}
-                        <div className="mb-4">
+                        <div className="mb-3">
                           <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-300">
                             {post.category}
                           </span>
                         </div>
+
+                        {/* Author Info */}
+                        {post.author_name && (
+                          <div className="flex items-center mb-3">
+                            <div className="w-6 h-6 rounded-full bg-gray-200 dark:bg-gray-700 flex items-center justify-center mr-2">
+                              <span className="text-xs font-semibold text-gray-700 dark:text-gray-300">
+                                {post.author_name.charAt(0).toUpperCase()}
+                              </span>
+                            </div>
+                            <div>
+                              <div className="text-xs font-medium text-gray-900 dark:text-white">
+                                {post.author_name}
+                              </div>
+                              {post.author_role && (
+                                <div className="text-xs text-gray-500 dark:text-gray-400">
+                                  {post.author_role}
+                                </div>
+                              )}
+                            </div>
+                          </div>
+                        )}
 
                         {/* Stats and Read More */}
                         <div className="mt-auto">
@@ -442,7 +469,7 @@ export default function BlogPage() {
 
               {/* Pagination */}
               {totalPages > 1 && (
-                <div className="flex justify-center mt-12">
+                <div className="flex justify-center mt-12 w-4/5 mx-auto">
                   <div className="flex items-center space-x-2">
                     <Button
                       variant="outline"
