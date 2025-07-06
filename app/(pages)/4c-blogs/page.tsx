@@ -18,6 +18,7 @@ import {
   FaRss,
   FaTh,
   FaList,
+  FaArrowUp,
 } from "react-icons/fa";
 import { useState, useEffect } from "react";
 import Link from "next/link";
@@ -50,6 +51,8 @@ export default function BlogPage() {
   const [sortBy, setSortBy] = useState("newest");
   const [currentPage, setCurrentPage] = useState(1);
   const postsPerPage = 12;
+  const [isLoadingMore, setIsLoadingMore] = useState(false);
+  const [showScrollTop, setShowScrollTop] = useState(false);
 
   useEffect(() => {
     async function loadData() {
@@ -88,6 +91,16 @@ export default function BlogPage() {
       if (!error && data?.role === "admin") setIsAdmin(true);
     }
     checkRole();
+  }, []);
+
+  // Handle scroll to top button visibility
+  useEffect(() => {
+    const handleScroll = () => {
+      setShowScrollTop(window.scrollY > 400);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   const filteredPosts = posts.filter((post) => {
@@ -144,6 +157,76 @@ export default function BlogPage() {
     setViewMode(newView);
   };
 
+  const handleViewAllArticles = () => {
+    const element = document.getElementById("main-blog-content");
+    if (element) {
+      const headerOffset = 100; // Adjust based on your header height
+      const elementPosition = element.getBoundingClientRect().top;
+      const offsetPosition =
+        elementPosition + window.pageYOffset - headerOffset;
+
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: "smooth",
+      });
+    }
+  };
+
+  const handlePageChange = (page: number) => {
+    setIsLoadingMore(true);
+    setCurrentPage(page);
+    // Scroll to top of content area
+    const element = document.getElementById("main-blog-content");
+    if (element) {
+      const headerOffset = 100;
+      const elementPosition = element.offsetTop - headerOffset;
+      window.scrollTo({
+        top: elementPosition,
+        behavior: "smooth",
+      });
+    }
+    // Simulate loading delay for better UX
+    setTimeout(() => setIsLoadingMore(false), 300);
+  };
+
+  const scrollToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  };
+
+  // Generate pagination range for better mobile experience
+  const getPaginationRange = () => {
+    const delta = 2; // Show 2 pages on each side
+    const range = [];
+    const rangeWithDots = [];
+
+    for (
+      let i = Math.max(2, currentPage - delta);
+      i <= Math.min(totalPages - 1, currentPage + delta);
+      i++
+    ) {
+      range.push(i);
+    }
+
+    if (currentPage - delta > 2) {
+      rangeWithDots.push(1, "...");
+    } else {
+      rangeWithDots.push(1);
+    }
+
+    rangeWithDots.push(...range);
+
+    if (currentPage + delta < totalPages - 1) {
+      rangeWithDots.push("...", totalPages);
+    } else {
+      rangeWithDots.push(totalPages);
+    }
+
+    return rangeWithDots;
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900">
@@ -154,25 +237,6 @@ export default function BlogPage() {
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Breadcrumb Navigation */}
-      <nav className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
-        <div className="container mx-auto px-4 py-3">
-          <div className="flex items-center space-x-2 text-sm text-gray-600 dark:text-gray-400">
-            <Link
-              href="/"
-              className="hover:text-cognition-600 dark:hover:text-cognition-400 flex items-center"
-            >
-              <FaHome className="w-4 h-4 mr-1" />
-              Home
-            </Link>
-            <FaChevronRight className="w-3 h-3" />
-            <span className="text-cognition-600 dark:text-cognition-400 font-medium">
-              Blog
-            </span>
-          </div>
-        </div>
-      </nav>
-
       {/* Compact Hero Section */}
       <section className="relative py-12 md:py-16 bg-gradient-to-br from-cognition-50 via-white to-consciousness-50 dark:from-cognition-900 dark:via-gray-900 dark:to-consciousness-900">
         {/* Background Elements */}
@@ -247,12 +311,13 @@ export default function BlogPage() {
             sortBy={sortBy}
             onSortChange={handleSortChange}
             onViewChange={handleViewChange}
+            onViewAllArticles={handleViewAllArticles}
           />
         </div>
       </section>
 
-      {/* Featured Blog Posts - Only show if there are featured posts */}
-      {featuredPosts.length > 0 && (
+      {/* Featured Blog Posts - Only show if there are featured posts and no active filters */}
+      {featuredPosts.length > 0 && !searchTerm && !selectedCategory && (
         <FeaturedBlogPosts
           featuredPosts={featuredPosts}
           isAdmin={isAdmin}
@@ -265,14 +330,18 @@ export default function BlogPage() {
         <div className="container mx-auto px-4">
           {/* Results Header */}
           <div className="w-4/5 mx-auto">
+            {/* Title and Controls Row */}
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-8">
-              <div className="mb-4 sm:mb-0">
-                <h2 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white mb-2">
-                  {searchTerm || selectedCategory
-                    ? "Search Results"
-                    : "All Articles"}
+              {/* Centered Title */}
+              <div className="text-center sm:text-left mb-4 sm:mb-0">
+                <h2 className="text-3xl md:text-4xl font-bold text-cognition-900 dark:text-white mb-4 leading-tight">
+                  <span className="bg-gradient-to-r from-cognition-600 via-consciousness-600 to-care-600 bg-clip-text text-transparent">
+                    {searchTerm || selectedCategory
+                      ? "Search Results"
+                      : "All Articles"}
+                  </span>
                 </h2>
-                <p className="text-gray-600 dark:text-gray-400">
+                <p className="text-lg md:text-xl text-gray-700 dark:text-gray-300 leading-relaxed max-w-2xl">
                   {filteredPosts.length} of {posts.length} articles
                   {searchTerm && ` matching "${searchTerm}"`}
                   {selectedCategory && ` in ${selectedCategory}`}
@@ -280,7 +349,7 @@ export default function BlogPage() {
               </div>
 
               {/* View Toggle and Admin Actions */}
-              <div className="flex items-center gap-4">
+              <div className="flex items-center justify-center sm:justify-end gap-4">
                 {/* View Toggle */}
                 <div className="flex items-center bg-gray-100 dark:bg-gray-700 rounded-lg p-1">
                   <button
@@ -318,6 +387,13 @@ export default function BlogPage() {
           {/* Blog Posts Grid/List */}
           {paginatedPosts.length > 0 ? (
             <>
+              {isLoadingMore && (
+                <div className="w-4/5 mx-auto mb-8">
+                  <div className="flex justify-center">
+                    <LoadingSpinner />
+                  </div>
+                </div>
+              )}
               <div
                 className={
                   viewMode === "grid"
@@ -397,11 +473,28 @@ export default function BlogPage() {
                           {post.excerpt}
                         </p>
 
-                        {/* Category */}
-                        <div className="mb-3">
+                        {/* Category and Tags */}
+                        <div className="mb-3 flex flex-wrap gap-2">
                           <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-300">
                             {post.category}
                           </span>
+                          {post.tags && post.tags.length > 0 && (
+                            <div className="flex flex-wrap gap-1">
+                              {post.tags.slice(0, 2).map((tag, tagIndex) => (
+                                <span
+                                  key={tagIndex}
+                                  className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-cognition-100 text-cognition-700 dark:bg-cognition-900 dark:text-cognition-300"
+                                >
+                                  {tag}
+                                </span>
+                              ))}
+                              {post.tags.length > 2 && (
+                                <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-600 dark:bg-gray-700 dark:text-gray-400">
+                                  +{post.tags.length - 2}
+                                </span>
+                              )}
+                            </div>
+                          )}
                         </div>
 
                         {/* Author Info */}
@@ -475,34 +568,43 @@ export default function BlogPage() {
                       variant="outline"
                       size="sm"
                       onClick={() =>
-                        setCurrentPage(Math.max(1, currentPage - 1))
+                        handlePageChange(Math.max(1, currentPage - 1))
                       }
                       disabled={currentPage === 1}
+                      className="px-4 py-2"
                     >
                       Previous
                     </Button>
 
-                    {Array.from({ length: totalPages }, (_, i) => i + 1).map(
-                      (page) => (
-                        <Button
-                          key={page}
-                          variant={currentPage === page ? "default" : "outline"}
-                          size="sm"
-                          onClick={() => setCurrentPage(page)}
-                          className="w-10 h-10 p-0"
-                        >
-                          {page}
-                        </Button>
-                      )
-                    )}
+                    {getPaginationRange().map((page, index) => (
+                      <div key={index}>
+                        {page === "..." ? (
+                          <span className="px-3 py-2 text-gray-500 dark:text-gray-400">
+                            ...
+                          </span>
+                        ) : (
+                          <Button
+                            variant={
+                              currentPage === page ? "default" : "outline"
+                            }
+                            size="sm"
+                            onClick={() => handlePageChange(page as number)}
+                            className="w-12 h-12 p-0 text-sm font-medium"
+                          >
+                            {page}
+                          </Button>
+                        )}
+                      </div>
+                    ))}
 
                     <Button
                       variant="outline"
                       size="sm"
                       onClick={() =>
-                        setCurrentPage(Math.min(totalPages, currentPage + 1))
+                        handlePageChange(Math.min(totalPages, currentPage + 1))
                       }
                       disabled={currentPage === totalPages}
+                      className="px-4 py-2"
                     >
                       Next
                     </Button>
@@ -511,27 +613,58 @@ export default function BlogPage() {
               )}
             </>
           ) : (
-            <div className="text-center py-16">
+            <div className="text-center py-16 w-4/5 mx-auto">
               <div className="max-w-md mx-auto">
-                <div className="w-16 h-16 bg-gray-100 dark:bg-gray-700 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <FaSearch className="w-8 h-8 text-gray-400" />
-                </div>
-                <h3 className="text-xl font-medium text-gray-900 dark:text-white mb-2">
-                  No articles found
-                </h3>
-                <p className="text-gray-600 dark:text-gray-400 mb-6">
-                  Try adjusting your search or filter criteria
-                </p>
-                <Button
-                  onClick={() => {
-                    setSearchTerm("");
-                    setSelectedCategory("");
-                    setCurrentPage(1);
-                  }}
-                  variant="outline"
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 0.5 }}
+                  className="w-20 h-20 bg-gradient-to-br from-cognition-100 to-consciousness-100 dark:from-cognition-800 dark:to-consciousness-800 rounded-full flex items-center justify-center mx-auto mb-6"
                 >
-                  Clear Filters
-                </Button>
+                  <FaSearch className="w-10 h-10 text-cognition-600 dark:text-cognition-400" />
+                </motion.div>
+                <motion.h3
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5, delay: 0.1 }}
+                  className="text-2xl font-bold text-gray-900 dark:text-white mb-3"
+                >
+                  No articles found
+                </motion.h3>
+                <motion.p
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5, delay: 0.2 }}
+                  className="text-gray-600 dark:text-gray-400 mb-8 text-lg"
+                >
+                  {searchTerm || selectedCategory
+                    ? "Try adjusting your search or filter criteria"
+                    : "We're working on new content. Check back soon!"}
+                </motion.p>
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5, delay: 0.3 }}
+                  className="flex flex-col sm:flex-row gap-3 justify-center"
+                >
+                  <Button
+                    onClick={() => {
+                      setSearchTerm("");
+                      setSelectedCategory("");
+                      setCurrentPage(1);
+                    }}
+                    variant="outline"
+                    className="px-6 py-2"
+                  >
+                    Clear Filters
+                  </Button>
+                  <Button
+                    onClick={() => window.location.reload()}
+                    className="px-6 py-2 bg-cognition-600 hover:bg-cognition-700"
+                  >
+                    Refresh Page
+                  </Button>
+                </motion.div>
               </div>
             </div>
           )}
@@ -559,6 +692,21 @@ export default function BlogPage() {
           </div>
         </div>
       </section>
+
+      {/* Scroll to Top Button */}
+      <motion.button
+        initial={{ opacity: 0, scale: 0 }}
+        animate={{
+          opacity: showScrollTop ? 1 : 0,
+          scale: showScrollTop ? 1 : 0,
+        }}
+        transition={{ duration: 0.3 }}
+        onClick={scrollToTop}
+        className="fixed bottom-8 right-8 z-50 w-12 h-12 bg-cognition-600 hover:bg-cognition-700 text-white rounded-full shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center"
+        aria-label="Scroll to top"
+      >
+        <FaArrowUp className="w-5 h-5" />
+      </motion.button>
     </div>
   );
 }

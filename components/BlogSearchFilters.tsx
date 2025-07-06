@@ -26,6 +26,7 @@ interface BlogSearchFiltersProps {
   sortBy: string;
   onSortChange?: (sortBy: string) => void;
   onViewChange?: (view: "grid" | "list") => void;
+  onViewAllArticles?: () => void;
 }
 
 export default function BlogSearchFilters({
@@ -39,6 +40,7 @@ export default function BlogSearchFilters({
   sortBy,
   onSortChange,
   onViewChange,
+  onViewAllArticles,
 }: BlogSearchFiltersProps) {
   const [showAdvancedFilters, setShowAdvancedFilters] = useState(false);
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
@@ -208,8 +210,8 @@ export default function BlogSearchFilters({
             </div>
           </div>
 
-          {/* Sort and View Controls */}
-          <div className="flex items-center gap-3">
+          {/* Sort Controls */}
+          <div className="flex items-center justify-end gap-3">
             {/* Sort Dropdown */}
             <div className="relative sort-dropdown">
               <Button
@@ -297,38 +299,12 @@ export default function BlogSearchFilters({
                 )}
               </AnimatePresence>
             </div>
-
-            {/* View Toggle */}
-            <div className="flex items-center bg-gray-100 dark:bg-gray-700 rounded-lg p-1">
-              <button
-                onClick={() => handleViewChange("grid")}
-                className={`p-2 rounded-md transition-colors ${
-                  viewMode === "grid"
-                    ? "bg-white dark:bg-gray-600 text-cognition-600 dark:text-cognition-400 shadow-sm"
-                    : "text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300"
-                }`}
-                title="Grid view"
-              >
-                <FaTh className="text-sm" />
-              </button>
-              <button
-                onClick={() => handleViewChange("list")}
-                className={`p-2 rounded-md transition-colors ${
-                  viewMode === "list"
-                    ? "bg-white dark:bg-gray-600 text-cognition-600 dark:text-cognition-400 shadow-sm"
-                    : "text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300"
-                }`}
-                title="List view"
-              >
-                <FaList className="text-sm" />
-              </button>
-            </div>
           </div>
         </div>
 
         {/* Results Summary */}
         <div className="mt-6 pt-4 border-t border-gray-200 dark:border-gray-700">
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-4 text-sm text-gray-600 dark:text-gray-400">
               <span>
                 Showing {filteredCount} of {totalPosts} articles
@@ -352,6 +328,19 @@ export default function BlogSearchFilters({
               </Button>
             )}
           </div>
+
+          {/* View All Articles Button - Centered */}
+          {onViewAllArticles && (
+            <div className="text-center">
+              <Button
+                onClick={onViewAllArticles}
+                size="lg"
+                className="bg-gradient-to-r from-cognition-600 via-consciousness-600 to-care-600 hover:from-cognition-700 hover:via-consciousness-700 hover:to-care-700 text-white font-semibold px-8 py-3 text-base shadow-lg hover:shadow-xl transition-all duration-300"
+              >
+                View All Articles
+              </Button>
+            </div>
+          )}
         </div>
       </div>
     </div>

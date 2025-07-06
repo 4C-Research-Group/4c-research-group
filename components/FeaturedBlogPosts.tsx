@@ -206,34 +206,6 @@ export default function FeaturedBlogPosts({
             </motion.article>
           ))}
         </div>
-
-        {/* View All Posts CTA */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.8 }}
-          className="text-center mt-8"
-        >
-          <Link
-            href="#main-blog-content"
-            className="inline-flex items-center px-6 py-3 bg-cognition-600 hover:bg-cognition-700 text-white text-base font-semibold rounded-full shadow-lg hover:shadow-xl transition-all duration-300"
-            onClick={(e) => {
-              e.preventDefault();
-              const element = document.getElementById("main-blog-content");
-              if (element) {
-                const offset = 80; // Account for any fixed headers
-                const elementPosition = element.offsetTop - offset;
-                window.scrollTo({
-                  top: elementPosition,
-                  behavior: "smooth",
-                });
-              }
-            }}
-          >
-            View All Articles
-            <FaArrowRight className="ml-2" />
-          </Link>
-        </motion.div>
       </div>
     </section>
   );
