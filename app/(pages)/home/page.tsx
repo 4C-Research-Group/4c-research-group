@@ -508,12 +508,12 @@ export default function HomePage() {
                       {iconMap[i]}
                     </div>
 
-                    <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-3 text-center group-hover:text-cognition-600 dark:group-hover:text-cognition-400 transition-colors duration-300">
+                    <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-3 text-center">
                       {project.title}
                     </h3>
 
                     <p
-                      className="text-gray-600 dark:text-gray-400 text-center leading-relaxed group-hover:text-gray-700 dark:group-hover:text-gray-300 transition-colors duration-300 text-sm"
+                      className="text-gray-600 dark:text-gray-400 text-center leading-relaxed text-sm"
                       dangerouslySetInnerHTML={
                         project.description
                           ? { __html: project.description }
@@ -523,6 +523,23 @@ export default function HomePage() {
                   </div>
                 </motion.div>
               ))}
+            </motion.div>
+
+            {/* View our Research Button */}
+            <motion.div
+              className="text-center mt-12"
+              variants={conditionalFadeInUp}
+              initial="hidden"
+              whileInView="visible"
+              viewport={viewportSettings}
+            >
+              <Link
+                href="/research"
+                className="group inline-flex items-center justify-center px-8 py-4 bg-gradient-to-r from-cognition-600 to-cognition-700 hover:from-cognition-700 hover:to-cognition-800 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300"
+              >
+                View our Research
+                <FaArrowRight className="ml-2 group-hover:translate-x-1 transition-transform duration-300" />
+              </Link>
             </motion.div>
           </div>
         </section>
@@ -542,12 +559,12 @@ export default function HomePage() {
                 className="flex flex-col h-full"
               >
                 <div className="mb-8">
-                  <h2 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-6 leading-tight">
+                  <h2 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-6 leading-tight text-center">
                     <span className="bg-gradient-to-r from-cognition-600 to-consciousness-600 bg-clip-text text-transparent">
                       {mission.title}
                     </span>
                   </h2>
-                  <div className="w-32 h-1.5 bg-gradient-to-r from-cognition-500 via-consciousness-500 to-care-500 rounded-full" />
+                  <div className="w-32 h-1.5 bg-gradient-to-r from-cognition-500 via-consciousness-500 to-care-500 rounded-full mx-auto" />
                 </div>
 
                 <div className="space-y-8">
@@ -560,23 +577,31 @@ export default function HomePage() {
                     }
                   />
                   <div className="flex flex-col sm:flex-row gap-6">
-                    {mission.primaryText && mission.primaryLink && (
-                      <Link
-                        href={mission.primaryLink}
-                        className="group inline-flex items-center justify-center px-8 py-4 bg-gradient-to-r from-cognition-600 to-cognition-700 hover:from-cognition-700 hover:to-cognition-800 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300"
-                      >
-                        {mission.primaryText}
-                        <FaArrowRight className="ml-2 group-hover:translate-x-1 transition-transform duration-300" />
-                      </Link>
-                    )}
-                    {mission.secondaryText && mission.secondaryLink && (
-                      <Link
-                        href={mission.secondaryLink}
-                        className="group inline-flex items-center justify-center px-8 py-4 border-2 border-cognition-600 text-cognition-700 hover:bg-cognition-50 dark:border-cognition-400 dark:text-cognition-300 dark:hover:bg-cognition-900/50 font-semibold rounded-xl transition-all duration-300"
-                      >
-                        {mission.secondaryText}
-                      </Link>
-                    )}
+                    {mission.primaryText &&
+                      mission.primaryLink &&
+                      !mission.primaryText
+                        .toLowerCase()
+                        .includes("research") && (
+                        <Link
+                          href={mission.primaryLink}
+                          className="group inline-flex items-center justify-center px-8 py-4 bg-gradient-to-r from-cognition-600 to-cognition-700 hover:from-cognition-700 hover:to-cognition-800 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300"
+                        >
+                          {mission.primaryText}
+                          <FaArrowRight className="ml-2 group-hover:translate-x-1 transition-transform duration-300" />
+                        </Link>
+                      )}
+                    {mission.secondaryText &&
+                      mission.secondaryLink &&
+                      !mission.secondaryText
+                        .toLowerCase()
+                        .includes("research") && (
+                        <Link
+                          href={mission.secondaryLink}
+                          className="group inline-flex items-center justify-center px-8 py-4 border-2 border-cognition-600 text-cognition-700 hover:bg-cognition-50 dark:border-cognition-400 dark:text-cognition-300 dark:hover:bg-cognition-900/50 font-semibold rounded-xl transition-all duration-300"
+                        >
+                          {mission.secondaryText}
+                        </Link>
+                      )}
                   </div>
                 </div>
               </motion.div>
@@ -653,12 +678,12 @@ export default function HomePage() {
                       {iconMap[i]}
                     </div>
 
-                    <h3 className="text-2xl font-bold text-center text-gray-900 dark:text-white mb-6 group-hover:text-cognition-600 dark:group-hover:text-cognition-400 transition-colors duration-300">
+                    <h3 className="text-2xl font-bold text-center text-gray-900 dark:text-white mb-6">
                       {card.title}
                     </h3>
 
                     <p
-                      className="text-gray-600 dark:text-gray-400 text-center leading-relaxed group-hover:text-gray-700 dark:group-hover:text-gray-300 transition-colors duration-300"
+                      className="text-gray-600 dark:text-gray-400 text-center leading-relaxed"
                       dangerouslySetInnerHTML={
                         card.description
                           ? { __html: card.description }
