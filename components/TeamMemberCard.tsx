@@ -64,49 +64,6 @@ export default function TeamMemberCard({ member, index }: TeamMemberCardProps) {
             </span>
           </div>
         )}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-4">
-          <div className="flex space-x-3">
-            {member.email && (
-              <a
-                href={`mailto:${member.email}`}
-                className="bg-white/90 hover:bg-white text-gray-800 p-2 rounded-full shadow-sm transition-colors"
-                aria-label="Email"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-5 w-5"
-                  viewBox="0 0 20 20"
-                  fill="currentColor"
-                >
-                  <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
-                  <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
-                </svg>
-              </a>
-            )}
-            {member.linkedin_url && (
-              <a
-                href={member.linkedin_url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="bg-white/90 hover:bg-white text-blue-600 p-2 rounded-full shadow-sm transition-colors"
-                aria-label="LinkedIn"
-              >
-                <svg
-                  className="h-5 w-5"
-                  fill="currentColor"
-                  viewBox="0 0 24 24"
-                  aria-hidden="true"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"
-                    clipRule="evenodd"
-                  />
-                </svg>
-              </a>
-            )}
-          </div>
-        </div>
       </div>
 
       {/* Content */}
