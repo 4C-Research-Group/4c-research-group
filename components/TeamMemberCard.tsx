@@ -22,7 +22,6 @@ export default function TeamMemberCard({ member, index }: TeamMemberCardProps) {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{
-        delay: index * 0.1,
         duration: 0.5,
         ease: "easeOut",
       }}
@@ -31,7 +30,7 @@ export default function TeamMemberCard({ member, index }: TeamMemberCardProps) {
         scale: 1.02,
         boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.25)",
         transition: {
-          duration: 0.2,
+          duration: 0.15,
           ease: "easeOut",
         },
       }}
@@ -51,7 +50,7 @@ export default function TeamMemberCard({ member, index }: TeamMemberCardProps) {
               src={member.image_url}
               alt={member.name}
               fill
-              className="object-cover object-center group-hover:scale-110 transition-transform duration-300 ease-out"
+              className="object-cover object-center group-hover:scale-110 transition-transform duration-150 ease-out"
               sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
             />
           </div>

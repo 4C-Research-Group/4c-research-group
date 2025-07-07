@@ -91,7 +91,7 @@ export default function TeamPage() {
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6 }}
+              transition={{ duration: 0.6, delay: 0.2 }}
               className="relative"
             >
               {/* Background decoration */}
@@ -226,12 +226,17 @@ export default function TeamPage() {
       {/* Team Members */}
       <section className="py-16 px-4 bg-gray-50 dark:bg-gray-900/50">
         <div className="container mx-auto">
-          <div className="text-center mb-12">
+          <motion.div
+            className="text-center mb-12"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.4 }}
+          >
             <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
               Our Team Members
             </h2>
             <div className="w-20 h-1 bg-cognition-600 mx-auto"></div>
-          </div>
+          </motion.div>
 
           {teamMembers.length > 0 ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6 lg:gap-8 max-w-7xl mx-auto">
@@ -246,11 +251,18 @@ export default function TeamPage() {
                 }
               >
                 {teamMembers.map((member, index) => (
-                  <TeamMemberCard
+                  <motion.div
                     key={member.id}
-                    member={member}
-                    index={index}
-                  />
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{
+                      delay: 0.6 + index * 0.1,
+                      duration: 0.5,
+                      ease: "easeOut",
+                    }}
+                  >
+                    <TeamMemberCard member={member} index={0} />
+                  </motion.div>
                 ))}
               </Suspense>
             </div>
