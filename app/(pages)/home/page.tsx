@@ -274,24 +274,28 @@ export default function HomePage() {
                   animate="visible"
                   transition={{ delay: 0.4 }}
                 >
-                  {hero.primaryText && hero.primaryLink && (
-                    <Link
-                      href={hero.primaryLink}
-                      className="group inline-flex items-center justify-center px-8 py-4 bg-gradient-to-r from-cognition-600 to-cognition-700 hover:from-cognition-700 hover:to-cognition-800 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300"
-                    >
-                      {hero.primaryText}
-                      <FaArrowRight className="ml-2 group-hover:translate-x-1 transition-transform duration-300" />
-                    </Link>
-                  )}
-                  {hero.secondaryText && hero.secondaryLink && (
-                    <Link
-                      href={hero.secondaryLink}
-                      className="group inline-flex items-center justify-center px-8 py-4 border-2 border-cognition-600 text-cognition-700 hover:bg-cognition-50 dark:border-cognition-400 dark:text-cognition-300 dark:hover:bg-cognition-900/50 font-semibold rounded-xl transition-all duration-300"
-                    >
-                      <FaPlay className="mr-2 group-hover:scale-110 transition-transform duration-300" />
-                      {hero.secondaryText}
-                    </Link>
-                  )}
+                  {hero.primaryText &&
+                    hero.primaryLink &&
+                    !hero.primaryText.toLowerCase().includes("contact") && (
+                      <Link
+                        href={hero.primaryLink}
+                        className="group inline-flex items-center justify-center px-8 py-4 bg-gradient-to-r from-cognition-600 to-cognition-700 hover:from-cognition-700 hover:to-cognition-800 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300"
+                      >
+                        {hero.primaryText}
+                        <FaArrowRight className="ml-2 group-hover:translate-x-1 transition-transform duration-300" />
+                      </Link>
+                    )}
+                  {hero.secondaryText &&
+                    hero.secondaryLink &&
+                    !hero.secondaryText.toLowerCase().includes("contact") && (
+                      <Link
+                        href={hero.secondaryLink}
+                        className="group inline-flex items-center justify-center px-8 py-4 border-2 border-cognition-600 text-cognition-700 hover:bg-cognition-50 dark:border-cognition-400 dark:text-cognition-300 dark:hover:bg-cognition-900/50 font-semibold rounded-xl transition-all duration-300"
+                      >
+                        <FaPlay className="mr-2 group-hover:scale-110 transition-transform duration-300" />
+                        {hero.secondaryText}
+                      </Link>
+                    )}
                 </motion.div>
               </motion.div>
 
@@ -429,11 +433,20 @@ export default function HomePage() {
             </div>
           </div>
 
-          {/* Simple Scroll Indicator */}
+          {/* Enhanced Scroll Indicator */}
           <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2">
-            <div className="w-6 h-10 border-2 border-cognition-400 dark:border-cognition-300 rounded-full flex justify-center">
-              <div className="w-1 h-3 bg-cognition-400 dark:bg-cognition-300 rounded-full mt-2 animate-bounce" />
-            </div>
+            <motion.div
+              className="flex flex-col items-center space-y-2"
+              animate={{ y: [0, 5, 0] }}
+              transition={{ duration: 2, repeat: Infinity }}
+            >
+              <p className="text-sm text-cognition-700 dark:text-cognition-300 font-medium mb-2 text-center">
+                Scroll to explore
+              </p>
+              <div className="w-6 h-10 border-2 border-cognition-400 dark:border-cognition-300 rounded-full flex justify-center">
+                <div className="w-1 h-3 bg-cognition-400 dark:bg-cognition-300 rounded-full mt-2 animate-bounce" />
+              </div>
+            </motion.div>
           </div>
         </section>
       )}
