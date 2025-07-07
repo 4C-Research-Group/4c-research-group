@@ -117,7 +117,7 @@ export default function TeamPage() {
 
                 <div className="flex flex-col lg:flex-row">
                   {/* Image section */}
-                  <div className="w-full lg:w-2/5 bg-gradient-to-br from-cognition-50 to-cognition-100 dark:from-cognition-900/30 dark:to-cognition-800/30 p-6 sm:p-8 lg:p-12 flex flex-col items-center justify-center relative overflow-hidden">
+                  <div className="w-full lg:w-2/5 bg-gradient-to-br from-cognition-50 to-cognition-100 dark:from-cognition-900/30 dark:to-cognition-800/30 p-4 sm:p-6 lg:p-8 flex flex-col items-center justify-center relative overflow-hidden">
                     {/* Background pattern */}
                     <div className="absolute inset-0 opacity-10">
                       <div className="absolute top-0 left-0 w-32 h-32 bg-cognition-600 rounded-full -translate-x-16 -translate-y-16"></div>
@@ -125,7 +125,7 @@ export default function TeamPage() {
                     </div>
 
                     <div className="relative z-10 text-center">
-                      <div className="relative w-48 h-48 sm:w-56 sm:h-56 lg:w-64 lg:h-64 rounded-full overflow-hidden border-4 sm:border-6 lg:border-8 border-white/20 shadow-2xl mb-6 sm:mb-8 mx-auto">
+                      <div className="relative w-40 h-40 sm:w-48 sm:h-48 lg:w-56 lg:h-56 rounded-full overflow-hidden border-4 sm:border-6 lg:border-8 border-white/20 shadow-2xl mb-4 sm:mb-6 mx-auto">
                         {principalInvestigator.image_url ? (
                           <Image
                             src={principalInvestigator.image_url}
@@ -151,8 +151,8 @@ export default function TeamPage() {
                   </div>
 
                   {/* Content section */}
-                  <div className="w-full lg:w-3/5 p-6 sm:p-8 lg:p-12 flex flex-col justify-center">
-                    <div className="space-y-6">
+                  <div className="w-full lg:w-3/5 p-4 sm:p-6 lg:p-8 flex flex-col justify-center">
+                    <div className="space-y-4 sm:space-y-6">
                       {principalInvestigator.bio && (
                         <div className="prose dark:prose-invert max-w-none">
                           <p className="text-gray-700 dark:text-gray-300 text-sm sm:text-base lg:text-lg leading-relaxed">
@@ -162,15 +162,15 @@ export default function TeamPage() {
                       )}
 
                       {/* Contact section */}
-                      <div className="pt-6 border-t border-gray-200 dark:border-gray-700">
-                        <h4 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+                      <div className="pt-4 sm:pt-6 border-t border-gray-200 dark:border-gray-700">
+                        <h4 className="text-base sm:text-lg font-semibold text-gray-900 dark:text-white mb-3 sm:mb-4">
                           Get in Touch
                         </h4>
-                        <div className="space-y-3">
+                        <div className="space-y-2 sm:space-y-3">
                           {principalInvestigator.email && (
                             <motion.a
                               href={`mailto:${principalInvestigator.email}`}
-                              className="flex items-center space-x-3 p-4 bg-gray-50 dark:bg-gray-700 rounded-xl hover:bg-cognition-50 dark:hover:bg-cognition-900/30 transition-all duration-200 group"
+                              className="flex items-center space-x-3 p-3 sm:p-4 bg-gray-50 dark:bg-gray-700 rounded-xl hover:bg-cognition-50 dark:hover:bg-cognition-900/30 transition-all duration-200 group"
                               whileHover={{ x: 5 }}
                               whileTap={{ scale: 0.98 }}
                             >
@@ -193,7 +193,7 @@ export default function TeamPage() {
                               href={principalInvestigator.linkedin_url}
                               target="_blank"
                               rel="noopener noreferrer"
-                              className="flex items-center space-x-3 p-4 bg-gray-50 dark:bg-gray-700 rounded-xl hover:bg-cognition-50 dark:hover:bg-cognition-900/30 transition-all duration-200 group"
+                              className="flex items-center space-x-3 p-3 sm:p-4 bg-gray-50 dark:bg-gray-700 rounded-xl hover:bg-cognition-50 dark:hover:bg-cognition-900/30 transition-all duration-200 group"
                               whileHover={{ x: 5 }}
                               whileTap={{ scale: 0.98 }}
                             >
