@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import { motion } from "framer-motion";
 
 interface TeamMemberCardProps {
   member: {
@@ -8,26 +9,30 @@ interface TeamMemberCardProps {
     role: string;
     superpower: string;
     image?: string;
+    email?: string;
+    linkedin_url?: string;
   };
   index: number;
 }
 
 export default function TeamMemberCard({ member, index }: TeamMemberCardProps) {
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg overflow-hidden border border-gray-100 dark:border-gray-700 flex flex-col items-center pt-10 pb-8 px-6 text-center">
-      {/* Decorative accent */}
-      <div className="w-full h-2 bg-gradient-to-r from-cognition-400 to-cognition-600 mb-8"></div>
-
-      {/* Profile image container */}
-      <div className="relative w-36 h-36 mb-6 rounded-full overflow-hidden border-4 border-white dark:border-gray-800 shadow-lg">
+    <motion.div
+      className="group relative bg-white dark:bg-gray-800 rounded-xl shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100 dark:border-gray-700 flex flex-col h-full"
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: index * 0.1 }}
+      whileHover={{ y: -5 }}
+    >
+      {/* Image container with gradient overlay */}
+      <div className="relative h-64 w-full overflow-hidden">
         {member.image ? (
           <Image
             src={member.image}
             alt={member.name}
-            width={144}
-            height={144}
-            className="object-cover w-full h-full"
-            style={{ borderRadius: "9999px" }}
+            fill
+            className="object-cover transition-transform duration-500 group-hover:scale-105"
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
           />
         ) : (
           <div className="w-full h-full bg-gradient-to-br from-cognition-400 to-cognition-600 flex items-center justify-center">
@@ -39,27 +44,73 @@ export default function TeamMemberCard({ member, index }: TeamMemberCardProps) {
             </span>
           </div>
         )}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-4">
+          <div className="flex space-x-3">
+            {member.email && (
+              <a
+                href={`mailto:${member.email}`}
+                className="bg-white/90 hover:bg-white text-gray-800 p-2 rounded-full shadow-sm transition-colors"
+                aria-label="Email"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-5 w-5"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                >
+                  <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
+                  <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
+                </svg>
+              </a>
+            )}
+            {member.linkedin_url && (
+              <a
+                href={member.linkedin_url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="bg-white/90 hover:bg-white text-blue-600 p-2 rounded-full shadow-sm transition-colors"
+                aria-label="LinkedIn"
+              >
+                <svg
+                  className="h-5 w-5"
+                  fill="currentColor"
+                  viewBox="0 0 24 24"
+                  aria-hidden="true"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+              </a>
+            )}
+          </div>
+        </div>
       </div>
 
       {/* Content */}
-      <div className="w-full space-y-3">
-        <h3 className="text-2xl font-bold text-gray-900 dark:text-white">
-          {member.name}
-        </h3>
-        <p className="text-cognition-600 dark:text-cognition-400 font-medium text-lg mb-2">
-          {member.role}
-        </p>
-        {member.superpower && (
-          <div className="mt-4 pt-4 border-t border-gray-100 dark:border-gray-700">
-            <p className="text-xs font-semibold text-gray-500 dark:text-gray-400 mb-2 uppercase tracking-wider">
-              My Superpower
-            </p>
-            <p className="text-gray-600 dark:text-gray-300 text-sm font-medium">
-              {member.superpower}
-            </p>
-          </div>
-        )}
+      <div className="p-6 flex-1 flex flex-col">
+        <div className="flex-1">
+          <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-1">
+            {member.name}
+          </h3>
+          <p className="text-cognition-600 dark:text-cognition-400 font-medium mb-4">
+            {member.role}
+          </p>
+
+          {member.superpower && (
+            <div className="mt-4 pt-4 border-t border-gray-100 dark:border-gray-700">
+              <p className="text-xs font-semibold text-gray-500 dark:text-gray-400 mb-2 uppercase tracking-wider">
+                My Superpower
+              </p>
+              <p className="text-gray-600 dark:text-gray-300 text-sm font-medium">
+                {member.superpower}
+              </p>
+            </div>
+          )}
+        </div>
       </div>
-    </div>
+    </motion.div>
   );
 }
