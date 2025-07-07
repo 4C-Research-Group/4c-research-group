@@ -18,12 +18,30 @@ interface TeamMemberCardProps {
 export default function TeamMemberCard({ member, index }: TeamMemberCardProps) {
   return (
     <motion.div
-      className="group relative bg-white dark:bg-gray-800 rounded-xl shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100 dark:border-gray-700 flex flex-col h-full"
+      className="group relative bg-white dark:bg-gray-800 rounded-xl shadow-md hover:shadow-xl overflow-hidden border border-gray-100 dark:border-gray-700 flex flex-col h-full"
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: index * 0.1, duration: 0.6 }}
-      whileHover={{ y: -5, transition: { duration: 0.15 } }}
-      whileTap={{ scale: 0.98, transition: { duration: 0.15 } }}
+      transition={{
+        delay: index * 0.1,
+        duration: 0.5,
+        ease: "easeOut",
+      }}
+      whileHover={{
+        y: -8,
+        scale: 1.02,
+        boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.25)",
+        transition: {
+          duration: 0.2,
+          ease: "easeOut",
+        },
+      }}
+      whileTap={{
+        scale: 0.98,
+        transition: {
+          duration: 0.1,
+          ease: "easeInOut",
+        },
+      }}
     >
       {/* Image container with gradient overlay */}
       <div className="relative h-48 sm:h-56 md:h-64 w-full overflow-hidden">
@@ -33,7 +51,7 @@ export default function TeamMemberCard({ member, index }: TeamMemberCardProps) {
               src={member.image_url}
               alt={member.name}
               fill
-              className="object-cover object-center group-hover:scale-110 transition-transform duration-300"
+              className="object-cover object-center group-hover:scale-110 transition-transform duration-300 ease-out"
               sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
             />
           </div>
