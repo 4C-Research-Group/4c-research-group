@@ -19,7 +19,7 @@ const DEFAULT_JOIN: Join4CLabPage = {
   id: "",
   hero_title: "Join 4C Research Group",
   hero_description:
-    "We are always looking for passionate students to join the 4C Research Group. If you are interested in joining our team, please send your CV to:",
+    "We are always looking for passionate students to join our team. If you are interested in joining our team, please send your CV to:",
   hero_email: "rishi.ganesan@lhsc.on.ca",
   intro_title:
     "Read more about previous students' experiences with the 4C Research Group below!",
