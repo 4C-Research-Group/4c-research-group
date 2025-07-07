@@ -17,12 +17,12 @@ import PageHero from "@/components/PageHero";
 
 const DEFAULT_JOIN: Join4CLabPage = {
   id: "",
-  hero_title: "Join Mission 4C",
+  hero_title: "Join 4C Research Group",
   hero_description:
-    "We are always looking for passionate students to join our team. If you are interested in joining our team, please send your CV to:",
+    "We are always looking for passionate students to join the 4C Research Group. If you are interested in joining our team, please send your CV to:",
   hero_email: "rishi.ganesan@lhsc.on.ca",
   intro_title:
-    "Read more about previous students' experiences with Mission 4C below!",
+    "Read more about previous students' experiences with the 4C Research Group below!",
   card1_title: "Research Excellence",
   card1_description:
     "Work on cutting-edge research in cognition, consciousness, and critical care. Gain hands-on experience with state-of-the-art methodologies and technologies.",
@@ -150,6 +150,86 @@ export default function Join4CLabPage() {
             </div>
           </motion.div>
 
+          {/* Application Process */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+            viewport={{ once: true }}
+            className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8 mb-16"
+          >
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white text-center">
+              How to Apply
+            </h2>
+            <div className="w-32 h-1.5 bg-gradient-to-r from-cognition-500 via-consciousness-500 to-care-500 rounded-full mx-auto mt-4 mb-8" />
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              <div>
+                <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
+                  Required Documents
+                </h3>
+                <ul className="space-y-3 text-gray-600 dark:text-gray-300">
+                  <li className="flex items-start">
+                    <span className="bg-cognition-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm font-bold mr-3 mt-0.5">
+                      1
+                    </span>
+                    <span>Updated CV/Resume</span>
+                  </li>
+                  <li className="flex items-start">
+                    <span className="bg-cognition-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm font-bold mr-3 mt-0.5">
+                      2
+                    </span>
+                    <span>Cover letter explaining your interest</span>
+                  </li>
+                  <li className="flex items-start">
+                    <span className="bg-cognition-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm font-bold mr-3 mt-0.5">
+                      3
+                    </span>
+                    <span>Academic transcripts (if applicable)</span>
+                  </li>
+                  <li className="flex items-start">
+                    <span className="bg-cognition-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm font-bold mr-3 mt-0.5">
+                      4
+                    </span>
+                    <span>References (upon request)</span>
+                  </li>
+                </ul>
+              </div>
+              <div>
+                <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
+                  Application Steps
+                </h3>
+                <ul className="space-y-3 text-gray-600 dark:text-gray-300">
+                  <li className="flex items-start">
+                    <span className="bg-consciousness-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm font-bold mr-3 mt-0.5">
+                      1
+                    </span>
+                    <span>Send your CV to rishi.ganesan@lhsc.on.ca</span>
+                  </li>
+                  <li className="flex items-start">
+                    <span className="bg-consciousness-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm font-bold mr-3 mt-0.5">
+                      2
+                    </span>
+                    <span>Include a brief cover letter in the email</span>
+                  </li>
+                  <li className="flex items-start">
+                    <span className="bg-consciousness-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm font-bold mr-3 mt-0.5">
+                      3
+                    </span>
+                    <span>Wait for our team to review your application</span>
+                  </li>
+                  <li className="flex items-start">
+                    <span className="bg-consciousness-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm font-bold mr-3 mt-0.5">
+                      4
+                    </span>
+                    <span>
+                      We&apos;ll contact you for an interview if selected
+                    </span>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </motion.div>
+
           {/* Student Testimonials */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -164,8 +244,8 @@ export default function Join4CLabPage() {
               </h2>
               <div className="w-32 h-1.5 bg-gradient-to-r from-cognition-500 via-consciousness-500 to-care-500 rounded-full mx-auto" />
               <p className="text-lg text-gray-600 dark:text-gray-300 mt-4">
-                Hear from our previous students about their experiences with
-                Mission 4C
+                Hear from our previous students about their experiences with the
+                4C Research Group
               </p>
             </div>
 
@@ -253,85 +333,6 @@ export default function Join4CLabPage() {
                 </p>
               </div>
             )}
-          </motion.div>
-
-          {/* Application Process */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.2 }}
-            viewport={{ once: true }}
-            className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8 mb-16"
-          >
-            <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6 text-center">
-              How to Apply
-            </h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              <div>
-                <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
-                  Required Documents
-                </h3>
-                <ul className="space-y-3 text-gray-600 dark:text-gray-300">
-                  <li className="flex items-start">
-                    <span className="bg-cognition-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm font-bold mr-3 mt-0.5">
-                      1
-                    </span>
-                    <span>Updated CV/Resume</span>
-                  </li>
-                  <li className="flex items-start">
-                    <span className="bg-cognition-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm font-bold mr-3 mt-0.5">
-                      2
-                    </span>
-                    <span>Cover letter explaining your interest</span>
-                  </li>
-                  <li className="flex items-start">
-                    <span className="bg-cognition-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm font-bold mr-3 mt-0.5">
-                      3
-                    </span>
-                    <span>Academic transcripts (if applicable)</span>
-                  </li>
-                  <li className="flex items-start">
-                    <span className="bg-cognition-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm font-bold mr-3 mt-0.5">
-                      4
-                    </span>
-                    <span>References (upon request)</span>
-                  </li>
-                </ul>
-              </div>
-              <div>
-                <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
-                  Application Steps
-                </h3>
-                <ul className="space-y-3 text-gray-600 dark:text-gray-300">
-                  <li className="flex items-start">
-                    <span className="bg-consciousness-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm font-bold mr-3 mt-0.5">
-                      1
-                    </span>
-                    <span>Send your CV to rishi.ganesan@lhsc.on.ca</span>
-                  </li>
-                  <li className="flex items-start">
-                    <span className="bg-consciousness-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm font-bold mr-3 mt-0.5">
-                      2
-                    </span>
-                    <span>Include a brief cover letter in the email</span>
-                  </li>
-                  <li className="flex items-start">
-                    <span className="bg-consciousness-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm font-bold mr-3 mt-0.5">
-                      3
-                    </span>
-                    <span>Wait for our team to review your application</span>
-                  </li>
-                  <li className="flex items-start">
-                    <span className="bg-consciousness-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm font-bold mr-3 mt-0.5">
-                      4
-                    </span>
-                    <span>
-                      We&apos;ll contact you for an interview if selected
-                    </span>
-                  </li>
-                </ul>
-              </div>
-            </div>
           </motion.div>
 
           {/* Contact CTA */}
