@@ -7,8 +7,8 @@ interface TeamMemberCardProps {
   member: {
     name: string;
     role: string;
-    superpower: string;
-    image?: string;
+    superpower?: string;
+    image_url?: string;
     email?: string;
     linkedin_url?: string;
   };
@@ -25,15 +25,17 @@ export default function TeamMemberCard({ member, index }: TeamMemberCardProps) {
       whileHover={{ y: -5 }}
     >
       {/* Image container with gradient overlay */}
-      <div className="relative h-64 w-full overflow-hidden">
-        {member.image ? (
-          <Image
-            src={member.image}
-            alt={member.name}
-            fill
-            className="object-cover transition-transform duration-500 group-hover:scale-105"
-            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-          />
+      <div className="relative h-48 sm:h-56 md:h-64 w-full overflow-hidden">
+        {member.image_url ? (
+          <div className="w-full h-full flex items-center justify-center">
+            <Image
+              src={member.image_url}
+              alt={member.name}
+              fill
+              className="object-cover object-center"
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+            />
+          </div>
         ) : (
           <div className="w-full h-full bg-gradient-to-br from-cognition-400 to-cognition-600 flex items-center justify-center">
             <span className="text-5xl text-white font-bold">
@@ -90,12 +92,12 @@ export default function TeamMemberCard({ member, index }: TeamMemberCardProps) {
       </div>
 
       {/* Content */}
-      <div className="p-6 flex-1 flex flex-col">
+      <div className="p-4 sm:p-6 flex-1 flex flex-col">
         <div className="flex-1">
-          <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-1">
+          <h3 className="text-lg sm:text-xl font-bold text-gray-900 dark:text-white mb-1">
             {member.name}
           </h3>
-          <p className="text-cognition-600 dark:text-cognition-400 font-medium mb-4">
+          <p className="text-cognition-600 dark:text-cognition-400 font-medium mb-3 sm:mb-4 text-sm sm:text-base">
             {member.role}
           </p>
 

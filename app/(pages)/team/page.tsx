@@ -10,6 +10,7 @@ import {
   FaLinkedin,
   FaTwitter,
   FaUser,
+  FaUserTie,
 } from "react-icons/fa";
 import {
   getTeamMembers,
@@ -37,7 +38,10 @@ export default function TeamPage() {
           getPrincipalInvestigator(),
         ]);
 
-        setTeamMembers(members || []);
+        // Filter out the PI from the team members list to avoid duplication
+        const filteredMembers =
+          members?.filter((member) => !member.is_principal_investigator) || [];
+        setTeamMembers(filteredMembers);
         setPrincipalInvestigator(pi);
       } catch (error) {
         console.error("Error loading team data:", error);
@@ -57,54 +61,15 @@ export default function TeamPage() {
     return (
       <div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800">
         {/* Hero Section - Show immediately even when loading */}
-        <motion.section
-          className="relative overflow-hidden"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.6 }}
-        >
-          <div className="relative pt-32 pb-20 md:pt-40 md:pb-28">
-            <div className="container mx-auto px-4">
-              <motion.div
-                className="max-w-4xl mx-auto text-center"
-                initial={{ y: 20, opacity: 0 }}
-                animate={{ y: 0, opacity: 1 }}
-                transition={{ delay: 0.2 }}
-              >
-                <h1 className="text-4xl md:text-6xl font-bold text-gray-900 dark:text-white mb-6">
-                  Meet Our Team
-                </h1>
-                <p className="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
-                  Dedicated researchers and healthcare professionals working
-                  together to advance pediatric critical care
-                </p>
-              </motion.div>
-            </div>
-            <div className="absolute inset-0 -z-10 overflow-hidden">
-              <div className="absolute inset-0 bg-gradient-to-b from-cognition-500/5 to-transparent"></div>
-            </div>
-          </div>
-        </motion.section>
+        <PageHero
+          title="Meet Our Team"
+          subtitle="Dedicated researchers and healthcare professionals working together to advance pediatric critical care"
+        />
 
         {/* Loading Content */}
-        <section className="py-16 px-4">
-          <div className="container mx-auto max-w-2xl">
-            <motion.div
-              className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-xl p-6 text-center"
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ type: "spring", stiffness: 500, damping: 30 }}
-            >
-              <p className="text-red-800 dark:text-red-200 text-lg">
-                Loading team data...
-              </p>
-              <button
-                onClick={() => window.location.reload()}
-                className="mt-4 px-6 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg transition-colors font-medium"
-              >
-                Try Again
-              </button>
-            </motion.div>
+        <section className="py-20 px-4">
+          <div className="container mx-auto text-center">
+            <LoadingSpinner message="Loading team data..." size="lg" />
           </div>
         </section>
       </div>
@@ -114,130 +79,140 @@ export default function TeamPage() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800">
       {/* Hero Section */}
-      <motion.section
-        className="relative overflow-hidden"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.6 }}
-      >
-        <div className="relative pt-32 pb-20 md:pt-40 md:pb-28">
-          <div className="container mx-auto px-4">
-            <motion.div
-              className="max-w-4xl mx-auto text-center"
-              initial={{ y: 20, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              transition={{ delay: 0.2 }}
-            >
-              <h1 className="text-4xl md:text-6xl font-bold text-gray-900 dark:text-white mb-6">
-                Meet Our Team
-              </h1>
-              <p className="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
-                Dedicated researchers and healthcare professionals working
-                together to advance pediatric critical care
-              </p>
-            </motion.div>
-          </div>
-          <div className="absolute inset-0 -z-10 overflow-hidden">
-            <div className="absolute inset-0 bg-gradient-to-b from-cognition-500/5 to-transparent"></div>
-          </div>
-        </div>
-      </motion.section>
+      <PageHero
+        title="Meet Our Team"
+        subtitle="Dedicated researchers and healthcare professionals working together to advance pediatric critical care"
+      />
 
       {/* Principal Investigator */}
       {principalInvestigator && (
-        <section className="py-16 px-4">
+        <section className="py-20 px-4 bg-gradient-to-br from-gray-50 to-white dark:from-gray-900 dark:to-gray-800">
           <div className="container mx-auto max-w-6xl">
             <motion.div
-              className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl overflow-hidden border border-gray-100 dark:border-gray-700"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.3 }}
+              transition={{ duration: 0.6 }}
+              className="relative"
             >
-              <div className="md:flex">
-                <div className="md:w-1/3 relative">
-                  <div className="h-full w-full bg-gradient-to-br from-cognition-500 to-cognition-600 p-8 flex flex-col items-center justify-center">
-                    <div className="relative w-48 h-48 md:w-56 md:h-56 rounded-full overflow-hidden border-4 border-white/20 shadow-2xl mb-6">
-                      <Image
-                        src={
-                          principalInvestigator.image_url ||
-                          "/team/placeholder.jpg"
-                        }
-                        alt={principalInvestigator.name}
-                        fill
-                        className="object-cover"
-                        sizes="(max-width: 768px) 100vw, 33vw"
-                        priority
-                      />
+              {/* Background decoration */}
+              <div className="absolute inset-0 bg-gradient-to-r from-cognition-50 to-cognition-100 dark:from-cognition-900/20 dark:to-cognition-800/20 rounded-3xl transform rotate-1"></div>
+
+              <div className="relative bg-white dark:bg-gray-800 rounded-3xl shadow-2xl overflow-hidden border border-gray-100 dark:border-gray-700">
+                {/* Header section */}
+                <div className="bg-gradient-to-r from-cognition-600 to-cognition-700 px-8 py-6">
+                  <div className="flex items-center space-x-3">
+                    <div className="p-3 bg-white/20 rounded-full">
+                      <FaUserTie className="w-6 h-6 text-white" />
                     </div>
-                    <h2 className="text-2xl font-bold text-white text-center">
-                      {principalInvestigator.name}
-                    </h2>
-                    <p className="text-cognition-100 text-center text-lg mb-6">
-                      {principalInvestigator.role}
-                    </p>
-                    <div className="flex space-x-4">
-                      {principalInvestigator.email && (
-                        <a
-                          href={`mailto:${principalInvestigator.email}`}
-                          className="text-white hover:text-cognition-200 transition-colors"
-                          aria-label="Email"
-                        >
-                          <FaEnvelope className="w-5 h-5" />
-                        </a>
-                      )}
-                      {principalInvestigator.linkedin_url && (
-                        <a
-                          href={principalInvestigator.linkedin_url}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="text-white hover:text-cognition-200 transition-colors"
-                          aria-label="LinkedIn"
-                        >
-                          <FaLinkedin className="w-5 h-5" />
-                        </a>
-                      )}
+                    <div>
+                      <h2 className="text-2xl font-bold text-white">
+                        Principal Investigator
+                      </h2>
+                      <p className="text-cognition-100 text-sm">
+                        Leading our research initiatives
+                      </p>
                     </div>
                   </div>
                 </div>
 
-                <div className="md:w-2/3 p-8 md:p-10">
-                  <div className="prose dark:prose-invert max-w-none">
-                    <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">
-                      About {principalInvestigator.name.split(" ").slice(-1)[0]}
-                    </h3>
-                    {principalInvestigator.bio && (
-                      <div className="space-y-4 text-gray-700 dark:text-gray-300">
-                        {principalInvestigator.bio
-                          .split("\n")
-                          .map((paragraph, i) => (
-                            <p key={i} className="leading-relaxed">
-                              {paragraph}
-                            </p>
-                          ))}
+                <div className="flex flex-col lg:flex-row">
+                  {/* Image section */}
+                  <div className="w-full lg:w-2/5 bg-gradient-to-br from-cognition-50 to-cognition-100 dark:from-cognition-900/30 dark:to-cognition-800/30 p-6 sm:p-8 lg:p-12 flex flex-col items-center justify-center relative overflow-hidden">
+                    {/* Background pattern */}
+                    <div className="absolute inset-0 opacity-10">
+                      <div className="absolute top-0 left-0 w-32 h-32 bg-cognition-600 rounded-full -translate-x-16 -translate-y-16"></div>
+                      <div className="absolute bottom-0 right-0 w-24 h-24 bg-cognition-600 rounded-full translate-x-12 translate-y-12"></div>
+                    </div>
+
+                    <div className="relative z-10 text-center">
+                      <div className="relative w-48 h-48 sm:w-56 sm:h-56 lg:w-64 lg:h-64 rounded-full overflow-hidden border-4 sm:border-6 lg:border-8 border-white/20 shadow-2xl mb-6 sm:mb-8 mx-auto">
+                        {principalInvestigator.image_url ? (
+                          <Image
+                            src={principalInvestigator.image_url}
+                            alt={principalInvestigator.name}
+                            fill
+                            className="object-cover"
+                            sizes="(max-width: 640px) 192px, (max-width: 768px) 224px, 256px"
+                            priority
+                          />
+                        ) : (
+                          <div className="w-full h-full bg-gradient-to-br from-cognition-400 to-cognition-600 flex items-center justify-center">
+                            <FaUser className="text-white text-4xl sm:text-6xl lg:text-8xl" />
+                          </div>
+                        )}
                       </div>
-                    )}
+                      <h3 className="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-900 dark:text-white mb-2 sm:mb-3">
+                        {principalInvestigator.name}
+                      </h3>
+                      <p className="text-cognition-600 dark:text-cognition-400 text-base sm:text-lg lg:text-xl font-medium">
+                        {principalInvestigator.role}
+                      </p>
+                    </div>
                   </div>
-                  <div className="mt-8">
-                    <a
-                      href="/about-pi"
-                      className="inline-flex items-center text-cognition-600 dark:text-cognition-400 hover:text-cognition-700 dark:hover:text-cognition-300 font-medium transition-colors"
-                    >
-                      View full profile
-                      <svg
-                        className="w-4 h-4 ml-2"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M14 5l7 7m0 0l-7 7m7-7H3"
-                        />
-                      </svg>
-                    </a>
+
+                  {/* Content section */}
+                  <div className="w-full lg:w-3/5 p-6 sm:p-8 lg:p-12 flex flex-col justify-center">
+                    <div className="space-y-6">
+                      {principalInvestigator.bio && (
+                        <div className="prose dark:prose-invert max-w-none">
+                          <p className="text-gray-700 dark:text-gray-300 text-lg leading-relaxed">
+                            {principalInvestigator.bio}
+                          </p>
+                        </div>
+                      )}
+
+                      {/* Contact section */}
+                      <div className="pt-6 border-t border-gray-200 dark:border-gray-700">
+                        <h4 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+                          Get in Touch
+                        </h4>
+                        <div className="space-y-3">
+                          {principalInvestigator.email && (
+                            <motion.a
+                              href={`mailto:${principalInvestigator.email}`}
+                              className="flex items-center space-x-3 p-4 bg-gray-50 dark:bg-gray-700 rounded-xl hover:bg-cognition-50 dark:hover:bg-cognition-900/30 transition-all duration-200 group"
+                              whileHover={{ x: 5 }}
+                              whileTap={{ scale: 0.98 }}
+                            >
+                              <div className="p-2 bg-cognition-100 dark:bg-cognition-800 rounded-lg group-hover:bg-cognition-200 dark:group-hover:bg-cognition-700 transition-colors">
+                                <FaEnvelope className="w-4 h-4 text-cognition-600 dark:text-cognition-400" />
+                              </div>
+                              <div>
+                                <p className="text-sm text-gray-500 dark:text-gray-400">
+                                  Email
+                                </p>
+                                <p className="text-gray-900 dark:text-white font-medium">
+                                  {principalInvestigator.email}
+                                </p>
+                              </div>
+                            </motion.a>
+                          )}
+
+                          {principalInvestigator.linkedin_url && (
+                            <motion.a
+                              href={principalInvestigator.linkedin_url}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="flex items-center space-x-3 p-4 bg-gray-50 dark:bg-gray-700 rounded-xl hover:bg-cognition-50 dark:hover:bg-cognition-900/30 transition-all duration-200 group"
+                              whileHover={{ x: 5 }}
+                              whileTap={{ scale: 0.98 }}
+                            >
+                              <div className="p-2 bg-cognition-100 dark:bg-cognition-800 rounded-lg group-hover:bg-cognition-200 dark:group-hover:bg-cognition-700 transition-colors">
+                                <FaLinkedin className="w-4 h-4 text-cognition-600 dark:text-cognition-400" />
+                              </div>
+                              <div>
+                                <p className="text-sm text-gray-500 dark:text-gray-400">
+                                  LinkedIn
+                                </p>
+                                <p className="text-gray-900 dark:text-white font-medium">
+                                  Connect on LinkedIn
+                                </p>
+                              </div>
+                            </motion.a>
+                          )}
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -246,46 +221,18 @@ export default function TeamPage() {
         </section>
       )}
 
-      {/* Error Display */}
-      {error && (
-        <section className="py-16 px-4">
-          <div className="container mx-auto max-w-2xl">
-            <motion.div
-              className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-xl p-6 text-center"
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ type: "spring", stiffness: 500, damping: 30 }}
-            >
-              <p className="text-red-800 dark:text-red-200 text-lg">{error}</p>
-              <button
-                onClick={() => window.location.reload()}
-                className="mt-4 px-6 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg transition-colors font-medium"
-              >
-                Try Again
-              </button>
-            </motion.div>
-          </div>
-        </section>
-      )}
-
       {/* Team Members */}
       <section className="py-16 px-4 bg-gray-50 dark:bg-gray-900/50">
         <div className="container mx-auto">
-          <motion.div
-            className="text-center mb-16"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.2 }}
-          >
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
               Our Team Members
             </h2>
-            <div className="w-24 h-1 bg-gradient-to-r from-cognition-500 to-cognition-600 mx-auto rounded-full"></div>
-          </motion.div>
+            <div className="w-20 h-1 bg-cognition-600 mx-auto"></div>
+          </div>
 
           {teamMembers.length > 0 ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6 lg:gap-8 max-w-7xl mx-auto">
               <Suspense
                 fallback={
                   <div className="col-span-full text-center py-12">
@@ -299,32 +246,19 @@ export default function TeamPage() {
                 {teamMembers.map((member, index) => (
                   <TeamMemberCard
                     key={member.id}
-                    member={{
-                      name: member.name,
-                      role: member.role,
-                      superpower: member.superpower || "",
-                      image: member.image_url,
-                      email: member.email,
-                      linkedin_url: member.linkedin_url,
-                    }}
+                    member={member}
                     index={index}
                   />
                 ))}
               </Suspense>
             </div>
-          ) : !loading && !error ? (
-            <div className="text-center py-16">
-              <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-gray-100 dark:bg-gray-800 mb-4">
-                <FaUser className="w-10 h-10 text-gray-400" />
-              </div>
-              <h3 className="text-xl font-medium text-gray-900 dark:text-white mb-2">
-                No team members found
-              </h3>
-              <p className="text-gray-500 dark:text-gray-400">
-                Check back later for updates
+          ) : (
+            <div className="text-center py-12">
+              <p className="text-gray-600 dark:text-gray-400">
+                No team members found.
               </p>
             </div>
-          ) : null}
+          )}
         </div>
       </section>
     </div>
