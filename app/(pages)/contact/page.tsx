@@ -29,12 +29,12 @@ interface FormData {
 
 const DEFAULT_CONTACT: ContactPage = {
   id: "",
-  address: "800 Commissioners Rd E\nLondon, ON N6A 5W9",
+  address: "800 Commissioners Rd E., London, ON N6A 5W9", // No typo, but ensure clarity
   phone: "(519) 685-8500 Ext. 74702",
   email: "rishi.ganesan@lhsc.on.ca",
   research_coordinator_name: "Ms. Maysaa Assaf",
   research_coordinator_email: "Maysaa.Assaf@lhsc.on.ca",
-  hours: "Monday - Friday: 9:00 AM - 5:00 PM\nSaturday - Sunday: Closed",
+  hours: "Monday–Friday: 9:00 AM–5:00 PM, Saturday–Sunday: Closed", // Remove spaces around en dash in time range
   hero_title: "Get In Touch",
   hero_description:
     "Let us know if you are interested in learning more about our research, collaborating with our team, or contributing to our mission. If you are a student looking for opportunities to participate in research, please do not hesitate to reach out!",

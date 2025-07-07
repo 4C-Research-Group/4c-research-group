@@ -19,6 +19,7 @@ export default function PublicationsPage() {
   const [sortBy, setSortBy] = useState<"year" | "title">("year");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
     async function fetchPubs() {
@@ -44,6 +45,20 @@ export default function PublicationsPage() {
     } else {
       return [...publications].sort((a, b) => a.title.localeCompare(b.title));
     }
+  }
+
+  function getFilteredPubs() {
+    let pubs = getSortedPubs();
+    if (searchTerm.trim()) {
+      const term = searchTerm.toLowerCase();
+      pubs = pubs.filter(
+        (pub) =>
+          pub.title?.toLowerCase().includes(term) ||
+          pub.authors?.toLowerCase().includes(term) ||
+          pub.journal?.toLowerCase().includes(term)
+      );
+    }
+    return pubs;
   }
 
   return (
@@ -89,6 +104,13 @@ export default function PublicationsPage() {
       <div className="container mx-auto px-4 py-12 sm:py-16 max-w-7xl">
         <div className="max-w-4xl mx-auto w-full">
           <div className="mb-6 flex flex-col sm:flex-row gap-3 sm:gap-4 items-start sm:items-center">
+            <input
+              type="text"
+              placeholder="Search by title, author, or journal..."
+              className="px-3 py-2 rounded border text-sm sm:text-base w-full sm:w-auto"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
             <button
               className={`px-3 py-2 rounded border text-sm sm:text-base w-full sm:w-auto ${sortBy === "year" ? "bg-blue-600 text-white" : "bg-white text-blue-600 border-blue-600"}`}
               onClick={() => setSortBy("year")}
@@ -110,9 +132,9 @@ export default function PublicationsPage() {
           {error && (
             <div className="text-red-500 text-center py-8">{error}</div>
           )}
-          {publications.length > 0 ? (
+          {getFilteredPubs().length > 0 ? (
             <div className="space-y-6 sm:space-y-8">
-              {getSortedPubs().map((pub, index) => (
+              {getFilteredPubs().map((pub, index) => (
                 <motion.div
                   key={pub.id}
                   className="bg-white dark:bg-gray-800 rounded-xl shadow-md p-4 sm:p-6 hover:shadow-lg transition-shadow w-full"

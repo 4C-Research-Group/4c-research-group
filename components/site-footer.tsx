@@ -121,7 +121,7 @@ export function SiteFooter({ navItems }: SiteFooterProps) {
                   href="tel:+15196858000"
                   className="text-sm text-gray-600 hover:text-cognition-600 dark:text-gray-400 dark:hover:text-cognition-400 transition-colors"
                 >
-                  +1 (519) 685-8500
+                  +1 (519) 685-8500 Ext. 74702
                 </a>
               </div>
             </address>

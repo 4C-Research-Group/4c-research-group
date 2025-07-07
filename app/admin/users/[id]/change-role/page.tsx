@@ -69,16 +69,22 @@ export default function ChangeRolePage({ params }: { params: { id: string } }) {
     setSuccess(false);
 
     try {
-      const { error } = await supabase
-        .from("users")
-        .update({
-          role: newRole,
-          updated_at: new Date().toISOString(),
-        })
-        .eq("id", params.id);
+      const response = await fetch(
+        `/api/admin/users/${params.id}/change-role`,
+        {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ role: newRole }),
+        }
+      );
 
-      if (error) {
-        setError("Error updating user role");
+      const data = await response.json();
+
+      if (!response.ok) {
+        console.error("Role update error:", data.error);
+        setError(data.error || "Error updating user role");
         return;
       }
 
@@ -88,6 +94,7 @@ export default function ChangeRolePage({ params }: { params: { id: string } }) {
         router.push("/admin/users");
       }, 1000);
     } catch (err) {
+      console.error("Exception during role update:", err);
       setError("Error updating user role");
     } finally {
       setSaving(false);

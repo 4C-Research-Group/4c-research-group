@@ -60,6 +60,26 @@ export default async function ProjectDetail({ params }: Props) {
             <p className="text-xl md:text-2xl text-cognition-100 mb-8">
               {project.description}
             </p>
+
+            {/* Keywords/Tags */}
+            {tags && tags.length > 0 && (
+              <div className="mb-8">
+                <h2 className="text-lg font-semibold text-cognition-100 mb-3">
+                  Key Focus Areas
+                </h2>
+                <div className="flex flex-wrap gap-2">
+                  {tags.map((tag: string, index: number) => (
+                    <span
+                      key={index}
+                      className="px-3 py-1.5 bg-white/20 backdrop-blur-sm rounded-full text-sm font-medium text-white border border-white/30"
+                    >
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            )}
+
             <div className="flex flex-wrap gap-4">
               <span className="px-4 py-2 bg-white/20 backdrop-blur-sm rounded-full text-sm font-medium">
                 {project.category}

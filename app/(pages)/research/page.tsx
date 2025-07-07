@@ -444,7 +444,7 @@ export default function ProjectsPage() {
                     >
                       {/* Title */}
                       <h3
-                        className={`font-bold text-gray-900 dark:text-white mb-2 group-hover:text-cognition-600 dark:group-hover:text-cognition-400 transition-colors ${
+                        className={`font-bold text-gray-900 dark:text-white mb-1 group-hover:text-cognition-600 dark:group-hover:text-cognition-400 transition-colors ${
                           viewMode === "list"
                             ? "text-lg line-clamp-2"
                             : "text-xl line-clamp-2"
@@ -452,6 +452,13 @@ export default function ProjectsPage() {
                       >
                         {project.title}
                       </h3>
+
+                      {/* Key Focus Area */}
+                      {project.tags && project.tags.length > 0 && (
+                        <p className="text-sm italic text-cognition-600 dark:text-cognition-400 mb-2">
+                          {project.tags[0]}
+                        </p>
+                      )}
 
                       {/* Description */}
                       <p
@@ -475,23 +482,6 @@ export default function ProjectsPage() {
                             project.end_date
                           )}
                         </span>
-                        {project.tags && project.tags.length > 0 && (
-                          <div className="flex flex-wrap gap-1">
-                            {project.tags.slice(0, 2).map((tag, tagIndex) => (
-                              <span
-                                key={tagIndex}
-                                className="inline-flex items-center px-2 py-1 rounded-full font-medium bg-cognition-100 text-cognition-700 dark:bg-cognition-900 dark:text-cognition-300"
-                              >
-                                {tag}
-                              </span>
-                            ))}
-                            {project.tags.length > 2 && (
-                              <span className="inline-flex items-center px-2 py-1 rounded-full font-medium bg-gray-100 text-gray-600 dark:bg-gray-700 dark:text-gray-400">
-                                +{project.tags.length - 2}
-                              </span>
-                            )}
-                          </div>
-                        )}
                       </div>
 
                       {/* Bottom Row: View Project CTA and External Link */}

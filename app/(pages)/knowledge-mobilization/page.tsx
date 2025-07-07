@@ -11,6 +11,7 @@ import {
 import { motion } from "framer-motion";
 import { useState } from "react";
 import PageHero from "@/components/PageHero";
+import Link from "next/link";
 
 type ResourceCardProps = {
   title: string;
@@ -37,28 +38,48 @@ const ResourceCard = ({
         {title}
       </h3>
       <p className="text-gray-600 dark:text-gray-300 mb-4">{description}</p>
-      <a
-        href={link}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="text-cognition-600 dark:text-cognition-400 hover:underline font-medium inline-flex items-center"
-      >
-        Learn more
-        <svg
-          className="w-4 h-4 ml-2"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-          xmlns="http://www.w3.org/2000/svg"
+      {link && link !== "#" ? (
+        <a
+          href={link}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-cognition-600 dark:text-cognition-400 hover:underline font-medium inline-flex items-center"
         >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2}
-            d="M14 5l7 7m0 0l-7 7m7-7H3"
-          />
-        </svg>
-      </a>
+          Learn more
+          <svg
+            className="w-4 h-4 ml-2"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M14 5l7 7m0 0l-7 7m7-7H3"
+            />
+          </svg>
+        </a>
+      ) : (
+        <span className="text-gray-400 font-medium inline-flex items-center cursor-not-allowed opacity-60">
+          Learn more
+          <svg
+            className="w-4 h-4 ml-2"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M14 5l7 7m0 0l-7 7m7-7H3"
+            />
+          </svg>
+        </span>
+      )}
     </div>
   </motion.div>
 );
@@ -235,9 +256,11 @@ export default function KnowledgeMobilization() {
               Our team is here to help. Reach out to us for more resources or to
               learn about our research.
             </p>
-            <button className="bg-white text-cognition-700 hover:bg-gray-100 font-semibold py-3 px-8 rounded-full transition-colors duration-300">
-              Contact Us
-            </button>
+            <Link href="/contact" passHref legacyBehavior>
+              <a className="bg-white text-cognition-700 hover:bg-gray-100 font-semibold py-3 px-8 rounded-full transition-colors duration-300">
+                Contact Us
+              </a>
+            </Link>
           </div>
         </section>
       </div>
