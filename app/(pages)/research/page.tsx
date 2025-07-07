@@ -241,7 +241,7 @@ export default function ProjectsPage() {
       {/* Hero Section */}
       <PageHero
         title="Research Projects"
-        subtitle="Exploring innovative approaches to improve cognitive outcomes in critical care."
+        subtitle='<span class="whitespace-nowrap">Exploring innovative approaches to improve cognitive outcomes in critical care.</span>'
       >
         {/* Quick Stats */}
         <div className="flex flex-wrap justify-center gap-6 mb-6">
