@@ -38,8 +38,9 @@ export default async function BlogPostPage({ params }: Props) {
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 overflow-x-hidden">
       {/* Hero Section with Featured Image */}
       <section className="relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-b from-black/50 to-black/20 z-10"></div>
-        <div className="relative h-[60vh] min-h-[400px]">
+        {/* Background image and overlay */}
+        <div className="absolute inset-0 w-full h-full z-0">
+          <div className="absolute inset-0 bg-gradient-to-b from-black/50 to-black/20 z-10 pointer-events-none"></div>
           <BlogImage
             src={post.image_url}
             alt={post.title}
@@ -62,44 +63,42 @@ export default async function BlogPostPage({ params }: Props) {
           </Link>
         </div>
 
-        {/* Hero Content */}
-        <div className="absolute inset-0 z-20 flex items-end">
-          <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-8 sm:pb-16">
-            <div className="max-w-4xl mx-auto text-white">
-              <div className="flex flex-wrap items-center gap-2 sm:gap-4 mb-4 text-xs sm:text-sm">
-                <span className="px-2 py-1 sm:px-3 sm:py-1 bg-white/20 backdrop-blur-sm rounded-full">
-                  {post.category}
+        {/* Hero Content (in normal flow) */}
+        <div className="relative z-20 container mx-auto px-4 pt-12 pb-12 sm:pt-20 sm:pb-20 flex flex-col justify-center">
+          <div className="max-w-6xl mx-auto text-white">
+            <div className="flex flex-wrap items-center gap-2 sm:gap-4 mb-4 text-xs sm:text-sm mt-8 sm:mt-12">
+              <span className="px-2 py-1 sm:px-3 sm:py-1 bg-white/20 backdrop-blur-sm rounded-full">
+                {post.category}
+              </span>
+              <span className="flex items-center">
+                <FaCalendarAlt className="mr-1 sm:mr-2 w-3 h-3 sm:w-4 sm:h-4" />
+                <span className="hidden sm:inline">
+                  {new Date(post.created_at).toLocaleDateString("en-US", {
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric",
+                  })}
                 </span>
-                <span className="flex items-center">
-                  <FaCalendarAlt className="mr-1 sm:mr-2 w-3 h-3 sm:w-4 sm:h-4" />
-                  <span className="hidden sm:inline">
-                    {new Date(post.created_at).toLocaleDateString("en-US", {
-                      year: "numeric",
-                      month: "long",
-                      day: "numeric",
-                    })}
-                  </span>
-                  <span className="sm:hidden">
-                    {new Date(post.created_at).toLocaleDateString("en-US", {
-                      month: "short",
-                      day: "numeric",
-                    })}
-                  </span>
+                <span className="sm:hidden">
+                  {new Date(post.created_at).toLocaleDateString("en-US", {
+                    month: "short",
+                    day: "numeric",
+                  })}
                 </span>
-                <span className="flex items-center">
-                  <FaClock className="mr-1 sm:mr-2 w-3 h-3 sm:w-4 sm:h-4" />
-                  {post.read_time}
-                </span>
-              </div>
-
-              <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold mb-4 sm:mb-6 leading-tight break-words">
-                {post.title}
-              </h1>
-
-              <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-gray-100 leading-relaxed max-w-3xl break-words">
-                {post.excerpt}
-              </p>
+              </span>
+              <span className="flex items-center">
+                <FaClock className="mr-1 sm:mr-2 w-3 h-3 sm:w-4 sm:h-4" />
+                {post.read_time}
+              </span>
             </div>
+
+            <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold mb-4 sm:mb-6 leading-tight break-words">
+              {post.title}
+            </h1>
+
+            <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-gray-100 leading-relaxed max-w-3xl break-words">
+              {post.excerpt}
+            </p>
           </div>
         </div>
       </section>
