@@ -40,7 +40,7 @@ export const projects: Project[] = [
     endDate: "2025-12-31",
     images: [
       "/images/project-1.png",
-      "/images/placeholder.jpg",
+      "/images/Graphic_image_of_patient_with_confusion_memory_.original.jpg",
       "/images/placeholder.jpg",
     ],
     tags: [
@@ -74,7 +74,7 @@ export const projects: Project[] = [
     endDate: "2026-06-30",
     images: [
       "/images/project-2.jpg",
-      "/images/placeholder.jpg",
+      "/images/Graphic_image_of_patient_with_confusion_memory_.original.jpg",
       "/images/placeholder.jpg",
     ],
     tags: [
@@ -110,7 +110,7 @@ export const projects: Project[] = [
     endDate: "2026-12-31",
     images: [
       "/images/project-3.png",
-      "/images/placeholder.jpg",
+      "/images/Graphic_image_of_patient_with_confusion_memory_.original.jpg",
       "/images/placeholder.jpg",
     ],
     tags: [

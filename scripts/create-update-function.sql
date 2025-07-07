@@ -9,13 +9,13 @@ LANGUAGE plpgsql
 SECURITY DEFINER
 AS $$
 BEGIN
-    -- Update the user role
-    UPDATE public.users 
+  -- Update the user role
+  UPDATE public.users 
   SET role = new_role, updated_at = NOW()
   WHERE id = user_id;
 
-    -- Return true if a row was updated
-    RETURN FOUND;
+  -- Return true if a row was updated
+  RETURN FOUND;
 END;
 $$;
 
