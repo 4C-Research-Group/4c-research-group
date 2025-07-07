@@ -87,7 +87,7 @@ export default function TeamPage() {
       {/* Principal Investigator */}
       {principalInvestigator && (
         <section className="py-20 px-4 bg-gradient-to-br from-gray-50 to-white dark:from-gray-900 dark:to-gray-800">
-          <div className="container mx-auto max-w-6xl">
+          <div className="container mx-auto max-w-6xl px-2 sm:px-4">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -141,10 +141,10 @@ export default function TeamPage() {
                           </div>
                         )}
                       </div>
-                      <h3 className="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-900 dark:text-white mb-2 sm:mb-3">
+                      <h3 className="text-lg sm:text-xl lg:text-2xl xl:text-3xl font-bold text-gray-900 dark:text-white mb-2 sm:mb-3">
                         {principalInvestigator.name}
                       </h3>
-                      <p className="text-cognition-600 dark:text-cognition-400 text-base sm:text-lg lg:text-xl font-medium">
+                      <p className="text-cognition-600 dark:text-cognition-400 text-sm sm:text-base lg:text-lg xl:text-xl font-medium">
                         {principalInvestigator.role}
                       </p>
                     </div>
@@ -155,7 +155,7 @@ export default function TeamPage() {
                     <div className="space-y-6">
                       {principalInvestigator.bio && (
                         <div className="prose dark:prose-invert max-w-none">
-                          <p className="text-gray-700 dark:text-gray-300 text-lg leading-relaxed">
+                          <p className="text-gray-700 dark:text-gray-300 text-sm sm:text-base lg:text-lg leading-relaxed">
                             {principalInvestigator.bio}
                           </p>
                         </div>
@@ -177,11 +177,11 @@ export default function TeamPage() {
                               <div className="p-2 bg-cognition-100 dark:bg-cognition-800 rounded-lg group-hover:bg-cognition-200 dark:group-hover:bg-cognition-700 transition-colors">
                                 <FaEnvelope className="w-4 h-4 text-cognition-600 dark:text-cognition-400" />
                               </div>
-                              <div>
+                              <div className="min-w-0 flex-1">
                                 <p className="text-sm text-gray-500 dark:text-gray-400">
                                   Email
                                 </p>
-                                <p className="text-gray-900 dark:text-white font-medium">
+                                <p className="text-gray-900 dark:text-white font-medium text-sm sm:text-base break-all">
                                   {principalInvestigator.email}
                                 </p>
                               </div>
