@@ -172,7 +172,8 @@ export default function TeamPage() {
                               href={`mailto:${principalInvestigator.email}`}
                               className="flex items-center space-x-3 p-3 sm:p-4 bg-gray-50 dark:bg-gray-700 rounded-xl hover:bg-cognition-50 dark:hover:bg-cognition-900/30 transition-all duration-200 group"
                               whileHover={{ x: 5 }}
-                              whileTap={{ scale: 0.98 }}
+                              whileTap={{ scale: 0.95 }}
+                              transition={{ duration: 0.1 }}
                             >
                               <div className="p-2 bg-cognition-100 dark:bg-cognition-800 rounded-lg group-hover:bg-cognition-200 dark:group-hover:bg-cognition-700 transition-colors">
                                 <FaEnvelope className="w-4 h-4 text-cognition-600 dark:text-cognition-400" />
@@ -195,7 +196,8 @@ export default function TeamPage() {
                               rel="noopener noreferrer"
                               className="flex items-center space-x-3 p-3 sm:p-4 bg-gray-50 dark:bg-gray-700 rounded-xl hover:bg-cognition-50 dark:hover:bg-cognition-900/30 transition-all duration-200 group"
                               whileHover={{ x: 5 }}
-                              whileTap={{ scale: 0.98 }}
+                              whileTap={{ scale: 0.95 }}
+                              transition={{ duration: 0.1 }}
                             >
                               <div className="p-2 bg-cognition-100 dark:bg-cognition-800 rounded-lg group-hover:bg-cognition-200 dark:group-hover:bg-cognition-700 transition-colors">
                                 <FaLinkedin className="w-4 h-4 text-cognition-600 dark:text-cognition-400" />
