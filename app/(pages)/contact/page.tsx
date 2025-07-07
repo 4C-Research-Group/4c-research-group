@@ -11,6 +11,7 @@ import {
   FaUser,
   FaCheck,
   FaExclamationTriangle,
+  FaBuilding,
 } from "react-icons/fa";
 import type { ContactPage } from "@/lib/types/contact-page";
 import PageHero from "@/components/PageHero";
@@ -119,7 +120,7 @@ export default function ContactPage({}: Props) {
   }, []);
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       {/* Hero Section */}
       <PageHero
         title={contact.hero_title}
@@ -127,27 +128,35 @@ export default function ContactPage({}: Props) {
       />
 
       {/* Main Content */}
-      <div className="container mx-auto px-4 py-16">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-          {/* Contact Form */}
+      <div className="container mx-auto px-4 py-12">
+        <div className="max-w-4xl mx-auto">
+          {/* Contact Form Section */}
           <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            whileInView={{ opacity: 1, x: 0 }}
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
             viewport={{ once: true }}
-            className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8"
+            className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 lg:p-8 mb-8"
           >
-            <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">
-              Send us a Message
-            </h2>
+            <div className="mb-6">
+              <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
+                Send us a Message
+              </h2>
+              <p className="text-gray-600 dark:text-gray-300 text-sm">
+                We'd love to hear from you. Fill out the form below and we'll
+                get back to you as soon as possible.
+              </p>
+            </div>
 
             {/* Status Message */}
             {submitStatus.type && (
-              <div
-                className={`mb-6 p-4 rounded-lg flex items-center ${
+              <motion.div
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                className={`mb-6 p-3 rounded-lg flex items-center text-sm ${
                   submitStatus.type === "success"
-                    ? "bg-green-100 text-green-800 dark:bg-green-900/50 dark:text-green-400"
-                    : "bg-red-100 text-red-800 dark:bg-red-900/50 dark:text-red-400"
+                    ? "bg-green-50 dark:bg-green-900/20 text-green-800 dark:text-green-400 border border-green-200 dark:border-green-800"
+                    : "bg-red-50 dark:bg-red-900/20 text-red-800 dark:text-red-400 border border-red-200 dark:border-red-800"
                 }`}
               >
                 {submitStatus.type === "success" ? (
@@ -156,11 +165,11 @@ export default function ContactPage({}: Props) {
                   <FaExclamationTriangle className="mr-2 flex-shrink-0" />
                 )}
                 {submitStatus.message}
-              </div>
+              </motion.div>
             )}
 
-            <form onSubmit={handleSubmit} className="space-y-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <label
                     htmlFor="firstName"
@@ -175,7 +184,7 @@ export default function ContactPage({}: Props) {
                     value={formData.firstName}
                     onChange={handleInputChange}
                     required
-                    className="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-cognition-500 focus:border-transparent"
+                    className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-cognition-500 focus:border-transparent focus:bg-white dark:focus:bg-gray-600 transition-all duration-200 text-sm"
                     placeholder="John"
                     disabled={isSubmitting}
                   />
@@ -194,7 +203,7 @@ export default function ContactPage({}: Props) {
                     value={formData.lastName}
                     onChange={handleInputChange}
                     required
-                    className="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-cognition-500 focus:border-transparent"
+                    className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-cognition-500 focus:border-transparent focus:bg-white dark:focus:bg-gray-600 transition-all duration-200 text-sm"
                     placeholder="Doe"
                     disabled={isSubmitting}
                   />
@@ -206,7 +215,7 @@ export default function ContactPage({}: Props) {
                   htmlFor="email"
                   className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
                 >
-                  Email *
+                  Email Address *
                 </label>
                 <input
                   type="email"
@@ -215,7 +224,7 @@ export default function ContactPage({}: Props) {
                   value={formData.email}
                   onChange={handleInputChange}
                   required
-                  className="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-cognition-500 focus:border-transparent"
+                  className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-cognition-500 focus:border-transparent focus:bg-white dark:focus:bg-gray-600 transition-all duration-200 text-sm"
                   placeholder="you@example.com"
                   disabled={isSubmitting}
                 />
@@ -235,7 +244,7 @@ export default function ContactPage({}: Props) {
                   value={formData.subject}
                   onChange={handleInputChange}
                   required
-                  className="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-cognition-500 focus:border-transparent"
+                  className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-cognition-500 focus:border-transparent focus:bg-white dark:focus:bg-gray-600 transition-all duration-200 text-sm"
                   placeholder="How can we help?"
                   disabled={isSubmitting}
                 />
@@ -253,10 +262,10 @@ export default function ContactPage({}: Props) {
                   name="message"
                   value={formData.message}
                   onChange={handleInputChange}
-                  rows={5}
+                  rows={4}
                   required
-                  className="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-cognition-500 focus:border-transparent"
-                  placeholder="Your message here..."
+                  className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-cognition-500 focus:border-transparent focus:bg-white dark:focus:bg-gray-600 transition-all duration-200 text-sm resize-none"
+                  placeholder="Tell us more about your inquiry..."
                   disabled={isSubmitting}
                 ></textarea>
               </div>
@@ -265,7 +274,7 @@ export default function ContactPage({}: Props) {
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="w-full bg-cognition-600 hover:bg-cognition-700 disabled:bg-cognition-400 text-white font-semibold py-3 px-6 rounded-lg transition-colors duration-300 flex items-center justify-center disabled:cursor-not-allowed"
+                  className="w-full bg-cognition-600 hover:bg-cognition-700 disabled:bg-cognition-400 text-white font-medium py-3 px-6 rounded-lg transition-colors duration-300 flex items-center justify-center disabled:cursor-not-allowed text-sm"
                 >
                   {isSubmitting ? (
                     <>
@@ -283,142 +292,156 @@ export default function ContactPage({}: Props) {
             </form>
           </motion.div>
 
-          {/* Contact Information */}
-          <motion.div
-            initial={{ opacity: 0, x: 20 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.5, delay: 0.1 }}
-            viewport={{ once: true }}
-            className="space-y-8"
-          >
-            <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8">
-              <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">
+          {/* Contact Information Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+            {/* Contact Details */}
+            <motion.div
+              initial={{ opacity: 0, x: -20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.5, delay: 0.1 }}
+              viewport={{ once: true }}
+              className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6"
+            >
+              <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-4">
                 Contact Information
-              </h2>
-              <div className="space-y-6">
-                <div className="flex items-start">
-                  <div className="flex-shrink-0 bg-cognition-100 dark:bg-cognition-900 p-3 rounded-full text-cognition-600 dark:text-cognition-400">
-                    <FaMapMarkerAlt className="text-xl" />
+              </h3>
+              <div className="space-y-4">
+                <div className="flex items-start space-x-3">
+                  <div className="flex-shrink-0 bg-cognition-100 dark:bg-cognition-900/50 p-2 rounded-lg">
+                    <FaMapMarkerAlt className="text-cognition-600 dark:text-cognition-400 text-sm" />
                   </div>
-                  <div className="ml-4">
-                    <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+                  <div>
+                    <h4 className="text-sm font-semibold text-gray-900 dark:text-white mb-1">
                       Location
-                    </h3>
-                    <p className="text-gray-600 dark:text-gray-300">
+                    </h4>
+                    <p className="text-gray-600 dark:text-gray-300 text-sm">
                       {contact.address}
                     </p>
                   </div>
                 </div>
 
-                <div className="flex items-start">
-                  <div className="flex-shrink-0 bg-cognition-100 dark:bg-cognition-900 p-3 rounded-full text-cognition-600 dark:text-cognition-400">
-                    <FaPhone className="text-xl" />
+                <div className="flex items-start space-x-3">
+                  <div className="flex-shrink-0 bg-cognition-100 dark:bg-cognition-900/50 p-2 rounded-lg">
+                    <FaPhone className="text-cognition-600 dark:text-cognition-400 text-sm" />
                   </div>
-                  <div className="ml-4">
-                    <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+                  <div>
+                    <h4 className="text-sm font-semibold text-gray-900 dark:text-white mb-1">
                       Phone
-                    </h3>
-                    <p className="text-gray-600 dark:text-gray-300">
+                    </h4>
+                    <p className="text-gray-600 dark:text-gray-300 text-sm">
                       {contact.phone}
                     </p>
                   </div>
                 </div>
 
-                <div className="flex items-start">
-                  <div className="flex-shrink-0 bg-cognition-100 dark:bg-cognition-900 p-3 rounded-full text-cognition-600 dark:text-cognition-400">
-                    <FaEnvelope className="text-xl" />
+                <div className="flex items-start space-x-3">
+                  <div className="flex-shrink-0 bg-cognition-100 dark:bg-cognition-900/50 p-2 rounded-lg">
+                    <FaEnvelope className="text-cognition-600 dark:text-cognition-400 text-sm" />
                   </div>
-                  <div className="ml-4">
-                    <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+                  <div>
+                    <h4 className="text-sm font-semibold text-gray-900 dark:text-white mb-1">
                       Email
-                    </h3>
-                    <p className="text-gray-600 dark:text-gray-300">
-                      <a
-                        href={`mailto:${contact.email}`}
-                        className="hover:text-cognition-600 dark:hover:text-cognition-400 transition-colors"
-                      >
-                        {contact.email}
-                      </a>
-                    </p>
+                    </h4>
+                    <a
+                      href={`mailto:${contact.email}`}
+                      className="text-cognition-600 dark:text-cognition-400 hover:text-cognition-700 dark:hover:text-cognition-300 transition-colors text-sm"
+                    >
+                      {contact.email}
+                    </a>
                   </div>
                 </div>
 
-                <div className="flex items-start">
-                  <div className="flex-shrink-0 bg-cognition-100 dark:bg-cognition-900 p-3 rounded-full text-cognition-600 dark:text-cognition-400">
-                    <FaUser className="text-xl" />
+                <div className="flex items-start space-x-3">
+                  <div className="flex-shrink-0 bg-cognition-100 dark:bg-cognition-900/50 p-2 rounded-lg">
+                    <FaClock className="text-cognition-600 dark:text-cognition-400 text-sm" />
                   </div>
-                  <div className="ml-4">
-                    <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
-                      Research Coordinator
-                    </h3>
-                    <p className="text-gray-600 dark:text-gray-300">
-                      {contact.research_coordinator_name}
-                      <br />
-                      <a
-                        href={`mailto:${contact.research_coordinator_email}`}
-                        className="hover:text-cognition-600 dark:hover:text-cognition-400 transition-colors"
-                      >
-                        {contact.research_coordinator_email}
-                      </a>
-                    </p>
-                  </div>
-                </div>
-
-                <div className="flex items-start">
-                  <div className="flex-shrink-0 bg-cognition-100 dark:bg-cognition-900 p-3 rounded-full text-cognition-600 dark:text-cognition-400">
-                    <FaClock className="text-xl" />
-                  </div>
-                  <div className="ml-4">
-                    <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+                  <div>
+                    <h4 className="text-sm font-semibold text-gray-900 dark:text-white mb-1">
                       Hours
-                    </h3>
-                    <p className="text-gray-600 dark:text-gray-300">
+                    </h4>
+                    <p className="text-gray-600 dark:text-gray-300 text-sm">
                       {contact.hours}
                     </p>
                   </div>
                 </div>
-              </div>
-            </div>
 
-            {/* Real Map */}
-            <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl overflow-hidden">
-              <div className="w-full h-64">
+                <div className="flex items-start space-x-3">
+                  <div className="flex-shrink-0 bg-cognition-100 dark:bg-cognition-900/50 p-2 rounded-lg">
+                    <FaUser className="text-cognition-600 dark:text-cognition-400 text-sm" />
+                  </div>
+                  <div>
+                    <h4 className="text-sm font-semibold text-gray-900 dark:text-white mb-1">
+                      Research Coordinator
+                    </h4>
+                    <p className="text-gray-600 dark:text-gray-300 text-sm mb-1">
+                      {contact.research_coordinator_name}
+                    </p>
+                    <a
+                      href={`mailto:${contact.research_coordinator_email}`}
+                      className="text-cognition-600 dark:text-cognition-400 hover:text-cognition-700 dark:hover:text-cognition-300 transition-colors text-sm"
+                    >
+                      {contact.research_coordinator_email}
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+
+            {/* Map */}
+            <motion.div
+              initial={{ opacity: 0, x: 20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.5, delay: 0.2 }}
+              viewport={{ once: true }}
+              className="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden"
+            >
+              <div className="p-4 border-b border-gray-100 dark:border-gray-700">
+                <div className="flex items-center">
+                  <div className="bg-cognition-100 dark:bg-cognition-900/50 p-2 rounded-lg">
+                    <FaBuilding className="text-cognition-600 dark:text-cognition-400 text-sm" />
+                  </div>
+                  <h3 className="ml-3 text-lg font-semibold text-gray-900 dark:text-white">
+                    Visit Us
+                  </h3>
+                </div>
+              </div>
+              <div className="w-full h-48">
                 <iframe
                   src={contact.map_embed_url}
                   width="100%"
-                  height="400"
+                  height="100%"
                   style={{ border: 0 }}
                   allowFullScreen
                   loading="lazy"
                   referrerPolicy="no-referrer-when-downgrade"
                   title="Victoria Hospital & Children's Hospital"
-                  className="rounded-2xl"
                 ></iframe>
               </div>
-            </div>
-
-            <a
-              href="https://maps.app.goo.gl/NHAV4ZiR9p3aeGGW6"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center mt-4 px-4 py-2 bg-cognition-600 hover:bg-cognition-700 text-white font-semibold rounded-lg transition-colors"
-            >
-              Open in Google Maps
-              <svg
-                className="w-4 h-4 ml-2"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M17 8l4 4m0 0l-4 4m4-4H3"
-                ></path>
-              </svg>
-            </a>
-          </motion.div>
+              <div className="p-4">
+                <a
+                  href="https://maps.app.goo.gl/NHAV4ZiR9p3aeGGW6"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-full inline-flex items-center justify-center px-4 py-2 bg-cognition-600 hover:bg-cognition-700 text-white font-medium rounded-lg transition-colors duration-300 text-sm"
+                >
+                  Open in Google Maps
+                  <svg
+                    className="w-4 h-4 ml-2"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M17 8l4 4m0 0l-4 4m4-4H3"
+                    ></path>
+                  </svg>
+                </a>
+              </div>
+            </motion.div>
+          </div>
         </div>
       </div>
     </div>
