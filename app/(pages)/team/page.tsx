@@ -95,11 +95,11 @@ export default function TeamPage() {
               className="relative"
             >
               {/* Background decoration */}
-              <div className="absolute inset-0 bg-gradient-to-r from-cognition-50 to-cognition-100 dark:from-cognition-900/20 dark:to-cognition-800/20 rounded-3xl transform rotate-1"></div>
+              <div className="absolute inset-0 bg-gradient-to-r from-cognition-50 to-cognition-100 dark:from-gray-800 dark:to-gray-900 rounded-3xl transform rotate-1"></div>
 
-              <div className="relative bg-white dark:bg-gray-800 rounded-3xl shadow-2xl overflow-hidden border border-gray-100 dark:border-gray-700">
+              <div className="relative bg-white dark:bg-gray-800/95 rounded-3xl shadow-xl overflow-hidden border border-gray-100 dark:border-gray-700/50 backdrop-blur-sm">
                 {/* Header section */}
-                <div className="bg-gradient-to-r from-cognition-600 to-cognition-700 px-8 py-6">
+                <div className="bg-gradient-to-r from-cognition-600 to-cognition-700 dark:from-cognition-700 dark:to-cognition-800 px-8 py-6">
                   <div className="flex items-center space-x-3">
                     <div className="p-3 bg-white/20 rounded-full">
                       <FaUserTie className="w-6 h-6 text-white" />
@@ -117,11 +117,11 @@ export default function TeamPage() {
 
                 <div className="flex flex-col lg:flex-row">
                   {/* Image section */}
-                  <div className="w-full lg:w-2/5 bg-gradient-to-br from-cognition-50 to-cognition-100 dark:from-cognition-900/30 dark:to-cognition-800/30 p-4 sm:p-6 lg:p-8 flex flex-col items-center justify-center relative overflow-hidden">
+                  <div className="w-full lg:w-2/5 bg-gradient-to-br from-cognition-50 to-cognition-100 dark:from-gray-800 dark:to-gray-900/50 p-4 sm:p-6 lg:p-8 flex flex-col items-center justify-center relative overflow-hidden">
                     {/* Background pattern */}
-                    <div className="absolute inset-0 opacity-10">
-                      <div className="absolute top-0 left-0 w-32 h-32 bg-cognition-600 rounded-full -translate-x-16 -translate-y-16"></div>
-                      <div className="absolute bottom-0 right-0 w-24 h-24 bg-cognition-600 rounded-full translate-x-12 translate-y-12"></div>
+                    <div className="absolute inset-0 opacity-10 dark:opacity-5">
+                      <div className="absolute top-0 left-0 w-32 h-32 bg-cognition-600 dark:bg-cognition-400 rounded-full -translate-x-16 -translate-y-16"></div>
+                      <div className="absolute bottom-0 right-0 w-24 h-24 bg-cognition-600 dark:bg-cognition-400 rounded-full translate-x-12 translate-y-12"></div>
                     </div>
 
                     <div className="relative z-10 text-center">
@@ -151,38 +151,38 @@ export default function TeamPage() {
                   </div>
 
                   {/* Content section */}
-                  <div className="w-full lg:w-3/5 p-4 sm:p-6 lg:p-8 flex flex-col justify-center">
+                  <div className="w-full lg:w-3/5 p-4 sm:p-6 lg:p-8 flex flex-col justify-center bg-white/50 dark:bg-gray-800/50">
                     <div className="space-y-4 sm:space-y-6">
                       {principalInvestigator.bio && (
                         <div className="prose dark:prose-invert max-w-none">
-                          <p className="text-gray-700 dark:text-gray-300 text-sm sm:text-base lg:text-lg leading-relaxed">
+                          <p className="text-gray-700 dark:text-gray-200 text-sm sm:text-base lg:text-lg leading-relaxed">
                             {principalInvestigator.bio}
                           </p>
                         </div>
                       )}
 
                       {/* Contact section */}
-                      <div className="pt-4 sm:pt-6 border-t border-gray-200 dark:border-gray-700">
-                        <h4 className="text-base sm:text-lg font-semibold text-gray-900 dark:text-white mb-3 sm:mb-4">
+                      <div className="pt-4 sm:pt-6 border-t border-gray-200 dark:border-gray-700/50">
+                        <h4 className="text-base sm:text-lg font-semibold text-gray-900 dark:text-gray-100 mb-3 sm:mb-4">
                           Get in Touch
                         </h4>
                         <div className="space-y-2 sm:space-y-3">
                           {principalInvestigator.email && (
                             <motion.a
                               href={`mailto:${principalInvestigator.email}`}
-                              className="flex items-center space-x-3 p-3 sm:p-4 bg-gray-50 dark:bg-gray-700 rounded-xl hover:bg-cognition-50 dark:hover:bg-cognition-900/30 transition-all duration-200 group"
+                              className="flex items-center space-x-3 p-3 sm:p-4 bg-gray-50/70 dark:bg-gray-700/70 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-700 transition-all duration-200 group border border-gray-100 dark:border-gray-700/30"
                               whileHover={{ x: 5 }}
-                              whileTap={{ scale: 0.95 }}
+                              whileTap={{ scale: 0.98 }}
                               transition={{ duration: 0.1 }}
                             >
-                              <div className="p-2 bg-cognition-100 dark:bg-cognition-800 rounded-lg group-hover:bg-cognition-200 dark:group-hover:bg-cognition-700 transition-colors">
+                              <div className="p-2 bg-cognition-100 dark:bg-cognition-900/50 rounded-lg group-hover:bg-cognition-200 dark:group-hover:bg-cognition-800 transition-colors">
                                 <FaEnvelope className="w-4 h-4 text-cognition-600 dark:text-cognition-400" />
                               </div>
                               <div className="min-w-0 flex-1">
-                                <p className="text-sm text-gray-500 dark:text-gray-400">
+                                <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400">
                                   Email
                                 </p>
-                                <p className="text-gray-900 dark:text-white font-medium text-sm sm:text-base break-all">
+                                <p className="text-gray-900 dark:text-gray-100 font-medium text-sm sm:text-base break-all">
                                   {principalInvestigator.email}
                                 </p>
                               </div>
@@ -194,19 +194,19 @@ export default function TeamPage() {
                               href={principalInvestigator.linkedin_url}
                               target="_blank"
                               rel="noopener noreferrer"
-                              className="flex items-center space-x-3 p-3 sm:p-4 bg-gray-50 dark:bg-gray-700 rounded-xl hover:bg-cognition-50 dark:hover:bg-cognition-900/30 transition-all duration-200 group"
+                              className="flex items-center space-x-3 p-3 sm:p-4 bg-gray-50/70 dark:bg-gray-700/70 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-700 transition-all duration-200 group border border-gray-100 dark:border-gray-700/30"
                               whileHover={{ x: 5 }}
-                              whileTap={{ scale: 0.95 }}
+                              whileTap={{ scale: 0.98 }}
                               transition={{ duration: 0.1 }}
                             >
-                              <div className="p-2 bg-cognition-100 dark:bg-cognition-800 rounded-lg group-hover:bg-cognition-200 dark:group-hover:bg-cognition-700 transition-colors">
+                              <div className="p-2 bg-cognition-100 dark:bg-cognition-900/50 rounded-lg group-hover:bg-cognition-200 dark:group-hover:bg-cognition-800 transition-colors">
                                 <FaLinkedin className="w-4 h-4 text-cognition-600 dark:text-cognition-400" />
                               </div>
                               <div>
-                                <p className="text-sm text-gray-500 dark:text-gray-400">
+                                <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400">
                                   LinkedIn
                                 </p>
-                                <p className="text-gray-900 dark:text-white font-medium">
+                                <p className="text-gray-900 dark:text-gray-100 font-medium">
                                   Connect on LinkedIn
                                 </p>
                               </div>
