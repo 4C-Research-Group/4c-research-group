@@ -2,6 +2,12 @@ import { notFound } from "next/navigation";
 import Image from "next/image";
 import { createServerClient } from "@supabase/ssr";
 import { cookies } from "next/headers";
+import {
+  FaCalendarAlt,
+  FaExternalLinkAlt,
+  FaUsers,
+  FaBullseye,
+} from "react-icons/fa";
 
 // Force dynamic rendering for this page
 export const dynamic = "force-dynamic";
@@ -48,25 +54,108 @@ export default async function ProjectDetail({ params }: Props) {
   const objectives = project.objectives || [];
   const teamMembers = project.team_members || [];
 
-  return (
-    <div className="min-h-screen bg-white dark:bg-gray-900">
-      {/* Hero Section */}
-      <section className="relative bg-gradient-to-r from-cognition-600 to-cognition-800 text-white">
-        <div className="container mx-auto px-4 py-24 md:py-32">
-          <div className="max-w-3xl">
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6">
-              {project.title}
-            </h1>
-            <p className="text-xl md:text-2xl text-cognition-100 mb-8">
-              {project.description}
-            </p>
+  const formatProjectDates = (
+    startDate: string,
+    status: string,
+    endDate?: string
+  ) => {
+    const start = new Date(startDate);
+    const startYear = start.getFullYear();
 
-            {/* Keywords/Tags */}
-            {tags && tags.length > 0 && (
-              <div className="mb-8">
-                <h2 className="text-lg font-semibold text-cognition-100 mb-3">
-                  Key Focus Areas
-                </h2>
+    if (endDate) {
+      const end = new Date(endDate);
+      const endYear = end.getFullYear();
+
+      if (startYear === endYear) {
+        return `${startYear}`;
+      } else {
+        return `${startYear} - ${endYear}`;
+      }
+    } else {
+      if (status === "active") {
+        return `${startYear} - Present`;
+      } else {
+        return `${startYear}`;
+      }
+    }
+  };
+
+  const getStatusBadge = (status: string) => {
+    const statusConfig = {
+      active: {
+        color:
+          "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300",
+        text: "Active",
+      },
+      completed: {
+        color: "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300",
+        text: "Completed",
+      },
+      pending: {
+        color:
+          "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300",
+        text: "Pending",
+      },
+      on_hold: {
+        color: "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300",
+        text: "On Hold",
+      },
+    };
+
+    const config =
+      statusConfig[status as keyof typeof statusConfig] || statusConfig.pending;
+
+    return (
+      <span
+        className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${config.color}`}
+      >
+        {config.text}
+      </span>
+    );
+  };
+
+  return (
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+      {/* Hero Section with Background Image */}
+      <section className="relative h-96 md:h-[500px] overflow-hidden">
+        <div className="absolute inset-0">
+          <Image
+            src={images[0] || "/images/placeholder.jpg"}
+            alt={project.title}
+            fill
+            className="object-cover"
+            priority
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent"></div>
+        </div>
+
+        <div className="relative h-full flex items-end">
+          <div className="container mx-auto px-4 pb-12">
+            <div className="max-w-4xl">
+              <div className="flex flex-wrap items-center gap-3 mb-4">
+                {getStatusBadge(project.status)}
+                <span className="px-3 py-1 bg-white/20 backdrop-blur-sm rounded-full text-sm font-medium text-white">
+                  {project.category}
+                </span>
+                <span className="flex items-center text-white/80 text-sm">
+                  <FaCalendarAlt className="mr-2" />
+                  {formatProjectDates(
+                    project.start_date,
+                    project.status,
+                    project.end_date
+                  )}
+                </span>
+              </div>
+
+              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6 leading-tight">
+                {project.title}
+              </h1>
+
+              <p className="text-xl md:text-2xl text-white/90 mb-8 max-w-3xl">
+                {project.description}
+              </p>
+
+              {tags && tags.length > 0 && (
                 <div className="flex flex-wrap gap-2">
                   {tags.map((tag: string, index: number) => (
                     <span
@@ -77,162 +166,191 @@ export default async function ProjectDetail({ params }: Props) {
                     </span>
                   ))}
                 </div>
-              </div>
-            )}
-
-            <div className="flex flex-wrap gap-4">
-              <span className="px-4 py-2 bg-white/20 backdrop-blur-sm rounded-full text-sm font-medium">
-                {project.category}
-              </span>
-              <span className="px-4 py-2 bg-white/20 backdrop-blur-sm rounded-full text-sm font-medium">
-                {project.status.charAt(0).toUpperCase() +
-                  project.status.slice(1)}
-              </span>
+              )}
             </div>
           </div>
         </div>
       </section>
 
-      {/* Project Content */}
+      {/* Main Content */}
       <section className="py-16 md:py-24">
         <div className="container mx-auto px-4">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
-            {/* Left Column - Description */}
-            <div className="prose dark:prose-invert max-w-none">
-              <h2 className="text-3xl font-bold mb-6">About the Project</h2>
-              <p className="text-lg text-gray-600 dark:text-gray-300 mb-6">
-                {project.long_description ||
-                  "Detailed project description coming soon..."}
-              </p>
-
-              <h3 className="text-2xl font-semibold mt-10 mb-4">
-                Research Objectives
-              </h3>
-              <ul className="space-y-3 mb-8">
-                {objectives.length > 0 ? (
-                  objectives.map((obj: string, index: number) => (
-                    <li key={index} className="flex items-start">
-                      <span className="text-cognition-600 dark:text-cognition-400 mr-2">
-                        •
-                      </span>
-                      <span className="text-gray-700 dark:text-gray-300">
-                        {obj}
-                      </span>
-                    </li>
-                  ))
-                ) : (
-                  <li className="text-gray-500 dark:text-gray-400">
-                    No objectives listed
-                  </li>
-                )}
-              </ul>
-
-              <h3 className="text-2xl font-semibold mt-10 mb-4">
-                Team Members
-              </h3>
-              <div className="flex flex-wrap gap-4">
-                {teamMembers.length > 0 ? (
-                  teamMembers.map((member: any) => (
-                    <div key={member.name} className="flex items-center">
-                      <div className="w-10 h-10 rounded-full bg-gray-200 dark:bg-gray-700 flex items-center justify-center text-gray-500 dark:text-gray-300 font-medium">
-                        {member.name
-                          .split(" ")
-                          .map((n: string) => n[0])
-                          .join("")}
-                      </div>
-                      <div className="ml-3">
-                        <p className="text-sm font-medium text-gray-900 dark:text-white">
-                          {member.name}
-                        </p>
-                        <p className="text-xs text-gray-500 dark:text-gray-400">
-                          {member.role}
-                        </p>
-                      </div>
-                    </div>
-                  ))
-                ) : (
-                  <p className="text-gray-500 dark:text-gray-400">
-                    No team members listed
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
+            {/* Main Content - 2 columns */}
+            <div className="lg:col-span-2 space-y-12">
+              {/* About Section */}
+              <div>
+                <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-6">
+                  About the Project
+                </h2>
+                <div className="prose dark:prose-invert max-w-none">
+                  <p className="text-lg text-gray-600 dark:text-gray-300 leading-relaxed">
+                    {project.long_description ||
+                      "Detailed project description coming soon..."}
                   </p>
-                )}
-              </div>
-            </div>
-
-            {/* Right Column - Images */}
-            <div className="space-y-6">
-              <div className="relative rounded-xl overflow-hidden aspect-video bg-gray-100 dark:bg-gray-800">
-                <Image
-                  src={images[0] || "/images/placeholder.jpg"}
-                  alt={`${project.title} - Main`}
-                  fill
-                  className="object-cover"
-                  priority
-                />
-              </div>
-              <div className="grid grid-cols-2 gap-4">
-                <div className="relative rounded-xl overflow-hidden aspect-square bg-gray-100 dark:bg-gray-800">
-                  <Image
-                    src={images[1] || "/images/placeholder.jpg"}
-                    alt={`${project.title} - Secondary`}
-                    fill
-                    className="object-cover"
-                  />
-                </div>
-                <div className="relative rounded-xl overflow-hidden aspect-square bg-gray-100 dark:bg-gray-800">
-                  <Image
-                    src={images[2] || "/images/placeholder.jpg"}
-                    alt={`${project.title} - Secondary`}
-                    fill
-                    className="object-cover"
-                  />
                 </div>
               </div>
 
-              {/* Project Details */}
-              <div className="bg-gray-50 dark:bg-gray-800 rounded-xl p-6">
-                <h3 className="text-lg font-semibold mb-4">Project Details</h3>
-                <div className="space-y-3">
-                  <div>
-                    <span className="text-sm text-gray-500 dark:text-gray-400">
-                      Status
-                    </span>
-                    <p className="font-medium">
-                      {project.status.charAt(0).toUpperCase() +
-                        project.status.slice(1)}
-                    </p>
+              {/* Project Images */}
+              <div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  {/* First additional image - always shown */}
+                  <div className="bg-white dark:bg-gray-800 rounded-2xl overflow-hidden shadow-sm border border-gray-200 dark:border-gray-700">
+                    <div className="relative aspect-[4/3]">
+                      <Image
+                        src={images[1] || "/images/placeholder.jpg"}
+                        alt={`${project.title} - Project Image 1`}
+                        fill
+                        className="object-cover"
+                      />
+                    </div>
                   </div>
-                  {project.funding && (
-                    <div>
-                      <span className="text-sm text-gray-500 dark:text-gray-400">
-                        Funding
-                      </span>
-                      <p className="font-medium">{project.funding}</p>
+
+                  {/* Second additional image - optional */}
+                  {images[2] && (
+                    <div className="bg-white dark:bg-gray-800 rounded-2xl overflow-hidden shadow-sm border border-gray-200 dark:border-gray-700">
+                      <div className="relative aspect-[4/3]">
+                        <Image
+                          src={images[2]}
+                          alt={`${project.title} - Project Image 2`}
+                          fill
+                          className="object-cover"
+                        />
+                      </div>
                     </div>
                   )}
                 </div>
-                {project.link && (
-                  <a
-                    href={project.link}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="mt-6 inline-flex items-center text-cognition-600 dark:text-cognition-400 hover:underline font-medium"
-                  >
-                    Visit Project Website
-                    <svg
-                      className="w-4 h-4 ml-2"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
-                      />
-                    </svg>
-                  </a>
+              </div>
+
+              {/* Research Objectives */}
+              <div>
+                <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-6 flex items-center">
+                  <FaBullseye className="mr-3 text-cognition-600 dark:text-cognition-400" />
+                  Research Objectives
+                </h2>
+                <div className="bg-white dark:bg-gray-800 rounded-2xl p-8 shadow-sm border border-gray-200 dark:border-gray-700">
+                  {objectives.length > 0 ? (
+                    <ul className="space-y-4">
+                      {objectives.map((obj: string, index: number) => (
+                        <li key={index} className="flex items-start">
+                          <div className="flex-shrink-0 w-8 h-8 bg-cognition-100 dark:bg-cognition-900 rounded-full flex items-center justify-center mr-4 mt-0.5">
+                            <span className="text-cognition-600 dark:text-cognition-400 font-semibold text-sm">
+                              {index + 1}
+                            </span>
+                          </div>
+                          <span className="text-gray-700 dark:text-gray-300 leading-relaxed">
+                            {obj}
+                          </span>
+                        </li>
+                      ))}
+                    </ul>
+                  ) : (
+                    <p className="text-gray-500 dark:text-gray-400 italic">
+                      No objectives listed
+                    </p>
+                  )}
+                </div>
+              </div>
+            </div>
+
+            {/* Sidebar */}
+            <div className="space-y-8">
+              {/* Project Details Card */}
+              <div className="bg-white dark:bg-gray-800 rounded-2xl p-8 shadow-sm border border-gray-200 dark:border-gray-700">
+                <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-6">
+                  Project Details
+                </h3>
+                <div className="space-y-6">
+                  <div>
+                    <span className="text-sm font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide">
+                      Status
+                    </span>
+                    <div className="mt-2">{getStatusBadge(project.status)}</div>
+                  </div>
+
+                  <div>
+                    <span className="text-sm font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide">
+                      Category
+                    </span>
+                    <p className="mt-2 font-semibold text-gray-900 dark:text-white">
+                      {project.category}
+                    </p>
+                  </div>
+
+                  <div>
+                    <span className="text-sm font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide">
+                      Timeline
+                    </span>
+                    <p className="mt-2 font-semibold text-gray-900 dark:text-white">
+                      {formatProjectDates(
+                        project.start_date,
+                        project.status,
+                        project.end_date
+                      )}
+                    </p>
+                  </div>
+
+                  {project.funding && (
+                    <div>
+                      <span className="text-sm font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide">
+                        Funding
+                      </span>
+                      <p className="mt-2 font-semibold text-gray-900 dark:text-white">
+                        {project.funding}
+                      </p>
+                    </div>
+                  )}
+
+                  {project.link && (
+                    <div className="pt-6 border-t border-gray-200 dark:border-gray-700">
+                      <a
+                        href={project.link}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center justify-center w-full px-6 py-3 bg-cognition-600 hover:bg-cognition-700 text-white font-semibold rounded-xl transition-colors duration-200"
+                      >
+                        <FaExternalLinkAlt className="mr-2" />
+                        Visit Project Website
+                      </a>
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              {/* Team Members Card */}
+              <div className="bg-white dark:bg-gray-800 rounded-2xl p-8 shadow-sm border border-gray-200 dark:border-gray-700">
+                <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-6 flex items-center">
+                  <FaUsers className="mr-3 text-cognition-600 dark:text-cognition-400" />
+                  Team Members
+                </h3>
+                {teamMembers.length > 0 ? (
+                  <div className="space-y-4">
+                    {teamMembers.map((member: any) => (
+                      <div
+                        key={member.name}
+                        className="flex items-center p-3 bg-gray-50 dark:bg-gray-700 rounded-xl"
+                      >
+                        <div className="w-10 h-10 rounded-full bg-cognition-100 dark:bg-cognition-900 flex items-center justify-center text-cognition-600 dark:text-cognition-400 font-semibold text-sm mr-3">
+                          {member.name
+                            .split(" ")
+                            .map((n: string) => n[0])
+                            .join("")}
+                        </div>
+                        <div>
+                          <p className="font-semibold text-gray-900 dark:text-white text-sm">
+                            {member.name}
+                          </p>
+                          <p className="text-xs text-gray-600 dark:text-gray-400">
+                            {member.role}
+                          </p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <p className="text-gray-500 dark:text-gray-400 italic text-sm">
+                    No team members listed
+                  </p>
                 )}
               </div>
             </div>
