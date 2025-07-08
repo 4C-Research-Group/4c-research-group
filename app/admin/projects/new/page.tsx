@@ -78,9 +78,9 @@ export default function NewProjectPage() {
     if (!file) return;
     setUploadingMain(true);
     try {
-      const filePath = `projects/${Date.now()}-${file.name}`;
+      const filePath = `${Date.now()}-${file.name}`;
       const { error: uploadError } = await supabase.storage
-        .from("team")
+        .from("projects")
         .upload(filePath, file, {
           cacheControl: "3600",
           upsert: false,
@@ -89,7 +89,7 @@ export default function NewProjectPage() {
 
       const {
         data: { publicUrl },
-      } = supabase.storage.from("team").getPublicUrl(filePath);
+      } = supabase.storage.from("projects").getPublicUrl(filePath);
 
       if (publicUrl) {
         setFormData((prev) => ({ ...prev, image: publicUrl }));
@@ -116,9 +116,9 @@ export default function NewProjectPage() {
         const file = files[i];
         const timestamp = Date.now();
         const randomId = Math.random().toString(36).substring(2, 15);
-        const filePath = `projects/${timestamp}-${randomId}-${i}-${file.name}`;
+        const filePath = `${timestamp}-${randomId}-${i}-${file.name}`;
         const { error: uploadError } = await supabase.storage
-          .from("team")
+          .from("projects")
           .upload(filePath, file, {
             cacheControl: "3600",
             upsert: false,
@@ -127,7 +127,7 @@ export default function NewProjectPage() {
 
         const {
           data: { publicUrl },
-        } = supabase.storage.from("team").getPublicUrl(filePath);
+        } = supabase.storage.from("projects").getPublicUrl(filePath);
 
         if (publicUrl) {
           setFormData((prev) => ({

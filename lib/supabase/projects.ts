@@ -137,28 +137,26 @@ export async function deleteProject(id: string) {
         console.log(`Processing image URL: ${imageUrl}`);
         let filePath = null;
 
-        // Try different extraction methods for different URL formats
+        // Extract file path from projects bucket URL
         if (imageUrl.includes("/storage/v1/object/public/")) {
           // Method 1: Extract after /storage/v1/object/public/
           const parts = imageUrl.split("/storage/v1/object/public/");
           if (parts.length > 1) {
             const fullPath = parts[1];
             console.log(`Extracted full path: ${fullPath}`);
-            // Remove the bucket name (team/) from the path since we're specifying the bucket
-            if (fullPath.startsWith("team/")) {
-              filePath = fullPath.substring(5); // Remove "team/" prefix
-              console.log(`Removed team/ prefix, final path: ${filePath}`);
+            // For projects bucket, the path is just the filename (no subfolder)
+            if (fullPath.startsWith("projects/")) {
+              filePath = fullPath.substring(9); // Remove "projects/" prefix
+              console.log(`Removed projects/ prefix, final path: ${filePath}`);
             } else {
               filePath = fullPath;
-              console.log(
-                `No team/ prefix found, using full path: ${filePath}`
-              );
+              console.log(`Using full path: ${filePath}`);
             }
           }
-        } else if (imageUrl.includes("/team/")) {
-          // Method 2: Extract after /team/
-          filePath = imageUrl.split("/team/")[1];
-          console.log(`Extracted path using /team/ method: ${filePath}`);
+        } else if (imageUrl.includes("/projects/")) {
+          // Method 2: Extract after /projects/
+          filePath = imageUrl.split("/projects/")[1];
+          console.log(`Extracted path using /projects/ method: ${filePath}`);
         } else if (imageUrl.includes("supabase.co")) {
           // Method 3: Extract everything after the domain
           const urlParts = imageUrl.split("supabase.co");
@@ -178,24 +176,24 @@ export async function deleteProject(id: string) {
             }
           }
         } else {
-          // Method 4: Try to extract filename and assume it's in projects folder
+          // Method 4: Try to extract filename
           const urlParts = imageUrl.split("/");
           const fileName = urlParts[urlParts.length - 1];
           if (fileName && fileName.includes(".")) {
-            filePath = `projects/${fileName}`;
+            filePath = fileName;
             console.log(`Extracted path using filename method: ${filePath}`);
           }
         }
 
         if (filePath) {
           console.log(`Attempting to delete image with path: ${filePath}`);
-          console.log(`Using bucket: team`);
+          console.log(`Using bucket: projects`);
           console.log(
-            `Calling supabase.storage.from("team").remove([${filePath}])`
+            `Calling supabase.storage.from("projects").remove([${filePath}])`
           );
 
           const { error: deleteError } = await supabase.storage
-            .from("team")
+            .from("projects")
             .remove([filePath]);
 
           if (deleteError) {
