@@ -3,6 +3,7 @@ import Image from "next/image";
 import { createServerClient } from "@supabase/ssr";
 import { cookies } from "next/headers";
 import Link from "next/link";
+import RichTextContent from "@/components/ui/rich-text-content";
 import {
   FaCalendarAlt,
   FaExternalLinkAlt,
@@ -196,10 +197,17 @@ export default async function ProjectDetail({ params }: Props) {
                   About the Project
                 </h2>
                 <div className="prose dark:prose-invert max-w-none">
-                  <p className="text-lg text-gray-600 dark:text-gray-300 leading-relaxed">
-                    {project.long_description ||
-                      "Detailed project description coming soon..."}
-                  </p>
+                  {project.long_description ? (
+                    <RichTextContent
+                      content={project.long_description}
+                      className="text-lg text-gray-600 dark:text-gray-300 leading-relaxed"
+                    />
+                  ) : (
+                    <p className="text-lg text-gray-600 dark:text-gray-300 leading-relaxed">
+                      {project.description ||
+                        "Detailed project description coming soon..."}
+                    </p>
+                  )}
                 </div>
               </div>
 

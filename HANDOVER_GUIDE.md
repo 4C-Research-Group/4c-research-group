@@ -55,8 +55,8 @@ This guide is specifically designed for the 4C Research team members who will be
 **Project Actions:**
 
 - **View**: See how the project appears on the public research page
-- **Edit**: Modify basic project details, content, and upload images (main + additional images)
-- **Advanced Edit**: Modify detailed project information including objectives, team members, tags, and long descriptions
+- **Edit**: Modify basic project details, content with rich text editing, and upload images (main + additional images)
+- **Advanced Edit**: Modify detailed project information including objectives, team members, tags, and long descriptions with rich text editing
 - **Delete**: Remove projects (this action cannot be undone)
 
 **Project Settings:**

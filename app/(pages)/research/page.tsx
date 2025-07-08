@@ -466,7 +466,7 @@ export default function ProjectsPage() {
                           viewMode === "list" ? "line-clamp-2" : "line-clamp-3"
                         }`}
                       >
-                        {project.description}
+                        {project.description.replace(/<[^>]*>/g, "")}
                       </p>
 
                       {/* Meta Row */}

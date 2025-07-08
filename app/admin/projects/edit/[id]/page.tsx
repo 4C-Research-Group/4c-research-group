@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
+import RichTextEditor from "@/components/ui/rich-text-editor";
 import Link from "next/link";
 import { CardFooter } from "@/components/ui/card";
 import Image from "next/image";
@@ -227,7 +228,7 @@ export default function EditProjectPage() {
 
   if (loading) {
     return (
-      <div className="container mx-auto px-4 py-8">
+      <div className="max-w-4xl mx-auto py-12 px-4">
         <div className="flex items-center justify-center min-h-[400px]">
           <div className="text-center">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-cognition-600 mx-auto mb-4"></div>
@@ -242,7 +243,7 @@ export default function EditProjectPage() {
 
   if (error) {
     return (
-      <div className="container mx-auto px-4 py-8">
+      <div className="max-w-4xl mx-auto py-12 px-4">
         <div className="text-center">
           <p className="text-red-600 dark:text-red-400 mb-4">{error}</p>
           <Link
@@ -258,7 +259,7 @@ export default function EditProjectPage() {
   }
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className="max-w-4xl mx-auto py-12 px-4">
       <div className="mb-8">
         <Link
           href="/admin/projects"
@@ -315,13 +316,11 @@ export default function EditProjectPage() {
           </div>
 
           <div className="mt-4">
-            <Label htmlFor="description">Description *</Label>
-            <Textarea
-              id="description"
+            <RichTextEditor
               value={description}
-              onChange={(e) => setDescription(e.target.value)}
+              onChange={setDescription}
               placeholder="Brief description for project cards"
-              rows={3}
+              label="Description *"
               required
             />
           </div>

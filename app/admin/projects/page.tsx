@@ -292,13 +292,13 @@ export default function AdminProjects() {
             research page
           </li>
           <li>
-            • <strong>Edit:</strong> Modify basic project details, content, and
-            upload images (main + additional images)
+            • <strong>Edit:</strong> Modify basic project details, content with
+            rich text editing, and upload images (main + additional images)
           </li>
           <li>
             • <strong>Advanced Edit:</strong> Modify detailed project
             information including objectives, team members, tags, and long
-            descriptions
+            descriptions with rich text editing
           </li>
           <li>
             • <strong>Delete:</strong> Remove projects (this action cannot be

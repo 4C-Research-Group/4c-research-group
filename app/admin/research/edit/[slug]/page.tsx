@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
+import RichTextEditor from "@/components/ui/rich-text-editor";
 
 interface TeamMember {
   name: string;
@@ -217,12 +218,11 @@ export default function EditResearchProjectPage() {
         </div>
 
         <div>
-          <Label htmlFor="longDescription">Long Description</Label>
-          <Textarea
-            id="longDescription"
+          <RichTextEditor
             value={longDescription}
-            onChange={(e) => setLongDescription(e.target.value)}
-            rows={6}
+            onChange={setLongDescription}
+            placeholder="Comprehensive project description with rich formatting"
+            label="Long Description"
           />
         </div>
 
