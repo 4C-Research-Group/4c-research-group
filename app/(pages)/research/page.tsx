@@ -486,7 +486,7 @@ export default function ProjectsPage() {
 
                       {/* External Link (if exists) - positioned naturally */}
                       {project.link && !project.link.startsWith("/") && (
-                        <div className="mt-auto pt-3 flex items-center justify-end">
+                        <div className="mt-auto flex items-center justify-end">
                           <a
                             href={project.link}
                             target="_blank"
