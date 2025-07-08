@@ -2,11 +2,13 @@ import { notFound } from "next/navigation";
 import Image from "next/image";
 import { createServerClient } from "@supabase/ssr";
 import { cookies } from "next/headers";
+import Link from "next/link";
 import {
   FaCalendarAlt,
   FaExternalLinkAlt,
   FaUsers,
   FaBullseye,
+  FaArrowLeft,
 } from "react-icons/fa";
 
 // Force dynamic rendering for this page
@@ -118,9 +120,19 @@ export default async function ProjectDetail({ params }: Props) {
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       {/* Hero Section with Background Image */}
       <section className="relative h-96 md:h-[500px] overflow-hidden">
+        {/* Back to Projects Button - Overlay on Hero */}
+        <div className="absolute top-8 left-4 z-20">
+          <Link
+            href="/research"
+            className="inline-flex items-center px-4 py-2 bg-white/90 dark:bg-gray-900/90 backdrop-blur-sm text-gray-900 dark:text-white hover:bg-white dark:hover:bg-gray-900 font-medium rounded-lg transition-colors duration-200 shadow-lg"
+          >
+            <FaArrowLeft className="mr-2" />
+            Back to Projects
+          </Link>
+        </div>
         <div className="absolute inset-0">
           <Image
-            src={images[0] || "/images/placeholder.jpg"}
+            src={project.image || "/images/placeholder.jpg"}
             alt={project.title}
             fill
             className="object-cover"
@@ -198,7 +210,7 @@ export default async function ProjectDetail({ params }: Props) {
                   <div className="bg-white dark:bg-gray-800 rounded-2xl overflow-hidden shadow-sm border border-gray-200 dark:border-gray-700">
                     <div className="relative aspect-[4/3]">
                       <Image
-                        src={images[1] || "/images/placeholder.jpg"}
+                        src={images[0] || "/images/placeholder.jpg"}
                         alt={`${project.title} - Project Image 1`}
                         fill
                         className="object-cover"
@@ -207,11 +219,11 @@ export default async function ProjectDetail({ params }: Props) {
                   </div>
 
                   {/* Second additional image - optional */}
-                  {images[2] && (
+                  {images[1] && (
                     <div className="bg-white dark:bg-gray-800 rounded-2xl overflow-hidden shadow-sm border border-gray-200 dark:border-gray-700">
                       <div className="relative aspect-[4/3]">
                         <Image
-                          src={images[2]}
+                          src={images[1]}
                           alt={`${project.title} - Project Image 2`}
                           fill
                           className="object-cover"

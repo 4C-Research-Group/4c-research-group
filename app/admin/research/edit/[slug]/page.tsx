@@ -38,7 +38,6 @@ export default function EditResearchProjectPage() {
   const [tags, setTags] = useState<string[]>([]);
   const [objectives, setObjectives] = useState<string[]>([]);
   const [teamMembers, setTeamMembers] = useState<TeamMember[]>([]);
-  const [additionalInfo, setAdditionalInfo] = useState("");
 
   useEffect(() => {
     async function fetchProject() {
@@ -70,7 +69,6 @@ export default function EditResearchProjectPage() {
       setTags(data.tags || []);
       setObjectives(data.objectives || []);
       setTeamMembers(data.team_members || []);
-      setAdditionalInfo(data.additional_info || "");
       setLoading(false);
     }
 
@@ -158,7 +156,6 @@ export default function EditResearchProjectPage() {
       team_members: teamMembers.filter(
         (member) => member.name.trim() !== "" && member.role.trim() !== ""
       ),
-      additional_info: additionalInfo || null,
     };
 
     const { error } = await supabase
@@ -379,44 +376,6 @@ export default function EditResearchProjectPage() {
               Add Tag
             </Button>
           </div>
-        </div>
-
-        {/* Images */}
-        <div>
-          <Label>Images</Label>
-          <div className="space-y-2">
-            {images.map((image, index) => (
-              <div key={index} className="flex gap-2">
-                <Input
-                  value={image}
-                  onChange={(e) => updateImage(index, e.target.value)}
-                  placeholder="Image URL"
-                />
-                <Button
-                  type="button"
-                  variant="outline"
-                  onClick={() => removeImage(index)}
-                  className="px-3"
-                >
-                  Remove
-                </Button>
-              </div>
-            ))}
-            <Button type="button" variant="outline" onClick={addImage}>
-              Add Image
-            </Button>
-          </div>
-        </div>
-
-        {/* Additional Info */}
-        <div>
-          <Label htmlFor="additionalInfo">Additional Information</Label>
-          <Textarea
-            id="additionalInfo"
-            value={additionalInfo}
-            onChange={(e) => setAdditionalInfo(e.target.value)}
-            rows={4}
-          />
         </div>
 
         {error && <div className="text-red-600">{error}</div>}

@@ -292,8 +292,13 @@ export default function AdminProjects() {
             research page
           </li>
           <li>
-            • <strong>Edit:</strong> Modify project details, content, and
-            settings
+            • <strong>Edit:</strong> Modify basic project details, content, and
+            upload images (main + additional images)
+          </li>
+          <li>
+            • <strong>Advanced Edit:</strong> Modify detailed project
+            information including objectives, team members, tags, and long
+            descriptions
           </li>
           <li>
             • <strong>Delete:</strong> Remove projects (this action cannot be
@@ -306,7 +311,12 @@ export default function AdminProjects() {
           </li>
           <li>
             • <strong>Categories:</strong> Organize projects by research type
-            (Clinical Research, Implementation Science, etc.)
+            (Clinical Research, Implementation Science, Clinical Trial, Basic
+            Science, Quality Improvement)
+          </li>
+          <li>
+            • <strong>Images:</strong> Main image (hero) + up to 2 additional
+            images (use plus button to upload multiple at once)
           </li>
         </ul>
       </div>

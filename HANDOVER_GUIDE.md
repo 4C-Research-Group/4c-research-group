@@ -50,6 +50,28 @@ This guide is specifically designed for the 4C Research team members who will be
 4. Update descriptions, images, and status
 5. Keep research current!
 
+#### 📋 **Project Management Guide**
+
+**Project Actions:**
+
+- **View**: See how the project appears on the public research page
+- **Edit**: Modify basic project details, content, and upload images (main + additional images)
+- **Advanced Edit**: Modify detailed project information including objectives, team members, tags, and long descriptions
+- **Delete**: Remove projects (this action cannot be undone)
+
+**Project Settings:**
+
+- **Status**: Use "upcoming" for future projects, "active" for ongoing, "completed" for finished
+- **Categories**: Organize projects by research type (Clinical Research, Implementation Science, Clinical Trial, Basic Science, Quality Improvement)
+
+**Image Management:**
+
+- **Main Image**: Hero image displayed prominently on the project page
+- **Additional Images**: Up to 2 additional images displayed in the project gallery
+  - Use the plus button to upload multiple images at once
+  - Images are automatically resized and optimized
+  - Remove individual images using the × button on each preview
+
 ## 🎨 Content Management Tips
 
 ### 📸 **Adding Images**

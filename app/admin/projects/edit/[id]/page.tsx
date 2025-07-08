@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useRouter, useParams } from "next/navigation";
 import { supabase } from "@/lib/supabase/client";
 import { Button } from "@/components/ui/button";
@@ -9,6 +9,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import Link from "next/link";
 import { CardFooter } from "@/components/ui/card";
+import Image from "next/image";
 import {
   Eye,
   Edit,
@@ -27,6 +28,10 @@ export default function EditProjectPage() {
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [project, setProject] = useState<any>(null);
+  const [uploadingMain, setUploadingMain] = useState(false);
+  const [uploadingAdditional, setUploadingAdditional] = useState(false);
+  const mainImageRef = useRef<HTMLInputElement>(null);
+  const additionalImageRef = useRef<HTMLInputElement>(null);
 
   // Form fields
   const [title, setTitle] = useState("");
@@ -73,17 +78,79 @@ export default function EditProjectPage() {
     if (projectId) fetchProject();
   }, [projectId]);
 
-  const addImage = () => {
-    setImages([...images, ""]);
+  const handleMainImageUpload = async (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setUploadingMain(true);
+    try {
+      const filePath = `projects/${Date.now()}-${file.name}`;
+      const { error: uploadError } = await supabase.storage
+        .from("team")
+        .upload(filePath, file, {
+          cacheControl: "3600",
+          upsert: false,
+        });
+      if (uploadError) throw uploadError;
+
+      const {
+        data: { publicUrl },
+      } = supabase.storage.from("team").getPublicUrl(filePath);
+
+      if (publicUrl) {
+        setImage(publicUrl);
+      } else {
+        throw new Error("Failed to generate public URL");
+      }
+    } catch (err) {
+      console.error("Upload error:", err);
+      alert("Image upload failed. Please try again.");
+    } finally {
+      setUploadingMain(false);
+    }
   };
 
-  const updateImage = (index: number, value: string) => {
-    const newImages = [...images];
-    newImages[index] = value;
-    setImages(newImages);
+  const handleAdditionalImageUpload = async (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const files = e.target.files;
+    if (!files || files.length === 0) return;
+
+    setUploadingAdditional(true);
+    try {
+      for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+        const timestamp = Date.now();
+        const randomId = Math.random().toString(36).substring(2, 15);
+        const filePath = `projects/${timestamp}-${randomId}-${i}-${file.name}`;
+        const { error: uploadError } = await supabase.storage
+          .from("team")
+          .upload(filePath, file, {
+            cacheControl: "3600",
+            upsert: false,
+          });
+        if (uploadError) throw uploadError;
+
+        const {
+          data: { publicUrl },
+        } = supabase.storage.from("team").getPublicUrl(filePath);
+
+        if (publicUrl) {
+          setImages((prev) => [...prev, publicUrl]);
+        } else {
+          throw new Error("Failed to generate public URL");
+        }
+      }
+    } catch (err) {
+      console.error("Upload error:", err);
+      alert("Image upload failed. Please try again.");
+    } finally {
+      setUploadingAdditional(false);
+    }
   };
 
-  const removeImage = (index: number) => {
+  const removeAdditionalImage = (index: number) => {
     setImages(images.filter((_, i) => i !== index));
   };
 
@@ -132,36 +199,6 @@ export default function EditProjectPage() {
       }
     }
 
-    let normalizedImage = null;
-    if (image) {
-      normalizedImage = normalizeUrl(image);
-      if (normalizedImage === false) {
-        setError(
-          "Please enter a valid URL for the main image (e.g., 'example.com/image.jpg' or 'https://example.com/image.jpg') or leave it empty"
-        );
-        setSaving(false);
-        return;
-      }
-    }
-
-    // Check and normalize additional images
-    const normalizedImages = [];
-    for (let i = 0; i < images.length; i++) {
-      if (images[i]) {
-        const normalized = normalizeUrl(images[i]);
-        if (normalized === false) {
-          setError(
-            `Please enter a valid URL for additional image ${i + 1} (e.g., 'example.com/image.jpg') or leave it empty`
-          );
-          setSaving(false);
-          return;
-        }
-        if (normalized) {
-          normalizedImages.push(normalized);
-        }
-      }
-    }
-
     const updateData = {
       title,
       description,
@@ -171,8 +208,8 @@ export default function EditProjectPage() {
       end_date: endDate || null,
       funding: funding || null,
       link: normalizedLink,
-      image: normalizedImage,
-      images: normalizedImages,
+      image,
+      images,
     };
 
     const { error } = await supabase
@@ -207,12 +244,13 @@ export default function EditProjectPage() {
     return (
       <div className="container mx-auto px-4 py-8">
         <div className="text-center">
-          <p className="text-red-600 mb-4">{error}</p>
-          <Link href="/admin/projects">
-            <Button variant="outline">
-              <ArrowLeft className="h-4 w-4 mr-2" />
-              Back to Projects
-            </Button>
+          <p className="text-red-600 dark:text-red-400 mb-4">{error}</p>
+          <Link
+            href="/admin/projects"
+            className="inline-flex items-center text-cognition-600 hover:text-cognition-700"
+          >
+            <ArrowLeft className="mr-2 h-4 w-4" />
+            Back to Projects
           </Link>
         </div>
       </div>
@@ -221,242 +259,271 @@ export default function EditProjectPage() {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <div className="max-w-2xl mx-auto">
-        <div className="flex items-center gap-4 mb-8">
-          <Link href="/admin/projects">
-            <Button variant="outline" size="sm">
-              <ArrowLeft className="h-4 w-4 mr-2" />
-              Back
-            </Button>
-          </Link>
-          <h1 className="text-3xl font-bold">Edit Project</h1>
-        </div>
-
-        <form
-          onSubmit={handleSave}
-          className="space-y-6 bg-white dark:bg-gray-900 p-8 rounded-xl shadow"
+      <div className="mb-8">
+        <Link
+          href="/admin/projects"
+          className="inline-flex items-center text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white mb-4"
         >
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <ArrowLeft className="mr-2 h-4 w-4" />
+          Back to Projects
+        </Link>
+        <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
+          Edit Project
+        </h1>
+      </div>
+
+      {error && (
+        <div className="mb-6 p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg">
+          <p className="text-red-800 dark:text-red-200">{error}</p>
+        </div>
+      )}
+
+      <form onSubmit={handleSave} className="space-y-8">
+        {/* Basic Information */}
+        <section className="p-6 border rounded-lg">
+          <h2 className="text-xl font-semibold mb-4">Basic Information</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <Label htmlFor="title">Title</Label>
+              <Label htmlFor="title">Project Title *</Label>
               <Input
                 id="title"
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
+                placeholder="e.g., NuANCEd"
                 required
               />
             </div>
-
             <div>
-              <Label htmlFor="category">Category</Label>
+              <Label htmlFor="category">Category *</Label>
               <select
                 id="category"
                 value={category}
                 onChange={(e) => setCategory(e.target.value)}
-                className="w-full border rounded-md px-3 py-2 bg-white dark:bg-gray-800"
+                className="w-full p-2 border rounded-md"
                 required
               >
-                <option value="">Select category</option>
+                <option value="">Select Category</option>
                 <option value="Clinical Research">Clinical Research</option>
                 <option value="Implementation Science">
                   Implementation Science
                 </option>
+                <option value="Clinical Trial">Clinical Trial</option>
                 <option value="Basic Science">Basic Science</option>
-                <option value="Health Services Research">
-                  Health Services Research
-                </option>
                 <option value="Quality Improvement">Quality Improvement</option>
               </select>
             </div>
           </div>
 
-          <div>
-            <Label htmlFor="description">Description</Label>
+          <div className="mt-4">
+            <Label htmlFor="description">Description *</Label>
             <Textarea
               id="description"
               value={description}
               onChange={(e) => setDescription(e.target.value)}
-              className="min-h-[120px]"
+              placeholder="Brief description for project cards"
+              rows={3}
               required
             />
           </div>
+        </section>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {/* Project Details */}
+        <section className="p-6 border rounded-lg">
+          <h2 className="text-xl font-semibold mb-4">Project Details</h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
-              <Label htmlFor="status">Status</Label>
+              <Label htmlFor="status">Status *</Label>
               <select
                 id="status"
                 value={status}
                 onChange={(e) => setStatus(e.target.value)}
-                className="w-full border rounded-md px-3 py-2 bg-white dark:bg-gray-800"
+                className="w-full p-2 border rounded-md"
                 required
               >
-                <option value="">Select status</option>
+                <option value="">Select Status</option>
                 <option value="upcoming">Upcoming</option>
                 <option value="active">Active</option>
                 <option value="completed">Completed</option>
               </select>
             </div>
-
             <div>
-              <Label htmlFor="funding">Funding</Label>
+              <Label htmlFor="start_date">Start Date *</Label>
               <Input
-                id="funding"
-                value={funding}
-                onChange={(e) => setFunding(e.target.value)}
-                placeholder="e.g., CIHR, NSERC"
-              />
-            </div>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div>
-              <Label htmlFor="startDate">Start Date</Label>
-              <Input
-                id="startDate"
+                id="start_date"
                 type="date"
                 value={startDate}
                 onChange={(e) => setStartDate(e.target.value)}
                 required
               />
             </div>
-
             <div>
-              <Label htmlFor="endDate">End Date</Label>
+              <Label htmlFor="end_date">End Date</Label>
               <Input
-                id="endDate"
+                id="end_date"
                 type="date"
                 value={endDate}
                 onChange={(e) => setEndDate(e.target.value)}
-                placeholder="Leave empty for ongoing projects"
               />
             </div>
           </div>
 
-          <div>
-            <Label htmlFor="link">External Link (Optional)</Label>
-            <Input
-              id="link"
-              type="text"
-              value={link}
-              onChange={(e) => setLink(e.target.value)}
-              placeholder="https://..."
-            />
-            <p className="text-sm text-gray-500 mt-1">
-              Leave empty if no external link is available
-            </p>
-          </div>
-
-          {/* Image Section */}
-          <div className="space-y-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
             <div>
-              <Label htmlFor="image">Main Project Image (Optional)</Label>
+              <Label htmlFor="funding">Funding Source</Label>
               <Input
-                id="image"
-                type="text"
-                value={image}
-                onChange={(e) => setImage(e.target.value)}
-                placeholder="https://example.com/image.jpg"
+                id="funding"
+                value={funding}
+                onChange={(e) => setFunding(e.target.value)}
+                placeholder="e.g., AMOSO Opportunities Fund"
               />
-              <p className="text-sm text-gray-500 mt-1">
-                This will be the primary image displayed for the project. Leave
-                empty if no image is available.
-              </p>
             </div>
-
             <div>
-              <div className="flex items-center justify-between mb-2">
-                <Label>Additional Images</Label>
-                <Button
-                  type="button"
-                  variant="outline"
-                  size="sm"
-                  onClick={addImage}
-                  className="flex items-center gap-2"
-                >
-                  <Plus className="h-4 w-4" />
-                  Add Image
-                </Button>
-              </div>
+              <Label htmlFor="link">Project Link</Label>
+              <Input
+                id="link"
+                value={link}
+                onChange={(e) => setLink(e.target.value)}
+                placeholder="https://..."
+              />
+            </div>
+          </div>
+        </section>
 
-              {images.length === 0 ? (
-                <div className="text-center py-8 border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg">
-                  <ImageIcon className="h-12 w-12 text-gray-400 mx-auto mb-2" />
-                  <p className="text-sm text-gray-500">
-                    No additional images added
-                  </p>
+        {/* Media & Links */}
+        <section className="p-6 border rounded-lg">
+          <h2 className="text-xl font-semibold mb-4">Media & Links</h2>
+
+          {/* Main Project Image */}
+          <div className="mb-6">
+            <Label htmlFor="main_image">
+              Main Project Image (Hero Image) *
+            </Label>
+            <div className="mt-2 space-y-4">
+              <div className="flex items-center gap-4">
+                <input
+                  type="file"
+                  accept="image/*"
+                  ref={mainImageRef}
+                  onChange={handleMainImageUpload}
+                  disabled={uploadingMain}
+                  className="block"
+                />
+                {uploadingMain && (
+                  <span className="text-sm text-gray-500">Uploading...</span>
+                )}
+              </div>
+              {image && (
+                <div className="max-w-xs">
+                  <Image
+                    src={image}
+                    alt="Main project image preview"
+                    width={300}
+                    height={200}
+                    className="w-full h-auto object-cover rounded-lg border"
+                  />
                 </div>
-              ) : (
-                <div className="space-y-3">
-                  {images.map((image, index) => (
-                    <div key={index} className="flex items-center gap-2">
-                      <Input
-                        type="text"
-                        value={image}
-                        onChange={(e) => updateImage(index, e.target.value)}
-                        placeholder="https://example.com/image.jpg"
-                        className="flex-1"
+              )}
+            </div>
+          </div>
+
+          {/* Additional Project Images */}
+          <div className="mb-6">
+            <Label htmlFor="additional_images">
+              Additional Project Images (Optional)
+            </Label>
+            <div className="mt-2 space-y-4">
+              <div className="flex items-center gap-4">
+                <input
+                  type="file"
+                  accept="image/*"
+                  multiple
+                  ref={additionalImageRef}
+                  onChange={handleAdditionalImageUpload}
+                  disabled={uploadingAdditional}
+                  className="hidden"
+                />
+                <button
+                  type="button"
+                  onClick={() => additionalImageRef.current?.click()}
+                  disabled={uploadingAdditional}
+                  className="flex items-center justify-center w-32 h-24 border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg hover:border-cognition-500 dark:hover:border-cognition-400 transition-colors"
+                >
+                  <div className="text-center">
+                    <Plus className="w-6 h-6 text-gray-400 dark:text-gray-500 mx-auto mb-1" />
+                    <span className="text-xs text-gray-500 dark:text-gray-400">
+                      Add Images
+                    </span>
+                  </div>
+                </button>
+                {uploadingAdditional && (
+                  <span className="text-sm text-gray-500">Uploading...</span>
+                )}
+              </div>
+              <p className="text-sm text-gray-500 mt-2">
+                Click the plus button to add images. Up to 2 additional images
+                will be displayed on the public page.
+              </p>
+              {images.length > 0 && (
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                  {images.map((imageUrl, index) => (
+                    <div key={index} className="relative">
+                      <Image
+                        src={imageUrl}
+                        alt={`Additional project image ${index + 1}`}
+                        width={200}
+                        height={150}
+                        className="w-full h-auto object-cover rounded-lg border"
                       />
-                      <Button
+                      <button
                         type="button"
-                        variant="outline"
-                        size="sm"
-                        onClick={() => removeImage(index)}
-                        className="text-red-600 hover:text-red-700"
+                        onClick={() => removeAdditionalImage(index)}
+                        className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm hover:bg-red-600"
                       >
-                        <X className="h-4 w-4" />
-                      </Button>
+                        ×
+                      </button>
                     </div>
                   ))}
                 </div>
               )}
             </div>
           </div>
+        </section>
 
-          {error && (
-            <div className="p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-md">
-              <p className="text-red-600 dark:text-red-400">{error}</p>
-            </div>
-          )}
+        <div className="flex justify-end gap-4">
+          <Button
+            type="button"
+            variant="outline"
+            onClick={() => router.push("/admin/projects")}
+            disabled={saving}
+          >
+            Cancel
+          </Button>
+          <Button type="submit" disabled={saving}>
+            {saving ? "Saving..." : "Save Changes"}
+          </Button>
+        </div>
+      </form>
 
-          <div className="flex gap-4">
-            <Button type="submit" disabled={saving} className="flex-1">
-              {saving ? "Saving..." : "Save Changes"}
-            </Button>
-            <Link href="/admin/projects">
-              <Button type="button" variant="outline">
-                Cancel
-              </Button>
-            </Link>
-          </div>
-        </form>
-
-        {project && (
-          <div className="mt-8 p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
-            <h3 className="font-semibold text-blue-900 dark:text-blue-100 mb-4">
-              Additional Options
-            </h3>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <Link href={`/research/${project.slug}`} target="_blank">
-                <Button variant="outline" className="w-full">
-                  <Eye className="h-4 w-4 mr-2" />
-                  View Public Page
-                </Button>
-              </Link>
-              <Link href={`/admin/research/edit/${project.slug}`}>
-                <Button variant="secondary" className="w-full">
-                  <Edit className="h-4 w-4 mr-2" />
-                  Advanced Edit
-                </Button>
-              </Link>
-            </div>
-            <p className="text-sm text-blue-800 dark:text-blue-200 mt-3">
-              <strong>Advanced Edit</strong> includes detailed content, team
-              members, objectives, and more image options.
-            </p>
-          </div>
-        )}
-      </div>
+      {project && (
+        <div className="mt-8 flex justify-end gap-4">
+          <Link
+            href={`/projects/${project.slug}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center text-cognition-600 hover:text-cognition-700"
+          >
+            <Eye className="mr-2 h-4 w-4" />
+            View Public Page
+          </Link>
+          <Link
+            href={`/admin/research/edit/${project.slug}`}
+            className="inline-flex items-center text-cognition-600 hover:text-cognition-700"
+          >
+            <Edit className="mr-2 h-4 w-4" />
+            Advanced Edit
+          </Link>
+        </div>
+      )}
     </div>
   );
 }

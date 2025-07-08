@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { createProject, getProjectBySlug } from "@/lib/supabase/projects";
 import { Button } from "@/components/ui/button";
@@ -7,6 +7,9 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import dynamic from "next/dynamic";
+import Image from "next/image";
+import { supabase } from "@/lib/supabase/client";
+import { Plus } from "lucide-react";
 const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
 import "react-quill/dist/quill.snow.css";
 
@@ -14,6 +17,10 @@ export default function NewProjectPage() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [uploadingMain, setUploadingMain] = useState(false);
+  const [uploadingAdditional, setUploadingAdditional] = useState(false);
+  const mainImageRef = useRef<HTMLInputElement>(null);
+  const additionalImageRef = useRef<HTMLInputElement>(null);
 
   const [formData, setFormData] = useState({
     slug: "",
@@ -61,6 +68,88 @@ export default function NewProjectPage() {
       return { name: name || "", role: role || "" };
     });
     setFormData((prev) => ({ ...prev, team_members }));
+  };
+
+  const handleMainImageUpload = async (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setUploadingMain(true);
+    try {
+      const filePath = `projects/${Date.now()}-${file.name}`;
+      const { error: uploadError } = await supabase.storage
+        .from("team")
+        .upload(filePath, file, {
+          cacheControl: "3600",
+          upsert: false,
+        });
+      if (uploadError) throw uploadError;
+
+      const {
+        data: { publicUrl },
+      } = supabase.storage.from("team").getPublicUrl(filePath);
+
+      if (publicUrl) {
+        setFormData((prev) => ({ ...prev, image: publicUrl }));
+      } else {
+        throw new Error("Failed to generate public URL");
+      }
+    } catch (err) {
+      console.error("Upload error:", err);
+      alert("Image upload failed. Please try again.");
+    } finally {
+      setUploadingMain(false);
+    }
+  };
+
+  const handleAdditionalImageUpload = async (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const files = e.target.files;
+    if (!files || files.length === 0) return;
+
+    setUploadingAdditional(true);
+    try {
+      for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+        const timestamp = Date.now();
+        const randomId = Math.random().toString(36).substring(2, 15);
+        const filePath = `projects/${timestamp}-${randomId}-${i}-${file.name}`;
+        const { error: uploadError } = await supabase.storage
+          .from("team")
+          .upload(filePath, file, {
+            cacheControl: "3600",
+            upsert: false,
+          });
+        if (uploadError) throw uploadError;
+
+        const {
+          data: { publicUrl },
+        } = supabase.storage.from("team").getPublicUrl(filePath);
+
+        if (publicUrl) {
+          setFormData((prev) => ({
+            ...prev,
+            images: [...prev.images, publicUrl],
+          }));
+        } else {
+          throw new Error("Failed to generate public URL");
+        }
+      }
+    } catch (err) {
+      console.error("Upload error:", err);
+      alert("Image upload failed. Please try again.");
+    } finally {
+      setUploadingAdditional(false);
+    }
+  };
+
+  const removeAdditionalImage = (index: number) => {
+    setFormData((prev) => ({
+      ...prev,
+      images: prev.images.filter((_, i) => i !== index),
+    }));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -118,19 +207,6 @@ export default function NewProjectPage() {
         normalizedLink = result || undefined;
       }
 
-      let normalizedImage: string | undefined = undefined;
-      if (formData.image) {
-        const result = normalizeUrl(formData.image);
-        if (result === false) {
-          throw new Error(
-            "Please enter a valid URL for the main image (e.g., 'example.com/image.jpg' or 'https://example.com/image.jpg') or leave it empty"
-          );
-        }
-        normalizedImage = result || undefined;
-      }
-
-      // Remove unused legacy image normalization
-
       // Create slug from title if not provided
       let slug =
         formData.slug ||
@@ -155,8 +231,6 @@ export default function NewProjectPage() {
         ...formData,
         slug,
         link: normalizedLink,
-        image: normalizedImage,
-        images: formData.images,
         publications: [],
         // Convert empty strings to undefined for optional fields
         end_date: formData.end_date || undefined,
@@ -339,48 +413,114 @@ export default function NewProjectPage() {
           {/* Media & Links */}
           <section className="p-6 border rounded-lg">
             <h2 className="text-xl font-semibold mb-4">Media & Links</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <Label htmlFor="image">Main Project Image (Optional)</Label>
-                <Input
-                  id="image"
-                  type="text"
-                  value={formData.image}
-                  onChange={(e) => handleInputChange("image", e.target.value)}
-                  placeholder="https://example.com/image.jpg"
-                />
-                <p className="text-xs text-muted-foreground mt-1">
-                  This will be the primary image displayed for the project.
-                  Leave empty if no image is available.
-                </p>
-              </div>
-              <div>
-                <Label htmlFor="link">Project Link (Optional)</Label>
-                <Input
-                  id="link"
-                  type="text"
-                  value={formData.link}
-                  onChange={(e) => handleInputChange("link", e.target.value)}
-                  placeholder="https://..."
-                />
-                <p className="text-xs text-muted-foreground mt-1">
-                  Leave empty if no external link is available
-                </p>
+
+            {/* Main Project Image */}
+            <div className="mb-6">
+              <Label htmlFor="main_image">
+                Main Project Image (Hero Image) *
+              </Label>
+              <div className="mt-2 space-y-4">
+                <div className="flex items-center gap-4">
+                  <input
+                    type="file"
+                    accept="image/*"
+                    ref={mainImageRef}
+                    onChange={handleMainImageUpload}
+                    disabled={uploadingMain}
+                    className="block"
+                  />
+                  {uploadingMain && (
+                    <span className="text-sm text-gray-500">Uploading...</span>
+                  )}
+                </div>
+                {formData.image && (
+                  <div className="max-w-xs">
+                    <Image
+                      src={formData.image}
+                      alt="Main project image preview"
+                      width={300}
+                      height={200}
+                      className="w-full h-auto object-cover rounded-lg border"
+                    />
+                  </div>
+                )}
               </div>
             </div>
 
-            <div className="mt-4">
-              <Label htmlFor="image">Legacy Image URL (Optional)</Label>
+            {/* Additional Project Images */}
+            <div className="mb-6">
+              <Label htmlFor="additional_images">
+                Additional Project Images (Optional)
+              </Label>
+              <div className="mt-2 space-y-4">
+                <div className="flex items-center gap-4">
+                  <input
+                    type="file"
+                    accept="image/*"
+                    multiple
+                    ref={additionalImageRef}
+                    onChange={handleAdditionalImageUpload}
+                    disabled={uploadingAdditional}
+                    className="hidden"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => additionalImageRef.current?.click()}
+                    disabled={uploadingAdditional}
+                    className="flex items-center justify-center w-32 h-24 border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg hover:border-cognition-500 dark:hover:border-cognition-400 transition-colors"
+                  >
+                    <div className="text-center">
+                      <Plus className="w-6 h-6 text-gray-400 dark:text-gray-500 mx-auto mb-1" />
+                      <span className="text-xs text-gray-500 dark:text-gray-400">
+                        Add Images
+                      </span>
+                    </div>
+                  </button>
+                  {uploadingAdditional && (
+                    <span className="text-sm text-gray-500">Uploading...</span>
+                  )}
+                </div>
+                <p className="text-sm text-gray-500 mt-2">
+                  Click the plus button to add images. Up to 2 additional images
+                  will be displayed on the public page.
+                </p>
+                {formData.images.length > 0 && (
+                  <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                    {formData.images.map((imageUrl, index) => (
+                      <div key={index} className="relative">
+                        <Image
+                          src={imageUrl}
+                          alt={`Additional project image ${index + 1}`}
+                          width={200}
+                          height={150}
+                          className="w-full h-auto object-cover rounded-lg border"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => removeAdditionalImage(index)}
+                          className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm hover:bg-red-600"
+                        >
+                          ×
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* Project Link */}
+            <div>
+              <Label htmlFor="link">Project Link (Optional)</Label>
               <Input
-                id="image"
+                id="link"
                 type="text"
-                value={formData.image}
-                onChange={(e) => handleInputChange("image", e.target.value)}
-                placeholder="/images/project-1.png"
+                value={formData.link}
+                onChange={(e) => handleInputChange("link", e.target.value)}
+                placeholder="https://..."
               />
               <p className="text-xs text-muted-foreground mt-1">
-                For backward compatibility with existing projects. Leave empty
-                if not needed.
+                Leave empty if no external link is available
               </p>
             </div>
           </section>
@@ -450,6 +590,7 @@ export default function NewProjectPage() {
               type="button"
               variant="outline"
               onClick={() => router.back()}
+              disabled={loading}
             >
               Cancel
             </Button>

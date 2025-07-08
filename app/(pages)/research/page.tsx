@@ -411,7 +411,7 @@ export default function ProjectsPage() {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.3, delay: index * 0.05 }}
                   className={`bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300 ${
-                    viewMode === "list" ? "flex" : "flex flex-col min-h-[400px]"
+                    viewMode === "list" ? "flex" : "flex flex-col"
                   }`}
                 >
                   <Link
@@ -484,32 +484,22 @@ export default function ProjectsPage() {
                         </span>
                       </div>
 
-                      {/* Bottom Row: View Project CTA and External Link */}
-                      <div className="mt-auto pt-4 flex items-center justify-between border-t border-gray-200 dark:border-gray-700">
-                        <button
-                          type="button"
-                          tabIndex={-1}
-                          className="inline-flex items-center px-3 py-1.5 bg-cognition-600 hover:bg-cognition-700 text-white font-medium rounded-md shadow-sm transition-colors focus:outline-none focus:ring-2 focus:ring-cognition-500 focus:ring-offset-2 text-xs"
-                          style={{ pointerEvents: "none" }}
-                          aria-hidden="true"
-                        >
-                          View Project
-                          <FaArrowRight className="ml-1.5 w-3 h-3" />
-                        </button>
-                        {project.link && !project.link.startsWith("/") && (
+                      {/* External Link (if exists) - positioned naturally */}
+                      {project.link && !project.link.startsWith("/") && (
+                        <div className="mt-auto pt-3 flex items-center justify-end">
                           <a
                             href={project.link}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="ml-2 text-gray-400 hover:text-cognition-600 dark:hover:text-cognition-400 transition-colors"
+                            className="text-gray-400 hover:text-cognition-600 dark:hover:text-cognition-400 transition-colors"
                             onClick={(e) => e.stopPropagation()}
                             tabIndex={0}
                             aria-label={`External link for project: ${project.title}`}
                           >
-                            <FaExternalLinkAlt className="w-5 h-5" />
+                            <FaExternalLinkAlt className="w-4 h-4" />
                           </a>
-                        )}
-                      </div>
+                        </div>
+                      )}
                     </div>
                   </Link>
                 </motion.article>
