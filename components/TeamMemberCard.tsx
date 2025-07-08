@@ -1,7 +1,9 @@
 "use client";
 
 import Image from "next/image";
-import { motion, useReducedMotion } from "framer-motion";
+import { motion } from "framer-motion";
+import { useReducedMotion } from "framer-motion";
+import { FaEnvelope, FaLinkedin, FaUser } from "react-icons/fa";
 
 interface TeamMemberCardProps {
   member: {
@@ -15,69 +17,136 @@ interface TeamMemberCardProps {
   index: number;
 }
 
-export default function TeamMemberCard({ member }: TeamMemberCardProps) {
+export default function TeamMemberCard({ member, index }: TeamMemberCardProps) {
   const shouldReduceMotion = useReducedMotion();
 
   return (
-    <motion.div
-      role="region"
-      tabIndex={0}
-      aria-label={`Team member: ${member.name}`}
-      initial={shouldReduceMotion ? false : { opacity: 0, y: 20 }}
+    <motion.article
+      className="group relative h-full overflow-hidden rounded-2xl bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm border border-white/20 dark:border-gray-700/50 shadow-lg hover:shadow-xl transition-all duration-150 ease-out"
+      initial={shouldReduceMotion ? false : { opacity: 0, y: 10 }}
       animate={shouldReduceMotion ? false : { opacity: 1, y: 0 }}
-      transition={{ duration: 0.4, ease: "easeOut" }}
+      transition={{
+        duration: 0.3,
+        delay: index * 0.03,
+        ease: "easeOut",
+      }}
       whileHover={
         shouldReduceMotion
           ? undefined
           : {
-              y: -4,
-              scale: 1.015,
-              transition: { duration: 0.2 },
+              y: -2,
+              transition: {
+                duration: 0.15,
+                ease: "easeOut",
+              },
             }
       }
-      whileTap={shouldReduceMotion ? undefined : { scale: 0.98 }}
-      className="group flex flex-col rounded-2xl overflow-hidden shadow-md border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 transition-all duration-200"
+      whileTap={
+        shouldReduceMotion
+          ? undefined
+          : {
+              scale: 0.99,
+              transition: {
+                duration: 0.1,
+                ease: "easeInOut",
+              },
+            }
+      }
+      aria-label={`Team member: ${member.name}, ${member.role}`}
+      role="article"
+      tabIndex={0}
     >
-      {/* Image Section */}
-      <div className="relative h-48 sm:h-56 md:h-64 w-full bg-gray-100 dark:bg-gray-800">
+      {/* Subtle gradient overlay */}
+      <div className="absolute inset-0 bg-gradient-to-br from-cognition-500/3 via-transparent to-consciousness-500/3 opacity-0 group-hover:opacity-100 transition-opacity duration-150" />
+
+      {/* Image section */}
+      <div className="relative h-64 w-full overflow-hidden">
+        {/* Background pattern */}
+        <div className="absolute inset-0 bg-gradient-to-br from-cognition-100/10 to-consciousness-100/10 dark:from-cognition-900/10 dark:to-consciousness-900/10" />
+
         {member.image_url ? (
-          <Image
-            src={member.image_url}
-            alt={member.name}
-            fill
-            className="object-cover group-hover:scale-105 transition-transform duration-200 ease-out"
-            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-          />
+          <div className="relative h-full w-full">
+            <Image
+              src={member.image_url}
+              alt={member.name}
+              fill
+              className="object-cover object-center transition-transform duration-200 ease-out group-hover:scale-102"
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+              priority={index < 4}
+            />
+            {/* Very subtle overlay on image */}
+            <div className="absolute inset-0 bg-gradient-to-t from-black/10 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-150" />
+          </div>
         ) : (
-          <div className="flex items-center justify-center h-full bg-gradient-to-br from-cognition-500 to-cognition-700 text-white text-4xl font-semibold">
-            {member.name
-              .split(" ")
-              .map((n) => n[0])
-              .join("")}
+          <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-cognition-500 to-consciousness-600">
+            <div className="text-center">
+              <FaUser className="mx-auto mb-2 text-6xl text-white/80" />
+              <span className="text-2xl font-bold text-white">
+                {member.name
+                  .split(" ")
+                  .map((n) => n[0])
+                  .join("")}
+              </span>
+            </div>
           </div>
         )}
       </div>
 
-      {/* Content Section */}
-      <div className="flex flex-col flex-1 p-4 sm:p-5">
-        <h3 className="text-lg sm:text-xl font-semibold text-gray-900 dark:text-white">
-          {member.name}
-        </h3>
-        <p className="text-sm text-cognition-600 dark:text-cognition-400 font-medium mt-1">
-          {member.role}
-        </p>
+      {/* Content section */}
+      <div className="relative p-6">
+        {/* Name and role */}
+        <div className="mb-4">
+          <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2 group-hover:text-cognition-600 dark:group-hover:text-cognition-400 transition-colors duration-150">
+            {member.name}
+          </h3>
+          <p className="text-sm font-medium text-cognition-600 dark:text-cognition-400 leading-relaxed">
+            {member.role}
+          </p>
+        </div>
 
+        {/* Superpower section */}
         {member.superpower && (
-          <div className="mt-4 border-t pt-3 border-gray-200 dark:border-gray-700">
-            <p className="text-xs uppercase font-semibold tracking-wide text-gray-500 dark:text-gray-400 mb-1">
+          <div className="mb-6 p-4 bg-gradient-to-r from-cognition-50 to-consciousness-50 dark:from-cognition-900/20 dark:to-consciousness-900/20 rounded-xl border border-cognition-100/30 dark:border-cognition-700/20">
+            <p className="text-xs font-semibold text-cognition-600 dark:text-cognition-400 uppercase tracking-wider mb-2">
               Superpower
             </p>
-            <p className="text-sm text-gray-700 dark:text-gray-300 font-medium">
+            <p className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed">
               {member.superpower}
             </p>
           </div>
         )}
+
+        {/* Contact links */}
+        <div className="flex items-center gap-3 pt-4 border-t border-gray-100 dark:border-gray-700/30">
+          {member.email && (
+            <a
+              href={`mailto:${member.email}`}
+              className="flex items-center justify-center w-10 h-10 rounded-full bg-cognition-100 dark:bg-cognition-900/30 text-cognition-600 dark:text-cognition-400 hover:bg-cognition-200 dark:hover:bg-cognition-800/50 hover:scale-105 transition-all duration-150 ease-out group/link"
+              aria-label={`Email ${member.name}`}
+            >
+              <FaEnvelope className="w-4 h-4" />
+            </a>
+          )}
+
+          {member.linkedin_url && (
+            <a
+              href={member.linkedin_url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center justify-center w-10 h-10 rounded-full bg-cognition-100 dark:bg-cognition-900/30 text-cognition-600 dark:text-cognition-400 hover:bg-cognition-200 dark:hover:bg-cognition-800/50 hover:scale-105 transition-all duration-150 ease-out group/link"
+              aria-label={`${member.name}'s LinkedIn profile`}
+            >
+              <FaLinkedin className="w-4 h-4" />
+            </a>
+          )}
+
+          {/* Spacer to push contact buttons to the left */}
+          <div className="flex-1" />
+        </div>
       </div>
-    </motion.div>
+
+      {/* Very subtle corner accent */}
+      <div className="absolute top-0 right-0 w-12 h-12 bg-gradient-to-bl from-cognition-500/5 to-transparent rounded-bl-full opacity-0 group-hover:opacity-100 transition-opacity duration-150" />
+    </motion.article>
   );
 }
