@@ -1,4 +1,8 @@
 import { createClient } from "@supabase/supabase-js";
+import dotenv from "dotenv";
+
+// Load environment variables
+dotenv.config();
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL,
@@ -13,6 +17,7 @@ const testProjects = [
     image: "/images/project-1.png",
     category: "Cognition",
     status: "active",
+    start_date: "2024-01-15",
     tags: ["ICU", "Delirium", "Assessment"],
     link: "https://example.com/project1",
     slug: "cognitive-assessment-critical-care",
@@ -26,6 +31,8 @@ const testProjects = [
     image: "/images/project-2.jpg",
     category: "Consciousness",
     status: "completed",
+    start_date: "2023-06-01",
+    end_date: "2024-03-15",
     tags: ["EEG", "Machine Learning", "Brain Injury"],
     link: "https://example.com/project2",
     slug: "consciousness-monitoring-systems",
@@ -39,6 +46,7 @@ const testProjects = [
     image: "/images/project-3.png",
     category: "Critical Care",
     status: "active",
+    start_date: "2024-02-01",
     tags: ["Outcomes", "Longitudinal", "Recovery"],
     link: "https://example.com/project3",
     slug: "critical-care-outcomes-research",
@@ -52,6 +60,7 @@ const testProjects = [
     image: "/images/project-4.jpeg",
     category: "Cognition",
     status: "pending",
+    start_date: "2024-03-01",
     tags: ["Neural Networks", "Prediction", "ICU"],
     link: "https://example.com/project4",
     slug: "neural-network-analysis-icu",
@@ -65,6 +74,7 @@ const testProjects = [
     image: "/images/project-5.jpeg",
     category: "Consciousness",
     status: "active",
+    start_date: "2023-09-01",
     tags: ["Sleep", "Recovery", "Intervention"],
     link: "https://example.com/project5",
     slug: "sleep-quality-recovery",
@@ -78,6 +88,7 @@ const testProjects = [
     image: "/images/project-1.png",
     category: "Critical Care",
     status: "on_hold",
+    start_date: "2023-12-01",
     tags: ["Pharmacology", "Prevention", "Treatment"],
     link: "https://example.com/project6",
     slug: "pharmacological-interventions",
@@ -91,6 +102,8 @@ const testProjects = [
     image: "/images/project-2.jpg",
     category: "Cognition",
     status: "completed",
+    start_date: "2023-03-01",
+    end_date: "2024-01-15",
     tags: ["Family", "Support", "Recovery"],
     link: "https://example.com/project7",
     slug: "family-support-systems",
@@ -104,6 +117,7 @@ const testProjects = [
     image: "/images/project-3.png",
     category: "Consciousness",
     status: "active",
+    start_date: "2023-11-01",
     tags: ["Virtual Reality", "Rehabilitation", "Technology"],
     link: "https://example.com/project8",
     slug: "virtual-reality-rehabilitation",
@@ -117,6 +131,7 @@ const testProjects = [
     image: "/images/project-4.jpeg",
     category: "Critical Care",
     status: "pending",
+    start_date: "2024-04-01",
     tags: ["Biomarkers", "Detection", "Early Warning"],
     link: "https://example.com/project9",
     slug: "biomarker-discovery",
@@ -130,6 +145,7 @@ const testProjects = [
     image: "/images/project-5.jpeg",
     category: "Cognition",
     status: "active",
+    start_date: "2023-08-01",
     tags: ["Telemedicine", "Remote", "Assessment"],
     link: "https://example.com/project10",
     slug: "telemedicine-critical-care",

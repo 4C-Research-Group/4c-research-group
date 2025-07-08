@@ -258,7 +258,8 @@ export default function AdminProjects() {
                         <AlertDialogTitle>Delete Project</AlertDialogTitle>
                         <AlertDialogDescription>
                           Are you sure you want to delete &quot;{project.title}
-                          &quot;? This action cannot be undone.
+                          &quot;? This will permanently remove the project and
+                          all associated images. This action cannot be undone.
                         </AlertDialogDescription>
                       </AlertDialogHeader>
                       <AlertDialogFooter>
@@ -301,8 +302,8 @@ export default function AdminProjects() {
             descriptions with rich text editing
           </li>
           <li>
-            • <strong>Delete:</strong> Remove projects (this action cannot be
-            undone)
+            • <strong>Delete:</strong> Remove projects and all associated images
+            (this action cannot be undone)
           </li>
           <li>
             • <strong>Status:</strong> Use &quot;upcoming&quot; for future
