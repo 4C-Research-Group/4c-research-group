@@ -301,7 +301,7 @@ export default function ProjectsPage() {
                 )}
 
                 {/* View Toggle */}
-                <div className="flex items-center bg-gray-100 dark:bg-gray-700 rounded-md p-0.5">
+                <div className="hidden md:flex items-center bg-gray-100 dark:bg-gray-700 rounded-md p-0.5">
                   <button
                     onClick={() => setViewMode("grid")}
                     className={`p-1.5 rounded transition-colors ${
