@@ -146,12 +146,39 @@ export default function PublicationsPage() {
                   <h3 className="text-lg sm:text-xl font-bold text-gray-900 dark:text-white mb-2 leading-tight break-words">
                     {pub.title}
                   </h3>
-                  <p className="text-gray-600 dark:text-gray-300 mb-2 text-sm sm:text-base break-words">
-                    {pub.authors}
+                  {pub.authors && (
+                    <p className="text-gray-600 dark:text-gray-300 mb-2 text-sm sm:text-base break-words">
+                      {pub.authors}
+                    </p>
+                  )}
+                  <p className="text-gray-600 dark:text-gray-400 text-xs sm:text-sm mb-1 break-words">
+                    {pub.journal}
+                    {pub.journal && pub.year ? ", " : ""}
+                    {pub.year}
                   </p>
-                  <p className="text-gray-600 dark:text-gray-400 text-xs sm:text-sm mb-3 break-words">
-                    {pub.journal}, {pub.year}
-                  </p>
+                  {pub.publisher && (
+                    <p className="text-gray-500 dark:text-gray-400 text-xs mb-1 break-words">
+                      <span className="font-medium">Publisher:</span>{" "}
+                      {pub.publisher}
+                    </p>
+                  )}
+                  {pub.type && (
+                    <p className="text-gray-500 dark:text-gray-400 text-xs mb-1 break-words">
+                      <span className="font-medium">Type:</span> {pub.type}
+                    </p>
+                  )}
+                  {pub.abstract && (
+                    <p className="text-gray-500 dark:text-gray-400 text-xs mb-1 break-words">
+                      <span className="font-medium">Abstract:</span>{" "}
+                      {pub.abstract}
+                    </p>
+                  )}
+                  {pub.citation && (
+                    <p className="text-gray-500 dark:text-gray-400 text-xs mb-1 break-words">
+                      <span className="font-medium">Citation:</span>{" "}
+                      {pub.citation}
+                    </p>
+                  )}
                   <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
                     {pub.externalIds && pub.externalIds.length > 0 && (
                       <div className="text-sm">
