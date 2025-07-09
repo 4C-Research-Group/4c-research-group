@@ -3,7 +3,28 @@
 import Image from "next/image";
 import { motion } from "framer-motion";
 import { useReducedMotion } from "framer-motion";
-import { FaEnvelope, FaLinkedin, FaUser } from "react-icons/fa";
+import {
+  FaEnvelope,
+  FaLinkedin,
+  FaUser,
+  FaBrain,
+  FaHeart,
+  FaFlask,
+  FaLightbulb,
+  FaUsers,
+  FaChartLine,
+  FaShieldAlt,
+  FaRocket,
+  FaStar,
+  FaMagic,
+  FaCog,
+  FaLeaf,
+  FaFire,
+  FaEye,
+  FaHandshake,
+  FaBook,
+  FaGraduationCap,
+} from "react-icons/fa";
 
 interface TeamMemberCardProps {
   member: {
@@ -15,6 +36,151 @@ interface TeamMemberCardProps {
     linkedin_url?: string;
   };
   index: number;
+}
+
+// Function to get icon based on superpower keywords
+function getSuperpowerIcon(superpower: string) {
+  const lowerSuperpower = superpower.toLowerCase();
+
+  if (
+    lowerSuperpower.includes("brain") ||
+    lowerSuperpower.includes("cognitive") ||
+    lowerSuperpower.includes("neuroscience") ||
+    lowerSuperpower.includes("mind")
+  ) {
+    return <FaBrain className="w-4 h-4" />;
+  }
+  if (
+    lowerSuperpower.includes("heart") ||
+    lowerSuperpower.includes("care") ||
+    lowerSuperpower.includes("compassion") ||
+    lowerSuperpower.includes("empathy")
+  ) {
+    return <FaHeart className="w-4 h-4" />;
+  }
+  if (
+    lowerSuperpower.includes("research") ||
+    lowerSuperpower.includes("lab") ||
+    lowerSuperpower.includes("experiment") ||
+    lowerSuperpower.includes("analysis")
+  ) {
+    return <FaFlask className="w-4 h-4" />;
+  }
+  if (
+    lowerSuperpower.includes("innovation") ||
+    lowerSuperpower.includes("creative") ||
+    lowerSuperpower.includes("idea") ||
+    lowerSuperpower.includes("solution")
+  ) {
+    return <FaLightbulb className="w-4 h-4" />;
+  }
+  if (
+    lowerSuperpower.includes("team") ||
+    lowerSuperpower.includes("collaboration") ||
+    lowerSuperpower.includes("leadership") ||
+    lowerSuperpower.includes("mentor")
+  ) {
+    return <FaUsers className="w-4 h-4" />;
+  }
+  if (
+    lowerSuperpower.includes("data") ||
+    lowerSuperpower.includes("analytics") ||
+    lowerSuperpower.includes("statistics") ||
+    lowerSuperpower.includes("metrics")
+  ) {
+    return <FaChartLine className="w-4 h-4" />;
+  }
+  if (
+    lowerSuperpower.includes("protection") ||
+    lowerSuperpower.includes("safety") ||
+    lowerSuperpower.includes("security") ||
+    lowerSuperpower.includes("guardian")
+  ) {
+    return <FaShieldAlt className="w-4 h-4" />;
+  }
+  if (
+    lowerSuperpower.includes("speed") ||
+    lowerSuperpower.includes("fast") ||
+    lowerSuperpower.includes("efficiency") ||
+    lowerSuperpower.includes("accelerate")
+  ) {
+    return <FaRocket className="w-4 h-4" />;
+  }
+  if (
+    lowerSuperpower.includes("excellence") ||
+    lowerSuperpower.includes("best") ||
+    lowerSuperpower.includes("quality") ||
+    lowerSuperpower.includes("premium")
+  ) {
+    return <FaStar className="w-4 h-4" />;
+  }
+  if (
+    lowerSuperpower.includes("magic") ||
+    lowerSuperpower.includes("wizard") ||
+    lowerSuperpower.includes("transform") ||
+    lowerSuperpower.includes("special")
+  ) {
+    return <FaMagic className="w-4 h-4" />;
+  }
+  if (
+    lowerSuperpower.includes("technical") ||
+    lowerSuperpower.includes("engineering") ||
+    lowerSuperpower.includes("system") ||
+    lowerSuperpower.includes("process")
+  ) {
+    return <FaCog className="w-4 h-4" />;
+  }
+  if (
+    lowerSuperpower.includes("nature") ||
+    lowerSuperpower.includes("organic") ||
+    lowerSuperpower.includes("growth") ||
+    lowerSuperpower.includes("sustainable")
+  ) {
+    return <FaLeaf className="w-4 h-4" />;
+  }
+  if (
+    lowerSuperpower.includes("energy") ||
+    lowerSuperpower.includes("passion") ||
+    lowerSuperpower.includes("drive") ||
+    lowerSuperpower.includes("power")
+  ) {
+    return <FaFire className="w-4 h-4" />;
+  }
+  if (
+    lowerSuperpower.includes("vision") ||
+    lowerSuperpower.includes("insight") ||
+    lowerSuperpower.includes("foresight") ||
+    lowerSuperpower.includes("perspective")
+  ) {
+    return <FaEye className="w-4 h-4" />;
+  }
+  if (
+    lowerSuperpower.includes("communication") ||
+    lowerSuperpower.includes("network") ||
+    lowerSuperpower.includes("partnership") ||
+    lowerSuperpower.includes("relationship")
+  ) {
+    return <FaHandshake className="w-4 h-4" />;
+  }
+  if (
+    lowerSuperpower.includes("knowledge") ||
+    lowerSuperpower.includes("learning") ||
+    lowerSuperpower.includes("education") ||
+    lowerSuperpower.includes("teaching")
+  ) {
+    return <FaBook className="w-4 h-4" />;
+  }
+  if (
+    lowerSuperpower.includes("academic") ||
+    lowerSuperpower.includes("scholar") ||
+    lowerSuperpower.includes("expertise") ||
+    lowerSuperpower.includes("specialist")
+  ) {
+    return <FaGraduationCap className="w-4 h-4" />;
+  }
+
+  // Default icon if no keywords match
+  return <FaStar className="w-4 h-4" />;
 }
 
 export default function TeamMemberCard({ member, index }: TeamMemberCardProps) {
@@ -107,9 +273,14 @@ export default function TeamMemberCard({ member, index }: TeamMemberCardProps) {
         {/* Superpower section */}
         {member.superpower && (
           <div className="mb-4 p-3 bg-gradient-to-r from-cognition-50 to-consciousness-50 dark:from-cognition-900/20 dark:to-consciousness-900/20 rounded-xl border border-cognition-100/30 dark:border-cognition-700/20">
-            <p className="text-xs font-semibold text-cognition-600 dark:text-cognition-400 uppercase tracking-wider mb-2">
-              Superpower
-            </p>
+            <div className="flex items-center gap-2 mb-2">
+              <div className="text-cognition-600 dark:text-cognition-400">
+                {getSuperpowerIcon(member.superpower)}
+              </div>
+              <p className="text-xs font-semibold text-cognition-600 dark:text-cognition-400 uppercase tracking-wider">
+                Superpower
+              </p>
+            </div>
             <p className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed">
               {member.superpower}
             </p>
