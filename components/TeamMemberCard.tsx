@@ -60,7 +60,7 @@ export default function TeamMemberCard({ member, index }: TeamMemberCardProps) {
       <div className="absolute inset-0 bg-gradient-to-br from-cognition-500/3 via-transparent to-consciousness-500/3 opacity-0 group-hover:opacity-100 transition-opacity duration-150" />
 
       {/* Image section */}
-      <div className="relative h-64 w-full overflow-hidden">
+      <div className="relative h-60 w-full overflow-hidden">
         {/* Background pattern */}
         <div className="absolute inset-0 bg-gradient-to-br from-cognition-100/10 to-consciousness-100/10 dark:from-cognition-900/10 dark:to-consciousness-900/10" />
 
@@ -93,9 +93,9 @@ export default function TeamMemberCard({ member, index }: TeamMemberCardProps) {
       </div>
 
       {/* Content section */}
-      <div className="relative p-6">
+      <div className="relative p-5">
         {/* Name and role */}
-        <div className="mb-4">
+        <div className="mb-3">
           <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2 group-hover:text-cognition-600 dark:group-hover:text-cognition-400 transition-colors duration-150">
             {member.name}
           </h3>
@@ -106,7 +106,7 @@ export default function TeamMemberCard({ member, index }: TeamMemberCardProps) {
 
         {/* Superpower section */}
         {member.superpower && (
-          <div className="mb-6 p-4 bg-gradient-to-r from-cognition-50 to-consciousness-50 dark:from-cognition-900/20 dark:to-consciousness-900/20 rounded-xl border border-cognition-100/30 dark:border-cognition-700/20">
+          <div className="mb-4 p-3 bg-gradient-to-r from-cognition-50 to-consciousness-50 dark:from-cognition-900/20 dark:to-consciousness-900/20 rounded-xl border border-cognition-100/30 dark:border-cognition-700/20">
             <p className="text-xs font-semibold text-cognition-600 dark:text-cognition-400 uppercase tracking-wider mb-2">
               Superpower
             </p>
@@ -117,7 +117,7 @@ export default function TeamMemberCard({ member, index }: TeamMemberCardProps) {
         )}
 
         {/* Contact links */}
-        <div className="flex items-center gap-3 pt-4 border-t border-gray-100 dark:border-gray-700/30">
+        <div className="flex items-center gap-3 pt-3 border-t border-gray-100 dark:border-gray-700/30">
           {member.email && (
             <a
               href={`mailto:${member.email}`}
