@@ -120,14 +120,14 @@ export default async function ProjectDetail({ params }: Props) {
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       {/* Hero Section with Background Image */}
-      <section className="relative h-96 md:h-[500px] overflow-hidden">
+      <section className="relative min-h-[280px] sm:min-h-[360px] md:h-[420px] lg:h-[500px] max-h-[90vh] overflow-visible flex flex-col justify-end">
         {/* Back to Projects Button - Overlay on Hero */}
-        <div className="absolute top-8 left-4 z-20">
+        <div className="absolute top-2 left-1 sm:top-6 sm:left-3 z-20">
           <Link
             href="/research"
-            className="inline-flex items-center px-4 py-2 bg-white/90 dark:bg-gray-900/90 backdrop-blur-sm text-gray-900 dark:text-white hover:bg-white dark:hover:bg-gray-900 font-medium rounded-lg transition-colors duration-200 shadow-lg"
+            className="inline-flex items-center px-2 py-1 sm:px-3 sm:py-1.5 bg-white/90 dark:bg-gray-900/90 backdrop-blur-sm text-gray-900 dark:text-white hover:bg-white dark:hover:bg-gray-900 font-medium rounded-lg transition-colors duration-200 shadow-lg text-xs sm:text-sm"
           >
-            <FaArrowLeft className="mr-2" />
+            <FaArrowLeft className="mr-1 sm:mr-2" />
             Back to Projects
           </Link>
         </div>
@@ -142,16 +142,16 @@ export default async function ProjectDetail({ params }: Props) {
           <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent"></div>
         </div>
 
-        <div className="relative h-full flex items-end">
-          <div className="container mx-auto px-4 pb-12">
+        <div className="relative w-full flex items-end overflow-visible">
+          <div className="container mx-auto px-1 sm:px-3 pb-4 sm:pb-8 overflow-visible">
             <div className="max-w-4xl">
-              <div className="flex flex-wrap items-center gap-3 mb-4">
+              <div className="flex flex-wrap items-center gap-1 sm:gap-2 mb-1 sm:mb-3">
                 {getStatusBadge(project.status)}
-                <span className="px-3 py-1 bg-white/20 backdrop-blur-sm rounded-full text-sm font-medium text-white">
+                <span className="px-1.5 py-0.5 sm:px-2 sm:py-1 bg-white/20 backdrop-blur-sm rounded-full text-[11px] sm:text-xs font-medium text-white">
                   {project.category}
                 </span>
-                <span className="flex items-center text-white/80 text-sm">
-                  <FaCalendarAlt className="mr-2" />
+                <span className="flex items-center text-white/80 text-[11px] sm:text-xs">
+                  <FaCalendarAlt className="mr-1" />
                   {formatProjectDates(
                     project.start_date,
                     project.status,
@@ -160,20 +160,20 @@ export default async function ProjectDetail({ params }: Props) {
                 </span>
               </div>
 
-              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6 leading-tight">
+              <h1 className="text-lg sm:text-2xl md:text-4xl lg:text-6xl font-bold text-white mb-2 sm:mb-4 leading-tight break-words break-all hyphens-auto overflow-visible">
                 {project.title}
               </h1>
 
-              <p className="text-xl md:text-2xl text-white/90 mb-8 max-w-3xl">
+              <p className="text-xs sm:text-base md:text-xl text-white/90 mb-2 sm:mb-4 max-w-3xl break-words break-all hyphens-auto overflow-visible">
                 {project.description}
               </p>
 
               {tags && tags.length > 0 && (
-                <div className="flex flex-wrap gap-2">
+                <div className="flex flex-wrap gap-0.5 sm:gap-1">
                   {tags.map((tag: string, index: number) => (
                     <span
                       key={index}
-                      className="px-3 py-1.5 bg-white/20 backdrop-blur-sm rounded-full text-sm font-medium text-white border border-white/30"
+                      className="px-1.5 py-0.5 sm:px-2 sm:py-1 bg-white/20 backdrop-blur-sm rounded-full text-[11px] sm:text-xs font-medium text-white border border-white/30"
                     >
                       {tag}
                     </span>

@@ -1,0 +1,15 @@
+langchain==0.3.26
+langchain-core==0.3.68
+langchain-google-genai==2.1.7
+langchain-community==0.3.26
+python-dotenv==1.1.1
+streamlit==1.46.1
+tiktoken==0.9.0
+faiss-cpu==1.7.4
+protobuf==5.29.5
+pandas==2.2.3
+numpy==1.26.4
+sentence-transformers==2.7.0
+fastapi==0.104.1
+uvicorn==0.24.0
+pydantic>=2.7.4,<3.0.0

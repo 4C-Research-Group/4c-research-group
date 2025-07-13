@@ -5,6 +5,7 @@ import { ThemeProvider } from "@/components/theme-provider";
 import { AuthProvider } from "@/components/providers/auth-provider";
 import { ClientWrapper } from "@/components/providers/client-wrapper";
 import { Toaster } from "sonner";
+import ChatBot from "@/components/ChatBot";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -73,6 +74,7 @@ export default function RootLayout({
             >
               <main>{children}</main>
               <Toaster />
+              <ChatBot />
             </ThemeProvider>
           </AuthProvider>
         </ClientWrapper>
