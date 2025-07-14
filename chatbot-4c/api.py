@@ -7,7 +7,7 @@ from langchain_core.prompts import PromptTemplate
 from langchain.chains import RetrievalQA
 from langchain_community.vectorstores import FAISS
 from langchain_community.embeddings import HuggingFaceEmbeddings
-from langchain.document_loaders.csv_loader import CSVLoader
+from langchain_community.document_loaders import CSVLoader
 import os
 from dotenv import load_dotenv
 
@@ -47,13 +47,17 @@ class ChatResponse(BaseModel):
 vector_store = None
 chain = None
 
+# Paths for saving/loading
+VECTOR_STORE_PATH = "vector_store"
+FAQ_CSV_PATH = "data/4c_research_lab_faqs.csv"
+
 
 def load_faq_data():
     """Load and prepare the FAQ data using CSVLoader"""
     try:
         # Use CSVLoader with proper source column
         loader = CSVLoader(
-            file_path='data/4c_research_lab_faqs.csv',
+            file_path=FAQ_CSV_PATH,
             source_column="question"
         )
         documents = loader.load()
@@ -77,6 +81,36 @@ def create_vector_store(documents):
         return vector_store
     except Exception as e:
         print(f"Error creating vector store: {e}")
+        return None
+
+
+def save_vector_store(vector_store, path=VECTOR_STORE_PATH):
+    """Save vector store to disk"""
+    try:
+        vector_store.save_local(path)
+        print(f"✅ Vector store saved to {path}")
+        return True
+    except Exception as e:
+        print(f"❌ Error saving vector store: {e}")
+        return False
+
+
+def load_vector_store(path=VECTOR_STORE_PATH):
+    """Load vector store from disk"""
+    try:
+        if os.path.exists(path):
+            embeddings = HuggingFaceEmbeddings(
+                model_name="hkunlp/instructor-large",
+                model_kwargs={'device': 'cpu'}
+            )
+            vector_store = FAISS.load_local(path, embeddings)
+            print(f"✅ Vector store loaded from {path}")
+            return vector_store
+        else:
+            print(f"❌ Vector store not found at {path}")
+            return None
+    except Exception as e:
+        print(f"❌ Error loading vector store: {e}")
         return None
 
 
@@ -134,25 +168,36 @@ QUESTION: {question}"""
 async def startup_event():
     global vector_store, chain
 
-    print("Loading FAQ data...")
-    documents = load_faq_data()
-    if documents is None:
-        print("Failed to load FAQ data")
-        return
+    print("🔄 Initializing RAG system...")
 
-    print("Creating vector store...")
-    vector_store = create_vector_store(documents)
+    # Try to load existing vector store first
+    vector_store = load_vector_store()
+
     if vector_store is None:
-        print("Failed to create vector store")
-        return
+        print("📚 Creating new vector store from FAQ data...")
+        documents = load_faq_data()
+        if documents is None:
+            print("❌ Failed to load FAQ data")
+            return
 
-    print("Creating RAG chain...")
+        print("🔧 Creating vector store...")
+        vector_store = create_vector_store(documents)
+        if vector_store is None:
+            print("❌ Failed to create vector store")
+            return
+
+        # Save the vector store for future use
+        save_vector_store(vector_store)
+    else:
+        print("✅ Using cached vector store")
+
+    print("🔗 Creating RAG chain...")
     chain = create_rag_chain(vector_store)
     if chain is None:
-        print("Failed to create RAG chain")
+        print("❌ Failed to create RAG chain")
         return
 
-    print("RAG system initialized successfully!")
+    print("🎉 RAG system initialized successfully!")
 
 
 @app.get("/")
@@ -160,7 +205,8 @@ async def root():
     return {
         "message": "4C Research Lab Chatbot API",
         "status": "running",
-        "rag_ready": chain is not None
+        "rag_ready": chain is not None,
+        "vector_store_cached": os.path.exists(VECTOR_STORE_PATH)
     }
 
 
@@ -169,7 +215,8 @@ async def health_check():
     return {
         "status": "healthy",
         "rag_ready": chain is not None,
-        "vector_store_ready": vector_store is not None
+        "vector_store_ready": vector_store is not None,
+        "vector_store_cached": os.path.exists(VECTOR_STORE_PATH)
     }
 
 
@@ -189,7 +236,7 @@ async def chat(request: ChatRequest):
 
     try:
         # Use the RAG chain to get response
-        response = chain({"query": request.message})
+        response = chain.invoke({"query": request.message})
         answer = response['result']
 
         # Extract sources if available
@@ -209,6 +256,47 @@ async def chat(request: ChatRequest):
             status_code=500,
             detail=f"Error processing request: {str(e)}"
         )
+
+
+@app.post("/rebuild-vectorstore")
+async def rebuild_vectorstore():
+    """Force rebuild the vector store (useful when FAQ data changes)"""
+    global vector_store, chain
+
+    try:
+        print("🔄 Rebuilding vector store...")
+
+        # Load fresh FAQ data
+        documents = load_faq_data()
+        if documents is None:
+            raise HTTPException(
+                status_code=500, detail="Failed to load FAQ data")
+
+        # Create new vector store
+        vector_store = create_vector_store(documents)
+        if vector_store is None:
+            raise HTTPException(
+                status_code=500, detail="Failed to create vector store")
+
+        # Save new vector store
+        if save_vector_store(vector_store):
+            # Recreate RAG chain
+            chain = create_rag_chain(vector_store)
+            if chain is None:
+                raise HTTPException(
+                    status_code=500, detail="Failed to create RAG chain")
+
+            return {"message": "Vector store rebuilt successfully", "status": "success"}
+        else:
+            raise HTTPException(
+                status_code=500, detail="Failed to save vector store")
+
+    except HTTPException:
+        raise
+    except Exception as e:
+        print(f"Error rebuilding vector store: {e}")
+        raise HTTPException(
+            status_code=500, detail=f"Error rebuilding vector store: {str(e)}")
 
 if __name__ == "__main__":
     import uvicorn

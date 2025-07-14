@@ -30,6 +30,42 @@ The API will be available at:
 - **Health Check**: http://localhost:8000/health
 - **API Documentation**: http://localhost:8000/docs
 
+## ⚡ Vector Store Caching
+
+The system now **saves and reuses** the vector store for faster startup:
+
+### **First Run (Slow)**
+
+- Creates embeddings from FAQ data
+- Saves vector store to `vector_store/` directory
+- Takes 30-60 seconds
+
+### **Subsequent Runs (Fast)**
+
+- Loads cached vector store from disk
+- Starts in 5-10 seconds
+- No need to recreate embeddings
+
+### **Managing the Vector Store**
+
+#### Check Status
+
+```bash
+python manage_vectorstore.py status
+```
+
+#### Rebuild Vector Store (when FAQ data changes)
+
+```bash
+python manage_vectorstore.py rebuild
+```
+
+#### Wait for API to be Ready
+
+```bash
+python manage_vectorstore.py wait
+```
+
 ## 🔧 API Endpoints
 
 ### POST /chat
@@ -62,6 +98,10 @@ Check if the RAG system is ready.
 
 Basic API information.
 
+### POST /rebuild-vectorstore
+
+Force rebuild the vector store (useful when FAQ data changes).
+
 ## 🌐 Integration with Next.js Website
 
 The Next.js website is configured to call this API at `http://localhost:8000/chat`.
@@ -92,11 +132,16 @@ RAG_API_URL=http://localhost:8000
    - Change the port in `start_api.py` or `api.py`
    - Update `RAG_API_URL` in your Next.js environment
 
+5. **Vector store issues**
+   - Delete `vector_store/` directory to force rebuild
+   - Use `python manage_vectorstore.py rebuild` to rebuild
+
 ## 📊 Monitoring
 
 - Check `/health` endpoint for system status
 - Monitor console logs for initialization progress
 - API docs available at `/docs` (Swagger UI)
+- Use `python manage_vectorstore.py status` for quick status check
 
 ## 🔄 Development
 
@@ -106,6 +151,7 @@ The API includes:
 - CORS enabled for local development
 - Error handling with fallback responses
 - Source document tracking
+- **Vector store caching for faster startup**
 
 ## 🚀 Production Deployment
 
@@ -116,3 +162,26 @@ For production, consider:
 - Using environment variables for configuration
 - Adding rate limiting
 - Setting up monitoring and logging
+- **Pre-building vector store during deployment**
+
+## 📁 File Structure
+
+```
+chatbot-4c/
+├── api.py                    # Main FastAPI application
+├── start_api.py             # Startup script
+├── manage_vectorstore.py    # Vector store management
+├── requirements.txt         # Python dependencies
+├── data/
+│   └── 4c_research_lab_faqs.csv  # FAQ data
+├── vector_store/            # Cached embeddings (auto-created)
+└── .env                     # Environment variables
+```
+
+## ⚡ Performance Tips
+
+1. **First startup**: Be patient (30-60 seconds for embedding creation)
+2. **Subsequent startups**: Should be much faster (5-10 seconds)
+3. **Update FAQ data**: Use `python manage_vectorstore.py rebuild`
+4. **Monitor memory**: Vector store uses ~50-100MB RAM
+5. **Scale horizontally**: Multiple API instances can share the same vector store
