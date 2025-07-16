@@ -74,7 +74,7 @@ export default function RootLayout({
             >
               <main>{children}</main>
               <Toaster />
-              <ChatBot />
+              {/* <ChatBot /> */}
             </ThemeProvider>
           </AuthProvider>
         </ClientWrapper>
