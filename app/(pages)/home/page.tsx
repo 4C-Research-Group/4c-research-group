@@ -214,6 +214,33 @@ export default function HomePage() {
 
   return (
     <div className="min-h-screen bg-background overflow-x-hidden">
+      {/* Floating "In Development" Visual */}
+      <div className="fixed z-[9999] bottom-8 right-8 flex items-center gap-3 pointer-events-none select-none">
+        <motion.div
+          initial={{ y: 30, opacity: 0, scale: 0.95 }}
+          animate={{ y: [30, 0, 10, 0], opacity: 1, scale: [0.95, 1, 1.05, 1] }}
+          transition={{ duration: 1.2, repeat: Infinity, repeatType: "reverse", ease: "easeInOut" }}
+          className="flex items-center bg-gradient-to-r from-cognition-600 to-consciousness-600 text-white px-5 py-3 rounded-2xl shadow-2xl border border-white/20 text-base font-semibold"
+        >
+          <svg className="w-6 h-6 mr-2 animate-spin-slow" fill="none" viewBox="0 0 24 24">
+            <circle
+              className="opacity-30"
+              cx="12"
+              cy="12"
+              r="10"
+              stroke="currentColor"
+              strokeWidth="4"
+            />
+            <path
+              className="opacity-80"
+              fill="currentColor"
+              d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
+            />
+          </svg>
+          In development
+        </motion.div>
+      </div>
+
       {/* Hero Section */}
       {hero && (
         <section className="relative -mt-12 min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-cognition-50 via-white to-consciousness-50 dark:from-cognition-900 dark:via-gray-900 dark:to-consciousness-900">

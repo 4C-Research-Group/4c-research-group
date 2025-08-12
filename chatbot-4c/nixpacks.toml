@@ -1,0 +1,12 @@
+[phases.setup]
+# Use a minimal base image
+nixPkgs = ["python310"]
+
+[phases.install]
+cmds = [
+  # Single command to set up the environment and install packages
+  "python -m venv /opt/venv && . /opt/venv/bin/activate && pip install --upgrade pip setuptools wheel && pip install --no-cache-dir --prefer-binary langchain==0.3.26 langchain-core==0.3.68 langchain-google-genai==2.1.7 python-dotenv==1.1.1 tiktoken==0.9.0 faiss-cpu==1.7.4 'pydantic>=2.7.4,<3.0.0' fastapi==0.104.1 uvicorn==0.24.0 requests==2.31.0 && find /opt/venv -type d -name '__pycache__' -exec rm -rf {} + && find /opt/venv -type f -name '*.pyc' -delete && find /opt/venv -type d -name 'tests' -exec rm -rf {} + && find /opt/venv -type d -name '*.dist-info' -exec rm -rf {} + && find /opt/venv -type d -name '*.egg-info' -exec rm -rf {} +"
+]
+
+[phases.start]
+cmd = "/opt/venv/bin/python -m uvicorn app:app --host 0.0.0.0 --port $PORT"
