@@ -36,10 +36,6 @@ export const sectionStyles = {
   paragraph: "mt-4 text-gray-700 dark:text-gray-300 leading-relaxed",
 };
 
-/**
- * Cleans up author names that might be email addresses
- * Converts email addresses to readable names
- */
 export function cleanAuthorName(authorName: string): string {
   if (!authorName) return "Admin User";
 
