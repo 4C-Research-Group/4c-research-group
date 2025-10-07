@@ -14,7 +14,6 @@ const corsHeaders = {
 
 export async function GET(request: NextRequest) {
   try {
-    // Use URL API to parse the request URL
     const url = new URL(request.url);
     const category = url.searchParams.get("category");
     const excludeId = url.searchParams.get("excludeId");
