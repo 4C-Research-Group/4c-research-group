@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { Plus, Edit, Eye, Trash2, Calendar, Tag } from "lucide-react";
+import Image from "next/image";
 import { Project, getProjects, deleteProject } from "@/lib/supabase/projects";
 import { Button } from "@/components/ui/button";
 import {
@@ -137,11 +138,12 @@ export default function AdminProjects() {
                 {/* Project Image */}
                 <div className="relative h-48 bg-gray-100 dark:bg-gray-800">
                   {project.image ? (
-                    <img
+                    <Image
                       src={project.image}
                       alt={project.title}
-                      className="w-full h-full object-cover"
-                      onLoad={() =>
+                      fill
+                      className="object-cover"
+                      onLoadingComplete={() =>
                         console.log("Image loaded successfully:", project.image)
                       }
                       onError={(e) => {

@@ -138,6 +138,14 @@ export async function middleware(request: NextRequest) {
   return response;
 }
 
+// Only run middleware on specific paths
 export const config = {
-  matcher: ["/login", "/signup", "/dashboard/:path*", "/admin/:path*"],
+  matcher: [
+    "/login", 
+    "/signup", 
+    "/dashboard/:path*", 
+    "/admin/:path*",
+    // Match all paths except those starting with _next, api, or static files
+    "/((?!_next|api|favicon.ico|.*\..*).*)",
+  ],
 };

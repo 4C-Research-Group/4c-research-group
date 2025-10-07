@@ -3,7 +3,7 @@ import { createClient } from "@/lib/supabase/server";
 
 export async function GET(request: NextRequest) {
   try {
-    const { searchParams } = new URL(request.url);
+    const { searchParams } = request.nextUrl;
     const category = searchParams.get("category");
     const excludeId = searchParams.get("excludeId");
     const limit = parseInt(searchParams.get("limit") || "3");
