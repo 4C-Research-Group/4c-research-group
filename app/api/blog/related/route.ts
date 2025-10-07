@@ -2,31 +2,30 @@ import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 
 // This route needs to be dynamic because it handles search parameters
-export const dynamic = 'force-dynamic';
+export const dynamic = "force-dynamic";
+export const runtime = "nodejs";
 
 // CORS headers
 const corsHeaders = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Methods': 'GET, OPTIONS',
-  'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Methods": "GET, OPTIONS",
+  "Content-Type": "application/json",
 };
 
 export async function GET(request: NextRequest) {
   try {
-    const { searchParams } = request.nextUrl;
-    const category = searchParams.get("category");
-    const excludeId = searchParams.get("excludeId");
-    const limit = parseInt(searchParams.get("limit") || "3");
+    // Use URL API to parse the request URL
+    const url = new URL(request.url);
+    const category = url.searchParams.get("category");
+    const excludeId = url.searchParams.get("excludeId");
+    const limit = parseInt(url.searchParams.get("limit") || "3");
 
     if (!category) {
       return new NextResponse(
         JSON.stringify({ error: "Category parameter is required" }),
-        { 
+        {
           status: 400,
-          headers: {
-            'Content-Type': 'application/json',
-            ...corsHeaders
-          }
+          headers: corsHeaders,
         }
       );
     }
@@ -50,12 +49,9 @@ export async function GET(request: NextRequest) {
       console.error("Error fetching related posts:", error);
       return new NextResponse(
         JSON.stringify({ error: "Failed to fetch related posts" }),
-        { 
+        {
           status: 500,
-          headers: {
-            'Content-Type': 'application/json',
-            ...corsHeaders
-          }
+          headers: corsHeaders,
         }
       );
     }
@@ -65,22 +61,27 @@ export async function GET(request: NextRequest) {
 
     return new NextResponse(JSON.stringify(limitedData), {
       status: 200,
-      headers: {
-        'Content-Type': 'application/json',
-        ...corsHeaders
-      }
+      headers: corsHeaders,
     });
   } catch (error) {
     console.error("Error in related posts API:", error);
     return new NextResponse(
       JSON.stringify({ error: "Internal server error" }),
-      { 
+      {
         status: 500,
-        headers: {
-          'Content-Type': 'application/json',
-          ...corsHeaders
-        }
+        headers: corsHeaders,
       }
     );
   }
+}
+
+// Handle OPTIONS method for CORS preflight
+export async function OPTIONS() {
+  return new NextResponse(null, {
+    status: 200,
+    headers: {
+      ...corsHeaders,
+      Allow: "GET, OPTIONS",
+    },
+  });
 }
