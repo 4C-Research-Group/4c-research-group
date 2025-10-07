@@ -20,7 +20,6 @@ export async function updateContactPage(
 ): Promise<ContactPage | null> {
   const supabase = createClient();
 
-  // First, check if a record exists
   const { data: existingData, error: checkError } = await supabase
     .from("contact_page")
     .select("id")
