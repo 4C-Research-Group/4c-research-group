@@ -199,10 +199,11 @@ export async function deleteProject(id: string) {
           if (deleteError) {
             console.error(`Failed to delete image ${filePath}:`, deleteError);
             console.error("Delete error details:", {
+              name: deleteError.name,
               message: deleteError.message,
-              details: deleteError.details,
-              hint: deleteError.hint,
-              code: deleteError.code,
+              // Only include properties that exist on StorageError
+              ...(deleteError as any).statusCode && { statusCode: (deleteError as any).statusCode },
+              ...(deleteError as any).error && { error: (deleteError as any).error },
             });
             // Continue with other deletions even if one fails
           } else {

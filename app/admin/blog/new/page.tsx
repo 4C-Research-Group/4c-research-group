@@ -6,6 +6,10 @@ import { createBlogPost } from "@/lib/supabase/admin/blog";
 import { supabase } from "@/lib/supabase/client";
 import RichTextEditor from "@/components/ui/rich-text-editor";
 
+type UserRole = {
+  role: string;
+};
+
 export default function NewBlogPost() {
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -42,7 +46,7 @@ export default function NewBlogPost() {
         .from("users")
         .select("role")
         .eq("id", session.user.id)
-        .single();
+        .single<UserRole>();
       if (!error && data?.role === "admin") setIsAdmin(true);
       setCheckedAuth(true);
 

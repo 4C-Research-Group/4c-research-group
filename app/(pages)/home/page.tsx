@@ -209,11 +209,11 @@ export default function HomePage() {
               database
             </li>
             <li>
-              Ensure there's a record with <code>slug = 'home'</code> in the
-              pages table
+              Ensure there&#39;s a record with{" "}
+              <code>slug = &#39;home&#39;</code> in the pages table
             </li>
             <li>
-              Check the browser's developer console (F12) for detailed error
+              Check the browser&#39;s developer console (F12) for detailed error
               messages
             </li>
             <li>Inspect the Network tab to see the API response</li>

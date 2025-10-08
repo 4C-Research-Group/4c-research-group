@@ -1,6 +1,10 @@
 "use client";
 
 import { motion } from "framer-motion";
+
+type UserRole = {
+  role: string;
+};
 import {
   FaCalendarAlt,
   FaClock,
@@ -88,7 +92,7 @@ export default function BlogPage() {
         .from("users")
         .select("role")
         .eq("id", session.user.id)
-        .single();
+        .single<UserRole>();
       if (!error && data?.role === "admin") setIsAdmin(true);
     }
     checkRole();

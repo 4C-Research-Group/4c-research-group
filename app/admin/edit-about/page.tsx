@@ -6,6 +6,10 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import dynamic from "next/dynamic";
+
+type PageContent = {
+  content: string;
+};
 const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
 import "react-quill/dist/quill.snow.css";
 
@@ -24,7 +28,7 @@ export default function EditAboutPage() {
         .from("pages")
         .select("content")
         .eq("slug", "about")
-        .single();
+        .single<PageContent>();
 
       if (error) {
         // If the page doesn't exist, that's okay - we'll create it
@@ -88,6 +92,7 @@ export default function EditAboutPage() {
 
     if (existingPage) {
       // Update existing page
+      // Update the page with proper typing
       const { error } = await supabase
         .from("pages")
         .update({
@@ -104,13 +109,13 @@ export default function EditAboutPage() {
       }
     } else {
       // Create new page
-      const { error } = await supabase.from("pages").insert({
+      const { error } = await (supabase.from("pages").insert({
         slug: "about",
         title: "About Page",
         content: JSON.stringify(content),
         created_at: new Date().toISOString(),
         updated_at: new Date().toISOString(),
-      });
+      } as any) as any);
 
       if (error) {
         setError("Failed to create about page.");

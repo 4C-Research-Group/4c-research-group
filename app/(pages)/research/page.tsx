@@ -21,6 +21,10 @@ import ResearchPagination from "@/components/ResearchPagination";
 import LoadingSpinner from "@/components/ui/loading-spinner";
 import { Button } from "@/components/ui/button";
 
+interface UserRole {
+  role: string;
+}
+
 interface Project {
   id: string;
   title: string;
@@ -76,7 +80,7 @@ export default function ProjectsPage() {
         .from("users")
         .select("role")
         .eq("id", session.user.id)
-        .single();
+        .single<UserRole>();
       if (!error && data?.role === "admin") setIsAdmin(true);
     }
 

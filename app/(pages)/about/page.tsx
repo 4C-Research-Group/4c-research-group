@@ -16,6 +16,10 @@ import { supabase } from "@/lib/supabase/client";
 import LoadingSpinner from "@/components/ui/loading-spinner";
 import PageHero from "@/components/PageHero";
 
+type PageContent = {
+  content: string;
+};
+
 type TeamMember = {
   name: string;
   role: string;
@@ -25,7 +29,7 @@ type TeamMember = {
 };
 
 export default function AboutPage() {
-  const [content, setContent] = useState<any>(null);
+  const [content, setContent] = useState<Record<string, any> | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -37,7 +41,7 @@ export default function AboutPage() {
         .from("pages")
         .select("content")
         .eq("slug", "about")
-        .single();
+        .single<PageContent>();
       if (error) {
         setError("Failed to load about page content.");
         setLoading(false);
