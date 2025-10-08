@@ -143,23 +143,46 @@ export default function HomePage() {
     async function fetchContent() {
       setLoading(true);
       setError(null);
-      const { data, error } = await supabase
-        .from("pages")
-        .select("content")
-        .eq("slug", "home")
-        .single();
-      if (error) {
+
+      try {
+        const response = await fetch(
+          `/api/supabase?table=pages&select=content&slug=home`,
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data = await response.json();
+
+        if (!data || data.length === 0) {
+          throw new Error("No content found");
+        }
+
+        const pageData = data[0];
+        let parsedContent = null;
+
+        if (typeof pageData?.content === "string") {
+          parsedContent = JSON.parse(pageData.content);
+        } else if (pageData?.content) {
+          parsedContent = pageData.content;
+        }
+
+        setContent(parsedContent);
+      } catch (err) {
+        console.error("Error fetching content:", err);
         setError("Failed to load home page content.");
+      } finally {
         setLoading(false);
-        return;
       }
-      let parsedContent = null;
-      if (typeof data?.content === "string") {
-        parsedContent = JSON.parse(data.content);
-      }
-      setContent(parsedContent);
-      setLoading(false);
     }
+
     fetchContent();
   }, []);
 
@@ -169,8 +192,41 @@ export default function HomePage() {
 
   if (error || !content) {
     return (
-      <div className="min-h-screen flex items-center justify-center text-red-600 bg-gradient-to-br from-cognition-50 to-white dark:from-cognition-900 dark:to-gray-900">
-        {error || "No content found."}
+      <div className="min-h-screen flex flex-col items-center justify-center p-4 text-red-600 bg-gradient-to-br from-cognition-50 to-white dark:from-cognition-900 dark:to-gray-900">
+        <h2 className="text-2xl font-bold mb-4">
+          Failed to load home page content
+        </h2>
+        <p className="mb-4">{error || "No content found."}</p>
+        <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-md max-w-2xl w-full">
+          <h3 className="font-semibold mb-2">Troubleshooting steps:</h3>
+          <ol className="list-decimal pl-5 space-y-2">
+            <li>
+              Check if the Supabase URL and anon key are correctly set in your{" "}
+              <code>.env.local</code> file
+            </li>
+            <li>
+              Verify that the <code>pages</code> table exists in your Supabase
+              database
+            </li>
+            <li>
+              Ensure there's a record with <code>slug = 'home'</code> in the
+              pages table
+            </li>
+            <li>
+              Check the browser's developer console (F12) for detailed error
+              messages
+            </li>
+            <li>Inspect the Network tab to see the API response</li>
+          </ol>
+        </div>
+        <div className="mt-6">
+          <button
+            onClick={() => window.location.reload()}
+            className="px-4 py-2 bg-cognition-500 text-white rounded hover:bg-cognition-600 transition-colors"
+          >
+            Retry Loading
+          </button>
+        </div>
       </div>
     );
   }
@@ -214,33 +270,6 @@ export default function HomePage() {
 
   return (
     <div className="min-h-screen bg-background overflow-x-hidden">
-      {/* Floating "In Development" Visual */}
-      <div className="fixed z-[9999] bottom-8 right-8 flex items-center gap-3 pointer-events-none select-none">
-        <motion.div
-          initial={{ y: 30, opacity: 0, scale: 0.95 }}
-          animate={{ y: [30, 0, 10, 0], opacity: 1, scale: [0.95, 1, 1.05, 1] }}
-          transition={{ duration: 1.2, repeat: Infinity, repeatType: "reverse", ease: "easeInOut" }}
-          className="flex items-center bg-gradient-to-r from-cognition-600 to-consciousness-600 text-white px-5 py-3 rounded-2xl shadow-2xl border border-white/20 text-base font-semibold"
-        >
-          <svg className="w-6 h-6 mr-2 animate-spin-slow" fill="none" viewBox="0 0 24 24">
-            <circle
-              className="opacity-30"
-              cx="12"
-              cy="12"
-              r="10"
-              stroke="currentColor"
-              strokeWidth="4"
-            />
-            <path
-              className="opacity-80"
-              fill="currentColor"
-              d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
-            />
-          </svg>
-          In development
-        </motion.div>
-      </div>
-
       {/* Hero Section */}
       {hero && (
         <section className="relative -mt-12 min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-cognition-50 via-white to-consciousness-50 dark:from-cognition-900 dark:via-gray-900 dark:to-consciousness-900">

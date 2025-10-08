@@ -21,11 +21,29 @@ const publicRoutes = [
   "/auth/callback",
 ];
 
+// CORS headers
+const corsHeaders = {
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+  "Access-Control-Allow-Headers":
+    "authorization, x-client-info, apikey, content-type",
+};
+
 export async function middleware(request: NextRequest) {
+  // Handle CORS preflight requests
+  if (request.method === "OPTIONS") {
+    return new NextResponse("ok", { headers: corsHeaders });
+  }
+
   let response = NextResponse.next({
     request: {
       headers: request.headers,
     },
+  });
+
+  // Add CORS headers to all responses
+  Object.entries(corsHeaders).forEach(([key, value]) => {
+    response.headers.set(key, value);
   });
 
   const supabase = createServerClient(
@@ -141,9 +159,9 @@ export async function middleware(request: NextRequest) {
 // Only run middleware on specific paths
 export const config = {
   matcher: [
-    "/login", 
-    "/signup", 
-    "/dashboard/:path*", 
+    "/login",
+    "/signup",
+    "/dashboard/:path*",
     "/admin/:path*",
     // Match all paths except those starting with _next, api, or static files
     "/((?!_next|api|favicon.ico|.*\..*).*)",
