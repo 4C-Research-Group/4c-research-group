@@ -12,12 +12,14 @@ The 4C Research Lab is a modern web application dedicated to research in Cogniti
 ## Features
 
 ### 🔍 Research Focus Areas
+
 - **Cognition** - Exploring the mental processes of perception, memory, and problem-solving
 - **Consciousness** - Investigating the nature of conscious experience and awareness
 - **Critical Care** - Advancing research in intensive care medicine and patient outcomes
 - **Comfort** - Studying patient comfort and quality of life in healthcare settings
 
 ### 🚀 Key Features
+
 - **Modern, Responsive Design** - Optimized for all devices from mobile to desktop
 - **User Authentication** - Secure login/signup with Supabase Auth
 - **Admin Dashboard** - Comprehensive interface for content management
@@ -27,6 +29,7 @@ The 4C Research Lab is a modern web application dedicated to research in Cogniti
 - **Dark/Light Mode** - Full support for both light and dark themes
 
 ### 🛠️ Technical Stack
+
 - **Frontend**: Next.js 14 with React 18
 - **Styling**: Tailwind CSS with CSS Modules
 - **State Management**: React Context API
@@ -42,6 +45,7 @@ The 4C Research Lab is a modern web application dedicated to research in Cogniti
 ## Getting Started
 
 ### Prerequisites
+
 - Node.js 18.0.0 or later
 - npm or yarn
 - Supabase account (for authentication and database)
@@ -49,12 +53,14 @@ The 4C Research Lab is a modern web application dedicated to research in Cogniti
 ### Installation
 
 1. **Clone the repository**
+
    ```bash
    git clone https://github.com/4C-Research-Group/4c-research-lab.git
    cd 4c-research-lab
    ```
 
 2. **Install dependencies**
+
    ```bash
    npm install
    # or
@@ -63,13 +69,15 @@ The 4C Research Lab is a modern web application dedicated to research in Cogniti
 
 3. **Set up environment variables**
    Create a `.env.local` file in the root directory and add your Supabase credentials:
+
    ```env
    NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
-   NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
+   NEXT_PUBLIC_SUPABASE_KEY=your_supabase_anon_key
    SUPABASE_SERVICE_ROLE_KEY=your_supabase_service_role_key
    ```
 
 4. **Run the development server**
+
    ```bash
    npm run dev
    # or

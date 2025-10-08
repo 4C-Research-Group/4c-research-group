@@ -3,24 +3,22 @@ import { createBrowserClient } from "@supabase/ssr";
 import { Database } from "./database.types";
 
 // Ensure we only create one instance
-let supabaseInstance: ReturnType<typeof createBrowserClient<Database>> | null = null;
+let supabaseInstance: ReturnType<typeof createBrowserClient<Database>> | null =
+  null;
 
 // Client-side Supabase client for browser usage
 export const supabase = (() => {
   if (!supabaseInstance) {
     const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
     const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_KEY;
-    
+
     if (!supabaseUrl || !supabaseKey) {
       throw new Error(
         "Missing required environment variables: NEXT_PUBLIC_SUPABASE_URL or NEXT_PUBLIC_SUPABASE_KEY"
       );
     }
 
-    supabaseInstance = createBrowserClient<Database>(
-      supabaseUrl,
-      supabaseKey
-    );
+    supabaseInstance = createBrowserClient<Database>(supabaseUrl, supabaseKey);
   }
   return supabaseInstance;
 })();
