@@ -22,7 +22,7 @@ export async function createBlogPost(formData: FormData) {
   // Create service role client for admin operations
   const supabaseAdmin = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_ROLE_KEY!,
+    process.env.SUPABASE_SERVICE_KEY!,
     {
       cookies: {
         get(name: string) {
@@ -107,7 +107,7 @@ export async function updateBlogPost(postId: string, formData: FormData) {
   // Create service role client for admin operations
   const supabaseAdmin = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_ROLE_KEY!,
+    process.env.SUPABASE_SERVICE_KEY!,
     {
       cookies: {
         get(name: string) {
@@ -193,7 +193,7 @@ export async function getBlogPostById(postId: string) {
   // Create service role client for admin operations
   const supabaseAdmin = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_ROLE_KEY!,
+    process.env.SUPABASE_SERVICE_KEY!,
     {
       cookies: {
         get(name: string) {
@@ -249,7 +249,7 @@ export async function deleteBlogPost(postId: string) {
   // Create service role client for admin operations
   const supabaseAdmin = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_ROLE_KEY!,
+    process.env.SUPABASE_SERVICE_KEY!,
     {
       cookies: {
         get(name: string) {

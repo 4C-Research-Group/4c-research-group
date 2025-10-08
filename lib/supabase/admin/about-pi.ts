@@ -24,7 +24,7 @@ export async function updateAboutPIAdmin(
   // Create service role client for admin operations
   const supabaseAdmin = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_ROLE_KEY!,
+    process.env.SUPABASE_SERVICE_KEY!,
     {
       cookies: {
         get(name: string) {
@@ -88,7 +88,7 @@ export async function getAboutPIAdmin() {
   // Create service role client for admin operations
   const supabaseAdmin = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_ROLE_KEY!,
+    process.env.SUPABASE_SERVICE_KEY!,
     {
       cookies: {
         get(name: string) {

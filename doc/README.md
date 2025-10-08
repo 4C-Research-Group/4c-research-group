@@ -86,7 +86,7 @@ Create a `.env.local` file in the root directory:
 # Supabase Configuration
 NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
 NEXT_PUBLIC_SUPABASE_KEY=your_supabase_anon_key
-SUPABASE_SERVICE_ROLE_KEY=your_supabase_service_role_key
+SUPABASE_SERVICE_KEY=your_SUPABASE_SERVICE_KEY
 
 # Email Service (for contact form)
 RESEND_API_KEY=your_resend_api_key

@@ -9,7 +9,15 @@
     "start": "next start",
     "lint": "next lint",
     "test": "vitest",
-    "create-admin": "node scripts/create-admin.mjs"
+    "test:auth": "ts-node --esm scripts/test-auth.ts",
+    "create-admin": "ts-node --esm scripts/create-admin.ts",
+    "list-users": "ts-node --esm scripts/list-users.ts",
+    "update-to-admin": "ts-node --esm scripts/update-to-admin.ts",
+    "test-signin": "ts-node --esm scripts/test-signin.ts",
+    "check-user": "ts-node --esm scripts/check-user.ts",
+    "resend-confirmation": "ts-node --esm scripts/resend-confirmation.ts",
+    "create-admin-user": "ts-node --esm scripts/create-admin-user.ts",
+    "delete-user": "ts-node --esm scripts/delete-user.ts"
   },
   "dependencies": {
     "@heroicons/react": "^2.2.0",
@@ -61,16 +69,18 @@
     "zod": "^3.24.2"
   },
   "devDependencies": {
-    "@types/node": "^20.11.24",
+    "@types/node": "^20.19.19",
     "@types/react": "^18.2.61",
     "@types/react-dom": "^18.2.19",
     "autoprefixer": "^10.4.18",
     "eslint": "^8.57.0",
     "eslint-config-next": "14.0.4",
+    "open": "^10.2.0",
     "postcss": "^8.4.35",
     "tailwindcss": "^3.4.1",
+    "ts-node": "^10.9.2",
     "tsx": "^4.20.3",
-    "typescript": "^5.3.3",
+    "typescript": "^5.9.3",
     "vitest": "^3.0.5"
   }
 }
