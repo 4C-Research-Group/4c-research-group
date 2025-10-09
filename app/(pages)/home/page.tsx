@@ -237,9 +237,6 @@ export default function HomePage() {
   // RESEARCH HIGHLIGHTS
   const researchHighlights = content.researchHighlights || { cards: [] };
 
-  // SERVICES
-  const services = content.services || { cards: [] };
-
   // PROJECTS
   const projects = content.projects || { cards: [] };
 
@@ -605,8 +602,24 @@ export default function HomePage() {
       {mission && (
         <section className="py-24 bg-gradient-to-br from-gray-50 to-white dark:from-gray-800 dark:to-gray-900">
           <div className="container mx-auto px-4">
+            {/* Single Centered Heading */}
+            <motion.div
+              className="text-center mb-16"
+              variants={conditionalFadeInUp}
+              initial="hidden"
+              whileInView="visible"
+              viewport={viewportSettings}
+            >
+              <h2 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-6">
+                <span className="bg-gradient-to-r from-cognition-600 to-consciousness-600 bg-clip-text text-transparent">
+                  {mission.title}
+                </span>
+              </h2>
+              <div className="w-32 h-1.5 bg-gradient-to-r from-cognition-500 via-consciousness-500 to-care-500 rounded-full mx-auto" />
+            </motion.div>
+
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start max-w-6xl mx-auto">
-              {/* Left Column - Mission */}
+              {/* Left Column - Mission Content */}
               <motion.div
                 variants={conditionalFadeInLeft}
                 initial="hidden"
@@ -614,15 +627,6 @@ export default function HomePage() {
                 viewport={viewportSettings}
                 className="flex flex-col h-full"
               >
-                <div className="mb-8">
-                  <h2 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-6 leading-tight text-center">
-                    <span className="bg-gradient-to-r from-cognition-600 to-consciousness-600 bg-clip-text text-transparent">
-                      {mission.title}
-                    </span>
-                  </h2>
-                  <div className="w-32 h-1.5 bg-gradient-to-r from-cognition-500 via-consciousness-500 to-care-500 rounded-full mx-auto" />
-                </div>
-
                 <div className="space-y-8">
                   <div
                     className="text-xl text-gray-600 dark:text-gray-300 leading-relaxed"
@@ -662,7 +666,6 @@ export default function HomePage() {
                 </div>
               </motion.div>
 
-              {/* Right Column - 4C's */}
               <motion.div
                 className="flex flex-col h-full justify-center"
                 variants={conditionalFadeInRight}
@@ -670,22 +673,13 @@ export default function HomePage() {
                 whileInView="visible"
                 viewport={viewportSettings}
               >
-                <div className="mb-8 text-center">
-                  <h2 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-6 leading-tight">
-                    <span className="bg-gradient-to-r from-cognition-600 to-consciousness-600 bg-clip-text text-transparent">
-                      {mission.fourCsTitle || "The 4C's"}
-                    </span>
-                  </h2>
-                  <div className="w-32 h-1.5 bg-gradient-to-r from-cognition-500 via-consciousness-500 to-care-500 rounded-full mx-auto" />
-                </div>
-
                 <div className="relative w-full h-64 md:h-80 lg:h-96 max-w-4xl mx-auto">
                   <div className="relative bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-2xl p-2 shadow-xl border border-white/20 h-full">
                     <Image
-                      src={mission.fourCsImage || "/images/4cccc.png"}
+                      src="/images/eeg.jpg"
                       alt="The 4C's: Cognition, Care, Compassion, and Collaboration"
                       fill
-                      className="object-contain"
+                      className="object-cover"
                       priority
                       sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                     />
@@ -696,64 +690,6 @@ export default function HomePage() {
           </div>
         </section>
       )}
-
-      {/* Services Section */}
-      {services && services.cards && services.cards.length > 0 && (
-        <section className="py-24 bg-gradient-to-br from-white to-gray-50 dark:from-gray-900 dark:to-gray-800">
-          <div className="container mx-auto px-4">
-            <motion.div
-              className="text-center mb-20"
-              variants={conditionalFadeInUp}
-              initial="hidden"
-              whileInView="visible"
-              viewport={viewportSettings}
-            >
-              <h2 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-6">
-                <span className="bg-gradient-to-r from-cognition-600 to-consciousness-600 bg-clip-text text-transparent">
-                  {services.title}
-                </span>
-              </h2>
-              <div className="w-32 h-1.5 bg-gradient-to-r from-cognition-500 via-consciousness-500 to-care-500 rounded-full mx-auto" />
-            </motion.div>
-
-            <motion.div
-              className="grid grid-cols-1 md:grid-cols-3 gap-8"
-              variants={conditionalStaggerContainer}
-              initial="hidden"
-              whileInView="visible"
-              viewport={viewportSettings}
-            >
-              {services.cards.map((card: any, i: number) => (
-                <motion.div
-                  key={i}
-                  variants={conditionalCardVariants}
-                  className="group relative bg-white dark:bg-gray-800 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 p-8 border border-gray-100 dark:border-gray-700"
-                >
-                  <div className="relative z-10">
-                    <div className="bg-gradient-to-br from-cognition-500 to-cognition-600 w-16 h-16 rounded-2xl flex items-center justify-center mb-6 mx-auto shadow-lg">
-                      {iconMap[i]}
-                    </div>
-
-                    <h3 className="text-2xl font-bold text-center text-gray-900 dark:text-white mb-6">
-                      {card.title}
-                    </h3>
-
-                    <p
-                      className="text-gray-600 dark:text-gray-400 text-center leading-relaxed"
-                      dangerouslySetInnerHTML={
-                        card.description
-                          ? { __html: card.description }
-                          : undefined
-                      }
-                    />
-                  </div>
-                </motion.div>
-              ))}
-            </motion.div>
-          </div>
-        </section>
-      )}
-
       {/* Stats Section */}
       {stats && stats.length > 0 && (
         <section className="py-24 bg-gradient-to-br from-cognition-600 via-consciousness-600 to-care-600 text-white">
