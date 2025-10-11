@@ -16,6 +16,7 @@ import {
 import Link from "next/link";
 import { supabase } from "@/lib/supabase/client";
 import LoadingSpinner from "@/components/ui/loading-spinner";
+import { ResearchLandingPage } from "@/components/ResearchTheme";
 
 // Unsplash images for research focus areas - optimized for performance
 // Four distinct, verified working images for visual variety
@@ -503,6 +504,10 @@ export default function HomePage() {
           </div>
         </section>
       )}
+      {/* Research Themes Section */}
+      <section className="py-16 bg-white dark:bg-gray-900">
+        <ResearchLandingPage />
+      </section>
 
       {/* Research Projects Section */}
       {projects && projects.cards && projects.cards.length > 0 && (
