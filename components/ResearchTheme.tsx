@@ -23,7 +23,7 @@ const researchThemes: Theme[] = [
     projects: [
       {
         title: "Systematic reviews on neuroprognostication",
-        link: "https://www.sciencedirect.com/science/article/pii/S030095722400858X",
+        link: "",
         description:
           "Prediction of good neurological outcome after return of circulation following paediatric cardiac arrest: A systematic review and meta-analysis.",
         image: "/images/barney_scholefield.jpg",
@@ -36,7 +36,7 @@ const researchThemes: Theme[] = [
       },
       {
         title: "Common data elements for Disorders of Consciousness",
-        link: "https://link.springer.com/article/10.1007/s12028-023-01870-7",
+        link: "",
         description:
           "Recommendations from the Working Group in the Pediatric Population.",
       },
@@ -54,7 +54,7 @@ const researchThemes: Theme[] = [
       {
         title:
           "Book chapter: Approach to child with reduced level of consciousness",
-        link: "https://link.springer.com/chapter/10.1007/978-3-031-67951-3_49",
+        link: "",
         description:
           "Published book chapter on pediatric consciousness assessment.",
       },
@@ -119,7 +119,7 @@ const researchThemes: Theme[] = [
         title: "ABOVE trial",
         description:
           "Advancing Brain Outcomes in pediatric critically ill patients sedated with volatile anesthetic agents. Pilot multicenter RCT. Funded by CIHR.",
-        link: "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC11189165/",
+        link: "",
         image: "/images/above_trial_team.jpg",
       },
       {
@@ -134,7 +134,7 @@ const researchThemes: Theme[] = [
     projects: [
       {
         title: "POPCORN",
-        link: "https://www.popcornpediatrics.ca/",
+        link: "",
         description:
           "Pediatric Outcomes improvement through Coordination of Research Networks. Scientific committee chair, Site PI, lead of sub-study SnaCCC.",
       },
