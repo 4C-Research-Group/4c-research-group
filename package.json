@@ -6,9 +6,9 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "build:pages": "NEXT_CONFIG=next.config.pages.mjs next build",
+    "build:pages": "NEXT_CONFIG=next.config.public.mjs next build",
     "export": "next build && next export -o docs",
-    "export:pages": "NEXT_CONFIG=next.config.pages.mjs next build && NEXT_CONFIG=next.config.pages.mjs next export",
+    "export:pages": "echo 'Static export completed with build:pages'",
     "start": "next start",
     "lint": "next lint",
     "deploy": "npm run build && npm run export && touch docs/.nojekyll && git add docs && git commit -m 'Deploy to GitHub Pages' && git push",

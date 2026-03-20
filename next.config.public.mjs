@@ -32,10 +32,7 @@ const nextConfig = {
       },
     ],
   },
-  // Exclude dynamic routes from static export
   trailingSlash: false,
-  // Skip API routes and dynamic admin routes
-  excludeDefaultMomentLocales: true,
 };
 
 export default nextConfig;
