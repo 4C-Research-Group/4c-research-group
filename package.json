@@ -6,10 +6,13 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
+    "build:pages": "NEXT_CONFIG=next.config.pages.mjs next build",
     "export": "next build && next export -o docs",
+    "export:pages": "NEXT_CONFIG=next.config.pages.mjs next build && NEXT_CONFIG=next.config.pages.mjs next export",
     "start": "next start",
     "lint": "next lint",
     "deploy": "npm run build && npm run export && touch docs/.nojekyll && git add docs && git commit -m 'Deploy to GitHub Pages' && git push",
+    "deploy:pages": "npm run build:pages && npm run export:pages",
     "test": "vitest",
     "test:auth": "ts-node --esm scripts/test-auth.ts",
     "create-admin": "ts-node --esm scripts/create-admin.ts",

@@ -1,0 +1,16 @@
+{
+  "name": "4c-research-group-pages",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build:pages": "NEXT_CONFIG=next.config.pages.mjs next build",
+    "export": "NEXT_CONFIG=next.config.pages.mjs next export",
+    "deploy:pages": "npm run build:pages && npm run export"
+  },
+  "dependencies": {
+    "next": "14.2.30",
+    "react": "^18",
+    "react-dom": "^18"
+  }
+}
